@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fractol_mac.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:10:14 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 08:47:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:15:09 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <math.h>
 # include <pthread.h>
 # include <ctype.h>
-# include "minilibx_mms_20191025_beta/mlx.h"
+# include "../minilibx_mms_20191025_beta/mlx.h"
 
 // Define macOS key codes (different from X11 keysyms)
 # define KEY_ESC 53

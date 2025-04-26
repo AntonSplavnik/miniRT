@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 08:47:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:10:57 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "platform.h"
 #include <string.h>
 
 
@@ -47,7 +47,7 @@ int	main(int ac, char **av)
 	// Initialize the structure to zeros/NULL to avoid uninitialized memory
 	memset(&scene, 0, sizeof(t_scene));
 
-	if ((ac == 2))
+	if (ac == 2)
 		start_raytracer(&scene, av[1]);
 	else
 		print_usage_and_exit();

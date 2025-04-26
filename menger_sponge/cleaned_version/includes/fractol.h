@@ -3,24 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   fractol.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:10:14 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 08:47:19 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:05:42 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
-
-#ifdef __APPLE__
-    # include <mlx.h>
-    // macOS-specific headers
-#else
-    # include <X11/X.h>
-    # include <X11/keysym.h>
-    // Other Linux-specific headers
-#endif
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -28,7 +19,12 @@
 # include <math.h>
 # include <pthread.h>
 # include <ctype.h>
+
+#ifndef __APPLE__
+# include <X11/X.h>
+# include <X11/keysym.h>
 # include "../minilibx-linux/mlx.h"
+#endif
 
 # define WIDTH	1280
 # define HEIGHT	1024

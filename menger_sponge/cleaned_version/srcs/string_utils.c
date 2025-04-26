@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   string_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 13:18:59 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 08:29:13 by abillote         ###   ########.fr       */
+/*   Created: 2024/10/10 16:20:25 by asplavni          #+#    #+#             */
+/*   Updated: 2025/04/26 17:55:59 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "platform.h"
 
 int	ft_strncmp(char *s1, char *s2, int n)
 {

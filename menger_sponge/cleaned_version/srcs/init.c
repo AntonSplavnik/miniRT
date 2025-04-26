@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fractol.h"
+#include "platform.h"
 
 //Used
 static void	malloc_error(void)
@@ -80,7 +80,9 @@ void	scene_init(t_scene *scene)
 			WIDTH, HEIGHT, scene->name);
 	if (NULL == scene->mlx_window)
 	{
+#ifdef __linux__
 		mlx_destroy_display(scene->mlx_connection);
+#endif
 		free(scene->mlx_connection);
 		malloc_error();
 	}
@@ -89,7 +91,9 @@ void	scene_init(t_scene *scene)
 	if (NULL == scene->img.img_ptr)
 	{
 		mlx_destroy_window(scene->mlx_connection, scene->mlx_window);
+#ifdef __linux__
 		mlx_destroy_display(scene->mlx_connection);
+#endif
 		free(scene->mlx_connection);
 		malloc_error();
 	}
