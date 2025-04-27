@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 18:08:59 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/04/27 12:30:52 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,18 @@ int	close_handler(t_scene *scene)
 	}
 
 	// Clear all other resources
-	if (scene->mlx_window && scene->mlx_connection)
-		mlx_destroy_window(scene->mlx_connection, scene->mlx_window);
-
+	// Clear all other resources
 	if (scene->img.img_ptr && scene->mlx_connection)
+	{
 		mlx_destroy_image(scene->mlx_connection, scene->img.img_ptr);
+		scene->img.img_ptr = NULL;
+	}
+
+	if (scene->mlx_window && scene->mlx_connection)
+	{
+		mlx_destroy_window(scene->mlx_connection, scene->mlx_window);
+		scene->mlx_window = NULL;
+	}
 
 	// Free the MLX pointer too
 	if (scene->mlx_connection)
@@ -73,8 +80,10 @@ int	close_handler(t_scene *scene)
 		mlx_destroy_display(scene->mlx_connection);
 #endif
 		free(scene->mlx_connection);
+		scene->mlx_connection = NULL;
 	}
 
+	exit(EXIT_SUCCESS);
 	// Exit the program cleanly
 	return (0);
 }
