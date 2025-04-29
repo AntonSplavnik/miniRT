@@ -5,18 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 13:10:14 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/29 10:37:51 by abillote         ###   ########.fr       */
+/*   Created: 2025/04/29 10:40:17 by abillote          #+#    #+#             */
+/*   Updated: 2025/04/29 10:40:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PLATFORM_H
 # define PLATFORM_H
 
-# ifdef __APPLE__
-#  include "fractol_mac.h"
-# else
-#  include "fractol.h"
-# endif
+# include "miniRT.h"
 
 #endif

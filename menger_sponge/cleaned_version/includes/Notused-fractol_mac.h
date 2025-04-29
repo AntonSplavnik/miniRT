@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
+/*   Notused-fractol_mac.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:10:14 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/29 10:30:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/29 10:48:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FRACTOL_H
-# define FRACTOL_H
+#ifndef FRACTOL_MAC_H
+# define FRACTOL_MAC_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -19,14 +19,38 @@
 # include <math.h>
 # include <pthread.h>
 # include <ctype.h>
+# include "../minilibx_mms_20191025_beta/mlx.h"
 
-#ifndef __APPLE__
-# include <X11/X.h>
-# include <X11/keysym.h>
-# include "../minilibx-linux/mlx.h"
-# include "vec3.h"
+// Define macOS key codes (different from X11 keysyms)
+# define KEY_ESC 53
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
+# define KEY_PLUS 24
+# define KEY_MINUS 27
+# define KEY_EQUAL 24
+# define KEY_R 15
+# define KEY_M 46
+# define KEY_1 18
+# define KEY_2 19
+# define KEY_3 20
+# define KEY_4 21
+# define KEY_5 23
+# define KEY_W 13
+# define KEY_A 0
+# define KEY_S 1
+# define KEY_D 2
+# define KEY_BRACKET_LEFT 33
+# define KEY_BRACKET_RIGHT 30
+# define KEY_Q 12
+# define KEY_E 14
 
-#endif
+// Mouse button codes
+# define MOUSE_LEFT_BUTTON 1
+# define MOUSE_RIGHT_BUTTON 2
+# define MOUSE_SCROLL_UP 4
+# define MOUSE_SCROLL_DOWN 5
 
 # define WIDTH	1280
 # define HEIGHT	1024
@@ -54,40 +78,29 @@
 # define ELECTRIC_BLUE   0x0066FF
 # define LAVA_RED        0xFF3300
 
-typedef struct	s_color
-{
-	int	r;
-	int g;
-	int b;
-}	t_color;
+// If you're using these keys in your code, they may also need to be defined
+# define KEY_B 11
+# define KEY_C 8
+# define KEY_F 3
+# define KEY_G 5
+# define KEY_H 4
+# define KEY_I 34
+# define KEY_J 38
+# define KEY_K 40
+# define KEY_L 37
+# define KEY_N 45
+# define KEY_O 31
+# define KEY_P 35
+# define KEY_T 17
+# define KEY_U 32
+# define KEY_V 9
+# define KEY_X 7
+# define KEY_Y 16
+# define KEY_Z 6
 
-//material properties for objects (bonus)
-//for bonuses: nothing mentionned so we can add the material properties in the rt files
-typedef struct	s_material
-{
-	t_color	color;
-	double	specular; //specular reflection coeff
-	double	shininess; //shininess exponent for specular reflection
-	double	reflectivity; //reflectivity coeff
-	int		checkerboard; //flag for checkerboard pattern
-	t_color	checker_color; //Secondary color for checkerboard
-}	t_material;
-
-
-//Ambient lighting
-typedef struct s_ambient
-{
-	double	ratio; //Ambient lighting ratio (0.0 - 1.0)
-	t_color	color;
-}	t_ambient;
-
-typedef struct	s_light
-{
-	t_vec3	position;
-	double	intensity; //light brightness ratio (0.0 - 1.0)
-	t_color	color; //light color (for bonus)
-	struct s_light *next; //pointer to next light (bonuses)
-}	t_light;
+# define KEY_bracketleft KEY_BRACKET_LEFT
+# define KEY_bracketright KEY_BRACKET_RIGHT
+# define KEY_r KEY_R
 
 typedef struct s_vec3
 {
@@ -114,85 +127,12 @@ typedef struct s_bvh_node
 typedef struct s_camera
 {
 	t_vec3	position;
-	t_vec3	rotation; //Used for rotation of the camera
-	t_vec3	orientation; //simple camera orientation, from parsing
-	double	fov; //range 0-180
-
-	//These three vectors together define a local coordinate system for the camera
-	t_vec3	forwards; //forward vector
-	t_vec3	right; //right vector
-	t_vec3	up; //up vector
-
-	double	aspect_ratio; //Initialized but not used yet
-	double	near; //Initialized but not used yet
-	double	far; //Initialized but not used yet
+	t_vec3	rotation;
+	double	fov;
+	double	aspect_ratio;
+	double	near;
+	double	far;
 }				t_camera;
-
-typedef enum	e_object_type
-{
-	SPHERE,
-	PLANE,
-	CYLINDER,
-	CONE, //For bonus
-	HYPERBOLOID, //For bonus
-	PARABOLOID, //For bonus
-}	t_object_type;
-
-//Object structure, linked list
-typedef struct	s_object
-{
-	void			*data; //pointer to store any object struct
-	t_object_type	type;
-	t_material		material;
-	struct s_object	*next;
-}	t_object;
-
-typedef struct	s_sphere
-{
-	t_vec3	center; //from parsing
-	double	diameter; //from parsing
-	double	radius; //calculated from diameter
-}	t_sphere;
-
-typedef struct s_plane
-{
-	t_vec3	point; //from parsing
-	t_vec3	normal; //from parsing
-}	t_plane;
-
-typedef struct s_cylinder
-{
-	t_vec3	center; //parsing
-	t_vec3	axis; //parsing
-	double	diameter; //parsing
-	double	radius; //calculated from diameter
-	double height; //parsing
-}	t_cylinder;
-
-typedef struct	s_ray
-{
-	t_vec3	origin;
-	t_vec3	direction; //normalized
-}	t_ray;
-
-typedef struct	s_hit_record
-{
-	double		t; //Ray parameter at the intersection
-	t_vec3		point; //Point of intersection
-	t_vec3		normal; //Surface normal at intersection
-	t_material	material; //material of the intersected object
-	t_object	*object; //Pointer to the intersected object
-	int			inside; //Flag indicating if the ray is inside the object
-}	t_hit_record;
-
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*pixels_ptr;
-	int		bpp;
-	int		endian;
-	int		line_len;
-}				t_img;
 
 typedef struct s_menger
 {
@@ -211,24 +151,27 @@ typedef struct s_bounds
 	double	old_max;
 }	t_bounds;
 
+typedef struct s_complex
+{
+	double	x;
+	double	y;
+}				t_complex;
+
+typedef struct s_img
+{
+	void	*img_ptr;
+	char	*pixels_ptr;
+	int		bpp;
+	int		endian;
+	int		line_len;
+}				t_img;
+
 typedef struct s_scene
 {
-	char		*name; //input file name
-	void		*mlx_connection; //MLX pointer
-	void		*mlx_window; //MLW window pointer
-	t_img		img; //Image struct
-
-	int			width; // Window width
-	int			height; //Window height
-
-	t_ambient	ambiant;
-	t_camera	camera;
-	t_light		*lights; //Linked list of lights
-	t_object	*objects; //Linked list of objects
-
-	//for bonuses
-	int 		sample; //for anti-aliasing
-	int			max_depth; //Maximum recursion depth (for reflections)
+	char		*name;
+	void		*mlx_connection;
+	void		*mlx_window;
+	t_img		img;
 
 	double		escape_value;
 	int			iterations_defintion;
@@ -242,6 +185,8 @@ typedef struct s_scene
 	int			prev_mouse_x;
 	int			prev_mouse_y;
 
+	// 3D specific fields
+	t_camera	camera;
 	t_menger	menger;
 	int			is_3d;
 	int			resolution_factor;  // For controlling render resolution
@@ -259,8 +204,8 @@ int			close_handler(t_scene *scene);
 int			key_handler(int keysym, t_scene *scene);
 int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
-void		display_status(t_scene *scene);
-void		display_progress(t_scene *scene, const char *status_text);
+void        display_status(t_scene *scene);
+void        display_progress(t_scene *scene, const char *status_text);
 
 //init
 void		scene_init(t_scene *scene);
@@ -273,6 +218,7 @@ void		draw_image_to_window(t_scene *scene);
 //string utils
 int			ft_strncmp(char *s1, char *s2, int n);
 void		write_string_to_file_descriptor(char *str, int file_descriptor);
+
 
 // 3D rendering functions
 void		init_3d(t_scene *scene);
