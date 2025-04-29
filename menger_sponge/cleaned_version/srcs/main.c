@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 18:10:57 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/04/28 17:33:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	start_raytracer(t_scene *scene, char *name)
 	scene->name = name;
 	scene_init(scene);
 	init_3d(scene);
+
 	render_menger_sponge(scene);
 	display_status(scene);
 
