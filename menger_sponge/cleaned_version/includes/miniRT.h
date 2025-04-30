@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/30 09:41:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:06:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,5 +302,14 @@ t_vec3		vec3_normalize(t_vec3 v);
 
 //colors
 t_color		create_color(int r, int g, int b);
+
+//material
+t_material	create_material(t_color color);
+
+//object creation
+void		add_object(t_scene *scene, t_object *object);
+t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
+t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
+t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
 
 #endif
