@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/27 12:30:52 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:33:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	close_handler(t_scene *scene)
 		return (0);
 	freed = 1;
 
+	cleanup_scene(scene);
+
 	// Free BVH for Menger sponge if it exists
 	if (!ft_strncmp(scene->name, "menger", 6) && scene->menger.bvh_root)
 	{
@@ -59,7 +61,6 @@ int	close_handler(t_scene *scene)
 		scene->menger.bvh_root = NULL;
 	}
 
-	// Clear all other resources
 	// Clear all other resources
 	if (scene->img.img_ptr && scene->mlx_connection)
 	{

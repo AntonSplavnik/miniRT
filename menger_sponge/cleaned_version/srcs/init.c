@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/26 08:47:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:06:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@ static void	malloc_error(void)
 //Used
 static void	data_init(t_scene *scene)
 {
+
+	scene->mlx_connection = NULL;
+	scene->mlx_window = NULL;
+	scene->width = WIDTH;
+	scene->height = HEIGHT;
+	scene->ambient.ratio = 0.1; //default
+	scene->ambient.color = create_color(255,255 ,255); //white by default
+	scene->lights = NULL;
+	scene->objects = NULL;
+
+	//Bonus
+	scene->sample = 1;
+	scene->max_depth = 3;
+
+	//---to do : sort things from here---
 	scene->escape_value = 4;
 	scene->iterations_defintion = 100;
 	scene->shift_x = 0.0;
@@ -34,7 +49,7 @@ static void	data_init(t_scene *scene)
 	scene->resolution_factor = 4;  // Default resolution factor
 
 	// Initialize camera defaults for 3D scenes
-	scene->is_3d = 0;  // Default to 2D mode
+	scene->is_3d = 0;  // Default to 2D mode - needs to be cleaned out
 	scene->camera.fov = 60.0;
 	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
 	scene->camera.near = 0.1;
@@ -70,8 +85,7 @@ static void	events_init(t_scene *scene)
 #endif
 }
 
-//Used
-void	scene_init(t_scene *scene)
+void scene_mlx_init(t_scene *scene)
 {
 	scene->mlx_connection = mlx_init();
 	if (NULL == scene->mlx_connection)
@@ -99,6 +113,13 @@ void	scene_init(t_scene *scene)
 	}
 	scene->img.pixels_ptr = mlx_get_data_addr(scene->img.img_ptr,
 			&scene->img.bpp, &scene->img.line_len, &scene->img.endian);
-	events_init(scene);
+}
+
+//Used
+void	scene_init(t_scene *scene)
+{
+
 	data_init(scene);
+	scene_mlx_init(scene);
+	events_init(scene);
 }

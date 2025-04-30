@@ -6,13 +6,39 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/28 17:33:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:35:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
 #include <string.h>
 
+void cleanup_scene(t_scene *scene)
+{
+	t_object *obj;
+	t_object *next_obj;
+	t_light *light;
+	t_light *next_light;
+
+	if (!scene)
+		return;
+	obj = scene->objects;
+	while (obj)
+	{
+		next_obj = obj->next;
+		if (obj->data)
+			free(obj->data);
+		free(obj);
+		obj = next_obj;
+	}
+	light = scene->lights;
+	while (light)
+	{
+		next_light = light->next;
+		free(light);
+		light = next_light;
+	}
+}
 
 void	start_raytracer(t_scene *scene, char *name)
 {

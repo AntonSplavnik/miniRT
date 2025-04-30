@@ -26,7 +26,7 @@ INC_DIR = includes
 OBJ_DIR = obj
 
 # Source files
-SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c
+SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c colors.c
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 # Output files

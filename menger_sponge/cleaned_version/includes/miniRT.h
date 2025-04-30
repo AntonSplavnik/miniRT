@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/29 10:49:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/30 09:41:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ typedef struct s_scene
 	int			width; // Window width
 	int			height; //Window height
 
-	t_ambient	ambiant;
+	t_ambient	ambient;
 	t_camera	camera;
 	t_light		*lights; //Linked list of lights
 	t_object	*objects; //Linked list of objects
@@ -258,6 +258,8 @@ void		display_progress(t_scene *scene, const char *status_text);
 
 //init
 void		scene_init(t_scene *scene);
+void		cleanup_scene(t_scene *scene);
+
 
 //render
 void		pixel_put(int x, int y, t_img *img, int color);
@@ -297,5 +299,8 @@ t_vec3		vec3_cross(t_vec3 u, t_vec3 v);
 double		vec3_length_squared(t_vec3 v);
 double		vec3_length(t_vec3 v);
 t_vec3		vec3_normalize(t_vec3 v);
+
+//colors
+t_color		create_color(int r, int g, int b);
 
 #endif
