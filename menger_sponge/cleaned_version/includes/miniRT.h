@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/30 10:06:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:18:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,6 @@ int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
 									t_vec3 dir, double *out_tmin, double *out_tmax);
 
 //Vector utilities
-
 t_vec3		vec3_create(double x, double y, double z);
 t_vec3		vec3_negate(t_vec3 v);
 t_vec3		vec3_add(t_vec3 u, t_vec3 v);
@@ -311,5 +310,9 @@ void		add_object(t_scene *scene, t_object *object);
 t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
+
+//lights
+void		add_light(t_scene *scene, t_light *light);
+t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 #endif
