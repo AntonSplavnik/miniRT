@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/29 13:23:47 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:25:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,23 @@ t_color	create_color(int r, int g, int b)
 	color.r = valid_color_range(r);
 	color.g = valid_color_range(g);
 	color.b = valid_color_range(b);
+	return (color);
+}
+
+//to improve to add all lighting factors
+int	get_final_color(t_scene *scene, double light_intensity)
+{
+	t_color	object_color;
+	int		color;
+	int		r;
+	int		g;
+	int		b;
+
+	object_color = scene->objects->material.color;
+	r = valid_color_range((int)(object_color.r *light_intensity));
+	g = valid_color_range((int)(object_color.g * light_intensity));
+	b = valid_color_range((int)(object_color.b *light_intensity));
+
+	color = (r << 16) | (g << 8) | b;
 	return (color);
 }

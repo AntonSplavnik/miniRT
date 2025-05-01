@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/29 13:33:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:40:20 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ void display_status(t_scene *scene)
 {
 	char status[100];
 
+	if (!ft_strncmp(scene->name, "sphere", 6))
+	{
+		// Simple sphere status
+		snprintf(status, 100, "Simple Sphere | Camera: (%.1f, %.1f, %.1f)",
+				scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
+	}
 	// Format status text based on scene type
-	if (scene->is_3d)
+	else if (scene->is_3d)
 	{
 		// 3D mode status
 		snprintf(status, 100, "3D Mode | Iterations: %d | Resolution: %d",
@@ -103,8 +109,94 @@ int	key_handler(int keysym, t_scene *scene)
 		// Exit directly since we can't end the mlx loop gracefully
 		exit(EXIT_SUCCESS);
 	}
+	// Handle camera movement for the sphere renderer
+	if (!ft_strncmp(scene->name, "sphere", 6))
+	{
+		int camera_changed = 0;
+		// Camera movement - slower to be more precise
+#ifdef __APPLE__
+		if (keysym == KEY_W)
+		{
+			scene->camera.position.z += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_S)
+		{
+			scene->camera.position.z -= 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_A)
+		{
+			scene->camera.position.x -= 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_D)
+		{
+			scene->camera.position.x += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_Q)
+		{
+			scene->camera.position.y += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_E)
+		{
+			scene->camera.position.y -= 0.5;
+			camera_changed = 1;
+		}
+#else
+		if (keysym == XK_w)
+		{
+			scene->camera.position.z += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_s)
+		{
+			scene->camera.position.z -= 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_a)
+		{
+			scene->camera.position.x -= 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_d)
+		{
+			scene->camera.position.x += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_q)
+		{
+			scene->camera.position.y += 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_e)
+		{
+			scene->camera.position.y -= 0.5;
+			camera_changed = 1;
+		}
+#endif
 
-	if (!ft_strncmp(scene->name, "menger", 6))
+		// Re-render if camera has changed
+		if (camera_changed)
+		{
+			render_simple_scene(scene);
+			return (0);
+		}
+		// Reset camera position
+#ifdef __APPLE__
+		else if (keysym == KEY_r)
+#else
+		else if (keysym == XK_r)
+#endif
+		{
+			scene->camera.position = (t_vec3){0.0, 0.0, -5.0};
+			render_simple_scene(scene);
+			return (0);
+		}
+	}
+	else if (!ft_strncmp(scene->name, "menger", 6))
 	{
 		int camera_changed = 0;
 		// Camera movement - slower to be more precise

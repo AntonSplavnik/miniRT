@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:27:34 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/30 10:16:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:31:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_light	*create_light(t_vec3 position, double intensity, t_color color)
 {
 	t_light	*light;
 
-	light = malloc(sizeof(light));
+	light = malloc(sizeof(t_light));
 	if (!light)
 		return (NULL);
 	light->color = color;
