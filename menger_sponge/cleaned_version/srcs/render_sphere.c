@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/01 13:51:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:20:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ void	set_up_simple_scene(t_scene *scene)
 
 	scene->ambient.ratio = 0.2;
 	scene->ambient.color = create_color(255, 255, 255);
+
+	t_vec3	light_pos = vec3_create(10.0, 10.0, -10.0);
+	t_color	light_color = create_color(255, 255, 255);
+	t_light	*light = create_light(light_pos, 0.8, light_color);
+	add_light(scene, light);
 }
 
 t_vec3	sphere_normal_at_point(t_vec3 point, t_sphere sphere)
@@ -47,6 +52,7 @@ void	render_simple_scene(t_scene *scene)
 	t_vec3	hit_point;
 	t_vec3	normal;
 	double	light_intensity;
+	t_vec3	light_dir;
 
 	if (!scene->objects)
 		set_up_simple_scene(scene);
@@ -79,8 +85,14 @@ void	render_simple_scene(t_scene *scene)
 				//calculate the normal at the hit point
 				normal = sphere_normal_at_point(hit_point, *sphere);
 
-				//simple lighting, just based on the normal - to improve with diffuse lighting
-				light_intensity = 0.2 + 0.8 * fmax(0.0, normal.z);
+				// Calculate light direction from hit point to light source
+				light_dir = vec3_normalize(vec3_subtract(scene->lights->position, hit_point));
+
+				// Calculate diffuse lighting - dot product of normal and light direction
+				double diffuse = fmax(0.0, vec3_dot(normal, light_dir));
+
+				// Combine ambient and diffuse lighting
+				light_intensity = scene->ambient.ratio + (scene->lights->intensity * diffuse);
 
 				//Get color from material and apply lighting
 				color = get_final_color(scene, light_intensity);
