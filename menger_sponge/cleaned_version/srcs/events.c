@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/01 13:40:20 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:31:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,26 @@ int	key_handler(int keysym, t_scene *scene)
 			scene->camera.position.y -= 0.5;
 			camera_changed = 1;
 		}
+		else if (keysym == KEY_LEFT)
+		{
+			scene->camera.rotation.y -= 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_RIGHT)
+		{
+			scene->camera.rotation.y += 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_UP)
+		{
+			scene->camera.rotation.x -= 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == KEY_DOWN)
+		{
+			scene->camera.rotation.x += 0.05;
+			camera_changed = 1;
+		}
 #else
 		if (keysym == XK_w)
 		{
@@ -174,6 +194,26 @@ int	key_handler(int keysym, t_scene *scene)
 		else if (keysym == XK_e)
 		{
 			scene->camera.position.y -= 0.5;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_Left)
+		{
+			scene->camera.rotation.y -= 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_Right)
+		{
+			scene->camera.rotation.y += 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_Up)
+		{
+			scene->camera.rotation.x -= 0.05;
+			camera_changed = 1;
+		}
+		else if (keysym == XK_Down)
+		{
+			scene->camera.rotation.x += 0.05;
 			camera_changed = 1;
 		}
 #endif

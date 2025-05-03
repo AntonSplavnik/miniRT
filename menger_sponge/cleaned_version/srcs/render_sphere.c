@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/02 13:20:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/03 13:50:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	set_up_simple_scene(t_scene *scene)
 
 	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
 	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
-	scene->camera.fov = 90.0;
+	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
+	scene->camera.fov = 60.0;
 
 	scene->ambient.ratio = 0.2;
 	scene->ambient.color = create_color(255, 255, 255);
@@ -34,6 +35,9 @@ void	set_up_simple_scene(t_scene *scene)
 	t_color	light_color = create_color(255, 255, 255);
 	t_light	*light = create_light(light_pos, 0.8, light_color);
 	add_light(scene, light);
+
+	sphere->material.specular = 0.8;   // High specular reflection
+	sphere->material.shininess = 32.0; // For a shiny appearance
 }
 
 t_vec3	sphere_normal_at_point(t_vec3 point, t_sphere sphere)
@@ -59,20 +63,22 @@ void	render_simple_scene(t_scene *scene)
 
 	t_sphere *sphere = (t_sphere *)(scene->objects->data);
 
+	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+
 	for (int y = 0; y < scene->height; y++)
 	{
 		for (int x = 0; x < scene->width; x++)
 		{
-			double u = (double)x / scene->width;
-			double v = (double)y / scene->height;
-
-			u = 2.0 * u - 1.0;
-			v = 1.0 - 2.0 * v;
+			double u = (2.0 * x / (double)scene->width - 1.0) * fov_scale;
+			double v = (1.0 - 2.0 * y / (double)scene->height) * fov_scale;
 
 			u *= (double)scene->width / scene->height;
 
+			t_vec3 ray_dir_camera = vec3_normalize(vec3_create(u, v, 1.0));
+			ray.direction = rotate_point(ray_dir_camera, scene->camera.rotation);
+			ray.direction = vec3_normalize(ray.direction);
+
 			ray.origin = scene->camera.position;
-			ray.direction = vec3_normalize(vec3_create(u, v, 1.0));
 
 			//set brackground color
 			color = 0x87CEEB;
@@ -91,8 +97,21 @@ void	render_simple_scene(t_scene *scene)
 				// Calculate diffuse lighting - dot product of normal and light direction
 				double diffuse = fmax(0.0, vec3_dot(normal, light_dir));
 
-				// Combine ambient and diffuse lighting
-				light_intensity = scene->ambient.ratio + (scene->lights->intensity * diffuse);
+				//Calculate the view direction (from hit point to camera)
+				t_vec3 view_dir = vec3_normalize(vec3_subtract(scene->camera.position, hit_point));
+
+				//Calculate reflection direction
+				t_vec3 reflect_dir = vec3_subtract(vec3_scale(normal, 2.0 * vec3_dot(light_dir, normal)), light_dir);
+				reflect_dir = vec3_normalize(reflect_dir);
+
+				//Calculate specular component
+				double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), scene->objects->material.shininess);
+				double specular_intensity = scene->objects->material.specular * specular;
+
+				// Combine all lighting components
+				light_intensity = scene->ambient.ratio +
+				(scene->lights->intensity * diffuse) +
+				(scene->lights->intensity * specular_intensity);
 
 				//Get color from material and apply lighting
 				color = get_final_color(scene, light_intensity);

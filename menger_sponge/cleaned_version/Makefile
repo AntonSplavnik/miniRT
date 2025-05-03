@@ -30,7 +30,7 @@ SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c colors.c ren
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 # Output files
-NAME = fractol
+NAME = minirt
 
 # Object files (in a simpler format to handle spaces)
 OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
