@@ -6,11 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/03 13:50:08 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:55:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
+
+//set up scene with two spheres
 
 
 //set up simple scene with one sphere
@@ -26,7 +28,7 @@ void	set_up_simple_scene(t_scene *scene)
 	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
 	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
 	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
-	scene->camera.fov = 60.0;
+	scene->camera.fov = 90.0;
 
 	scene->ambient.ratio = 0.2;
 	scene->ambient.color = create_color(255, 255, 255);
@@ -36,7 +38,7 @@ void	set_up_simple_scene(t_scene *scene)
 	t_light	*light = create_light(light_pos, 0.8, light_color);
 	add_light(scene, light);
 
-	sphere->material.specular = 0.8;   // High specular reflection
+	sphere->material.specular = 0.5;   // High specular reflection
 	sphere->material.shininess = 32.0; // For a shiny appearance
 }
 
@@ -81,7 +83,7 @@ void	render_simple_scene(t_scene *scene)
 			ray.origin = scene->camera.position;
 
 			//set brackground color
-			color = 0x87CEEB;
+			color = (217 << 16 | 185 << 8 | 155); //beige
 
 			if (ray_sphere_intersect(ray, *sphere, &t))
 			{
@@ -97,14 +99,16 @@ void	render_simple_scene(t_scene *scene)
 				// Calculate diffuse lighting - dot product of normal and light direction
 				double diffuse = fmax(0.0, vec3_dot(normal, light_dir));
 
-				//Calculate the view direction (from hit point to camera)
+				//Adding specular reflection:
+				//1. Calculate the view direction (from hit point to camera)
+				//Used to determine if the viewers sees the specular highlight
 				t_vec3 view_dir = vec3_normalize(vec3_subtract(scene->camera.position, hit_point));
 
-				//Calculate reflection direction
+				//2. Calculate reflection direction with reflection law calculation: R = L - 2(N.L)N
 				t_vec3 reflect_dir = vec3_subtract(vec3_scale(normal, 2.0 * vec3_dot(light_dir, normal)), light_dir);
 				reflect_dir = vec3_normalize(reflect_dir);
 
-				//Calculate specular component
+				//3. Calculate specular component
 				double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), scene->objects->material.shininess);
 				double specular_intensity = scene->objects->material.specular * specular;
 
