@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_sphere.c                                    :+:      :+:    :+:   */
+/*   render_two_spheres.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/05 10:34:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:28:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
 
-//set up simple scene with one sphere
-void	set_up_simple_scene(t_scene *scene)
+//set up scene with two spheres
+void	set_up_scene_two_sphere(t_scene *scene)
 {
-	t_vec3 sphere_center = vec3_create(0.0, 0.0, 2.0);
-	double sphere_diameter = 4.0;
+	//First sphere - red
+	t_vec3 sphere_red_center = vec3_create(1.5, 0.0, 2.0);
+	double sphere_red_diameter = 4.0;
 	t_color red_color = create_color(255, 0, 0);
 
-	t_object *sphere = create_sphere(sphere_center, sphere_diameter, red_color);
-	add_object(scene, sphere);
+	t_object *sphere_red = create_sphere(sphere_red_center, sphere_red_diameter, red_color);
+	add_object(scene, sphere_red);
+
+	//Second sphere - blue
+	t_vec3 sphere_blue_center = vec3_create(-1.5, 0.0, 0.0);
+	double sphere_blue_diameter = 2.0;
+	t_color blue_color = create_color(0, 0, 255);
+
+	t_object *sphere_blue = create_sphere(sphere_blue_center, sphere_blue_diameter, blue_color);
+	add_object(scene, sphere_blue);
 
 	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
 	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
@@ -35,24 +44,26 @@ void	set_up_simple_scene(t_scene *scene)
 	t_light	*light = create_light(light_pos, 0.8, light_color);
 	add_light(scene, light);
 
-	sphere->material.specular = 0.5;   // High specular reflection
-	sphere->material.shininess = 32.0; // For a shiny appearance
+	sphere_red->material.specular = 0.5;   // High specular reflection
+	sphere_red->material.shininess = 32.0; // For a shiny appearance
+
+	sphere_blue->material.specular = 0.8;   // Higher specular reflection
+	sphere_blue->material.shininess = 64.0; //More shiny
 }
 
-void	render_simple_scene(t_scene *scene)
+void	render_two_spheres(t_scene *scene)
 {
-	t_ray	ray;
-	int		color;
-	double	t;
-	t_vec3	hit_point;
-	t_vec3	normal;
-	double	light_intensity;
-	t_vec3	light_dir;
+	t_ray		ray;
+	int			color;
+	double		t;
+	t_vec3		hit_point;
+	t_vec3		normal;
+	double		light_intensity;
+	t_vec3		light_dir;
+	t_object	*hit_object;
 
 	if (!scene->objects)
 		set_up_scene_two_sphere(scene);
-
-	t_sphere *sphere = (t_sphere *)(scene->objects->data);
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 
@@ -74,16 +85,21 @@ void	render_simple_scene(t_scene *scene)
 			//set brackground color
 			color = (217 << 16 | 185 << 8 | 155); //beige
 
-			if (ray_sphere_intersect(ray, *sphere, &t))
+			if (find_closest_intersection(scene, ray, &t, &hit_object))
 			{
 				//calculate where the ray hit the sphere
 				hit_point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
 
 				//calculate the normal at the hit point
+				t_sphere *sphere = (t_sphere *)(hit_object->data);
 				normal = sphere_normal_at_point(hit_point, *sphere);
 
-				// Calculate light direction from hit point to light source
-				light_dir = vec3_normalize(vec3_subtract(scene->lights->position, hit_point));
+				// Calculate vector from hit point to light source
+				t_vec3 to_light = vec3_subtract(scene->lights->position, hit_point);
+				double light_distance = vec3_length(to_light);
+
+				//Normalize to get light direction
+				light_dir = vec3_normalize(to_light);
 
 				// Calculate diffuse lighting - dot product of normal and light direction
 				double diffuse = fmax(0.0, vec3_dot(normal, light_dir));
@@ -98,16 +114,24 @@ void	render_simple_scene(t_scene *scene)
 				reflect_dir = vec3_normalize(reflect_dir);
 
 				//3. Calculate specular component
-				double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), scene->objects->material.shininess);
-				double specular_intensity = scene->objects->material.specular * specular;
+				double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), hit_object->material.shininess);
+				double specular_intensity = hit_object->material.specular * specular;
+
+				//Check if the hit point is in shadow
+				int in_shadow = is_in_shadow(scene, hit_point, light_dir, light_distance);
 
 				// Combine all lighting components
-				light_intensity = scene->ambient.ratio +
+				if (in_shadow)
+					light_intensity = scene->ambient.ratio;
+				else
+				{
+					light_intensity = scene->ambient.ratio +
 				(scene->lights->intensity * diffuse) +
 				(scene->lights->intensity * specular_intensity);
+				}
 
 				//Get color from material and apply lighting
-				color = get_final_color(scene, light_intensity);
+				color = get_object_color(hit_object, light_intensity);
 			}
 			pixel_put(x, y, &scene->img, color);
 		}
@@ -118,3 +142,4 @@ void	render_simple_scene(t_scene *scene)
 
 	display_status(scene);
 }
+

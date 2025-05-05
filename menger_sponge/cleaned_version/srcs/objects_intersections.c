@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:16:07 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/02 13:09:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:29:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,41 @@ int	ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t)
 	}
 	*t = root;
 	return (1);
+}
+
+t_vec3	sphere_normal_at_point(t_vec3 point, t_sphere sphere)
+{
+	t_vec3	normal;
+	normal = vec3_subtract(point, sphere.center);
+	return (vec3_normalize(normal));
+}
+
+int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
+{
+	t_object	*current;
+	double		t_closest;
+	double		t_temp;
+	int			hit_something;
+
+	current = scene->objects;
+	t_closest = INFINITY;
+	hit_something = 0;
+	*hit_object = NULL;
+	while (current)
+	{
+		if (current->type == SPHERE)
+		{
+			t_sphere *sphere = (t_sphere *)(current->data);
+			if (ray_sphere_intersect(ray, *sphere, &t_temp) && t_temp < t_closest)
+			{
+				t_closest = t_temp;
+				hit_something = 1;
+				*hit_object = current;
+			}
+		}
+		current = current->next;
+	}
+	if (hit_something)
+		*t = t_closest;
+	return (hit_something);
 }

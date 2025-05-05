@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/01 12:49:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:30:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,7 @@ t_vec3		vec3_normalize(t_vec3 v);
 //colors
 t_color		create_color(int r, int g, int b);
 int			get_final_color(t_scene *scene, double light_intensity);
+int			get_object_color(t_object *object, double light_intensity);
 
 //material
 t_material	create_material(t_color color);
@@ -314,12 +315,19 @@ t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
 
 //object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
+int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object);
+t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 //rendering test
-void render_simple_scene(t_scene *scene);
+void		render_simple_scene(t_scene *scene);
+void		render_two_spheres(t_scene *scene);
+void		set_up_scene_two_sphere(t_scene *scene);
+
+//shadows
+int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
 
 #endif

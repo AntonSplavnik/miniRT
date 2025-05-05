@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/04 15:07:20 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:31:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	start_raytracer(t_scene *scene, char *name)
 	scene_init(scene);
 	//init_3d(scene);
 
-	render_simple_scene(scene);
+	//render_simple_scene(scene);
+	render_two_spheres(scene);
 	//render_menger_sponge(scene);
 	display_status(scene);
 
