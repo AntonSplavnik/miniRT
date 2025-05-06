@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_two_spheres.c                               :+:      :+:    :+:   */
+/*   render_complex_scene.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,48 @@
 /* ************************************************************************** */
 
 #include "platform.h"
+
+//set up scene with a cylinder
+void	set_up_scene_cylinder(t_scene *scene)
+{
+	//Sphere - red
+	t_vec3 sphere_red_center = vec3_create(1.5, 0.0, 2.0);
+	double sphere_red_diameter = 4.0;
+	t_color red_color = create_color(255, 0, 0);
+
+	t_object *sphere_red = create_sphere(sphere_red_center, sphere_red_diameter, red_color);
+	add_object(scene, sphere_red);
+
+	//Cylinder - blue
+	t_vec3	cylinder_center = vec3_create(-1.5, 0.0, 2.0);
+	t_vec3	cylinder_axis = vec3_create(0.0, 1.0, 0.0);
+	double cylinder_diameter = 1.5;
+	double cylinder_height = 3.0;
+	t_color	blue_color = create_color(0, 0, 255);
+
+	t_object *cylinder_blue = create_cylinder(cylinder_center, cylinder_axis, cylinder_diameter, cylinder_height);
+	cylinder_blue->material.color = blue_color;
+	add_object(scene, cylinder_blue);
+
+	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
+	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
+	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
+	scene->camera.fov = 50.0;
+
+	scene->ambient.ratio = 0.2;
+	scene->ambient.color = create_color(255, 255, 255);
+
+	t_vec3	light_pos = vec3_create(10.0, 10.0, -10.0);
+	t_color	light_color = create_color(255, 255, 255);
+	t_light	*light = create_light(light_pos, 0.8, light_color);
+	add_light(scene, light);
+
+	sphere_red->material.specular = 0.5;   // High specular reflection
+	sphere_red->material.shininess = 32.0; // For a shiny appearance
+
+	cylinder_blue->material.specular = 0.8;   // Higher specular reflection
+	cylinder_blue->material.shininess = 64.0; //More shiny
+}
 
 //set up scene with two spheres
 void	set_up_scene_two_sphere(t_scene *scene)
@@ -51,7 +93,7 @@ void	set_up_scene_two_sphere(t_scene *scene)
 	sphere_blue->material.shininess = 64.0; //More shiny
 }
 
-void	render_two_spheres(t_scene *scene)
+void	render_complex_scene(t_scene *scene)
 {
 	t_ray		ray;
 	int			color;
@@ -91,8 +133,16 @@ void	render_two_spheres(t_scene *scene)
 				hit_point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
 
 				//calculate the normal at the hit point
-				t_sphere *sphere = (t_sphere *)(hit_object->data);
-				normal = sphere_normal_at_point(hit_point, *sphere);
+				if (hit_object->type == SPHERE)
+				{
+					t_sphere *sphere = (t_sphere *)(hit_object->data);
+					normal = sphere_normal_at_point(hit_point, *sphere);
+				}
+				else if (hit_object->type == CYLINDER)
+				{
+					t_cylinder *cylinder = (t_cylinder *)(hit_object->data);
+					normal = cylinder_normal_at_point(hit_point, *cylinder);
+				}
 
 				// Calculate vector from hit point to light source
 				t_vec3 to_light = vec3_subtract(scene->lights->position, hit_point);

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 11:16:07 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/05 10:29:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:39:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,51 @@ t_vec3	sphere_normal_at_point(t_vec3 point, t_sphere sphere)
 	t_vec3	normal;
 	normal = vec3_subtract(point, sphere.center);
 	return (vec3_normalize(normal));
+}
+
+t_vec3	cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder)
+{
+	t_vec3	normal;
+	t_vec3	cp;
+	double	projection;
+	t_vec3	axis_projection;
+	t_vec3	top_center;
+	t_vec3	bottom_center;
+	double	dist_to_top;
+	double	dist_to_bottom;
+
+
+	//Determine if we are on one of the caps
+	//1. Calculate caps positions
+	top_center = vec3_add(cylinder.center, vec3_scale(cylinder.axis, cylinder.height / 2.0));
+	bottom_center = vec3_add(cylinder.center, vec3_scale(cylinder.axis, -cylinder.height / 2.0));
+
+	//2. Calculate distance to caps from hit point
+	dist_to_top = vec3_length(vec3_subtract(point, top_center));
+	dist_to_bottom = vec3_length(vec3_subtract(point, bottom_center));
+
+	//3. Check if we are on the top cap
+	if (dist_to_top <= cylinder.radius && fabs(vec3_dot(vec3_subtract(point, top_center), cylinder.axis)) < 0.001)
+		return (cylinder.axis);
+
+	//4. check if we are on the bottom cap
+	if (dist_to_bottom <= cylinder.radius && fabs(vec3_dot(vec3_subtract(point, bottom_center), cylinder.axis)) < 0.001)
+		return (vec3_negate(cylinder.axis));
+
+	//If not on one of the caps:
+	//1. Calculate hit point to cylinder center vector
+	cp = vec3_subtract(point, cylinder.center);
+
+	//2. Calculate scalar projection along axis
+	projection = vec3_dot(cp, cylinder.axis);
+
+	//3. Calculate axis projection to find the axis point which is closest to our hit point
+	axis_projection = vec3_scale(cylinder.axis, projection);
+
+	//4. Calculate normal vector (N = cp - axis_projection)
+	normal = vec3_subtract(cp, axis_projection);
+	return (vec3_normalize(normal));
+
 }
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)

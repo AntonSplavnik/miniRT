@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/05 10:30:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:42:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,6 +317,7 @@ t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
 int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object);
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
+t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
@@ -324,7 +325,7 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 //rendering test
 void		render_simple_scene(t_scene *scene);
-void		render_two_spheres(t_scene *scene);
+void		render_complex_scene(t_scene *scene);
 void		set_up_scene_two_sphere(t_scene *scene);
 
 //shadows

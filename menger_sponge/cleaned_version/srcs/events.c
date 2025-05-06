@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/05 10:39:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:51:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int	key_handler(int keysym, t_scene *scene)
 	if (camera_changed)
 	{
 		if (!ft_strncmp(scene->name, "sphere", 6))
-			render_two_spheres(scene);
+			render_complex_scene(scene);
 		else if (!ft_strncmp(scene->name, "menger", 6))
 			render_menger_sponge(scene);
 		return (0);
@@ -234,7 +234,7 @@ int	key_handler(int keysym, t_scene *scene)
 	{
 		scene->camera.position = (t_vec3){0.0, 0.0, -5.0};
 		if (!ft_strncmp(scene->name, "sphere", 6))
-			render_two_spheres(scene);
+			render_complex_scene(scene);
 		else if (!ft_strncmp(scene->name, "menger", 6))
 			render_menger_sponge(scene);
 		return (0);
@@ -334,7 +334,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 		// Debug camera positions
 #ifdef __APPLE__
@@ -348,7 +348,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_2)
@@ -361,7 +361,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_3)
@@ -374,7 +374,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_4)
@@ -387,7 +387,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_5)
@@ -400,7 +400,7 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_two_spheres(scene);
+				render_complex_scene(scene);
 		}
 
 		// Ensure we're in 3D mode and render
