@@ -105,7 +105,7 @@ void	render_complex_scene(t_scene *scene)
 	t_object	*hit_object;
 
 	if (!scene->objects)
-		set_up_scene_two_sphere(scene);
+		set_up_scene_cylinder(scene);
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 
