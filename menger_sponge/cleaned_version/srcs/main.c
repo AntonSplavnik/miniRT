@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/05 10:51:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:40:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ int	main(int ac, char **av)
 	// Initialize the structure to zeros/NULL to avoid uninitialized memory
 	memset(&scene, 0, sizeof(t_scene));
 
+	//  // Check for special test mode
+	//  if (ac == 3 && strcmp(av[1], "test") == 0) {
+	//	// Test camera positions based on argument
+	//	int test_number = atoi(av[2]);
+	//	setup_camera_test_position(&scene, test_number);
+	//}
 	if (ac == 2)
 		start_raytracer(&scene, av[1]);
 	else

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/06 10:37:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:24:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,7 @@ typedef struct s_bvh_node
 typedef struct s_camera
 {
 	t_vec3	position;
-	t_vec3	rotation; //Used for rotation of the camera
-	t_vec3	orientation; //simple camera orientation, from parsing
+	t_vec3	rotation; //simple camera orientation, from parsing
 	double	fov; //range 0-180
 
 	//These three vectors together define a local coordinate system for the camera
@@ -318,6 +317,7 @@ int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
 int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object);
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
+int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
@@ -330,5 +330,9 @@ void		set_up_scene_two_sphere(t_scene *scene);
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
+
+//test
+void setup_camera_test_position(t_scene *scene, int position_number);
+void test_camera_positions(t_scene *scene);
 
 #endif

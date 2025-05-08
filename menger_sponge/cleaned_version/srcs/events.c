@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/05 10:51:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/07 15:22:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,6 +400,34 @@ int	key_handler(int keysym, t_scene *scene)
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
+				render_complex_scene(scene);
+		}
+#ifdef __APPLE__
+else if (keysym == KEY_6)
+#else
+else if (keysym == XK_6)
+	#endif
+		{
+			// Position to look at the top cap
+			scene->camera.position = (t_vec3){2.4, 2.0, -2.8};
+			scene->camera.rotation = (t_vec3){1.0, 0.0, 0.0};; // Look straight down
+			if (!ft_strncmp(scene->name, "menger", 6))
+				render_menger_sponge(scene);
+			else
+				render_complex_scene(scene);
+		}
+#ifdef __APPLE__
+else if (keysym == KEY_7)
+#else
+else if (keysym == XK_7)
+#endif
+		{
+			// Position to look at the bottom cap
+			scene->camera.position = vec3_create(-1.5, -2.5, 2.0);
+			scene->camera.rotation = vec3_create(1.0, 0.0, 0.0); // Look straight up
+			if (!ft_strncmp(scene->name, "menger", 6))
+				render_menger_sponge(scene);
+			else
 				render_complex_scene(scene);
 		}
 

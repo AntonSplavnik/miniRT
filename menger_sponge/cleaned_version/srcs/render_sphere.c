@@ -23,7 +23,6 @@ void	set_up_simple_scene(t_scene *scene)
 	add_object(scene, sphere);
 
 	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
-	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
 	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
 	scene->camera.fov = 50.0;
 

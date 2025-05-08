@@ -34,9 +34,8 @@ void	set_up_scene_cylinder(t_scene *scene)
 	cylinder_blue->material.color = blue_color;
 	add_object(scene, cylinder_blue);
 
-	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
-	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
-	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
+	scene->camera.position = vec3_create(-2.0, -3.0, 2.0);
+	scene->camera.rotation = vec3_create(1.4, 0.0, 0.0);
 	scene->camera.fov = 50.0;
 
 	scene->ambient.ratio = 0.2;
@@ -74,7 +73,6 @@ void	set_up_scene_two_sphere(t_scene *scene)
 	add_object(scene, sphere_blue);
 
 	scene->camera.position = vec3_create(0.0, 0.0, -5.0);
-	scene->camera.orientation = vec3_create(0.0, 0.0, 1.0);
 	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
 	scene->camera.fov = 50.0;
 
@@ -108,7 +106,6 @@ void	render_complex_scene(t_scene *scene)
 		set_up_scene_cylinder(scene);
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
-
 	for (int y = 0; y < scene->height; y++)
 	{
 		for (int x = 0; x < scene->width; x++)
@@ -189,7 +186,7 @@ void	render_complex_scene(t_scene *scene)
 
 	//display the image
 	draw_image_to_window(scene);
-
+	//printf("camera position is %f, %f, %f", scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
+	//printf("camera rotation is %f, %f, %f", scene->camera.rotation.x, scene->camera.rotation.y, scene->camera.rotation.z);
 	display_status(scene);
 }
-
