@@ -107,31 +107,58 @@ void	set_up_scene_cylinder(t_scene *scene)
 void	set_up_scene_plane(t_scene *scene)
 {
 	//Sphere - red
-	t_vec3 sphere_red_center = vec3_create(1.5, 0.0, 2.0);
-	double sphere_red_diameter = 3.0;
+	t_vec3 sphere_center = vec3_create(1.5, 0.0, 2.0);
+	double sphere_diameter = 3.0;
 	t_color red_color = create_color(255, 0, 0);
 
-	t_object *sphere_red = create_sphere(sphere_red_center, sphere_red_diameter, red_color);
+	t_object *sphere_red = create_sphere(sphere_center, sphere_diameter, red_color);
 	add_object(scene, sphere_red);
+
+	//Sphere - orange
+	sphere_center = vec3_create(0.0, 0.0, 4.0);
+	sphere_diameter = 2.0;
+	t_color orange_color = create_color(255, 165, 0);
+
+	t_object *sphere_orange = create_sphere(sphere_center, sphere_diameter, orange_color);
+	add_object(scene, sphere_orange);
+
+	//Sphere - purple
+	sphere_center = vec3_create(0.0, 1.5, 0.5);
+	sphere_diameter = 0.3;
+	t_color purple_color = create_color(93, 63, 211);
+
+	t_object *sphere_purple = create_sphere(sphere_center, sphere_diameter, purple_color);
+	add_object(scene, sphere_purple);
 
 	//Cylinder - blue
 	t_vec3	cylinder_center = vec3_create(-1.5, 0.0, 2.0);
 	t_vec3	cylinder_axis = vec3_create(0.0, 1.0, 0.0);
-	double cylinder_diameter = 1.5;
-	double cylinder_height = 3.0;
+	double cylinder_diameter = 1.0;
+	double cylinder_height = 2.0;
 	t_color	blue_color = create_color(0, 0, 255);
 
 	t_object *cylinder_blue = create_cylinder(cylinder_center, cylinder_axis, cylinder_diameter, cylinder_height);
 	cylinder_blue->material.color = blue_color;
 	add_object(scene, cylinder_blue);
 
-	//Plane - Green
+	//Cylinder - Pink
+	cylinder_center = vec3_create(-1.5, 1.0, 1.0);
+	cylinder_axis = vec3_create(1.0, 0.0, 0.0);
+	cylinder_diameter = 0.5;
+	cylinder_height = 3.0;
+	t_color	pink_color = create_color(255, 192, 203);
+
+	t_object *cylinder_pink = create_cylinder(cylinder_center, cylinder_axis, cylinder_diameter, cylinder_height);
+	cylinder_pink->material.color = pink_color;
+	add_object(scene, cylinder_pink);
+
+	//Planes
 	t_vec3	plane_point = vec3_create(0.0, -1.5, 0.0);
 	t_vec3	plane_normal = vec3_create(0.0, 1.0, 0.0);
 	t_color	green_color = create_color(0, 255, 0);
 
-	t_object *plane = create_plane(plane_point, plane_normal, green_color);
-	add_object(scene, plane);
+	t_object *floor_plane = create_plane(plane_point, plane_normal, green_color);
+	add_object(scene, floor_plane);
 
 	scene->camera.position = vec3_create(0.0, 0.0, -3.0);
 	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
@@ -147,6 +174,9 @@ void	set_up_scene_plane(t_scene *scene)
 
 	sphere_red->material.specular = 0.5;   // High specular reflection
 	sphere_red->material.shininess = 32.0; // For a shiny appearance
+
+	sphere_purple->material.specular = 0.5;   // High specular reflection
+	sphere_purple->material.shininess = 64.0; // For a shiny appearance
 
 	cylinder_blue->material.specular = 0.8;   // Higher specular reflection
 	cylinder_blue->material.shininess = 64.0; //More shiny
@@ -293,7 +323,6 @@ void	render_complex_scene(t_scene *scene)
 
 	//display the image
 	draw_image_to_window(scene);
-	//printf("camera position is %f, %f, %f", scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
-	//printf("camera rotation is %f, %f, %f", scene->camera.rotation.x, scene->camera.rotation.y, scene->camera.rotation.z);
+
 	display_status(scene);
 }
