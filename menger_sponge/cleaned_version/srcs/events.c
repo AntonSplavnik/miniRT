@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/07 15:22:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:09:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,7 +340,7 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 		else if (keysym == KEY_1)
 #else
-		else if (keysym == XK_1)
+		else if (keysym == XK_1) //Frontal view
 #endif
 		{
 			scene->camera.position = (t_vec3){0.0, 0.0, -4.0};
@@ -353,11 +353,11 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 		else if (keysym == KEY_2)
 #else
-		else if (keysym == XK_2)
+		else if (keysym == XK_2) //Side view(right)
 #endif
 		{
-			scene->camera.position = (t_vec3){4.0, 0.0, 0.0};
-			scene->camera.rotation = (t_vec3){0.0, -1.57, 0.0};
+			scene->camera.position = (t_vec3){4.0, 0.0, 0.0}; //camera on the right side
+			scene->camera.rotation = (t_vec3){0.0, -1.57, 0.0}; //-90 degrees angle around Y
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
@@ -366,11 +366,11 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 		else if (keysym == KEY_3)
 #else
-		else if (keysym == XK_3)
+		else if (keysym == XK_3) //top view
 #endif
 		{
-			scene->camera.position = (t_vec3){0.0, 4.0, -0.0};
-			scene->camera.rotation = (t_vec3){1.6, 0.0, 0.0};
+			scene->camera.position = (t_vec3){0.0, 4.0, 2.0};
+			scene->camera.rotation = (t_vec3){1.57, 0.0, 0.0};
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else if (!ft_strncmp(scene->name, "sphere", 6))
@@ -405,12 +405,11 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 else if (keysym == KEY_6)
 #else
-else if (keysym == XK_6)
+else if (keysym == XK_6) //Side view (left)
 	#endif
 		{
-			// Position to look at the top cap
-			scene->camera.position = (t_vec3){2.4, 2.0, -2.8};
-			scene->camera.rotation = (t_vec3){1.0, 0.0, 0.0};; // Look straight down
+			scene->camera.position = (t_vec3){-4.0, 0.0, 1.0}; //camera on the left side
+			scene->camera.rotation = (t_vec3){0.0, 1.57, 0.0};; // 90 degrees angle around Y
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else
@@ -419,12 +418,12 @@ else if (keysym == XK_6)
 #ifdef __APPLE__
 else if (keysym == KEY_7)
 #else
-else if (keysym == XK_7)
+else if (keysym == XK_7) //Bottom view
 #endif
 		{
 			// Position to look at the bottom cap
-			scene->camera.position = vec3_create(-1.5, -2.5, 2.0);
-			scene->camera.rotation = vec3_create(1.0, 0.0, 0.0); // Look straight up
+			scene->camera.position = vec3_create(0.0, -4.0, 2.0);
+			scene->camera.rotation = vec3_create(-1.57, 0.0, 0.0); // Look straight up
 			if (!ft_strncmp(scene->name, "menger", 6))
 				render_menger_sponge(scene);
 			else

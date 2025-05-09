@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/08 13:24:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:18:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,8 +331,5 @@ void		set_up_scene_two_sphere(t_scene *scene);
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
 
-//test
-void setup_camera_test_position(t_scene *scene, int position_number);
-void test_camera_positions(t_scene *scene);
 
 #endif

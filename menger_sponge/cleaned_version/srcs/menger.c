@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:30:00 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/09 09:13:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:17:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -516,39 +516,6 @@ void	init_3d(t_scene *scene)
     scene->camera.fov = 80.0; // Use wider FOV to see more
     scene->camera.position = (t_vec3){0.0, 3.0, 0.0}; // Directly above
     scene->camera.rotation = (t_vec3){-1.57, 0.0, 0.0}; // Looking straight down
-}
-
-
-t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
-{
-	t_vec3	result;
-	double	cos_x, sin_x, cos_y, sin_y, cos_z, sin_z;
-	t_vec3  temp;
-
-	cos_x = cos(rotation.x);
-	sin_x = sin(rotation.x);
-	cos_y = cos(rotation.y);
-	sin_y = sin(rotation.y);
-	cos_z = cos(rotation.z);
-	sin_z = sin(rotation.z);
-
-	// Rotate around X axis
-	temp.x = point.x;
-	temp.y = point.y * cos_x - point.z * sin_x;
-	temp.z = point.y * sin_x + point.z * cos_x;
-
-	// Rotate around Y axis
-	result.x = temp.x * cos_y + temp.z * sin_y;
-	result.y = temp.y;
-	result.z = -temp.x * sin_y + temp.z * cos_y;
-
-	// Rotate around Z axis (using result as input)
-	temp = result;
-	result.x = temp.x * cos_z - temp.y * sin_z;
-	result.y = temp.x * sin_z + temp.y * cos_z;
-	result.z = temp.z;
-
-	return (result);
 }
 
 // The is_menger_iteration function is not used anymore with BVH
