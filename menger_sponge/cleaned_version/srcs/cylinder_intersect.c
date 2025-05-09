@@ -12,46 +12,6 @@
 
 #include "platform.h"
 
-int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
-{
-	t_object	*current;
-	double		t_closest;
-	double		t_temp;
-	int			hit_something;
-
-	current = scene->objects;
-	t_closest = INFINITY;
-	hit_something = 0;
-	*hit_object = NULL;
-	while (current)
-	{
-		if (current->type == SPHERE)
-		{
-			t_sphere *sphere = (t_sphere *)(current->data);
-			if (ray_sphere_intersect(ray, *sphere, &t_temp) && t_temp < t_closest)
-			{
-				t_closest = t_temp;
-				hit_something = 1;
-				*hit_object = current;
-			}
-		}
-		else if (current->type == CYLINDER)
-		{
-			t_cylinder *cylinder = (t_cylinder *)(current->data);
-			if (ray_cylinder_intersect(ray, *cylinder, &t_temp) && t_temp < t_closest)
-			{
-				t_closest = t_temp;
-				hit_something = 1;
-				*hit_object = current;
-			}
-		}
-		current = current->next;
-	}
-	if (hit_something)
-		*t = t_closest;
-	return (hit_something);
-}
-
 // Helper function for disc (cap) intersection
 static int ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t)

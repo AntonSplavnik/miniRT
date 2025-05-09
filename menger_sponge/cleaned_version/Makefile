@@ -26,7 +26,7 @@ INC_DIR = includes
 OBJ_DIR = obj
 
 # Source files
-SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c colors.c render_sphere.c lights.c material.c objects_creation.c cylinder_intersect.c vec3_basic_op.c vec3_length.c vec3_product.c render_complex_scenes.c shadows.c sphere_intersect.c camera.c
+SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c colors.c render_sphere.c lights.c material.c objects_creation.c cylinder_intersect.c vec3_basic_op.c vec3_length.c vec3_product.c render_complex_scenes.c shadows.c sphere_intersect.c camera.c plane_intersect.c
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 # Output files

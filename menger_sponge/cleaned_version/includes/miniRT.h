@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/09 10:18:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:46:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object *
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
+int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
