@@ -17,7 +17,7 @@ void	set_up_scene_cylinder(t_scene *scene)
 {
 	//Sphere - red
 	t_vec3 sphere_red_center = vec3_create(1.5, 0.0, 2.0);
-	double sphere_red_diameter = 4.0;
+	double sphere_red_diameter = 3.0;
 	t_color red_color = create_color(255, 0, 0);
 
 	t_object *sphere_red = create_sphere(sphere_red_center, sphere_red_diameter, red_color);
@@ -34,9 +34,9 @@ void	set_up_scene_cylinder(t_scene *scene)
 	cylinder_blue->material.color = blue_color;
 	add_object(scene, cylinder_blue);
 
-	scene->camera.position = vec3_create(-2.0, -3.0, 2.0);
-	scene->camera.rotation = vec3_create(1.4, 0.0, 0.0);
-	scene->camera.fov = 50.0;
+	scene->camera.position = vec3_create(0.0, 0.0, -3.0);
+	scene->camera.rotation = vec3_create(0.0, 0.0, 0.0);
+	scene->camera.fov = 60.0;
 
 	scene->ambient.ratio = 0.2;
 	scene->ambient.color = create_color(255, 255, 255);

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:30:00 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/07 19:01:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:13:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,8 +534,8 @@ t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
 
 	// Rotate around X axis
 	temp.x = point.x;
-	temp.y = point.y * cos_x + point.z * sin_x;
-	temp.z = point.y * sin_x - point.z * cos_x;
+	temp.y = point.y * cos_x - point.z * sin_x;
+	temp.z = point.y * sin_x + point.z * cos_x;
 
 	// Rotate around Y axis
 	result.x = temp.x * cos_y + temp.z * sin_y;
