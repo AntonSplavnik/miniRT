@@ -12,7 +12,7 @@
 
 #include "platform.h"
 
-// Helper function for disc (cap) intersection
+// Helper function for disc (=cap) intersection
 static int ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t)
 {

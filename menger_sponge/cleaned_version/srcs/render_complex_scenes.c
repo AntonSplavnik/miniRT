@@ -115,7 +115,7 @@ void	set_up_scene_plane(t_scene *scene)
 	add_object(scene, sphere_red);
 
 	//Sphere - orange
-	sphere_center = vec3_create(0.0, 0.0, 4.0);
+	sphere_center = vec3_create(0.5, 0.0, 2.0);
 	sphere_diameter = 2.0;
 	t_color orange_color = create_color(255, 165, 0);
 

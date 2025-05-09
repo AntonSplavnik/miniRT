@@ -26,14 +26,31 @@ INC_DIR = includes
 OBJ_DIR = obj
 
 # Source files
-SRC_FILES = main.c events.c init.c render.c string_utils.c menger.c colors.c render_sphere.c lights.c material.c objects_creation.c cylinder_intersect.c vec3_basic_op.c vec3_length.c vec3_product.c render_complex_scenes.c shadows.c sphere_intersect.c camera.c plane_intersect.c
+SRC_FILES = main.c \
+            events.c \
+            init.c \
+            string_utils.c \
+            render.c \
+            menger.c \
+            colors.c \
+            lights.c \
+            material.c \
+            objects_creation.c \
+            cylinder_intersect.c \
+            vector_utils/vec3_basic_op.c \
+            vector_utils/vec3_length.c \
+            vector_utils/vec3_product.c \
+            render_complex_scenes.c \
+            shadows.c \
+            sphere_intersect.c \
+            camera.c \
+            plane_intersect.c
+
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
 # Output files
 NAME = minirt
-
-# Object files (in a simpler format to handle spaces)
-OBJECTS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SOURCES))
 
 .PHONY: all clean fclean re obj_dir mlx
 
@@ -43,9 +60,10 @@ all: mlx obj_dir $(NAME)
 mlx:
 	@$(MAKE) -C $(MLX_PATH)
 
-# Create obj directory
+# Create obj directory and subdirectories
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)/vector_utils
 
 # Build executable
 $(NAME): $(OBJECTS)
@@ -60,6 +78,7 @@ endif
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@echo "Compiling $<..."
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
