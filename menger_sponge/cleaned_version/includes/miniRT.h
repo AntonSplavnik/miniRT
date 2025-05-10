@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/09 10:46:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:32:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <pthread.h>
 # include <ctype.h>
 # include "platform_specifics.h"
+# include "parser.h"
 
 
 # define WIDTH	1280
@@ -268,6 +269,8 @@ void		draw_image_to_window(t_scene *scene);
 //string utils
 int			ft_strncmp(char *s1, char *s2, int n);
 void		write_string_to_file_descriptor(char *str, int file_descriptor);
+int			ft_strcmp(char *s1, char *s2);
+int			ft_strlen(char *str);
 
 // 3D rendering functions
 void		init_3d(t_scene *scene);

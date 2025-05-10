@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/08 13:40:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/10 16:07:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,14 @@ void	start_raytracer(t_scene *scene, char *name)
 	scene_init(scene);
 	//init_3d(scene);
 
-	//render_simple_scene(scene);
+	if (!parse_scene_file(scene, name))
+	{
+		cleanup_scene(scene);
+		write_string_to_file_descriptor("Error: Failed to parse scene file\n", STDERR_FILENO);
+		exit(EXIT_FAILURE);
+	}
 	render_complex_scene(scene);
-	//render_menger_sponge(scene);
+
 	display_status(scene);
 
 	// Start the event loop
@@ -76,12 +81,6 @@ int	main(int ac, char **av)
 	// Initialize the structure to zeros/NULL to avoid uninitialized memory
 	memset(&scene, 0, sizeof(t_scene));
 
-	//  // Check for special test mode
-	//  if (ac == 3 && strcmp(av[1], "test") == 0) {
-	//	// Test camera positions based on argument
-	//	int test_number = atoi(av[2]);
-	//	setup_camera_test_position(&scene, test_number);
-	//}
 	if (ac == 2)
 		start_raytracer(&scene, av[1]);
 	else
