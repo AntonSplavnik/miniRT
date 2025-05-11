@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/09 10:46:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/10 13:30:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,9 @@ typedef enum	e_object_type
 	SPHERE,
 	PLANE,
 	CYLINDER,
+	CUBE,
+	TRIANGLE,
+	MESH,
 	CONE, //For bonus
 	HYPERBOLOID, //For bonus
 	PARABOLOID, //For bonus
@@ -161,6 +164,29 @@ typedef struct s_cylinder
 	double	radius; //calculated from diameter
 	double height; //parsing
 }	t_cylinder;
+
+typedef struct s_cube
+{
+	t_vec3	center; //center point of the cube
+	double	side_length; //length of each side of the cube
+}	t_cube;
+
+typedef struct s_triangle
+{
+	t_vec3	v0; // First vertex
+	t_vec3	v1; // Second vertex
+	t_vec3	v2; // Third vertex
+	t_vec3	normal; // Precomputed normal
+}	t_triangle;
+
+typedef struct s_mesh
+{
+	t_triangle	*triangles; // Array of triangles
+	int			triangle_count; // Number of triangles
+	t_vec3		position; // Center position of the mesh
+	t_vec3		rotation; // Rotation of the mesh
+	t_vec3		scale; // Scale of the mesh
+}	t_mesh;
 
 typedef struct	s_ray
 {
@@ -311,6 +337,10 @@ void		add_object(t_scene *scene, t_object *object);
 t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
+t_object	*create_cube(t_vec3 center, double side_length, t_color color);
+t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color);
+t_object	*create_mesh(t_triangle *triangles, int triangle_count, t_color color);
+t_object	*create_cube_mesh(t_vec3 center, double size, t_color color);
 
 //object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
@@ -319,6 +349,11 @@ t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
 int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
+int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
+t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
+int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
+t_vec3		triangle_normal(t_triangle triangle);
+int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
@@ -332,5 +367,12 @@ void		set_up_scene_two_sphere(t_scene *scene);
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
 
+//scenes
+void	set_up_scene_triangle(t_scene *scene);
+void	set_up_scene_plane(t_scene *scene);
+void	set_up_scene_two_sphere(t_scene *scene);
+void	set_up_scene_cylinder(t_scene *scene);
+void	set_up_scene_mesh(t_scene *scene);
+void	set_up_scene_cube(t_scene *scene);
 
 #endif

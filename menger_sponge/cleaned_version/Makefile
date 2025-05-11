@@ -33,18 +33,30 @@ SRC_FILES = main.c \
             render.c \
             menger.c \
             colors.c \
-            lights.c \
             material.c \
-            objects_creation.c \
-            cylinder_intersect.c \
+            camera.c \
+            render_complex_scenes.c \
             vector_utils/vec3_basic_op.c \
             vector_utils/vec3_length.c \
             vector_utils/vec3_product.c \
-            render_complex_scenes.c \
-            shadows.c \
-            sphere_intersect.c \
-            camera.c \
-            plane_intersect.c
+            light/lights.c \
+            shadows/shadows.c \
+            objects/objects_creation.c \
+            objects/cylinder/cylinder_intersect.c \
+            objects/sphere/sphere_intersect.c \
+            objects/plane/plane_intersect.c \
+            objects/cube/cube_intersect.c \
+            objects/cube/cube_creation.c \
+            objects/triangle/triangle_intersect.c \
+            objects/triangle/triangle_creation.c \
+            objects/mesh/mesh_intersect.c \
+            objects/mesh/mesh_creation.c \
+            scenes/mesh_sphere_sphere.c \
+            scenes/cube.c \
+            scenes/triangle.c \
+            scenes/spheres_sylinder_plane.c \
+            scenes/sphere.c \
+            scenes/sphere_cylinder.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -64,6 +76,16 @@ mlx:
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/vector_utils
+	@mkdir -p $(OBJ_DIR)/light
+	@mkdir -p $(OBJ_DIR)/shadows
+	@mkdir -p $(OBJ_DIR)/objects
+	@mkdir -p $(OBJ_DIR)/objects/cylinder
+	@mkdir -p $(OBJ_DIR)/objects/sphere
+	@mkdir -p $(OBJ_DIR)/objects/plane
+	@mkdir -p $(OBJ_DIR)/objects/cube
+	@mkdir -p $(OBJ_DIR)/objects/triangle
+	@mkdir -p $(OBJ_DIR)/objects/mesh
+	@mkdir -p $(OBJ_DIR)/scenes
 
 # Build executable
 $(NAME): $(OBJECTS)
