@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/10 16:32:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:28:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,6 +271,7 @@ int			ft_strncmp(char *s1, char *s2, int n);
 void		write_string_to_file_descriptor(char *str, int file_descriptor);
 int			ft_strcmp(char *s1, char *s2);
 int			ft_strlen(char *str);
+char		*ft_strtrim(char const *s1, char const *set);
 
 // 3D rendering functions
 void		init_3d(t_scene *scene);

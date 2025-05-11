@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:08:35 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/10 17:12:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/11 14:37:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,31 @@ void parse_error(char *message)
 	exit(EXIT_FAILURE);
 }
 
+int	parse_line(t_scene *scene, char *line)
+{
+	char	*trimmed;
+	int		result;
+
+	trimmed = ft_strtrim(line, " ");
+	if (!trimmed)
+		return (0);
+	if (trimmed[0] == '\0' || trimmed[0] == '#')
+	{
+		free(trimmed);
+		return (1);
+	}
+	result = parse_parameters(scene, trimmed);
+	if (result == 0)
+	{
+		free(trimmed);
+		parse_error("Unknown element identifier");
+		return (0);
+	}
+	free(trimmed);
+	return (result);
+}
+
+//Find the end of the current line in the buffer if it exists otherwise return the end of the buffer
 static int	process_buffer_segment(char *buffer, int *i, int bytes_read)
 {
 	int	line_end;
@@ -31,6 +56,7 @@ static int	process_buffer_segment(char *buffer, int *i, int bytes_read)
 	return (line_end);
 }
 
+//Copy the current line from the buffer to the line array
 static int	copy_to_line(char *buffer, int *pos, char *line)
 {
 	int	start;
@@ -50,6 +76,10 @@ static int	copy_to_line(char *buffer, int *pos, char *line)
 	return (1);
 }
 
+//Using an array of positions to reduce the number of parameters
+//pos[0] is the current position in the buffer
+//pos[1] is the end of the current line
+//pos[2] is the current position in the line
 int	read_scene_file(int fd, t_scene *scene)
 {
 	int			bytes_read;
