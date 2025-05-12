@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:08:35 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 11:17:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:29:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,7 +393,7 @@ int	parse_sphere(t_scene *scene, char *line)
 	return (1);
 }
 
-int	parse_plane_data(char **parts, t_vec3 *point, t_vec3 *normal, t_color *color)
+void	parse_plane_data(char **parts, t_vec3 *point, t_vec3 *normal, t_color *color)
 {
 	if (!read_vector(parts[1], &point))
 	{
@@ -405,7 +405,7 @@ int	parse_plane_data(char **parts, t_vec3 *point, t_vec3 *normal, t_color *color
 		free_split(parts);
 		parse_error("Invalid format for plane normal. Expected: nx,ny,nz");
 	}
-	if (!check_vector_normalization(normal))
+	if (!check_vector_normalization(*normal))
 	{
 		free_split(parts);
 		parse_error("Invalid format for plane normal. Expected: nx,ny,nz");
@@ -430,7 +430,7 @@ int	parse_plane(t_scene *scene, char *line)
 	if (!parts)
 		parse_error("Failed to split line");
 	check_parts_count(parts, 4, "plane");
-	parse_result = parse_plane_data(parts, &point, &normal, &color);
+	parse_plane_data(parts, &point, &normal, &color);
 
 	free_split(parts);
 
