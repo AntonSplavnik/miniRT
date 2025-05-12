@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:08:35 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:59:29 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/12 11:17:25 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,13 +209,234 @@ int	parse_ambient(t_scene *scene, char *line)
 	}
 	read_ambient_ratio(parts, &scene->ambient.ratio);
 	parse_color = read_color(parts[2], &scene->ambient.color);
+	free_split(parts);
 	if (!parse_color)
+		parse_error("Invalid color format for ambient lighting. Expected: r,g,b");
+	return (1);
+}
+
+int	count_parts(char **parts)
+{
+	int	count;
+
+	count = 0;
+	while (parts[count])
+		count++;
+	return (count);
+}
+
+void	check_parts_count(char **parts, int expected_count, char *element_name)
+{
+	int	parts_count;
+
+	parts_count = count_parts(parts);
+	if (parts_count != expected_count)
 	{
 		free_split(parts);
-		parse_error("Invalid color format for ambient lighting. Expected: r,g,b");
+		if (ft_strcmp(element_name, "camera") == 0)
+			parse_error("Invalid format for camera. Expected: C o,d,f");
+		else if (ft_strcmp(element_name, "ambient") == 0)
+			parse_error("Invalid format for ambient lighting. Expected: A ratio r,g,b");
+		else if (ft_strcmp(element_name, "light") == 0)
+			parse_error("Invalid format for light. Expected: L ratio r,g,b");
+		else if (ft_strcmp(element_name, "sphere") == 0)
+			parse_error("Invalid format for sphere. Expected: sp x,y,z r");
+		else if (ft_strcmp(element_name, "plane") == 0)
+			parse_error("Invalid format for plane. Expected: pl x,y,z nx,ny,nz");
+		else if (ft_strcmp(element_name, "cylinder") == 0)
+			parse_error("Invalid format for cylinder. Expected: cy x,y,z d,h");
+		else if (ft_strcmp(element_name, "cone") == 0)
+			parse_error("Invalid format for cone. Expected: co x,y,z d,h");
+		else if (ft_strcmp(element_name, "triangle") == 0)
+			parse_error("Invalid format for triangle. Expected: tr x1,y1,z1 x2,y2,z2 x3,y3,z3");
+		else if (ft_strcmp(element_name, "cube") == 0)
+			parse_error("Invalid format for cube. Expected: cu x,y,z side_length");
+	}
+}
+
+int check_camera_uniqueness(t_scene *scene)
+{
+	if (scene->camera.position.x != 0.0 || scene->camera.position.y != 0.0 || scene->camera.position.z != 0.0)
+		return (0);
+	return (1);
+}
+
+int	check_vector_normalization(t_vec3 vector)
+{
+	if (vector.x < -1.0 || vector.x > 1.0 || vector.y < -1.0 || vector.y > 1.0 || vector.z < -1.0 || vector.z > 1.0)
+		return (0);
+	return (1);
+}
+
+int	read_vector(char *str, t_vec3 *vector)
+{
+	char	**parts;
+	double	x;
+	double	y;
+	double	z;
+	int		parts_count;
+
+	parts = ft_split(str, ",");
+	if (!parts)
+		return (0);
+	parts_count = count_parts(parts);
+	if (parts_count != 3)
+	{
+		free_split(parts);
+		return (0);
+	}
+	x = ft_atof(parts[0]);
+	y = ft_atof(parts[1]);
+	z = ft_atof(parts[2]);
+	free_split(parts);
+	*vector = vec3_create(x, y, z);
+	return (1);
+}
+
+int	parse_camera(t_scene *scene, char *line)
+{
+	char	**parts;
+	int		parse_result;
+
+	if (!check_camera_uniqueness(scene))
+		parse_error("Camera can only be declared once");
+	parts = ft_split(line, " ");
+	if (!parts)
+		parse_error("Failed to split line");
+	check_parts_count(parts, 4, "camera");
+	if (!read_vector(parts[1], &scene->camera.position))
+	{
+		free_split(parts);
+		parse_error("Invalid format for camera position. Expected: o,d,f");
+	}
+	parse_result = read_vector(parts[2], &scene->camera.rotation);
+	if (!parse_result || !check_vector_normalization(scene->camera.rotation))
+	{
+		free_split(parts);
+		parse_error("Invalid format for camera rotation. Expected: r,p,y");
+	}
+	scene->camera.fov = ft_atof(parts[3]);
+	free_split(parts);
+	if (!check_range(scene->camera.fov, 0.0, 180.0))
+		parse_error("Camera FOV must be between 0.0 and 180.0");
+	return (1);
+}
+
+int parse_light(t_scene *scene, char *line)
+{
+	char	**parts;
+	int		parse_result;
+
+	parts = ft_split(line, " ");
+	if (!parts)
+		parse_error("Failed to split line");
+	check_parts_count(parts, 4, "light");
+	if (!read_vector(parts[1], &scene->lights->position))
+	{
+		free_split(parts);
+		parse_error("Invalid format for light position. Expected: x,y,z");
+	}
+	scene->lights->intensity = ft_atof(parts[2]);
+	if (!check_range(scene->lights->intensity, 0.0, 1.0))
+	{
+		free_split(parts);
+		parse_error("Light ratio must be between 0.0 and 1.0");
+	}
+	parse_result = read_color(parts[3], &scene->lights->color);
+	free_split(parts);
+	if (!parse_result)
+		parse_error("Invalid format for light color. Expected: r,g,b");
+	return (1);
+}
+
+int	parse_sphere_data(char **parts, t_vec3 *center, double *diameter, t_color *color)
+{
+	if (!read_vector(parts[1], &center))
+	{
+		free_split(parts);
+		parse_error("Invalid format for sphere position. Expected: x,y,z");
+	}
+	*diameter = ft_atof(parts[2]);
+	if (!check_range(*diameter, 0.0, INFINITY))
+	{
+		free_split(parts);
+		parse_error("Sphere diameter must be a positive number");
+	}
+	if (!read_color(parts[3], &color))
+	{
+		free_split(parts);
+		parse_error("Invalid format for sphere color. Expected: r,g,b");
 	}
 	return (1);
 }
+int	parse_sphere(t_scene *scene, char *line)
+{
+	char		**parts;
+	int			parse_result;
+	t_object	*sphere;
+	t_vec3		center;
+	double		diameter;
+	t_color		color;
+
+	parts = ft_split(line, " ");
+	if (!parts)
+		parse_error("Failed to split line");
+	check_parts_count(parts, 4, "sphere");
+	parse_result = parse_sphere_data(parts, &center, &diameter, &color);
+	if (!parse_result)
+		return (0);
+	free_split(parts);
+	sphere = create_sphere(center, diameter, color);
+	if(!sphere)
+		parse_error("Failed to create sphere");
+	add_object(scene, sphere);
+	return (1);
+}
+
+int	parse_plane_data(char **parts, t_vec3 *point, t_vec3 *normal, t_color *color)
+{
+	if (!read_vector(parts[1], &point))
+	{
+		free_split(parts);
+		parse_error("Invalid format for plane position. Expected: x,y,z");
+	}
+	if (!read_vector(parts[2], &normal))
+	{
+		free_split(parts);
+		parse_error("Invalid format for plane normal. Expected: nx,ny,nz");
+	}
+	if (!check_vector_normalization(normal))
+	{
+		free_split(parts);
+		parse_error("Invalid format for plane normal. Expected: nx,ny,nz");
+	}
+	if (!read_color(parts[3], &color))
+	{
+		free_split(parts);
+		parse_error("Invalid format for plane color. Expected: r,g,b");
+	}
+}
+
+int	parse_plane(t_scene *scene, char *line)
+{
+	char	**parts;
+	int		parse_result;
+	t_object	*plane;
+	t_vec3		point;
+	t_vec3		normal;
+	t_color		color;
+
+	parts = ft_split(line, " ");
+	if (!parts)
+		parse_error("Failed to split line");
+	check_parts_count(parts, 4, "plane");
+	parse_result = parse_plane_data(parts, &point, &normal, &color);
+
+	free_split(parts);
+
+}
+
+
 
 int	parse_parameters(t_scene *scene, char *line)
 {
