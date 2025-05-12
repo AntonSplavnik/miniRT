@@ -6,71 +6,68 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:48 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/11 14:27:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/12 09:56:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "platform.h"
 
-static int	c_to_trim(char const *set, char c)
+// Helper function to find the start index for trimming
+static int find_trim_start(char *s)
 {
-	size_t	i;
+	int i;
 
 	i = 0;
-	while (set[i] != '\0')
-	{
-		if (set[i] == c)
-			return (1);
+	while (s[i] && ft_isspace(s[i]))
 		i++;
-	}
-	return (0);
+	return (i);
 }
 
-static char	*create_new_string(char const *s1, size_t start, size_t end)
+// Helper function to find the end index for trimming
+static int find_trim_end(char *s, int start)
 {
-	char	*strim;
-	size_t	i;
+	int end;
 
-	i = 0;
-	if (start > end || start > ft_strlen(s1))
-	{
-		strim = ft_calloc(1, sizeof(char));
-		if (!strim)
-			return (NULL);
-		strim[0] = '\0';
-		return (strim);
-	}
-	strim = ft_calloc((end - start + 2), sizeof(char));
-	if (!strim)
-		return (NULL);
-	while (start <= end)
-		strim[i++] = s1[start++];
-	strim[i] = '\0';
-	return (strim);
-}
-
-char	*ft_strtrim(char const *s1, char const *set)
-{
-	char	*strim;
-	size_t	start;
-	size_t	end;
-
-	start = 0;
-	end = ft_strlen(s1) - 1;
-	if (s1 == NULL || set == NULL)
-		return (NULL);
-	if (ft_strlen(s1) == 0)
-	{
-		strim = ft_calloc(1, sizeof(char));
-		if (!strim)
-			return (NULL);
-		strim[0] = '\0';
-		return (strim);
-	}
-	while (c_to_trim(set, s1[start]) != 0)
-		start++;
-	while (c_to_trim(set, s1[end]) != 0 && end != 0)
+	end = start;
+	while (s[end])
+		end++;
+	if (end > 0)
 		end--;
-	strim = create_new_string(s1, start, end);
-	return (strim);
+
+	while (end >= start && ft_isspace(s[end]))
+		end--;
+
+	return (end);
+}
+
+// Trim whitespace from the start and end of a string
+char *ft_strtrim(char *s)
+{
+	int start;
+	int end;
+	char *result;
+	int i;
+	int j;
+
+	if (!s)
+		return (NULL);
+
+	start = find_trim_start(s);
+	end = find_trim_end(s, start);
+
+	result = (char *)malloc(end - start + 2);
+	if (!result)
+		return (NULL);
+
+	i = start;
+	j = 0;
+	while (i <= end)
+	{
+		result[j] = s[i];
+		i++;
+		j++;
+	}
+	result[j] = '\0';
+
+	return (result);
 }
