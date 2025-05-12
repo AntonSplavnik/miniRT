@@ -696,6 +696,22 @@ int	mouse_handler(int button, int x, int y, t_scene *scene)
 {
 	(void)x;
 	(void)y;
+
+	// Check for checkbox clicks
+    if (button == 1) { // Left click
+        int cb_x = 50;
+        int cb_y = 50;
+        int cb_size = 20;
+
+        if (x >= cb_x && x <= cb_x + cb_size && y >= cb_y && y <= cb_y + cb_size) {
+            scene->app.checkbox_checked = !scene->app.checkbox_checked;
+			render_complex_scene(scene);
+
+            // mlx_clear_window(scene->mlx_connection, scene->mlx_window);
+            // draw_checkbox(scene);
+        }
+    }
+
 	// For 3D mode - handle camera controls
 	if (scene->is_3d)
 	{

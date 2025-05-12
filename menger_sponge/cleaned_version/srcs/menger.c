@@ -733,7 +733,6 @@ void *render_menger_thread(void *arg)
 
 
 
-// Replace the render_menger_sponge function with this optimized version
 void	render_menger_sponge(t_scene *scene)
 {
     // Safety check - ensure we're in 3D mode and it's actually the Menger sponge
@@ -742,7 +741,7 @@ void	render_menger_sponge(t_scene *scene)
 
     // Display rendering status
     display_progress(scene, "Rendering Menger sponge...");
-
+/* 
     // Clear the entire image with black to prevent any artifacts
     int x, y;
     for (y = 0; y < HEIGHT; y++)
@@ -754,7 +753,7 @@ void	render_menger_sponge(t_scene *scene)
     }
 
     // Show black screen first to indicate processing
-    draw_image_to_window(scene);
+    draw_image_to_window(scene); */
 
     // Define number of threads - adjust based on system capabilities
     // Using more threads than CPU cores usually doesn't help and can hurt performance

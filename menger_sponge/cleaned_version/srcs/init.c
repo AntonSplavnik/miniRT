@@ -32,6 +32,10 @@ static void	data_init(t_scene *scene)
 	scene->lights = NULL;
 	scene->objects = NULL;
 
+	scene->app.mlx = NULL;
+	scene->app.win = NULL;
+	scene->app.checkbox_checked = false;
+
 	//Bonus
 	scene->sample = 1;
 	scene->max_depth = 3;

@@ -19,6 +19,7 @@
 # include <math.h>
 # include <pthread.h>
 # include <ctype.h>
+# include <stdbool.h>
 # include "platform_specifics.h"
 
 
@@ -230,12 +231,19 @@ typedef struct s_bounds
 	double	old_max;
 }	t_bounds;
 
+typedef struct s_app {
+    void    *mlx;
+    void    *win;
+    bool    checkbox_checked;
+} t_app;
+
 typedef struct s_scene
 {
 	char		*name; //input file name
 	void		*mlx_connection; //MLX pointer
 	void		*mlx_window; //MLW window pointer
 	t_img		img; //Image struct
+	t_app		app;
 
 	int			width; // Window width
 	int			height; //Window height
@@ -273,6 +281,8 @@ typedef struct s_thread_data
 	t_scene	*scene;
 }	t_thread_data;
 
+
+
 //events
 int			close_handler(t_scene *scene);
 int			key_handler(int keysym, t_scene *scene);
@@ -280,6 +290,8 @@ int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
 void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
+
+
 
 //init
 void		scene_init(t_scene *scene);
@@ -374,5 +386,9 @@ void	set_up_scene_two_sphere(t_scene *scene);
 void	set_up_scene_cylinder(t_scene *scene);
 void	set_up_scene_mesh(t_scene *scene);
 void	set_up_scene_cube(t_scene *scene);
+
+//user interface
+void 		draw_checkbox(t_scene *scene);
+
 
 #endif

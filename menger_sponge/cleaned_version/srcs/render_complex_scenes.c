@@ -97,6 +97,14 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 	return (hit_something);
 }
 
+// compute_ray_direction(){
+
+// 	double	u;
+// 	double	v;
+
+
+// }
+
 void	render_complex_scene(t_scene *scene)
 {
 	t_ray		ray;
@@ -107,24 +115,34 @@ void	render_complex_scene(t_scene *scene)
 	double		light_intensity;
 	t_vec3		light_dir;
 	t_object	*hit_object;
+	int			in_shadow;
+
 
 	if (!scene->objects)
-		set_up_scene_mesh(scene);  // Use the mesh scene by default
+		set_up_scene_mesh(scene);
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+	
 	for (int y = 0; y < scene->height; y++)
 	{
 		for (int x = 0; x < scene->width; x++)
 		{
+			// compute_ray_direction();
+
+			//normalized based on FOV pixel coordinates
 			double u = (2.0 * x / (double)scene->width - 1.0) * fov_scale;
 			double v = (1.0 - 2.0 * y / (double)scene->height) * fov_scale;
 
+			//appled aspect ratio correction
 			u *= (double)scene->width / scene->height;
 
-			t_vec3 ray_dir_camera = vec3_normalize(vec3_create(u, v, 1.0));
+			//camera direction
+			t_vec3 ray_dir_camera = vec3_create(u, v, 1.0);
+			//apply camera rotation
 			ray.direction = rotate_point(ray_dir_camera, scene->camera.rotation);
 			ray.direction = vec3_normalize(ray.direction);
 
+			//setting ray origin
 			ray.origin = scene->camera.position;
 
 			//set brackground color
@@ -209,9 +227,11 @@ void	render_complex_scene(t_scene *scene)
 				double specular_intensity = hit_object->material.specular * specular;
 
 				//Check if the hit point is in shadow
-				int in_shadow = is_in_shadow(scene, hit_point, light_dir, light_distance);
+				if(scene->app.checkbox_checked)
+					in_shadow = is_in_shadow(scene, hit_point, light_dir, light_distance);
 
 				// Combine all lighting components
+				in_shadow = 0;
 				if (in_shadow)
 					light_intensity = scene->ambient.ratio;
 				else
@@ -230,6 +250,9 @@ void	render_complex_scene(t_scene *scene)
 
 	//display the image
 	draw_image_to_window(scene);
+
+	// Draw the checkbox control
+	draw_checkbox(scene);
 
 	display_status(scene);
 }

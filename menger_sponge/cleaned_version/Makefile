@@ -56,7 +56,8 @@ SRC_FILES = main.c \
             scenes/triangle.c \
             scenes/spheres_sylinder_plane.c \
             scenes/sphere.c \
-            scenes/sphere_cylinder.c
+            scenes/sphere_cylinder.c \
+			ui/user_interface.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
