@@ -292,7 +292,6 @@ void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
 
 
-
 //init
 void		scene_init(t_scene *scene);
 void		cleanup_scene(t_scene *scene);
@@ -310,7 +309,6 @@ void		write_string_to_file_descriptor(char *str, int file_descriptor);
 // 3D rendering functions
 void		init_3d(t_scene *scene);
 void		render_menger_sponge(t_scene *scene);
-t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 
 // BVH functions
 t_bvh_node	*build_menger_bvh(int max_iterations);
@@ -371,10 +369,9 @@ int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 void		add_light(t_scene *scene, t_light *light);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
-//rendering test
-void		render_simple_scene(t_scene *scene);
+//rendering
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y);
 void		render_complex_scene(t_scene *scene);
-void		set_up_scene_two_sphere(t_scene *scene);
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
@@ -390,5 +387,10 @@ void	set_up_scene_cube(t_scene *scene);
 //user interface
 void 		draw_checkbox(t_scene *scene);
 
+//camera
+t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
+t_vec3		get_forward_vector(t_vec3 rotation);
+t_vec3		get_right_vector(t_vec3 rotation);
+t_vec3		get_up_vector(t_vec3 rotation);
 
 #endif

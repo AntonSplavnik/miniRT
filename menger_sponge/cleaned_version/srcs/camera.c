@@ -43,3 +43,30 @@ t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
 
 	return (result);
 }
+
+// Function to calculate forward/backward movement vector based on camera rotation
+t_vec3 get_forward_vector(t_vec3 rotation)
+{
+	// Create a forward vector (0, 0, 1) and rotate it according to camera rotation
+	t_vec3 forward = {0, 0, 1};
+	forward = rotate_point(forward, rotation);
+	return vec3_normalize(forward);
+}
+
+// Function to calculate right/left movement vector based on camera rotation
+t_vec3 get_right_vector(t_vec3 rotation)
+{
+	// Create a right vector (1, 0, 0) and rotate it according to camera rotation
+	t_vec3 right = {1, 0, 0};
+	right = rotate_point(right, rotation);
+	return vec3_normalize(right);
+}
+
+// Function to calculate up/down movement vector based on camera rotation
+t_vec3 get_up_vector(t_vec3 rotation)
+{
+	// Create an up vector (0, 1, 0) and rotate it according to camera rotation
+	t_vec3 up = {0, 1, 0};
+	up = rotate_point(up, rotation);
+	return vec3_normalize(up);
+}

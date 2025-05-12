@@ -96,7 +96,7 @@ int	close_handler(t_scene *scene)
 }
 
 //Used
-int	key_handler(int keysym, t_scene *scene)
+int key_handler(int keysym, t_scene *scene)
 {
 #ifdef __APPLE__
 	if (keysym == KEY_ESC)
@@ -115,32 +115,38 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 	if (keysym == KEY_W)
 	{
-		scene->camera.position.z += 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_S)
 	{
-		scene->camera.position.z -= 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_A)
 	{
-		scene->camera.position.x -= 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_D)
 	{
-		scene->camera.position.x += 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_Q)
 	{
-		scene->camera.position.y += 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_E)
 	{
-		scene->camera.position.y -= 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_LEFT)
@@ -166,32 +172,38 @@ int	key_handler(int keysym, t_scene *scene)
 #else
 	if (keysym == XK_w)
 	{
-		scene->camera.position.z += 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_s)
 	{
-		scene->camera.position.z -= 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_a)
 	{
-		scene->camera.position.x -= 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_d)
 	{
-		scene->camera.position.x += 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_q)
 	{
-		scene->camera.position.y += 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_e)
 	{
-		scene->camera.position.y -= 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_Left)

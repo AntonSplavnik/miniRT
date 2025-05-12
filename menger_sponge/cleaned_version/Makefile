@@ -41,10 +41,13 @@ SRC_FILES = main.c \
             vector_utils/vec3_product.c \
             light/lights.c \
             shadows/shadows.c \
-            objects/objects_creation.c \
+            objects/add_object.c \
             objects/cylinder/cylinder_intersect.c \
+            objects/cylinder/cylinder_creation.c \
             objects/sphere/sphere_intersect.c \
+            objects/sphere/sphere_creation.c \
             objects/plane/plane_intersect.c \
+            objects/plane/plane_creation.c \
             objects/cube/cube_intersect.c \
             objects/cube/cube_creation.c \
             objects/triangle/triangle_intersect.c \
@@ -57,7 +60,7 @@ SRC_FILES = main.c \
             scenes/spheres_sylinder_plane.c \
             scenes/sphere.c \
             scenes/sphere_cylinder.c \
-			ui/user_interface.c
+			ui/user_interface.c\
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
