@@ -703,6 +703,44 @@ else if (keysym == XK_7) //Bottom view
 //	return (0);
 }
 
+// Handle mouse events in the control window
+int control_mouse_handler(int button, int x, int y, t_scene *scene)
+{
+    // Only process left clicks
+    if (button == 1) {
+        // Check shadow checkbox
+        if (x >= 30 && x <= 45 && y >= 50 && y <= 65) {
+            scene->app.checkbox_checked = !scene->app.checkbox_checked;
+            draw_control_panel(scene);
+            // Re-render with new settings when checkbox is toggled
+            render_complex_scene(scene);
+            return (0);
+        }
+        
+        // Check reflections checkbox
+        if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
+            scene->app.enable_reflections = !scene->app.enable_reflections;
+            draw_control_panel(scene);
+            return (0);
+        }
+        
+        // Check specular checkbox
+        if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
+            scene->app.enable_specular = !scene->app.enable_specular;
+            draw_control_panel(scene);
+            return (0);
+        }
+        
+        // Check if render button was clicked
+        if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
+            // Re-render with new settings
+            render_complex_scene(scene);
+            return (0);
+        }
+    }
+    return (0);
+}
+
 //Used
 int	mouse_handler(int button, int x, int y, t_scene *scene)
 {

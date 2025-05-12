@@ -231,10 +231,20 @@ typedef struct s_bounds
 	double	old_max;
 }	t_bounds;
 
+// In the t_app struct or t_scene struct, add:
+typedef struct s_control_panel {
+    t_img   img;          // Using your existing t_img structure
+    bool    initialized;  // Flag to track initialization status
+} t_control_panel;
+
 typedef struct s_app {
     void    *mlx;
     void    *win;
     bool    checkbox_checked;
+	void    *control_window;
+	bool    enable_reflections;
+    bool    enable_specular;
+	t_control_panel control_panel;  // Add this to store the control panel state
 } t_app;
 
 typedef struct s_scene
@@ -286,10 +296,12 @@ typedef struct s_thread_data
 //events
 int			close_handler(t_scene *scene);
 int			key_handler(int keysym, t_scene *scene);
+int 		control_mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
 void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
+
 
 
 //init
@@ -386,6 +398,10 @@ void	set_up_scene_cube(t_scene *scene);
 
 //user interface
 void 		draw_checkbox(t_scene *scene);
+void 		init_control_panel(t_scene *scene);
+void		draw_control_panel(t_scene *scene);
+void		destroy_control_panel(t_scene *scene);
+
 
 //camera
 t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);

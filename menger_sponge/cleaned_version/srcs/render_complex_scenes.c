@@ -207,9 +207,13 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 	reflect_dir = vec3_normalize(reflect_dir);
 
 	// 3. Calculate specular component
-	double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), hit_object->material.shininess);
-	result.specular_intensity = hit_object->material.specular * specular;
-	
+	result.specular_intensity = 0.0;
+	if(scene->app.enable_specular)
+	{
+		double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), hit_object->material.shininess);
+		result.specular_intensity = hit_object->material.specular * specular;
+	}
+
 	return (result);
 }
 
@@ -228,7 +232,7 @@ void	render_complex_scene(t_scene *scene)
 	in_shadow = 0;
 
 	if (!scene->objects)
-		set_up_scene_two_sphere(scene);
+		set_up_scene_plane(scene);
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 	
@@ -274,6 +278,7 @@ void	render_complex_scene(t_scene *scene)
 
 	// Draw the checkbox control
 	draw_checkbox(scene);
+
 
 	display_status(scene);
 }

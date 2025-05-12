@@ -38,6 +38,7 @@ void cleanup_scene(t_scene *scene)
 		free(light);
 		light = next_light;
 	}
+	destroy_control_panel(scene);
 }
 
 void	start_raytracer(t_scene *scene, char *name)
@@ -46,9 +47,11 @@ void	start_raytracer(t_scene *scene, char *name)
 	scene_init(scene);
 	//init_3d(scene);
 
-	//render_simple_scene(scene);
-	render_complex_scene(scene);
 	//render_menger_sponge(scene);
+	render_complex_scene(scene);
+
+    draw_control_panel(scene);
+
 	display_status(scene);
 
 	// Start the event loop
