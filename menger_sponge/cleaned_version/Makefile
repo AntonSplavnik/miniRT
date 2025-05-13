@@ -53,7 +53,8 @@ SRC_FILES = main.c \
 			utils/ft_strtrim.c \
 			utils/ft_calloc.c \
 			utils/ft_bzero.c \
-			utils/ft_memset.c
+			utils/ft_memset.c	\
+			utils/ft_strlcpy.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))

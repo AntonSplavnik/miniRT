@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:55:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:37:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,19 @@ void		scene_render(t_scene *scene);
 void		draw_image_to_window(t_scene *scene);
 
 //string utils
-int			ft_strncmp(char *s1, char *s2, int n);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void		write_string_to_file_descriptor(char *str, int file_descriptor);
 int			ft_strcmp(char *s1, char *s2);
 int			ft_strlen(char *str);
 char		*ft_strtrim(char *s);
-char		**ft_split(char const *s, char c);
+char		**ft_split(char *s, char c);
 int			ft_atoi(const char *nptr);
 int			ft_isspace(char c);
 double		ft_atof(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size);
 void		ft_bzero(void *s, size_t n);
 void		*ft_memset(void *s, int c, size_t n);
+size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 // 3D rendering functions
 void		init_3d(t_scene *scene);

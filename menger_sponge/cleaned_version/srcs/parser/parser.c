@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:08:35 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 13:14:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:55:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,6 +300,7 @@ int	parse_camera(t_scene *scene, char *line)
 {
 	char	**parts;
 	int		parse_result;
+	t_vec3	direction;
 
 	if (!check_camera_uniqueness(scene))
 		parse_error(scene, "Camera can only be declared once");
@@ -310,14 +311,24 @@ int	parse_camera(t_scene *scene, char *line)
 	if (!read_vector(parts[1], &scene->camera.position))
 	{
 		free_split(parts);
-		parse_error(scene, "Invalid format for camera position. Expected: o,d,f");
+		parse_error(scene, "Invalid format for camera position. Expected: x,y,z");
 	}
-	parse_result = read_vector(parts[2], &scene->camera.rotation);
-	if (!parse_result || !check_vector_normalization(scene->camera.rotation))
+	parse_result = read_vector(parts[2], &direction);
+	if (!parse_result || !check_vector_normalization(direction))
 	{
 		free_split(parts);
-		parse_error(scene, "Invalid format for camera rotation. Expected: r,p,y");
+		parse_error(scene, "Invalid format for camera direction. Expected: nx,ny,nz");
 	}
+
+	// Convert direction vector to rotation angles
+	// For a direction vector (x,y,z), we calculate:
+	// yaw (around Y axis) = atan2(x, z)
+	// pitch (around X axis) = atan2(y, sqrt(x*x + z*z))
+	// roll (around Z axis) = atan2(x, y) - this gives us the tilt of the camera
+	scene->camera.rotation.y = atan2(direction.x, direction.z);  // yaw
+	scene->camera.rotation.x = atan2(direction.y, sqrt(direction.x * direction.x + direction.z * direction.z));  // pitch
+	scene->camera.rotation.z = atan2(direction.x, direction.y);  // roll
+
 	scene->camera.fov = ft_atof(parts[3]);
 	free_split(parts);
 	if (!check_range(scene->camera.fov, 0.0, 180.0))
