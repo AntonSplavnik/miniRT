@@ -45,7 +45,19 @@ SRC_FILES = main.c \
             sphere_intersect.c \
             camera.c \
             plane_intersect.c	\
-			parser/parser.c \
+			parser/parser_utils.c \
+			parser/parser_identifiers.c \
+			parser/parser_identifiers2.c \
+			parser/parser_camera.c \
+			parser/parser_ambient.c \
+			parser/parser_light.c \
+			parser/parser_sphere.c \
+			parser/parser_plane.c \
+			parser/parser_cylinder.c \
+			parser/parser_cone.c \
+			parser/parser_file.c \
+			parser/parser_line.c \
+			parser/parser_types.c \
 			utils/ft_atof.c \
 			utils/ft_atoi.c	\
 			utils/ft_isspace.c \
@@ -74,6 +86,7 @@ mlx:
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/vector_utils
+	@mkdir -p $(OBJ_DIR)/parser
 
 # Build executable
 $(NAME): $(OBJECTS)

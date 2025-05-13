@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:40:17 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 13:33:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 18:40:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 # include "miniRT.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+
 
 #endif
