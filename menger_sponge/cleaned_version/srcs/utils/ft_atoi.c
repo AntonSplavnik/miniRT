@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:54:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:51:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:52:06 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "platform.h"
 
 int	ft_atoi(const char *nptr)
 {

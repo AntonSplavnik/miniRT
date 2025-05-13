@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:49:54 by abillote         ###   ########.fr       */
+/*   Created: 2025/05/13 10:55:13 by abillote          #+#    #+#             */
+/*   Updated: 2025/05/13 10:55:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "platform.h"
 
-# include "types.h"
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*ptr;
+	size_t			i;
 
-# define MAX_LINE_LEN 8192
-
-int	parse_scene_file(char *filename, t_scene *scene);
-
-#endif
+	ptr = s;
+	i = 0;
+	while (i < n)
+	{
+		ptr[i] = (unsigned char)c;
+		i++;
+	}
+	return (s);
+}

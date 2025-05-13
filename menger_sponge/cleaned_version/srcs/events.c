@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/09 10:09:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:20:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,10 +219,7 @@ int	key_handler(int keysym, t_scene *scene)
 	// Re-render if camera has changed
 	if (camera_changed)
 	{
-		if (!ft_strncmp(scene->name, "sphere", 6))
-			render_complex_scene(scene);
-		else if (!ft_strncmp(scene->name, "menger", 6))
-			render_menger_sponge(scene);
+		render_complex_scene(scene);
 		return (0);
 	}
 	// Reset camera position
@@ -233,10 +230,7 @@ int	key_handler(int keysym, t_scene *scene)
 #endif
 	{
 		scene->camera.position = (t_vec3){0.0, 0.0, -5.0};
-		if (!ft_strncmp(scene->name, "sphere", 6))
-			render_complex_scene(scene);
-		else if (!ft_strncmp(scene->name, "menger", 6))
-			render_menger_sponge(scene);
+		render_complex_scene(scene);
 		return (0);
 	}
 	#ifdef __APPLE__
@@ -331,10 +325,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){0, 0, -3};
 			scene->camera.rotation = (t_vec3){0, 0, 0};
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 		// Debug camera positions
 #ifdef __APPLE__
@@ -345,10 +336,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){0.0, 0.0, -4.0};
 			scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_2)
@@ -358,10 +346,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){4.0, 0.0, 0.0}; //camera on the right side
 			scene->camera.rotation = (t_vec3){0.0, -1.57, 0.0}; //-90 degrees angle around Y
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_3)
@@ -371,10 +356,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){0.0, 4.0, 2.0};
 			scene->camera.rotation = (t_vec3){1.57, 0.0, 0.0};
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_4)
@@ -384,10 +366,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){2.4, 0.4, -2.8};
 			scene->camera.rotation = (t_vec3){0.15, -0.7, 0.0};
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 		else if (keysym == KEY_5)
@@ -397,10 +376,7 @@ int	key_handler(int keysym, t_scene *scene)
 		{
 			scene->camera.position = (t_vec3){2.4, 2.0, -2.8};
 			scene->camera.rotation = (t_vec3){0.45, -0.7, 0.0};
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else if (!ft_strncmp(scene->name, "sphere", 6))
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 else if (keysym == KEY_6)
@@ -410,10 +386,7 @@ else if (keysym == XK_6) //Side view (left)
 		{
 			scene->camera.position = (t_vec3){-4.0, 0.0, 1.0}; //camera on the left side
 			scene->camera.rotation = (t_vec3){0.0, 1.57, 0.0};; // 90 degrees angle around Y
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 #ifdef __APPLE__
 else if (keysym == KEY_7)
@@ -424,10 +397,7 @@ else if (keysym == XK_7) //Bottom view
 			// Position to look at the bottom cap
 			scene->camera.position = vec3_create(0.0, -4.0, 2.0);
 			scene->camera.rotation = vec3_create(-1.57, 0.0, 0.0); // Look straight up
-			if (!ft_strncmp(scene->name, "menger", 6))
-				render_menger_sponge(scene);
-			else
-				render_complex_scene(scene);
+			render_complex_scene(scene);
 		}
 
 		// Ensure we're in 3D mode and render

@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:49:54 by abillote         ###   ########.fr       */
+/*   Created: 2025/05/13 10:54:19 by abillote          #+#    #+#             */
+/*   Updated: 2025/05/13 10:54:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#include "platform.h"
 
-# include "types.h"
-
-# define MAX_LINE_LEN 8192
-
-int	parse_scene_file(char *filename, t_scene *scene);
-
-#endif
+void	ft_bzero(void *s, size_t n)
+{
+	ft_memset(s, 0, n);
+}

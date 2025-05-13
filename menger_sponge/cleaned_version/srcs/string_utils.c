@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 16:20:25 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/10 16:32:15 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:09:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,15 @@ int	ft_strlen(char *str)
 int	ft_strncmp(char *s1, char *s2, int n)
 {
 	if (NULL == s1 || NULL == s2 || n <= 0)
-		return (0);
-	while (*s1 == *s2 && n > 0 && *s1 != '\0')
+		return (1);
+	while (n > 0 && *s1 && *s2 && *s1 == *s2)
 	{
 		++s1;
 		++s2;
 		--n;
 	}
+	if (n == 0 || (*s1 == *s2))
+		return (0);
 	return (*s1 - *s2);
 }
 

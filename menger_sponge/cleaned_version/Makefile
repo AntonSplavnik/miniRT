@@ -44,7 +44,16 @@ SRC_FILES = main.c \
             shadows.c \
             sphere_intersect.c \
             camera.c \
-            plane_intersect.c
+            plane_intersect.c	\
+			parser/parser.c \
+			utils/ft_atof.c \
+			utils/ft_atoi.c	\
+			utils/ft_isspace.c \
+			utils/ft_split.c	\
+			utils/ft_strtrim.c \
+			utils/ft_calloc.c \
+			utils/ft_bzero.c \
+			utils/ft_memset.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))

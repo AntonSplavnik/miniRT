@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 16:34:59 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:35:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:52:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "platform.h"
 
 static void	*ft_free_filled(char **substr, size_t j)
 {

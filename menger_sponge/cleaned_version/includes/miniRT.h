@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:58:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:55:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <pthread.h>
 # include <ctype.h>
 # include "platform_specifics.h"
+# include "types.h"
 # include "parser.h"
-
 
 # define WIDTH	1280
 # define HEIGHT	1024
@@ -49,205 +49,6 @@
 # define ELECTRIC_BLUE   0x0066FF
 # define LAVA_RED        0xFF3300
 
-typedef struct s_vec3
-{
-	double	x;
-	double	y;
-	double	z;
-}				t_vec3;
-
-typedef struct	s_color
-{
-	int	r;
-	int g;
-	int b;
-}	t_color;
-
-//material properties for objects (bonus)
-//for bonuses: nothing mentionned so we can add the material properties in the rt files
-typedef struct	s_material
-{
-	t_color	color;
-	double	specular; //specular reflection coeff
-	double	shininess; //shininess exponent for specular reflection
-	double	reflectivity; //reflectivity coeff
-	int		checkerboard; //flag for checkerboard pattern
-	t_color	checker_color; //Secondary color for checkerboard
-}	t_material;
-
-
-//Ambient lighting
-typedef struct s_ambient
-{
-	double	ratio; //Ambient lighting ratio (0.0 - 1.0)
-	t_color	color;
-}	t_ambient;
-
-typedef struct	s_light
-{
-	t_vec3	position;
-	double	intensity; //light brightness ratio (0.0 - 1.0)
-	t_color	color; //light color (for bonus)
-	struct s_light *next; //pointer to next light (bonuses)
-}	t_light;
-
-typedef struct s_aabb
-{
-	t_vec3	min;
-	t_vec3	max;
-}				t_aabb;
-
-typedef struct s_bvh_node
-{
-	t_aabb				bounds;
-	struct s_bvh_node	*left;
-	struct s_bvh_node	*right;
-	int					is_leaf;
-	int					iteration;
-}				t_bvh_node;
-
-typedef struct s_camera
-{
-	t_vec3	position;
-	t_vec3	rotation; //simple camera orientation, from parsing
-	double	fov; //range 0-180
-
-	//These three vectors together define a local coordinate system for the camera
-	t_vec3	forwards; //forward vector
-	t_vec3	right; //right vector
-	t_vec3	up; //up vector
-
-	double	aspect_ratio; //Initialized but not used yet
-	double	near; //Initialized but not used yet
-	double	far; //Initialized but not used yet
-}				t_camera;
-
-typedef enum	e_object_type
-{
-	SPHERE,
-	PLANE,
-	CYLINDER,
-	CONE, //For bonus
-	HYPERBOLOID, //For bonus
-	PARABOLOID, //For bonus
-}	t_object_type;
-
-//Object structure, linked list
-typedef struct	s_object
-{
-	void			*data; //pointer to store any object struct
-	t_object_type	type;
-	t_material		material;
-	struct s_object	*next;
-}	t_object;
-
-typedef struct	s_sphere
-{
-	t_vec3	center; //from parsing
-	double	diameter; //from parsing
-	double	radius; //calculated from diameter
-}	t_sphere;
-
-typedef struct s_plane
-{
-	t_vec3	point; //from parsing
-	t_vec3	normal; //from parsing
-}	t_plane;
-
-typedef struct s_cylinder
-{
-	t_vec3	center; //parsing
-	t_vec3	axis; //parsing
-	double	diameter; //parsing
-	double	radius; //calculated from diameter
-	double height; //parsing
-}	t_cylinder;
-
-typedef struct	s_ray
-{
-	t_vec3	origin;
-	t_vec3	direction; //normalized
-}	t_ray;
-
-typedef struct	s_hit_record
-{
-	double		t; //Ray parameter at the intersection
-	t_vec3		point; //Point of intersection
-	t_vec3		normal; //Surface normal at intersection
-	t_material	material; //material of the intersected object
-	t_object	*object; //Pointer to the intersected object
-	int			inside; //Flag indicating if the ray is inside the object
-}	t_hit_record;
-
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*pixels_ptr;
-	int		bpp;
-	int		endian;
-	int		line_len;
-}				t_img;
-
-typedef struct s_menger
-{
-	int			iterations;
-	double		size;
-	t_vec3		position;
-	t_vec3		rotation;
-	t_bvh_node	*bvh_root;
-}				t_menger;
-
-typedef struct s_bounds
-{
-	double	new_min;
-	double	new_max;
-	double	old_min;
-	double	old_max;
-}	t_bounds;
-
-typedef struct s_scene
-{
-	char		*name; //input file name
-	void		*mlx_connection; //MLX pointer
-	void		*mlx_window; //MLW window pointer
-	t_img		img; //Image struct
-
-	int			width; // Window width
-	int			height; //Window height
-
-	t_ambient	ambient;
-	t_camera	camera;
-	t_light		*lights; //Linked list of lights
-	t_object	*objects; //Linked list of objects
-
-	//for bonuses
-	int 		sample; //for anti-aliasing
-	int			max_depth; //Maximum recursion depth (for reflections)
-
-	double		escape_value;
-	int			iterations_defintion;
-	double		shift_x;
-	double		shift_y;
-	double		zoom;
-	double		julia_x;
-	double		julia_y;
-	int			mouse_control;
-	int			is_dragging;
-	int			prev_mouse_x;
-	int			prev_mouse_y;
-
-	t_menger	menger;
-	int			is_3d;
-	int			resolution_factor;  // For controlling render resolution
-}				t_scene;
-
-typedef struct s_thread_data
-{
-	int			start_row;
-	int			end_row;
-	t_scene	*scene;
-}	t_thread_data;
-
 //events
 int			close_handler(t_scene *scene);
 int			key_handler(int keysym, t_scene *scene);
@@ -259,7 +60,6 @@ void		display_progress(t_scene *scene, const char *status_text);
 //init
 void		scene_init(t_scene *scene);
 void		cleanup_scene(t_scene *scene);
-
 
 //render
 void		pixel_put(int x, int y, t_img *img, int color);
@@ -276,6 +76,9 @@ char		**ft_split(char const *s, char c);
 int			ft_atoi(const char *nptr);
 int			ft_isspace(char c);
 double		ft_atof(const char *str);
+void		*ft_calloc(size_t nmemb, size_t size);
+void		ft_bzero(void *s, size_t n);
+void		*ft_memset(void *s, int c, size_t n);
 
 // 3D rendering functions
 void		init_3d(t_scene *scene);
@@ -319,6 +122,7 @@ void		add_object(t_scene *scene, t_object *object);
 t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
+t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height);
 
 //object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
@@ -339,6 +143,5 @@ void		set_up_scene_two_sphere(t_scene *scene);
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
-
 
 #endif

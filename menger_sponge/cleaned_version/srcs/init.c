@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/01 13:41:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:58:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	data_init(t_scene *scene)
 	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
 	scene->camera.near = 0.1;
 	scene->camera.far = 100.0;
-	scene->camera.position = (t_vec3){0.0, 0.0, -3.0};
+	scene->camera.position = (t_vec3){0.0, 0.0, 0.0};
 	scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
 
 	// Initialize Menger sponge defaults

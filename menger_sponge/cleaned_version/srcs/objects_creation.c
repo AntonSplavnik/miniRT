@@ -6,11 +6,36 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:25:52 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/30 10:06:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:08:40 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
+
+t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height)
+{
+	t_object	*object;
+	t_cone		*cone;
+
+	object = malloc(sizeof(t_object));
+	if (!object)
+		return (NULL);
+	cone = malloc(sizeof(t_cone));
+	if (!cone)
+	{
+		free(object);
+		return (NULL);
+	}
+	cone->tip = tip;
+	cone->axis = vec3_normalize(axis);
+	cone->radius = radius;
+	cone->height = height;
+	object->data = cone;
+	object->material = create_material(create_color(255, 255, 255));
+	object->type = CONE;
+	object->next = NULL;
+	return (object);
+}
 
 //Note: Due to args limitation (norminette), we need to modify the color later, after cylinder creation
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height)

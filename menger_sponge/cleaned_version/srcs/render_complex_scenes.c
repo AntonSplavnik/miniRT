@@ -231,8 +231,14 @@ void	render_complex_scene(t_scene *scene)
 	t_vec3		light_dir;
 	t_object	*hit_object;
 
-	if (!scene->objects)
-		set_up_scene_plane(scene);
+	//if (!scene->objects)
+	//	set_up_scene_plane(scene);
+
+	if (!scene->lights)
+	{
+		write_string_to_file_descriptor("Error: No light source defined in scene\n", STDERR_FILENO);
+		return;
+	}
 
 	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 	for (int y = 0; y < scene->height; y++)
