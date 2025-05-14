@@ -240,12 +240,11 @@ void	render_complex_scene(t_scene *scene)
 	{
 		for (int x = 0; x < scene->width; x++)
 		{
-			compute_ray_direction(scene, &ray, fov_scale, x, y);
 
 			//set background color
 			color = (217 << 16 | 185 << 8 | 155); //beige
 
-			
+			// ray tracing
 			if (find_closest_intersection(scene, ray, &t, &hit_object))
 			{
 				compute_ray_intersaction(ray, hit_object, t, &hit_point, &normal);
