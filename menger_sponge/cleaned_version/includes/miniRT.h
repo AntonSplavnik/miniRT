@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:40:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:35:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <math.h>
 # include <pthread.h>
 # include <ctype.h>
+# include <stdbool.h>
 # include "platform_specifics.h"
 # include "types.h"
 # include "parser.h"
@@ -52,10 +53,13 @@
 //events
 int			close_handler(t_scene *scene);
 int			key_handler(int keysym, t_scene *scene);
+int 		control_mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
 void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
+
+
 
 //init
 void		scene_init(t_scene *scene);
@@ -84,7 +88,6 @@ size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 // 3D rendering functions
 void		init_3d(t_scene *scene);
 void		render_menger_sponge(t_scene *scene);
-t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 
 // BVH functions
 t_bvh_node	*build_menger_bvh(int max_iterations);
@@ -124,6 +127,10 @@ t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
 t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height);
+t_object	*create_cube(t_vec3 center, double side_length, t_color color);
+t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color);
+t_object	*create_mesh(t_triangle *triangles, int triangle_count, t_color color);
+t_object	*create_cube_mesh(t_vec3 center, double size, t_color color);
 
 //object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
@@ -132,15 +139,19 @@ t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
 int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
+int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
+t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
+int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
+t_vec3		triangle_normal(t_triangle triangle);
+int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
-//rendering test
-void		render_simple_scene(t_scene *scene);
+//rendering
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y);
 void		render_complex_scene(t_scene *scene);
-void		set_up_scene_two_sphere(t_scene *scene);
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
@@ -191,5 +202,25 @@ int		parse_scene_file(char *filename, t_scene *scene);
 int		parse_line(t_scene *scene, char *line);
 int		parse_parameters(t_scene *scene, char *line);
 int		copy_to_line(t_scene *scene, char *buffer, int *pos, char *line);
+//scenes
+void	set_up_scene_triangle(t_scene *scene);
+void	set_up_scene_plane(t_scene *scene);
+void	set_up_scene_two_sphere(t_scene *scene);
+void	set_up_scene_cylinder(t_scene *scene);
+void	set_up_scene_mesh(t_scene *scene);
+void	set_up_scene_cube(t_scene *scene);
+
+//user interface
+void 		draw_checkbox(t_scene *scene);
+void 		init_control_panel(t_scene *scene);
+void		draw_control_panel(t_scene *scene);
+void		destroy_control_panel(t_scene *scene);
+
+
+//camera
+t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
+t_vec3		get_forward_vector(t_vec3 rotation);
+t_vec3		get_right_vector(t_vec3 rotation);
+t_vec3		get_up_vector(t_vec3 rotation);
 
 #endif

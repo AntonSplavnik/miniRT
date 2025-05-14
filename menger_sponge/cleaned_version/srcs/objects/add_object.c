@@ -1,20 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   platform.h                                         :+:      :+:    :+:   */
+/*   objects_creation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/29 10:40:17 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:40:50 by abillote         ###   ########.fr       */
+/*   Created: 2025/04/29 13:25:52 by abillote          #+#    #+#             */
+/*   Updated: 2025/04/30 10:06:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PLATFORM_H
-# define PLATFORM_H
-
-#include "miniRT.h"
+#include "platform.h"
 
 
 
-#endif
+
+
+//Add an object to the scene's object list
+void	add_object(t_scene *scene, t_object *object)
+{
+	t_object	*current;
+
+	if (!scene || !object)
+		return ;
+	if (!scene->objects)
+	{
+		scene->objects = object;
+		return ;
+	}
+	current = scene->objects;
+	while (current->next)
+		current = current->next;
+	current->next = object;
+}

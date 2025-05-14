@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/13 10:42:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:37:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void cleanup_scene(t_scene *scene)
 		free(light);
 		light = next_light;
 	}
+	destroy_control_panel(scene);
 }
 
 void	start_raytracer(t_scene *scene, char *name)
@@ -53,6 +54,8 @@ void	start_raytracer(t_scene *scene, char *name)
 		exit(EXIT_FAILURE);
 	}
 	render_complex_scene(scene);
+
+    draw_control_panel(scene);
 
 	display_status(scene);
 

@@ -32,6 +32,18 @@ static void	data_init(t_scene *scene)
 	scene->lights = NULL;
 	scene->objects = NULL;
 
+	//app
+	scene->app.mlx = NULL;
+	scene->app.win = NULL;
+
+	// Initialize control window
+    scene->app.control_window = NULL;
+    scene->app.checkbox_checked = false;
+    scene->app.enable_reflections = true;   // Default values
+    scene->app.enable_specular = true;      // Default values
+	// Initialize control panel
+    scene->app.control_panel.initialized = false;
+
 	//Bonus
 	scene->sample = 1;
 	scene->max_depth = 3;
@@ -69,19 +81,31 @@ static void	data_init(t_scene *scene)
 static void	events_init(t_scene *scene)
 {
 #ifdef __APPLE__
-	mlx_hook(scene->mlx_window, 2, 1L<<0, key_handler, scene);
-	mlx_hook(scene->mlx_window, 4, 1L<<2, mouse_handler, scene);
-	mlx_hook(scene->mlx_window, 5, 1L<<3, mouse_release, scene);
-	mlx_hook(scene->mlx_window, 17, 0, close_handler, scene);
+    // Main window hooks
+    mlx_hook(scene->mlx_window, 2, 1L<<0, key_handler, scene);
+    mlx_hook(scene->mlx_window, 4, 1L<<2, mouse_handler, scene);
+    mlx_hook(scene->mlx_window, 5, 1L<<3, mouse_release, scene);
+    mlx_hook(scene->mlx_window, 17, 0, close_handler, scene);
+    
+    // Control window hooks
+    mlx_hook(scene->app.control_window, 4, 1L<<2, control_mouse_handler, scene);
+    mlx_hook(scene->app.control_window, 17, 0, close_handler, scene);
 #else
-	mlx_hook(scene->mlx_window, KeyPress,
-		KeyPressMask, key_handler, scene);
-	mlx_hook(scene->mlx_window, ButtonPress,
-		ButtonPressMask, mouse_handler, scene);
-	mlx_hook(scene->mlx_window, ButtonRelease,
-		ButtonReleaseMask, mouse_release, scene);
-	mlx_hook(scene->mlx_window, DestroyNotify,
-		StructureNotifyMask, close_handler, scene);
+    // Main window hooks
+    mlx_hook(scene->mlx_window, KeyPress,
+        KeyPressMask, key_handler, scene);
+    mlx_hook(scene->mlx_window, ButtonPress,
+        ButtonPressMask, mouse_handler, scene);
+    mlx_hook(scene->mlx_window, ButtonRelease,
+        ButtonReleaseMask, mouse_release, scene);
+    mlx_hook(scene->mlx_window, DestroyNotify,
+        StructureNotifyMask, close_handler, scene);
+        
+    // Control window hooks
+    mlx_hook(scene->app.control_window, ButtonPress,
+        ButtonPressMask, control_mouse_handler, scene);
+    mlx_hook(scene->app.control_window, DestroyNotify,
+        StructureNotifyMask, close_handler, scene);
 #endif
 }
 
@@ -92,6 +116,8 @@ void scene_mlx_init(t_scene *scene)
 		malloc_error();
 	scene->mlx_window = mlx_new_window(scene->mlx_connection,
 			WIDTH, HEIGHT, scene->name);
+	scene->app.control_window = mlx_new_window(scene->mlx_connection,
+            250, 300, "Controls");
 	if (NULL == scene->mlx_window)
 	{
 #ifdef __linux__
@@ -122,4 +148,6 @@ void	scene_init(t_scene *scene)
 	data_init(scene);
 	scene_mlx_init(scene);
 	events_init(scene);
+
+	init_control_panel(scene);
 }

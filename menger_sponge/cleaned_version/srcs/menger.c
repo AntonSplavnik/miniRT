@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:30:00 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/09 10:17:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:05:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_menger_thread_data
     int         end_y;
 } t_menger_thread_data;
 
-
+//Used
 // Function to create and initialize a new BVH node
 static t_bvh_node *create_bvh_node(t_aabb bounds, int is_leaf, int iteration)
 {
@@ -54,7 +54,7 @@ static t_bvh_node *create_bvh_node(t_aabb bounds, int is_leaf, int iteration)
     return (node);
 }
 
-
+//Used
 // Recursive function to build a BVH for the Menger sponge
 t_bvh_node *build_menger_bvh_recursive(t_aabb bounds, int current_iter, int max_iter)
 {
@@ -175,7 +175,7 @@ t_bvh_node *build_menger_bvh_recursive(t_aabb bounds, int current_iter, int max_
     return node;
 }
 
-
+//Used
 // Main function to build the BVH
 t_bvh_node *build_menger_bvh(int max_iterations)
 {
@@ -186,7 +186,7 @@ t_bvh_node *build_menger_bvh(int max_iterations)
     return build_menger_bvh_recursive(bounds, max_iterations, max_iterations);
 }
 
-
+//Used
 // Free the BVH tree
 void free_bvh(t_bvh_node *node)
 {
@@ -212,7 +212,7 @@ void free_bvh(t_bvh_node *node)
     free(node);
 }
 
-
+//Used
 // Ray-AABB intersection test
 int ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
                       double *t_min, double *t_max)
@@ -303,7 +303,7 @@ int ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
     return 1;
 }
 
-
+//Used
 #if HAS_NEON
 int ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin, t_vec3 dir, double *out_tmin, double *out_tmax)
 {
@@ -342,7 +342,7 @@ int ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin, t_vec3 dir, double *ou
 }
 #endif
 
-
+//Used
 //optimized version of the ray_intersect_bvh function
 int ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin, t_vec3 ray_dir,
                       double *t_min, double *t_max)
@@ -415,7 +415,7 @@ int ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin, t_vec3 ray_dir,
     return 0;
 }
 
-
+//Used
 // Get environment color for reflections
 int get_environment_color(t_vec3 direction)
 {
@@ -444,7 +444,7 @@ int get_environment_color(t_vec3 direction)
     }
 }
 
-
+//Used
 // Helper function to reflect a ray
 t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal)
 {
@@ -464,7 +464,7 @@ t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal)
     return reflection;
 }
 
-
+//Used
 // Helper function to blend two colors with a given weight
 int blend_colors(int color1, int color2, double weight)
 {
@@ -483,7 +483,7 @@ int blend_colors(int color1, int color2, double weight)
     return (r << 16) | (g << 8) | b;
 }
 
-
+//Used
 void	init_3d(t_scene *scene)
 {
 	scene->is_3d = 1;
@@ -517,6 +517,39 @@ void	init_3d(t_scene *scene)
     scene->camera.position = (t_vec3){0.0, 3.0, 0.0}; // Directly above
     scene->camera.rotation = (t_vec3){-1.57, 0.0, 0.0}; // Looking straight down
 }
+
+//Used
+//t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
+//{
+//	t_vec3	result;
+//	double	cos_x, sin_x, cos_y, sin_y, cos_z, sin_z;
+//	t_vec3  temp;
+
+//	cos_x = cos(rotation.x);
+//	sin_x = sin(rotation.x);
+//	cos_y = cos(rotation.y);
+//	sin_y = sin(rotation.y);
+//	cos_z = cos(rotation.z);
+//	sin_z = sin(rotation.z);
+
+//	// Rotate around X axis
+//	temp.x = point.x;
+//	temp.y = point.y * cos_x - point.z * sin_x;
+//	temp.z = point.y * sin_x + point.z * cos_x;
+
+//	// Rotate around Y axis
+//	result.x = temp.x * cos_y + temp.z * sin_y;
+//	result.y = temp.y;
+//	result.z = -temp.x * sin_y + temp.z * cos_y;
+
+//	// Rotate around Z axis (using result as input)
+//	temp = result;
+//	result.x = temp.x * cos_z - temp.y * sin_z;
+//	result.y = temp.x * sin_z + temp.y * cos_z;
+//	result.z = temp.z;
+
+//	return (result);
+//}
 
 // The is_menger_iteration function is not used anymore with BVH
 // So we include it only if specifically needed for debugging
@@ -566,7 +599,7 @@ static int is_menger_iteration(t_vec3 point, int iterations)
 }
 #endif
 
-
+//Used
 //optimized version of the render_menger_sponge function (inline pixel fill)
 void *render_menger_thread(void *arg)
 {
@@ -732,7 +765,7 @@ void *render_menger_thread(void *arg)
 }
 
 
-
+//Used
 // Replace the render_menger_sponge function with this optimized version
 void	render_menger_sponge(t_scene *scene)
 {

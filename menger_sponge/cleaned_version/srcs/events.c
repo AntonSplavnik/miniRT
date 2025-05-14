@@ -96,7 +96,7 @@ int	close_handler(t_scene *scene)
 }
 
 //Used
-int	key_handler(int keysym, t_scene *scene)
+int key_handler(int keysym, t_scene *scene)
 {
 #ifdef __APPLE__
 	if (keysym == KEY_ESC)
@@ -115,32 +115,38 @@ int	key_handler(int keysym, t_scene *scene)
 #ifdef __APPLE__
 	if (keysym == KEY_W)
 	{
-		scene->camera.position.z += 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_S)
 	{
-		scene->camera.position.z -= 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_A)
 	{
-		scene->camera.position.x -= 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_D)
 	{
-		scene->camera.position.x += 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_Q)
 	{
-		scene->camera.position.y += 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_E)
 	{
-		scene->camera.position.y -= 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == KEY_LEFT)
@@ -166,32 +172,38 @@ int	key_handler(int keysym, t_scene *scene)
 #else
 	if (keysym == XK_w)
 	{
-		scene->camera.position.z += 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_s)
 	{
-		scene->camera.position.z -= 0.5;
+		t_vec3 forward = get_forward_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(forward, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_a)
 	{
-		scene->camera.position.x -= 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_d)
 	{
-		scene->camera.position.x += 0.5;
+		t_vec3 right = get_right_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(right, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_q)
 	{
-		scene->camera.position.y += 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_add(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_e)
 	{
-		scene->camera.position.y -= 0.5;
+		t_vec3 up = get_up_vector(scene->camera.rotation);
+		scene->camera.position = vec3_subtract(scene->camera.position, vec3_scale(up, 0.5));
 		camera_changed = 1;
 	}
 	else if (keysym == XK_Left)
@@ -661,11 +673,65 @@ else if (keysym == XK_7) //Bottom view
 //	return (0);
 }
 
+// Handle mouse events in the control window
+int control_mouse_handler(int button, int x, int y, t_scene *scene)
+{
+    // Only process left clicks
+    if (button == 1) {
+        // Check shadow checkbox
+        if (x >= 30 && x <= 45 && y >= 50 && y <= 65) {
+            scene->app.checkbox_checked = !scene->app.checkbox_checked;
+            draw_control_panel(scene);
+            // Re-render with new settings when checkbox is toggled
+            render_complex_scene(scene);
+            return (0);
+        }
+        
+        // Check reflections checkbox
+        if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
+            scene->app.enable_reflections = !scene->app.enable_reflections;
+            draw_control_panel(scene);
+            return (0);
+        }
+        
+        // Check specular checkbox
+        if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
+            scene->app.enable_specular = !scene->app.enable_specular;
+            draw_control_panel(scene);
+            return (0);
+        }
+        
+        // Check if render button was clicked
+        if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
+            // Re-render with new settings
+            render_complex_scene(scene);
+            return (0);
+        }
+    }
+    return (0);
+}
+
 //Used
 int	mouse_handler(int button, int x, int y, t_scene *scene)
 {
 	(void)x;
 	(void)y;
+
+	// Check for checkbox clicks
+    if (button == 1) { // Left click
+        int cb_x = 50;
+        int cb_y = 50;
+        int cb_size = 20;
+
+        if (x >= cb_x && x <= cb_x + cb_size && y >= cb_y && y <= cb_y + cb_size) {
+            scene->app.checkbox_checked = !scene->app.checkbox_checked;
+			render_complex_scene(scene);
+
+            // mlx_clear_window(scene->mlx_connection, scene->mlx_window);
+            // draw_checkbox(scene);
+        }
+    }
+
 	// For 3D mode - handle camera controls
 	if (scene->is_3d)
 	{

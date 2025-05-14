@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/14 11:00:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:43:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,20 +203,42 @@ typedef struct s_bounds
 	double	old_max;
 }	t_bounds;
 
+// In the t_app struct or t_scene struct, add:
+typedef struct s_control_panel {
+    t_img   img;          // Using your existing t_img structure
+    bool    initialized;  // Flag to track initialization status
+} t_control_panel;
+
+typedef struct s_app {
+    void    *mlx;
+    void    *win;
+    bool    checkbox_checked;
+	void    *control_window;
+	bool    enable_reflections;
+    bool    enable_specular;
+	t_control_panel control_panel;  // Add this to store the control panel state
+} t_app;
+
 typedef struct s_scene
 {
-	char		*name;
-	void		*mlx_connection;
-	void		*mlx_window;
-	t_img		img;
-	int			width;
-	int			height;
+	char		*name; //input file name
+	void		*mlx_connection; //MLX pointer
+	void		*mlx_window; //MLW window pointer
+	t_img		img; //Image struct
+	t_app		app;
+
+	int			width; // Window width
+	int			height; //Window height
+
 	t_ambient	ambient;
 	t_camera	camera;
-	t_light		*lights;
-	t_object	*objects;
-	int 		sample;
-	int			max_depth;
+	t_light		*lights; //Linked list of lights
+	t_object	*objects; //Linked list of objects
+
+	//for bonuses
+	int 		sample; //for anti-aliasing
+	int			max_depth; //Maximum recursion depth (for reflections)
+
 	double		escape_value;
 	int			iterations_defintion;
 	double		shift_x;
@@ -228,9 +250,10 @@ typedef struct s_scene
 	int			is_dragging;
 	int			prev_mouse_x;
 	int			prev_mouse_y;
+
 	t_menger	menger;
 	int			is_3d;
-	int			resolution_factor;
+	int			resolution_factor;  // For controlling render resolution
 }				t_scene;
 
 typedef struct s_thread_data
