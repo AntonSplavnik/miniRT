@@ -52,6 +52,8 @@ SRC_FILES = main.c \
 			parser/parser_file.c \
 			parser/parser_line.c \
 			parser/parser_types.c \
+			parser/parser_triangle.c \
+			parser/parser_cube.c \
 			utils/ft_atof.c \
 			utils/ft_atoi.c	\
 			utils/ft_isspace.c \

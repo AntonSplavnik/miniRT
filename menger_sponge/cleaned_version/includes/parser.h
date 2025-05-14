@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:46:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 21:43:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int		parse_sphere(t_scene *scene, char *line);
 int		parse_plane(t_scene *scene, char *line);
 int		parse_cylinder(t_scene *scene, char *line);
 int		parse_cone(t_scene *scene, char *line);
+int		parse_triangle(t_scene *scene, char *line);
+int		parse_cube(t_scene *scene, char *line);
 
 // File handling functions
 int		is_valid_filename(char *filename);
