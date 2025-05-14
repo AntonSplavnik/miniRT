@@ -219,15 +219,15 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 
 void	render_complex_scene(t_scene *scene)
 {
-	t_ray		ray;
-	int			color;
-	t_vec3		hit_point;
-	t_vec3		normal;
-	double		light_intensity;
-	t_light_result light_info;
-	t_object	*hit_object;
-	int			in_shadow;
-	double		t;
+	t_ray			ray;
+	int				color;
+	t_vec3			hit_point;
+	t_vec3			normal;
+	double			light_intensity;
+	t_light_result	light_info;
+	t_object		*hit_object;
+	int				in_shadow;
+	double			t;
 	
 	in_shadow = 0;
 
@@ -244,6 +244,7 @@ void	render_complex_scene(t_scene *scene)
 			//set background color
 			color = (217 << 16 | 185 << 8 | 155); //beige
 
+			compute_ray_direction(scene, &ray, fov_scale, x, y);
 			// ray tracing
 			if (find_closest_intersection(scene, ray, &t, &hit_object))
 			{
