@@ -6,18 +6,18 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:40:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:01:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
 
-void	parse_cone_vectors(t_scene *scene, char **parts, t_vec3 *tip, t_vec3 *axis)
+void	parse_cone_vectors(t_scene *scene, char **parts, t_vec3 *apex, t_vec3 *axis)
 {
-	if (!read_vector(parts[1], tip))
+	if (!read_vector(parts[1], apex))
 	{
 		free_split(parts);
-		parse_error(scene, "Invalid format for cone tip. Expected: x,y,z");
+		parse_error(scene, "Invalid format for cone apex. Expected: x,y,z");
 	}
 	if (!read_vector(parts[2], axis))
 	{
@@ -56,7 +56,7 @@ int	parse_cone(t_scene *scene, char *line)
 {
 	char	**parts;
 	t_object	*cone;
-	t_vec3		tip;
+	t_vec3		apex;
 	t_vec3		axis;
 	double		radius;
 	double		height;
@@ -66,10 +66,10 @@ int	parse_cone(t_scene *scene, char *line)
 	if (!parts)
 		parse_error(scene, "Failed to split line");
 	check_parts_count(scene, parts, 6, "cone");
-	parse_cone_vectors(scene, parts, &tip, &axis);
+	parse_cone_vectors(scene, parts, &apex, &axis);
 	parse_cone_data(scene, parts, &radius, &height, &color);
 	free_split(parts);
-	cone = create_cone(tip, axis, radius, height);
+	cone = create_cone(apex, axis, radius, height);
 	if(!cone)
 		parse_error(scene, "Failed to create cone");
 	cone->material.color = color;

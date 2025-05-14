@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:42:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:00:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,10 +154,11 @@ typedef struct s_mesh
 
 typedef struct s_cone
 {
-	t_vec3  tip;
-	t_vec3  axis;
-	double  height;
-	double  radius;
+	t_vec3	apex;
+	t_vec3	axis;
+	double	height;
+	double	radius;
+	double	angle;
 } t_cone;
 
 typedef struct	s_ray

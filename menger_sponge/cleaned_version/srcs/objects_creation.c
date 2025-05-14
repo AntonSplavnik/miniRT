@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:25:52 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:08:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:01:05 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
 
-t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height)
+t_object	*create_cone(t_vec3 apex, t_vec3 axis, double radius, double height)
 {
 	t_object	*object;
 	t_cone		*cone;
@@ -26,10 +26,11 @@ t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height)
 		free(object);
 		return (NULL);
 	}
-	cone->tip = tip;
+	cone->apex = apex;
 	cone->axis = vec3_normalize(axis);
 	cone->radius = radius;
 	cone->height = height;
+	cone->angle = atan2(cone->radius, cone->height);
 	object->data = cone;
 	object->material = create_material(create_color(255, 255, 255));
 	object->type = CONE;
