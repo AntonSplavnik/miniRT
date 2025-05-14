@@ -13,6 +13,6 @@
 #ifndef PLATFORM_H
 # define PLATFORM_H
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 #endif

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 typedef struct s_light_result {
 	double diffuse;
@@ -228,13 +228,14 @@ void	render_complex_scene(t_scene *scene)
 	t_object	*hit_object;
 	int			in_shadow;
 	double		t;
+	double		fov_scale;
 	
 	in_shadow = 0;
 
 	if (!scene->objects)
 		set_up_scene_triangle(scene);
 
-	double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 	
 	for (int y = 0; y < scene->height; y++)
 	{
@@ -243,6 +244,9 @@ void	render_complex_scene(t_scene *scene)
 
 			//set background color
 			color = (217 << 16 | 185 << 8 | 155); //beige
+
+			// Initialize ray direction before using it
+			compute_ray_direction(scene, &ray, fov_scale, x, y);
 
 			// ray tracing
 			if (find_closest_intersection(scene, ray, &t, &hit_object))
