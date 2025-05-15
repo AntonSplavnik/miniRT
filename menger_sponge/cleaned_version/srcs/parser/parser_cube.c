@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/14 21:44:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:22:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	parse_cube(t_scene *scene, char *line)
 	parts = ft_split(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
-	check_parts_count(scene, parts, 5, "cube");
+	check_parts_count(scene, parts, 4, "cube");
 	parse_cube_data(scene, parts, &center, &side_length, &color);
 	free_split(parts);
 	cube = create_cube(center, side_length, color);

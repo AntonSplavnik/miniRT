@@ -63,16 +63,16 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 				*hit_object = current;
 			}
 		}
-		//else if (current->type == CUBE)
-		//{
-		//	t_cube	*cube = (t_cube *)(current->data);
-		//	if (ray_cube_intersect(ray, *cube, &t_temp) && t_temp < t_closest)
-		//	{
-		//		t_closest = t_temp;
-		//		hit_something = 1;
-		//		*hit_object = current;
-		//	}
-		//}
+		else if (current->type == CUBE)
+		{
+			t_cube	*cube = (t_cube *)(current->data);
+			if (ray_cube_intersect(ray, *cube, &t_temp) && t_temp < t_closest)
+			{
+				t_closest = t_temp;
+				hit_something = 1;
+				*hit_object = current;
+			}
+		}
 		else if (current->type == TRIANGLE)
 		{
 			t_triangle *triangle = (t_triangle *)(current->data);
