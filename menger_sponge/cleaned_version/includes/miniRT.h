@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 12:58:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 13:13:34 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,9 @@ t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
 int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
 t_vec3		triangle_normal(t_triangle triangle);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
+int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
+								double radius, double *t);
+int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);

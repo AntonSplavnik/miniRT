@@ -1,5 +1,5 @@
 ///* ************************************************************************** */
-///*                                                                            */
+///*	                                                                */
 ///*                                                        :::      ::::::::   */
 ///*   objects_intersections.c                            :+:      :+:    :+:   */
 ///*                                                    +:+ +:+         +:+     */
@@ -25,8 +25,10 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 	double	discriminant;
 	double	t_body;
 	int		hit_body;
+	int		hit_base;
 	double	t1;
 	double	t2;
+	double	t_base;
 
 	//Calculate base center: apex + axis * heigth
 	base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
@@ -77,17 +79,127 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 			//calculate both intersection point
 			t1 = (-b - sqrt(discriminant)) / (2.0 * a);
 			t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+
+			 // Check if intersections are valid (positive t and within height)
+			hit_body = 0;
+			t_body = INFINITY;
+
+			// Check first intersection point
+			if (t1 > 0.0001)
+			{
+				t_vec3 hit = vec3_add(ray.origin, vec3_scale(ray.direction, t1));
+				t_vec3 hit_to_apex = vec3_subtract(hit, cone.apex);
+				double projection = vec3_dot(hit_to_apex, cone.axis);
+
+				// Check if intersection is within cone height and not behind apex
+				if (projection > 0 && projection < cone.height)
+				{
+					// Additional check: is this point inside the cone radius at this height?
+					double radius_at_height = (projection / cone.height) * cone.radius;
+					t_vec3 point_on_axis = vec3_add(cone.apex, vec3_scale(cone.axis, projection));
+					double dist_squared = vec3_length_squared(vec3_subtract(hit, point_on_axis));
+
+					if (dist_squared <= radius_at_height * radius_at_height * 1.01) // 1% tolerance
+					{
+				hit_body = 1;
+				t_body = t1;
+					}
+				}
+			}
+
+			// Check second intersection point if needed
+			if (t2 > 0.0001 && (t_body == INFINITY || t2 < t_body))
+			{
+				t_vec3 hit = vec3_add(ray.origin, vec3_scale(ray.direction, t2));
+				t_vec3 hit_to_apex = vec3_subtract(hit, cone.apex);
+				double projection = vec3_dot(hit_to_apex, cone.axis);
+
+				// Check if intersection is within cone height and not behind apex
+				if (projection > 0 && projection < cone.height)
+				{
+					// Additional check: is this point inside the cone radius at this height?
+					double radius_at_height = (projection / cone.height) * cone.radius;
+					t_vec3 point_on_axis = vec3_add(cone.apex, vec3_scale(cone.axis, projection));
+					double dist_squared = vec3_length_squared(vec3_subtract(hit, point_on_axis));
+
+					if (dist_squared <= radius_at_height * radius_at_height * 1.01) // 1% tolerance
+					{
+						hit_body = 1;
+						t_body = t2;
+					}
+				}
+			}
 		}
 	}
+	 // Check for intersection with the base
+	hit_base = ray_disc_intersect(ray, base_center, cone.axis, cone.radius, &t_base);
 
-
-
+	// Find closest valid intersection
+	if (hit_body && hit_base)
+	{
+		if (t_body < t_base)
+			*t = t_body;
+		else
+			*t = t_base;
+		return 1;
+	}
+	else if (hit_body)
+	{
+		*t = t_body;
+		return 1;
+	}
+	else if (hit_base)
+	{
+		*t = t_base;
+		return 1;
+	}
+	return 0;
 }
 
 
-t_vec3	cone_normal_at_point(t_vec3 point, t_cone cone)
+	/*
+** cone_normal_at_point: Calculate the normal vector at a point on a cone
+**
+** The normal at any point on the cone's surface depends on:
+** 1. Whether the point is on the base (flat circular disc)
+** 2. Or on the conical surface
+**
+** For conical surface, the normal is perpendicular to both:
+** - The vector from apex to the point
+** - The tangent vector around the cone at that point
+*/
+t_vec3 cone_normal_at_point(t_vec3 point, t_cone cone)
 {
+    t_vec3 base_center;
 
+    // Calculate base center
+    base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
 
+    // Calculate base radius
+    double base_radius = cone.height * tan(cone.angle);
 
+    // Check if point is on the base
+    if (is_point_in_disc(point, base_center, cone.axis, base_radius))
+        return cone.axis; // Normal is the same as cone axis (pointing outward)
+
+    // Otherwise, point is on the conical surface
+    // For a point on the cone surface, the normal is not as simple as for a cylinder
+
+    // First, get the vector from apex to the point
+    t_vec3 apex_to_point = vec3_subtract(point, cone.apex);
+
+    // Project this vector onto the cone axis to find a point on the axis
+    double projection = vec3_dot(apex_to_point, cone.axis);
+    t_vec3 axis_point = vec3_add(cone.apex, vec3_scale(cone.axis, projection));
+
+    // The normal is perpendicular to the cone surface
+    // For a cone, it's not directly from axis to point, we need to adjust for the cone angle
+    t_vec3 point_to_axis = vec3_subtract(axis_point, point);
+
+    // Combine these vectors to get the normal direction
+    // We need to account for the cone angle
+    t_vec3 normal = vec3_add(point_to_axis,
+                             vec3_scale(apex_to_point, sin(cone.angle) * sin(cone.angle)));
+
+    return vec3_normalize(normal);
 }
