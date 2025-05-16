@@ -27,15 +27,15 @@ OBJ_DIR = obj
 
 # Source files
 SRC_FILES = main.c \
-            events.c \
+            close_handler.c \
             init.c \
             string_utils.c \
-            render.c \
-            menger.c \
+            rendering/render.c \
+            rendering/render_complex_scenes.c \
+            rendering/menger.c \
             colors.c \
             material.c \
-            camera.c \
-            render_complex_scenes.c \
+            camera/camera.c \
             vector_utils/vec3_basic_op.c \
             vector_utils/vec3_length.c \
             vector_utils/vec3_product.c \
@@ -61,7 +61,10 @@ SRC_FILES = main.c \
             scenes/sphere.c \
             scenes/sphere_cylinder.c \
 			ui/user_interface.c\
-            ui/control_panel.c
+            ui/control_panel.c\
+            ui/status_messages.c\
+            controls/keys.c\
+            controls/mouse.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -91,6 +94,9 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/triangle
 	@mkdir -p $(OBJ_DIR)/objects/mesh
 	@mkdir -p $(OBJ_DIR)/scenes
+	@mkdir -p $(OBJ_DIR)/ui
+	@mkdir -p $(OBJ_DIR)/controls
+	@mkdir -p $(OBJ_DIR)/camera
 
 # Build executable
 $(NAME): $(OBJECTS)

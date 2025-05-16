@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color)
 {

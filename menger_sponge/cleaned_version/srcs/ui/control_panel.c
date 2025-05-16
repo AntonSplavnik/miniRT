@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 // Helper function specifically for control panel pixels
 // This avoids any interference with the main window rendering
@@ -35,7 +35,8 @@ void init_control_panel(t_scene *scene)
 void draw_option_checkbox(t_scene *scene, int x, int y, bool checked)
 {
     int size = 15;
-    int i, j;
+    int i;
+    int j;
     
     // Draw checkbox background (dark gray)
     for (i = 1; i < size-1; i++) {
@@ -65,7 +66,8 @@ void draw_option_checkbox(t_scene *scene, int x, int y, bool checked)
 // Draw the entire control panel
 void draw_control_panel(t_scene *scene)
 {
-    int i, j;
+    int i;
+    int j;
     
     // Make sure the control panel is initialized
     if (!scene->app.control_panel.initialized) {
@@ -87,12 +89,12 @@ void draw_control_panel(t_scene *scene)
     }
     
     // Draw checkboxes
-    draw_option_checkbox(scene, 30, 50, scene->app.checkbox_checked);
+    draw_option_checkbox(scene, 30, 50, scene->app.enable_hard_shadows);
     draw_option_checkbox(scene, 30, 80, scene->app.enable_reflections);
     draw_option_checkbox(scene, 30, 110, scene->app.enable_specular);
     
     // Add render button
-    int button_x = 70;
+/*     int button_x = 70;
     int button_y = 200;
     int button_width = 100;
     int button_height = 30;
@@ -103,7 +105,7 @@ void draw_control_panel(t_scene *scene)
             control_pixel_put(scene, button_x + i, button_y + j, 0x444444);
         }
     }
-    
+   
     // Draw button outline
     for (i = 0; i < button_width; i++) {
         control_pixel_put(scene, button_x + i, button_y, 0xFFFFFF);
@@ -112,7 +114,7 @@ void draw_control_panel(t_scene *scene)
     for (i = 0; i < button_height; i++) {
         control_pixel_put(scene, button_x, button_y + i, 0xFFFFFF);
         control_pixel_put(scene, button_x + button_width - 1, button_y + i, 0xFFFFFF);
-    }
+    }*/
     
     // Put the image to the window
     mlx_put_image_to_window(scene->mlx_connection, scene->app.control_window,
@@ -128,11 +130,11 @@ void draw_control_panel(t_scene *scene)
     mlx_string_put(scene->mlx_connection, scene->app.control_window, 
                  50, 92, 0xFFFFFF, "Enable Reflections");
     mlx_string_put(scene->mlx_connection, scene->app.control_window, 
-                 50, 122, 0xFFFFFF, "Enable Specular");
+                 50, 122, 0xFFFFFF, "Enable Specular Reflections");
                  
     // Add button label
-    mlx_string_put(scene->mlx_connection, scene->app.control_window, 
-                 button_x + 25, button_y + 20, 0xFFFFFF, "Render");
+/*     mlx_string_put(scene->mlx_connection, scene->app.control_window, 
+                 button_x + 25, button_y + 20, 0xFFFFFF, "Render"); */
 }
 
 // Clean up control panel resources

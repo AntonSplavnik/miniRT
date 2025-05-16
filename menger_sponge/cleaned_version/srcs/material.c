@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 //create material with default value - to improve with bonuses
 t_material	create_material(t_color color)

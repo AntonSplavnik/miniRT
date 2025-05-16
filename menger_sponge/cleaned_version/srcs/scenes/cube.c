@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 //set up scene with a cube
 void	set_up_scene_cube(t_scene *scene)

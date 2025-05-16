@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 // Calculate the normal of a triangle (counter-clockwise winding)
 t_vec3	triangle_normal(t_triangle triangle)

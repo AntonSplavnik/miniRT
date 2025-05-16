@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 //Note: Due to args limitation (norminette), we need to modify the color later, after cylinder creation
 t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height)

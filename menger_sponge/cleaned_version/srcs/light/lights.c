@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 //Note: need to create color struct beforehand
 t_light	*create_light(t_vec3 position, double intensity, t_color color)

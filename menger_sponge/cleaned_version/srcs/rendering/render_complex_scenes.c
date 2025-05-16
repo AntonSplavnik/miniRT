@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-
 typedef struct s_light_result {
 	double diffuse;
 	double specular_intensity;
@@ -187,6 +186,16 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 {
 	t_light_result result;
 	
+	// Initialize defaults (used if no lights are present)
+	result.diffuse = 0.0;
+	result.specular_intensity = 0.0;
+	result.light_distance = 0.0;
+	result.light_dir = vec3_create(0.0, 1.0, 0.0);  // Default direction
+	
+	// Check if lights exist
+	if (!scene->lights)
+		return result;
+	
 	// Calculate vector from hit point to light source
 	t_vec3 to_light = vec3_subtract(scene->lights->position, hit_point);
 	result.light_distance = vec3_length(to_light);
@@ -217,29 +226,33 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 	return (result);
 }
 
+#include <string.h>
+
 void	render_complex_scene(t_scene *scene)
 {
-	t_ray		ray;
-	int			color;
-	t_vec3		hit_point;
-	t_vec3		normal;
-	double		light_intensity;
-	t_light_result light_info;
-	t_object	*hit_object;
-	int			in_shadow;
-	double		t;
-	double		fov_scale;
-	
+	int				color;
+	int				in_shadow;
+	double			light_intensity;
+	double			t;
+	double			fov_scale;
+	t_ray			ray;
+	t_vec3			hit_point;
+	t_vec3			normal;
+	t_light_result	light_info;
+	t_object		*hit_object;
+
 	in_shadow = 0;
 
 	if (!scene->objects)
 		set_up_scene_triangle(scene);
 
+	// memset(scene->img.pixels_ptr, 0, WIDTH * HEIGHT * (scene->img.bpp / 8));
+
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 	
-	for (int y = 0; y < scene->height; y++)
+	for (int y = 0; y < scene->height; y+=scene->app.resolution_factor)
 	{
-		for (int x = 0; x < scene->width; x++)
+		for (int x = 0; x < scene->width; x+=scene->app.resolution_factor)
 		{
 
 			//set background color
@@ -256,11 +269,11 @@ void	render_complex_scene(t_scene *scene)
 				light_info = compute_light(scene, hit_object, hit_point, normal);
 				
 				//Check if the hit point is in shadow
-				if(scene->app.checkbox_checked)
+				if(scene->app.enable_hard_shadows)
 					in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
 
 				// Combine all lighting components
-				if (in_shadow)
+				if (in_shadow || !scene->lights)
 					light_intensity = scene->ambient.ratio;
 				else
 				{
@@ -271,8 +284,20 @@ void	render_complex_scene(t_scene *scene)
 
 				//Get color from material and apply lighting
 				color = get_object_color(hit_object, light_intensity);
+
+				
 			}
-			pixel_put(x, y, &scene->img, color);
+
+			// Fill the entire block with this color
+				for (int by = 0; by < scene->app.resolution_factor && y + by < HEIGHT; by++)
+				{
+					for (int bx = 0; bx < scene->app.resolution_factor && x + bx < WIDTH; bx++)
+					{
+						pixel_put(x + bx, y + by, &scene->img, color);
+					}
+				}
+
+			// pixel_put(x, y, &scene->img, color);
 		}
 	}
 
@@ -280,8 +305,7 @@ void	render_complex_scene(t_scene *scene)
 	draw_image_to_window(scene);
 
 	// Draw the checkbox control
-	draw_checkbox(scene);
-
+	// draw_checkbox(scene);
 
 	display_status(scene);
 }

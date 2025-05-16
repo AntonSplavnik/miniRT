@@ -120,6 +120,9 @@ typedef struct s_camera
 	double	aspect_ratio; //Initialized but not used yet
 	double	near; //Initialized but not used yet
 	double	far; //Initialized but not used yet
+
+	double  movement_speed; //Speed for camera movement
+	double	rotation_speed;	//Speed for camera rotation
 }				t_camera;
 
 typedef enum	e_object_type
@@ -240,12 +243,14 @@ typedef struct s_control_panel {
 typedef struct s_app {
     void    *mlx;
     void    *win;
-    bool    checkbox_checked;
 	void    *control_window;
+    bool    enable_hard_shadows;
 	bool    enable_reflections;
     bool    enable_specular;
-	t_control_panel control_panel;  // Add this to store the control panel state
+	double	resolution_factor; // For controlling render resolution 
+	t_control_panel control_panel;  //store the control panel state
 } t_app;
+
 
 typedef struct s_scene
 {
@@ -279,9 +284,9 @@ typedef struct s_scene
 	int			prev_mouse_x;
 	int			prev_mouse_y;
 
-	t_menger	menger;
-	int			is_3d;
-	int			resolution_factor;  // For controlling render resolution
+	t_menger	menger;	//menger delete or repurpose later
+	int			is_3d;	//menger delete or repurpose later
+	int			resolution_factor;  // For controlling render resolution menger (delete later)
 }				t_scene;
 
 typedef struct s_thread_data
@@ -290,6 +295,7 @@ typedef struct s_thread_data
 	int			end_row;
 	t_scene	*scene;
 }	t_thread_data;
+
 
 
 
@@ -408,5 +414,10 @@ t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 t_vec3		get_forward_vector(t_vec3 rotation);
 t_vec3		get_right_vector(t_vec3 rotation);
 t_vec3		get_up_vector(t_vec3 rotation);
+
+//controls
+int				motion_handler(int x, int y, t_scene *scene);
+int				control_mouse_handler(int button, int x, int y, t_scene *scene);
+int				mouse_release(int button, int x, int y, t_scene *scene);
 
 #endif

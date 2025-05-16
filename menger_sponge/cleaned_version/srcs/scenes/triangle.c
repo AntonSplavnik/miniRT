@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 //set up scene with triangles
 void	set_up_scene_triangle(t_scene *scene)

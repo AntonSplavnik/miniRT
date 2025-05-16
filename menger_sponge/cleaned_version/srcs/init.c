@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 //Used
 static void	malloc_error(void)
@@ -38,15 +38,19 @@ static void	data_init(t_scene *scene)
 
 	// Initialize control window
     scene->app.control_window = NULL;
-    scene->app.checkbox_checked = false;
-    scene->app.enable_reflections = true;   // Default values
-    scene->app.enable_specular = true;      // Default values
+    scene->app.enable_hard_shadows = true;
+    scene->app.enable_reflections = true; 
+    scene->app.enable_specular = true;
+	scene->app.resolution_factor = 1;
+
 	// Initialize control panel
     scene->app.control_panel.initialized = false;
+
 
 	//Bonus
 	scene->sample = 1;
 	scene->max_depth = 3;
+
 
 	//---to do : sort things from here---
 	scene->escape_value = 4;
@@ -60,6 +64,7 @@ static void	data_init(t_scene *scene)
 	scene->prev_mouse_y = 0;
 	scene->resolution_factor = 4;  // Default resolution factor
 
+
 	// Initialize camera defaults for 3D scenes
 	scene->is_3d = 0;  // Default to 2D mode - needs to be cleaned out
 	scene->camera.fov = 60.0;
@@ -68,6 +73,9 @@ static void	data_init(t_scene *scene)
 	scene->camera.far = 100.0;
 	scene->camera.position = (t_vec3){0.0, 0.0, -3.0};
 	scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
+    scene->camera.movement_speed = 0.5;
+    scene->camera.rotation_speed = 0.05;
+
 
 	// Initialize Menger sponge defaults
 	scene->menger.iterations = 0;
@@ -86,6 +94,8 @@ static void	events_init(t_scene *scene)
     mlx_hook(scene->mlx_window, 4, 1L<<2, mouse_handler, scene);
     mlx_hook(scene->mlx_window, 5, 1L<<3, mouse_release, scene);
     mlx_hook(scene->mlx_window, 17, 0, close_handler, scene);
+	mlx_hook(scene->mlx_window, 6, 1L<<6, motion_handler, scene);
+
     
     // Control window hooks
     mlx_hook(scene->app.control_window, 4, 1L<<2, control_mouse_handler, scene);
@@ -100,6 +110,9 @@ static void	events_init(t_scene *scene)
         ButtonReleaseMask, mouse_release, scene);
     mlx_hook(scene->mlx_window, DestroyNotify,
         StructureNotifyMask, close_handler, scene);
+	mlx_hook(scene->mlx_window, MotionNotify,
+		PointerMotionMask, motion_handler, scene);
+
         
     // Control window hooks
     mlx_hook(scene->app.control_window, ButtonPress,
