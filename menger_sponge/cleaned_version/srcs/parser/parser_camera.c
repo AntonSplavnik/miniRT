@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:45:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:34:03 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parse_camera(t_scene *scene, char *line)
 	}
 	scene->camera.rotation.y = atan2(direction.x, direction.z);  // yaw
 	scene->camera.rotation.x = atan2(direction.y, sqrt(direction.x * direction.x + direction.z * direction.z));  // pitch
-	scene->camera.rotation.z = atan2(direction.x, direction.y);  // roll
+	scene->camera.rotation.z = 0.0;
 
 	scene->camera.fov = ft_atof(parts[3]);
 	free_split(parts);

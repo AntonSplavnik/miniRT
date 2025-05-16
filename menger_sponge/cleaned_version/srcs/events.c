@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/13 13:20:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:32:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -686,21 +686,21 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
             render_complex_scene(scene);
             return (0);
         }
-        
+
         // Check reflections checkbox
         if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
             scene->app.enable_reflections = !scene->app.enable_reflections;
             draw_control_panel(scene);
             return (0);
         }
-        
+
         // Check specular checkbox
         if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
             scene->app.enable_specular = !scene->app.enable_specular;
             draw_control_panel(scene);
             return (0);
         }
-        
+
         // Check if render button was clicked
         if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
             // Re-render with new settings

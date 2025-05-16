@@ -170,36 +170,36 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 */
 t_vec3 cone_normal_at_point(t_vec3 point, t_cone cone)
 {
-    t_vec3 base_center;
+	t_vec3 base_center;
 
-    // Calculate base center
-    base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
+	// Calculate base center
+	base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
 
-    // Calculate base radius
-    double base_radius = cone.height * tan(cone.angle);
+	// Calculate base radius
+	double base_radius = cone.height * tan(cone.angle);
 
-    // Check if point is on the base
-    if (is_point_in_disc(point, base_center, cone.axis, base_radius))
-        return cone.axis; // Normal is the same as cone axis (pointing outward)
+	// Check if point is on the base
+	if (is_point_in_disc(point, base_center, cone.axis, base_radius))
+		return cone.axis; // Normal is the same as cone axis (pointing outward)
 
-    // Otherwise, point is on the conical surface
-    // For a point on the cone surface, the normal is not as simple as for a cylinder
+	// Otherwise, point is on the conical surface
+	// For a point on the cone surface, the normal is not as simple as for a cylinder
 
-    // First, get the vector from apex to the point
-    t_vec3 apex_to_point = vec3_subtract(point, cone.apex);
+	// First, get the vector from apex to the point
+	t_vec3 apex_to_point = vec3_subtract(point, cone.apex);
 
-    // Project this vector onto the cone axis to find a point on the axis
-    double projection = vec3_dot(apex_to_point, cone.axis);
-    t_vec3 axis_point = vec3_add(cone.apex, vec3_scale(cone.axis, projection));
+	// Project this vector onto the cone axis to find a point on the axis
+	double projection = vec3_dot(apex_to_point, cone.axis);
+	t_vec3 axis_point = vec3_add(cone.apex, vec3_scale(cone.axis, projection));
 
-    // The normal is perpendicular to the cone surface
-    // For a cone, it's not directly from axis to point, we need to adjust for the cone angle
-    t_vec3 point_to_axis = vec3_subtract(axis_point, point);
+	// The normal is perpendicular to the cone surface
+	// For a cone, it's not directly from axis to point, we need to adjust for the cone angle
+	t_vec3 point_to_axis = vec3_subtract(axis_point, point);
 
-    // Combine these vectors to get the normal direction
-    // We need to account for the cone angle
-    t_vec3 normal = vec3_add(point_to_axis,
-                             vec3_scale(apex_to_point, sin(cone.angle) * sin(cone.angle)));
+	// Combine these vectors to get the normal direction
+	// We need to account for the cone angle
+	t_vec3 normal = vec3_add(point_to_axis,
+							vec3_scale(apex_to_point, sin(cone.angle) * sin(cone.angle)));
 
-    return vec3_normalize(normal);
+	return vec3_normalize(normal);
 }

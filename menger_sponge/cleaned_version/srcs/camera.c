@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:14:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/09 10:15:05 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:32:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,23 @@ t_vec3 get_up_vector(t_vec3 rotation)
 	t_vec3 up = {0, 1, 0};
 	up = rotate_point(up, rotation);
 	return vec3_normalize(up);
+}
+
+t_vec3 camera_to_world(t_scene *scene, t_vec3 v)
+{
+	t_vec3 result;
+
+	result.x = v.x * scene->camera.cam_matrix[0][0] +
+			   v.y * scene->camera.cam_matrix[1][0] +
+			   v.z * scene->camera.cam_matrix[2][0];
+
+	result.y = v.x * scene->camera.cam_matrix[0][1] +
+			   v.y * scene->camera.cam_matrix[1][1] +
+			   v.z * scene->camera.cam_matrix[2][1];
+
+	result.z = v.x * scene->camera.cam_matrix[0][2] +
+			   v.y * scene->camera.cam_matrix[1][2] +
+			   v.z * scene->camera.cam_matrix[2][2];
+
+	return result;
 }

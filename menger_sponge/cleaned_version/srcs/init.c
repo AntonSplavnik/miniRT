@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/13 10:58:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:32:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	events_init(t_scene *scene)
     mlx_hook(scene->mlx_window, 4, 1L<<2, mouse_handler, scene);
     mlx_hook(scene->mlx_window, 5, 1L<<3, mouse_release, scene);
     mlx_hook(scene->mlx_window, 17, 0, close_handler, scene);
-    
+
     // Control window hooks
     mlx_hook(scene->app.control_window, 4, 1L<<2, control_mouse_handler, scene);
     mlx_hook(scene->app.control_window, 17, 0, close_handler, scene);
@@ -100,7 +100,7 @@ static void	events_init(t_scene *scene)
         ButtonReleaseMask, mouse_release, scene);
     mlx_hook(scene->mlx_window, DestroyNotify,
         StructureNotifyMask, close_handler, scene);
-        
+
     // Control window hooks
     mlx_hook(scene->app.control_window, ButtonPress,
         ButtonPressMask, control_mouse_handler, scene);

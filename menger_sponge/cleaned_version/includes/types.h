@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/14 17:43:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:32:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_bvh_node
 typedef struct s_camera
 {
 	t_vec3	position;
+	t_vec3	direction;
 	t_vec3	rotation;
 	double	fov;
 	t_vec3	forwards;
@@ -84,6 +85,7 @@ typedef struct s_camera
 	double	aspect_ratio;
 	double	near;
 	double	far;
+	double	cam_matrix[3][3];
 }				t_camera;
 
 typedef enum	e_object_type

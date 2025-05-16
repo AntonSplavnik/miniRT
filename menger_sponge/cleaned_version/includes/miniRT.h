@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 13:13:34 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:21:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
+int			is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius);
 
 //lights
 void		add_light(t_scene *scene, t_light *light);
@@ -179,5 +180,7 @@ t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 t_vec3		get_forward_vector(t_vec3 rotation);
 t_vec3		get_right_vector(t_vec3 rotation);
 t_vec3		get_up_vector(t_vec3 rotation);
+t_vec3 camera_to_world(t_scene *scene, t_vec3 camera_dir);
+void update_camera_matrix(t_scene *scene);
 
 #endif

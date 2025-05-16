@@ -97,6 +97,16 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 				current->material.reflectivity = triangle_idx;
 			}
 		}
+		else if (current->type == CONE)
+		{
+			t_cone *cone= (t_cone *)(current->data);
+			if (ray_cone_intersect(ray, *cone, &t_temp) && t_temp < t_closest)
+			{
+				t_closest = t_temp;
+				hit_something = 1;
+				*hit_object = current;
+			}
+		}
 		current = current->next;
 	}
 	if (hit_something)
@@ -125,6 +135,7 @@ void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, 
 
 	//setting ray origin
 	ray->origin = scene->camera.position;
+
 }
 
 void	compute_ray_intersaction(t_ray ray, t_object *hit_object, double t, t_vec3 *hit_point, t_vec3 *normal)

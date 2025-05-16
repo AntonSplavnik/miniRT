@@ -13,7 +13,7 @@
 #include "platform.h"
 
 // Helper function for disc (=cap) intersection
-static int ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
+int ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t)
 {
 	double denom = vec3_dot(ray.direction, normal);
@@ -160,7 +160,7 @@ int ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t)
 }
 
 // Helper function to check if a point is within a disc (for caps) - normal calculation
-static int is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius)
+int is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius)
 {
 	t_vec3	to_point;
 	double	dist_to_plane;

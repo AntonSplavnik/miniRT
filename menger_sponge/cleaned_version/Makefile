@@ -80,6 +80,7 @@ SRC_FILES = main.c \
 			objects/mesh/mesh_intersect.c \
 			objects/mesh/mesh_creation.c \
 			objects/cone/cone_creation.c \
+			objects/cone/cone_intersect.c \
 			ui/user_interface.c\
 			ui/control_panel.c
 
