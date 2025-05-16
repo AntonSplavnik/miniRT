@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/15 11:21:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:44:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,14 @@ void	check_parts_count(t_scene *scene, char **parts, int expected_count, char *e
 		else if (ft_strcmp(element_name, "plane") == 0)
 			parse_error(scene, "Invalid format for plane. Expected: pl x,y,z nx,ny,nz");
 		else if (ft_strcmp(element_name, "cylinder") == 0)
-			parse_error(scene, "Invalid format for cylinder. Expected: cy x,y,z d,h");
+			parse_error(scene, "Invalid format for cylinder. Expected: cy x,y,z nx,ny,nz d h r,g,b");
 		else if (ft_strcmp(element_name, "cone") == 0)
 			parse_error(scene, "Invalid format for cone. Expected: co x,y,z nx,ny,nz radius height r,g,b");
 		else if (ft_strcmp(element_name, "triangle") == 0)
 			parse_error(scene, "Invalid format for triangle. Expected: tr x1,y1,z1 x2,y2,z2 x3,y3,z3 r,g,b");
 		else if (ft_strcmp(element_name, "cube") == 0)
 			parse_error(scene, "Invalid format for cube. Expected: cu x,y,z side_length r,g,b");
+		else if (ft_strcmp(element_name, "mesh") == 0)
+			parse_error(scene, "Invalid format for mesh. Expected: me filename x,y,z nx,ny,nz s r,g,b");
 	}
 }

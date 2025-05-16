@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:47:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:54:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,16 @@ int	is_triangle(char *line)
 int	is_cube(char *line)
 {
 	if (ft_strncmp(line, "cu", 2) == 0)
+	{
+		if (line[2] == ' ' || line[2] == '\t' || line[2] == '\0')
+			return (1);
+	}
+	return (0);
+}
+
+int	is_mesh(char *line)
+{
+	if (ft_strncmp(line, "me", 2) == 0)
 	{
 		if (line[2] == ' ' || line[2] == '\t' || line[2] == '\0')
 			return (1);
