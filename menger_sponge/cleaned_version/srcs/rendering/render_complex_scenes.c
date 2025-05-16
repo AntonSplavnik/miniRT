@@ -226,10 +226,11 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 	return (result);
 }
 
-#include <string.h>
-
-void	render_complex_scene(t_scene *scene)
+void	*render_thread(void *arg)
 {
+	t_thread_data *data = (t_thread_data *)arg;
+	t_scene	*scene = data->scene;
+
 	int				color;
 	int				in_shadow;
 	double			light_intensity;
@@ -242,12 +243,6 @@ void	render_complex_scene(t_scene *scene)
 	t_object		*hit_object;
 
 	in_shadow = 0;
-
-	if (!scene->objects)
-		set_up_scene_triangle(scene);
-
-	// memset(scene->img.pixels_ptr, 0, WIDTH * HEIGHT * (scene->img.bpp / 8));
-
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 	
 	for (int y = 0; y < scene->height; y+=scene->app.resolution_factor)
@@ -255,8 +250,7 @@ void	render_complex_scene(t_scene *scene)
 		for (int x = 0; x < scene->width; x+=scene->app.resolution_factor)
 		{
 
-			//set background color
-			color = (217 << 16 | 185 << 8 | 155); //beige
+			color = scene->background_color;
 
 			// Initialize ray direction before using it
 			compute_ray_direction(scene, &ray, fov_scale, x, y);
@@ -264,6 +258,7 @@ void	render_complex_scene(t_scene *scene)
 			// ray tracing
 			if (find_closest_intersection(scene, ray, &t, &hit_object))
 			{
+
 				compute_ray_intersaction(ray, hit_object, t, &hit_point, &normal);
 
 				light_info = compute_light(scene, hit_object, hit_point, normal);
@@ -283,9 +278,7 @@ void	render_complex_scene(t_scene *scene)
 				}
 
 				//Get color from material and apply lighting
-				color = get_object_color(hit_object, light_intensity);
-
-				
+				color = get_object_color(hit_object, light_intensity);				
 			}
 
 			// Fill the entire block with this color
@@ -300,12 +293,51 @@ void	render_complex_scene(t_scene *scene)
 			// pixel_put(x, y, &scene->img, color);
 		}
 	}
+	return (NULL);
+}
 
-	//display the image
-	draw_image_to_window(scene);
+void	render_complex_scene(t_scene *scene)
+{
 
-	// Draw the checkbox control
-	// draw_checkbox(scene);
+	int	rows_per_thread;
 
-	display_status(scene);
+	display_progress(scene, "Rendering...");
+
+	if (!scene->objects)
+		set_up_scene_triangle(scene);
+	
+	pthread_t	threads[NUM_THREADS];
+	t_thread_data	thread_data[NUM_THREADS];
+
+	rows_per_thread = scene->height / NUM_THREADS;
+
+	for(int i = 0; i < NUM_THREADS; i++)
+	{
+		thread_data[i].scene = scene;
+		thread_data[i].start_row = i * rows_per_thread;
+
+		// For the last thread, make sure we cover all remaining rows
+		thread_data[i].end_row = (i == NUM_THREADS - 1)? scene->height : (i + 1) * rows_per_thread;
+
+		if (pthread_create(&threads[i], NULL, render_thread, &thread_data[i]) != 0)
+        {
+            // If thread creation fails, fall back to single-threaded rendering
+            // (This would need to be implemented separately)
+            perror("Thread creation failed");
+            exit(1);
+        }
+	}
+
+	    // Wait for all threads to complete
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+    
+    // Draw the final image to the window
+    draw_image_to_window(scene);
+    
+    // Display status (FPS, settings, etc.)
+    display_status(scene);
+
 }

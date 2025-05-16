@@ -263,6 +263,8 @@ typedef struct s_scene
 	int			width; // Window width
 	int			height; //Window height
 
+	int			background_color;
+
 	t_ambient	ambient;
 	t_camera	camera;
 	t_light		*lights; //Linked list of lights
@@ -403,7 +405,6 @@ void	set_up_scene_mesh(t_scene *scene);
 void	set_up_scene_cube(t_scene *scene);
 
 //user interface
-void 		draw_checkbox(t_scene *scene);
 void 		init_control_panel(t_scene *scene);
 void		draw_control_panel(t_scene *scene);
 void		destroy_control_panel(t_scene *scene);

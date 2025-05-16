@@ -29,6 +29,7 @@ static void	data_init(t_scene *scene)
 	scene->height = HEIGHT;
 	scene->ambient.ratio = 0.1; //default
 	scene->ambient.color = create_color(255,255 ,255); //white by default
+	scene->background_color = (217 << 16 | 185 << 8 | 155); // beige 
 	scene->lights = NULL;
 	scene->objects = NULL;
 
