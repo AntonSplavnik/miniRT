@@ -80,12 +80,6 @@ SRC_FILES = main.c \
 			objects/mesh/mesh_intersect.c \
 			objects/mesh/mesh_creation.c \
 			objects/cone/cone_creation.c \
-			scenes/mesh_sphere_sphere.c \
-			scenes/cube.c \
-			scenes/triangle.c \
-			scenes/spheres_sylinder_plane.c \
-			scenes/sphere.c \
-			scenes/sphere_cylinder.c \
 			ui/user_interface.c\
 			ui/control_panel.c
 

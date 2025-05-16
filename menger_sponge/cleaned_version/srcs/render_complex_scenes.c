@@ -232,9 +232,6 @@ void	render_complex_scene(t_scene *scene)
 
 	in_shadow = 0;
 
-	if (!scene->objects)
-		set_up_scene_triangle(scene);
-
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 
 	for (int y = 0; y < scene->height; y++)

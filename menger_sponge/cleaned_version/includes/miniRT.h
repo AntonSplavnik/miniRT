@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 11:56:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:58:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 # include "types.h"
 # include "parser.h"
 
-# define WIDTH	640
-# define HEIGHT	512
+# define WIDTH	1280
+# define HEIGHT	1024
 # define NUM_THREADS 8  // Number of threads for multithreaded rendering
 
 // 3D rendering constants
