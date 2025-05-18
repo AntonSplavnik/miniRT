@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 15:21:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/18 14:07:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
+t_vec3		cone_normal_at_point(t_vec3 point, t_cone cone);
 int			is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius);
 
 //lights

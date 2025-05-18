@@ -175,6 +175,11 @@ void	compute_ray_intersaction(t_ray ray, t_object *hit_object, double t, t_vec3 
 		if (vec3_dot(ray.direction, *normal) > 0)
 			*normal = vec3_negate(*normal);
 	}
+	else if (hit_object->type == CONE)
+	{
+		t_cone *cone = (t_cone *)(hit_object->data);
+		*normal = cone_normal_at_point(*hit_point, *cone);
+	}
 	else if (hit_object->type == MESH)
 	{
 		t_mesh *mesh = (t_mesh *)(hit_object->data);
