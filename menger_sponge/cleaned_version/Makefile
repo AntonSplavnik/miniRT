@@ -54,17 +54,41 @@ SRC_FILES = main.c \
             objects/triangle/triangle_creation.c \
             objects/mesh/mesh_intersect.c \
             objects/mesh/mesh_creation.c \
-            scenes/mesh_sphere_sphere.c \
-            scenes/cube.c \
-            scenes/triangle.c \
-            scenes/spheres_sylinder_plane.c \
-            scenes/sphere.c \
-            scenes/sphere_cylinder.c \
+            scenes/old_scenes/mesh_sphere_sphere.c \
+            scenes/old_scenes/cube.c \
+            scenes/old_scenes/triangle.c \
+            scenes/old_scenes/spheres_sylinder_plane.c \
+            scenes/old_scenes/sphere.c \
+            scenes/old_scenes/sphere_cylinder.c \
 			ui/user_interface.c\
             ui/control_panel.c\
             ui/status_messages.c\
             controls/keys.c\
-            controls/mouse.c
+            controls/mouse.c \
+            parser/parser_file.c \
+            parser/parser_line.c \
+            parser/parser_identifiers.c \
+            parser/parser_identifiers2.c \
+            parser/parser_ambient.c \
+            parser/parser_camera.c \
+            parser/parser_light.c \
+            parser/parser_sphere.c \
+            parser/parser_plane.c \
+            parser/parser_cylinder.c \
+            parser/parser_cone.c \
+            parser/parser_triangle.c \
+            parser/parser_cube.c \
+            parser/parser_mesh.c \
+            parser/parser_utils.c \
+            parser/parser_types.c \
+            utils/ft_atof.c \
+            utils/ft_atoi.c \
+            utils/ft_split.c \
+            utils/ft_strtrim.c \
+            utils/ft_isspace.c \
+            utils/ft_strlcpy.c \
+            objects/cone/cone_creation.c \
+            objects/cone/cone_intersect.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -98,6 +122,8 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/ui
 	@mkdir -p $(OBJ_DIR)/controls
 	@mkdir -p $(OBJ_DIR)/camera
+	@mkdir -p $(OBJ_DIR)/utils
+	@mkdir -p $(OBJ_DIR)/objects/cone
 
 # Build executable
 $(NAME): $(OBJECTS)

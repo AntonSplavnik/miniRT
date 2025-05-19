@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/19 22:12:41 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/05/19 22:23:46 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@
 # define HOT_PINK        0xFF66B2
 # define ELECTRIC_BLUE   0x0066FF
 # define LAVA_RED        0xFF3300
-
+/*
 typedef struct s_vec3
 {
 	double	x;
@@ -298,7 +298,7 @@ typedef struct s_thread_data
 	int			end_row;
 	t_scene	*scene;
 }	t_thread_data;
-
+ */
 
 
 

@@ -114,6 +114,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	{
 		free_split(parts);
 		parse_error(scene, "Invalid format for mesh file");
+		return (0); 
 	}
 
 	// Load OBJ file

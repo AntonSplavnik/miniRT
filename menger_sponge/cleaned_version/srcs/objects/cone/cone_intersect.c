@@ -14,7 +14,6 @@
 
 int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 {
-	t_vec3	base_center;
 	t_vec3	apex_to_origin;
 	double	cos_squared;
 	double	dot_dir_axis;
@@ -24,12 +23,8 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 	double	c;
 	double	discriminant;
 	double	t_body;
-	int		hit_body;
-	double	t1;
-	double	t2;
-
-	//Calculate base center: apex + axis * heigth
-	base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
+	double	t1 = 0.0;  // Initialize t1
+	double	t2 = 0.0;  // Initialize t2
 
 	//Vector from apex to ray origin
 	apex_to_origin = vec3_subtract(ray.origin, cone.apex);
@@ -53,7 +48,7 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 	//c = (OA.axis)^2 - cos^2θ(OA.OA)
 	c = dot_origin_axis * dot_origin_axis - cos_squared * vec3_dot(apex_to_origin, apex_to_origin);
 
-	 // Check for degenerate cases (ray parallel to cone surface)
+	// Check for degenerate cases (ray parallel to cone surface)
 	if (fabs(a) < 0.0001)
 	{
 		// If b is also close to zero, no intersection with cone
@@ -62,32 +57,54 @@ int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 
 		// Linear case: one intersection point
 		t_body = -c / b;
-		hit_body = (t_body > 0.0001);
-	}
-	else
-	{
-		//solve quadratic equation
-		discriminant = b * b - 4 * a * c;
-
-		// No real solutions = no intersection
-		if (discriminant < 0)
-			hit_body = 0;
-		else
+		if (t_body > 0.0001)
 		{
-			//calculate both intersection point
-			t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-			t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+			*t = t_body;
+			return 1;
 		}
+		return 0;
 	}
 
+	//solve quadratic equation
+	discriminant = b * b - 4 * a * c;
 
+	// No real solutions = no intersection
+	if (discriminant < 0)
+		return 0;
 
+	//calculate both intersection points
+	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+
+	// Find the closest valid intersection
+	if (t1 > 0.0001)
+	{
+		*t = t1;
+		return 1;
+	}
+	if (t2 > 0.0001)
+	{
+		*t = t2;
+		return 1;
+	}
+	return 0;
 }
 
-
-t_vec3	cone_normal_at_point(t_vec3 point, t_cone cone)
+t_vec3 cone_normal_at_point(t_vec3 point, t_cone cone)
 {
+	t_vec3 apex_to_point;
+	t_vec3 normal;
+	double dot_product;
 
+	// Vector from apex to intersection point
+	apex_to_point = vec3_subtract(point, cone.apex);
 
+	// Project apex_to_point onto cone axis
+	dot_product = vec3_dot(apex_to_point, cone.axis);
 
+	// Calculate normal using the cone's surface equation
+	normal = vec3_subtract(apex_to_point, vec3_scale(cone.axis, dot_product));
+	normal = vec3_normalize(normal);
+
+	return normal;
 }
