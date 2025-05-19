@@ -181,15 +181,16 @@ typedef struct s_scene
 	double		julia_x;
 	double		julia_y;
 	int			mouse_control;
+	//mouse controls
 	int			is_dragging;
 	int			prev_mouse_x;
 	int			prev_mouse_y;
 
 	// 3D specific fields
-	t_camera	camera;
-	t_menger	menger;
-	int			is_3d;
-	int			resolution_factor;  // For controlling render resolution
+	t_camera	camera; //menger delete or repurpose later
+	t_menger	menger;	//menger delete or repurpose later
+	int			is_3d; //menger delete or repurpose later
+	int			resolution_factor;  // For controlling render resolution menger (delet later)
 }				t_scene;
 
 typedef struct s_thread_data

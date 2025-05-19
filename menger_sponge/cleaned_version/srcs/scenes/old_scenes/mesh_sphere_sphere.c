@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 //set up scene with a mesh
 void	set_up_scene_mesh(t_scene *scene)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 ///**
 // * Finds the closest intersection between a ray and a mesh

@@ -10,13 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
 {
 	t_vec3	result;
-	double	cos_x, sin_x, cos_y, sin_y, cos_z, sin_z;
 	t_vec3  temp;
+	double	cos_x;
+	double	sin_x;
+	double	cos_y;
+	double	sin_y;
+	double	cos_z;
+	double	sin_z;
 
 	cos_x = cos(rotation.x);
 	sin_x = sin(rotation.x);

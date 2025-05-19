@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 //set up scene with a cylinder
 void	set_up_scene_plane(t_scene *scene)

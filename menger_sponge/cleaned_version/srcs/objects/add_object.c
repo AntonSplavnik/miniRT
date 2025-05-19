@@ -10,11 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
-
-
-
-
+#include "miniRT.h"
 
 //Add an object to the scene's object list
 void	add_object(t_scene *scene, t_object *object)

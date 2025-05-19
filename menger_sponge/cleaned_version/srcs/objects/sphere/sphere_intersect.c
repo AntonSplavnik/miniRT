@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 //Check if the ray intersect with the sphere. If yes, attribute the closest solution to t.
 int	ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t)

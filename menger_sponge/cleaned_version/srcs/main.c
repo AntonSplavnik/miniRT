@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 #include <string.h>
 
 void cleanup_scene(t_scene *scene)

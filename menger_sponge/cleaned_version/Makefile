@@ -16,7 +16,7 @@ endif
 
 # Common compilation settings
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
 INCLUDES = -I$(MLX_PATH) -Iincludes
 LDFLAGS = -L$(MLX_PATH) -lmlx $(MLX_FLAGS)
 
@@ -27,61 +27,44 @@ OBJ_DIR = obj
 
 # Source files
 SRC_FILES = main.c \
-			events.c \
-			init.c \
-			string_utils.c \
-			render.c \
-			menger.c \
-			colors.c \
-			material.c \
-			camera.c \
-			render_complex_scenes.c \
-			vector_utils/vec3_basic_op.c \
-			vector_utils/vec3_length.c \
-			vector_utils/vec3_product.c \
-			parser/parser_utils.c \
-			parser/parser_identifiers.c \
-			parser/parser_identifiers2.c \
-			parser/parser_camera.c \
-			parser/parser_ambient.c \
-			parser/parser_light.c \
-			parser/parser_sphere.c \
-			parser/parser_plane.c \
-			parser/parser_cylinder.c \
-			parser/parser_cone.c \
-			parser/parser_file.c \
-			parser/parser_line.c \
-			parser/parser_types.c \
-			parser/parser_triangle.c \
-			parser/parser_cube.c \
-			parser/parser_mesh.c \
-			utils/ft_atof.c \
-			utils/ft_atoi.c	\
-			utils/ft_isspace.c \
-			utils/ft_split.c	\
-			utils/ft_strtrim.c \
-			utils/ft_calloc.c \
-			utils/ft_bzero.c \
-			utils/ft_memset.c	\
-			utils/ft_strlcpy.c	\
-			light/lights.c \
-			shadows/shadows.c \
-			objects/add_object.c \
-			objects/cylinder/cylinder_intersect.c \
-			objects/cylinder/cylinder_creation.c \
-			objects/sphere/sphere_intersect.c \
-			objects/sphere/sphere_creation.c \
-			objects/plane/plane_intersect.c \
-			objects/plane/plane_creation.c \
-			objects/cube/cube_intersect.c \
-			objects/cube/cube_creation.c \
-			objects/triangle/triangle_intersect.c \
-			objects/triangle/triangle_creation.c \
-			objects/mesh/mesh_intersect.c \
-			objects/mesh/mesh_creation.c \
-			objects/cone/cone_creation.c \
+            close_handler.c \
+            init.c \
+            string_utils.c \
+            rendering/render.c \
+            rendering/render_complex_scenes.c \
+            rendering/menger.c \
+            colors.c \
+            material.c \
+            camera/camera.c \
+            vector_utils/vec3_basic_op.c \
+            vector_utils/vec3_length.c \
+            vector_utils/vec3_product.c \
+            light/lights.c \
+            shadows/shadows.c \
+            objects/add_object.c \
+            objects/cylinder/cylinder_intersect.c \
+            objects/cylinder/cylinder_creation.c \
+            objects/sphere/sphere_intersect.c \
+            objects/sphere/sphere_creation.c \
+            objects/plane/plane_intersect.c \
+            objects/plane/plane_creation.c \
+            objects/cube/cube_intersect.c \
+            objects/cube/cube_creation.c \
+            objects/triangle/triangle_intersect.c \
+            objects/triangle/triangle_creation.c \
+            objects/mesh/mesh_intersect.c \
+            objects/mesh/mesh_creation.c \
+            scenes/mesh_sphere_sphere.c \
+            scenes/cube.c \
+            scenes/triangle.c \
+            scenes/spheres_sylinder_plane.c \
+            scenes/sphere.c \
+            scenes/sphere_cylinder.c \
 			ui/user_interface.c\
-			ui/control_panel.c
+            ui/control_panel.c\
+            ui/status_messages.c\
+            controls/keys.c\
+            controls/mouse.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -112,6 +95,9 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/triangle
 	@mkdir -p $(OBJ_DIR)/objects/mesh
 	@mkdir -p $(OBJ_DIR)/scenes
+	@mkdir -p $(OBJ_DIR)/ui
+	@mkdir -p $(OBJ_DIR)/controls
+	@mkdir -p $(OBJ_DIR)/camera
 
 # Build executable
 $(NAME): $(OBJECTS)
