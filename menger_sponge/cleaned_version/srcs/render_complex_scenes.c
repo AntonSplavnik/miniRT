@@ -11,6 +11,12 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
+#include "platform.h"
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 typedef struct s_light_result {
 	double diffuse;
@@ -215,7 +221,6 @@ t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_po
 
 	// Adding specular reflection:
 	// 1. Calculate the view direction (from hit point to camera)
-	// Used to determine if the viewer sees the specular highlight
 	t_vec3 view_dir = vec3_normalize(vec3_subtract(scene->camera.position, hit_point));
 
 	// 2. Calculate reflection direction with reflection law calculation: R = L - 2(N.L)N
@@ -246,8 +251,20 @@ void	render_complex_scene(t_scene *scene)
 	double		t;
 	double		fov_scale;
 
-	in_shadow = 0;
+	// Safety checks for scene and lights
+	if (!scene)
+	{
+		printf("ERROR - Scene pointer is NULL\n");
+		return;
+	}
+	if (!scene->lights)
+	{
+		printf("ERROR - No lights found in scene\n");
+		cleanup_scene(scene);
+		exit(EXIT_FAILURE);
+	}
 
+	in_shadow = 0;
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
 
 	for (int y = 0; y < scene->height; y++)
@@ -268,33 +285,28 @@ void	render_complex_scene(t_scene *scene)
 
 				light_info = compute_light(scene, hit_object, hit_point, normal);
 
-				//Check if the hit point is in shadow
-				if(scene->app.checkbox_checked)
-					in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
+					//Check if the hit point is in shadow
+					if(scene->app.checkbox_checked)
+						in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
 
-				// Combine all lighting components
-				if (in_shadow)
-					light_intensity = scene->ambient.ratio;
-				else
-				{
-					light_intensity = scene->ambient.ratio +
-						(scene->lights->intensity * light_info.diffuse) +
-						(scene->lights->intensity * light_info.specular_intensity);
+					// Combine all lighting components
+					if (in_shadow)
+						light_intensity = scene->ambient.ratio;
+					else
+					{
+						light_intensity = scene->ambient.ratio +
+							(scene->lights->intensity * light_info.diffuse) +
+							(scene->lights->intensity * light_info.specular_intensity);
+					}
+
+					// Get color from material and apply lighting with light color
+					color = get_object_color(hit_object, light_intensity, scene->lights->color);
 				}
-
-				//Get color from material and apply lighting
-				color = get_object_color(hit_object, light_intensity);
+				pixel_put(x, y, &scene->img, color);
 			}
-			pixel_put(x, y, &scene->img, color);
 		}
-	}
-
 	//display the image
 	draw_image_to_window(scene);
-
-	// Draw the checkbox control
 	draw_checkbox(scene);
-
-
 	display_status(scene);
 }

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/18 14:07:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:12:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_vec3		vec3_normalize(t_vec3 v);
 //colors
 t_color		create_color(int r, int g, int b);
 int			get_final_color(t_scene *scene, double light_intensity);
-int			get_object_color(t_object *object, double light_intensity);
+int			get_object_color(t_object *object, double light_intensity, t_color light_color);
 
 //material
 t_material	create_material(t_color color);
