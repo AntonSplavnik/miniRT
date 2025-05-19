@@ -16,7 +16,7 @@ endif
 
 # Common compilation settings
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
 INCLUDES = -I$(MLX_PATH) -Iincludes
 LDFLAGS = -L$(MLX_PATH) -lmlx $(MLX_FLAGS)
 

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
+
 typedef struct s_light_result {
 	double diffuse;
 	double specular_intensity;
@@ -244,6 +245,7 @@ void	*render_thread(void *arg)
 
 	in_shadow = 0;
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+	// int	samples_per_pixel = 4;
 	
 	for (int y = 0; y < scene->height; y+=scene->app.resolution_factor)
 	{
@@ -317,7 +319,10 @@ void	render_complex_scene(t_scene *scene)
 		thread_data[i].start_row = i * rows_per_thread;
 
 		// For the last thread, make sure we cover all remaining rows
-		thread_data[i].end_row = (i == NUM_THREADS - 1)? scene->height : (i + 1) * rows_per_thread;
+		if(i == NUM_THREADS - 1)
+			thread_data[i].end_row = scene->height;
+		else
+			thread_data[i].end_row = (i + 1) * rows_per_thread;
 
 		if (pthread_create(&threads[i], NULL, render_thread, &thread_data[i]) != 0)
         {

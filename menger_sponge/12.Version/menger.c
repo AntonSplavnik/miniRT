@@ -1232,9 +1232,6 @@ void *render_menger_thread(void *arg)
 	return NULL;
 }
 
-
-
-// Replace the render_menger_sponge function with this optimized version
 void	render_menger_sponge(t_fractal *fractal)
 {
     // Safety check - ensure we're in 3D mode and it's actually the Menger sponge
