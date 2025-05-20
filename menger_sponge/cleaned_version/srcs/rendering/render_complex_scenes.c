@@ -18,8 +18,6 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-
-
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
 {
 	t_object	*current;
@@ -248,6 +246,8 @@ void	*render_thread(void *arg)
 	t_light_result	light_info;
 	t_object		*hit_object;
 	t_light			*current_light;
+	double			light_intensity;
+	int				light_color;
 
 	in_shadow = 0;
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
@@ -267,8 +267,8 @@ void	*render_thread(void *arg)
 			{
 				compute_ray_intersaction(ray, hit_object, t, &hit_point, &normal);
 
-				// Start with ambient light
-				color = get_object_color(hit_object, scene->ambient.ratio, scene->ambient.color);
+				// Start with just the ambient light
+				color = get_pixel_color(hit_object, scene->ambient.ratio, scene->ambient.color);
 
 				// Accumulate light from all lights
 				current_light = scene->lights;
@@ -283,7 +283,14 @@ void	*render_thread(void *arg)
 					if (!in_shadow)
 					{
 						// Add this light's contribution
-						int light_color = get_multiple_lights_color(hit_object, light_info, current_light, scene->ambient.ratio);
+						// Start with ambient light
+						light_intensity = scene->ambient.ratio;
+
+						// Add diffuse and specular from this light
+						light_intensity += (current_light->intensity * light_info.diffuse) +
+							(current_light->intensity * light_info.specular_intensity);
+
+						light_color = get_pixel_color(hit_object, light_intensity, current_light->color);
 
 						// Extract RGB components
 						int r = (light_color >> 16) & 0xFF;

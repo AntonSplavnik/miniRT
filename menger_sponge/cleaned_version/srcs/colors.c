@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/20 10:47:08 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/20 11:14:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_color	create_color(int r, int g, int b)
 	return (color);
 }
 
-int	get_object_color(t_object *object, double light_intensity, t_color light_color)
+int	get_pixel_color(t_object *object, double light_intensity, t_color light_color)
 {
 	t_color	object_color;
 	int		r;
@@ -52,34 +52,4 @@ int	get_object_color(t_object *object, double light_intensity, t_color light_col
 	b = valid_color_range(b);
 
 	return ((r << 16) | (g << 8) | b);
-}
-
-//to improve to add all lighting factors
-int	get_final_color(t_scene *scene, double light_intensity)
-{
-	t_color	object_color;
-	int		r;
-	int		g;
-	int		b;
-
-	object_color = scene->objects->material.color;
-	light_intensity = fmax(scene->ambient.ratio, light_intensity);
-	r = valid_color_range((int)(object_color.r *light_intensity));
-	g = valid_color_range((int)(object_color.g * light_intensity));
-	b = valid_color_range((int)(object_color.b *light_intensity));
-	return ((r << 16) | (g << 8) | b);
-}
-
-int	get_multiple_lights_color(t_object *object, t_light_result light_info, t_light *light, double ambient_ratio)
-{
-	double light_intensity;
-
-	// Start with ambient light
-	light_intensity = ambient_ratio;
-
-	// Add diffuse and specular from this light
-	light_intensity += (light->intensity * light_info.diffuse) +
-		(light->intensity * light_info.specular_intensity);
-
-	return (get_object_color(object, light_intensity, light->color));
 }
