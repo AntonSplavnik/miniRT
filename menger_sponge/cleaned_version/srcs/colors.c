@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/19 12:12:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:47:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,18 @@ int	get_final_color(t_scene *scene, double light_intensity)
 	g = valid_color_range((int)(object_color.g * light_intensity));
 	b = valid_color_range((int)(object_color.b *light_intensity));
 	return ((r << 16) | (g << 8) | b);
+}
+
+int	get_multiple_lights_color(t_object *object, t_light_result light_info, t_light *light, double ambient_ratio)
+{
+	double light_intensity;
+
+	// Start with ambient light
+	light_intensity = ambient_ratio;
+
+	// Add diffuse and specular from this light
+	light_intensity += (light->intensity * light_info.diffuse) +
+		(light->intensity * light_info.specular_intensity);
+
+	return (get_object_color(object, light_intensity, light->color));
 }

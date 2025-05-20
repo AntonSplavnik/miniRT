@@ -27,7 +27,6 @@ OBJ_DIR = obj
 
 # Source files
 SRC_FILES = main.c \
-			events.c \
 			init.c \
 			string_utils.c \
 			colors.c \

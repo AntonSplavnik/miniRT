@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/20 09:57:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/20 10:36:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,20 @@
 # include <pthread.h>
 # include <ctype.h>
 
+
 typedef struct s_vec3
 {
 	double	x;
 	double	y;
 	double	z;
 }				t_vec3;
+
+typedef struct s_light_result {
+	double diffuse;
+	double specular_intensity;
+	double light_distance;
+	t_vec3 light_dir;
+} t_light_result;
 
 typedef struct	s_color
 {

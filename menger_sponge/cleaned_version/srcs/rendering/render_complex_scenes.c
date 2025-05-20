@@ -18,12 +18,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-typedef struct s_light_result {
-	double diffuse;
-	double specular_intensity;
-	double light_distance;
-	t_vec3 light_dir;
-} t_light_result;
+
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
 {
@@ -205,22 +200,12 @@ void	compute_ray_intersaction(t_ray ray, t_object *hit_object, double t, t_vec3 
 	}
 }
 
-t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_point, t_vec3 normal)
+t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_point, t_vec3 normal, t_light *light)
 {
 	t_light_result result;
 
-	// Initialize defaults (used if no lights are present)
-	result.diffuse = 0.0;
-	result.specular_intensity = 0.0;
-	result.light_distance = 0.0;
-	result.light_dir = vec3_create(0.0, 1.0, 0.0);  // Default direction
-
-	// Check if lights exist
-	if (!scene->lights)
-		return result;
-
 	// Calculate vector from hit point to light source
-	t_vec3 to_light = vec3_subtract(scene->lights->position, hit_point);
+	t_vec3 to_light = vec3_subtract(light->position, hit_point);
 	result.light_distance = vec3_length(to_light);
 
 	// Normalize to get light direction
@@ -255,7 +240,6 @@ void	*render_thread(void *arg)
 
 	int				color;
 	int				in_shadow;
-	double			light_intensity;
 	double			t;
 	double			fov_scale;
 	t_ray			ray;
@@ -263,6 +247,7 @@ void	*render_thread(void *arg)
 	t_vec3			normal;
 	t_light_result	light_info;
 	t_object		*hit_object;
+	t_light			*current_light;
 
 	in_shadow = 0;
 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
@@ -272,7 +257,6 @@ void	*render_thread(void *arg)
 	{
 		for (int x = 0; x < scene->width; x+=scene->app.resolution_factor)
 		{
-
 			color = scene->background_color;
 
 			// Initialize ray direction before using it
@@ -281,39 +265,51 @@ void	*render_thread(void *arg)
 			// ray tracing
 			if (find_closest_intersection(scene, ray, &t, &hit_object))
 			{
-
 				compute_ray_intersaction(ray, hit_object, t, &hit_point, &normal);
 
-				light_info = compute_light(scene, hit_object, hit_point, normal);
+				// Start with ambient light
+				color = get_object_color(hit_object, scene->ambient.ratio, scene->ambient.color);
 
-				//Check if the hit point is in shadow
-				if(scene->app.enable_hard_shadows)
-					in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
-
-				// Combine all lighting components
-				if (in_shadow || !scene->lights)
-					light_intensity = scene->ambient.ratio;
-				else
+				// Accumulate light from all lights
+				current_light = scene->lights;
+				while (current_light)
 				{
-					light_intensity = scene->ambient.ratio +
-						(scene->lights->intensity * light_info.diffuse) +
-						(scene->lights->intensity * light_info.specular_intensity);
-				}
+					light_info = compute_light(scene, hit_object, hit_point, normal, current_light);
 
-				// Get color from material and apply lighting with light color
-				color = get_object_color(hit_object, light_intensity, scene->lights->color);
+					//Check if the hit point is in shadow for this light
+					if(scene->app.enable_hard_shadows)
+						in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
+
+					if (!in_shadow)
+					{
+						// Add this light's contribution
+						int light_color = get_multiple_lights_color(hit_object, light_info, current_light, scene->ambient.ratio);
+
+						// Extract RGB components
+						int r = (light_color >> 16) & 0xFF;
+						int g = (light_color >> 8) & 0xFF;
+						int b = light_color & 0xFF;
+
+						// Add to final color
+						int final_r = valid_color_range(((color >> 16) & 0xFF) + r);
+						int final_g = valid_color_range(((color >> 8) & 0xFF) + g);
+						int final_b = valid_color_range((color & 0xFF) + b);
+
+						color = (final_r << 16) | (final_g << 8) | final_b;
+					}
+
+					current_light = current_light->next;
+				}
 			}
 
 			// Fill the entire block with this color
-				for (int by = 0; by < scene->app.resolution_factor && y + by < HEIGHT; by++)
+			for (int by = 0; by < scene->app.resolution_factor && y + by < HEIGHT; by++)
+			{
+				for (int bx = 0; bx < scene->app.resolution_factor && x + bx < WIDTH; bx++)
 				{
-					for (int bx = 0; bx < scene->app.resolution_factor && x + bx < WIDTH; bx++)
-					{
-						pixel_put(x + bx, y + by, &scene->img, color);
-					}
+					pixel_put(x + bx, y + by, &scene->img, color);
 				}
-
-			// pixel_put(x, y, &scene->img, color);
+			}
 		}
 	}
 	return (NULL);
