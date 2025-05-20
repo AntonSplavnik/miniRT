@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 15:32:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/20 09:57:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ typedef struct s_camera
 	double	near;
 	double	far;
 	double	cam_matrix[3][3];
+
+	double  movement_speed; //Speed for camera movement
+	double	rotation_speed;	//Speed for camera rotation
 }				t_camera;
 
 typedef enum	e_object_type
@@ -214,11 +217,12 @@ typedef struct s_control_panel {
 typedef struct s_app {
     void    *mlx;
     void    *win;
-    bool    checkbox_checked;
 	void    *control_window;
+    bool    enable_hard_shadows;
 	bool    enable_reflections;
     bool    enable_specular;
-	t_control_panel control_panel;  // Add this to store the control panel state
+	double	resolution_factor; // For controlling render resolution
+	t_control_panel control_panel;  //store the control panel state
 } t_app;
 
 typedef struct s_scene
@@ -231,6 +235,8 @@ typedef struct s_scene
 
 	int			width; // Window width
 	int			height; //Window height
+
+	int			background_color;
 
 	t_ambient	ambient;
 	t_camera	camera;

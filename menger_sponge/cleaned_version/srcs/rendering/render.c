@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 #include <sys/time.h>
 #include <string.h>
 
@@ -50,10 +50,6 @@ void	scene_render(t_scene *scene)
 		// Use the dedicated Menger sponge renderer
 		render_menger_sponge(scene);
 		return; // Exit early to prevent any 2D rendering
-	}
-	// For 2D scenes, clear any bottom message
-	if (!scene->is_3d) {
-		display_progress(scene, ""); // Empty message clears previous message
 	}
 }
 

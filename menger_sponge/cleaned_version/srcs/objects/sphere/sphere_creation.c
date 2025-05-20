@@ -1,4 +1,4 @@
-#include "platform.h"
+#include "miniRT.h"
 
 t_object	*create_sphere(t_vec3 center, double diameter, t_color color)
 {

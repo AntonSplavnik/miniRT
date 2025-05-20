@@ -16,7 +16,7 @@ endif
 
 # Common compilation settings
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
 INCLUDES = -I$(MLX_PATH) -Iincludes
 LDFLAGS = -L$(MLX_PATH) -lmlx $(MLX_FLAGS)
 
@@ -30,12 +30,8 @@ SRC_FILES = main.c \
 			events.c \
 			init.c \
 			string_utils.c \
-			render.c \
-			menger.c \
 			colors.c \
 			material.c \
-			camera.c \
-			render_complex_scenes.c \
 			vector_utils/vec3_basic_op.c \
 			vector_utils/vec3_length.c \
 			vector_utils/vec3_product.c \
@@ -81,8 +77,22 @@ SRC_FILES = main.c \
 			objects/mesh/mesh_creation.c \
 			objects/cone/cone_creation.c \
 			objects/cone/cone_intersect.c \
+			close_handler.c \
+			rendering/render.c \
+			rendering/render_complex_scenes.c \
+			rendering/menger.c \
+			camera/camera.c \
+			scenes/old_scenes/mesh_sphere_sphere.c \
+			scenes/old_scenes/cube.c \
+			scenes/old_scenes/triangle.c \
+			scenes/old_scenes/spheres_sylinder_plane.c \
+			scenes/old_scenes/sphere.c \
+			scenes/old_scenes/sphere_cylinder.c \
 			ui/user_interface.c\
-			ui/control_panel.c
+			ui/control_panel.c\
+			ui/status_messages.c\
+			controls/keys.c\
+			controls/mouse.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -113,6 +123,11 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/triangle
 	@mkdir -p $(OBJ_DIR)/objects/mesh
 	@mkdir -p $(OBJ_DIR)/scenes
+	@mkdir -p $(OBJ_DIR)/ui
+	@mkdir -p $(OBJ_DIR)/controls
+	@mkdir -p $(OBJ_DIR)/camera
+	@mkdir -p $(OBJ_DIR)/utils
+	@mkdir -p $(OBJ_DIR)/objects/cone
 
 # Build executable
 $(NAME): $(OBJECTS)

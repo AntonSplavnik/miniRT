@@ -1,5 +1,5 @@
 #include "miniRT.h"
-
+/* 
 void draw_checkbox(t_scene *scene)
 {
 	int x = 50;
@@ -19,11 +19,11 @@ void draw_checkbox(t_scene *scene)
 	}
 	
 	//If checked, draw a simple check mark (using text here)
-/*	if (scene->app.checkbox_checked)
-		mlx_string_put(scene->mlx_connection, scene->mlx_window, x + 7, y + 13, 0x00FF00, "X"); */
+	if (scene->app.enable_hard_shadows)
+		mlx_string_put(scene->mlx_connection, scene->mlx_window, x + 7, y + 13, 0x00FF00, "X");
 
 	// If checked, draw a simple check mark (using text here)
-	if (scene->app.checkbox_checked) {
+	if (scene->app.enable_hard_shadows) {
         // Draw an X using lines
         while (j < size - 4)
         {
@@ -42,3 +42,4 @@ void draw_checkbox(t_scene *scene)
                   x + size + 10, y + 15, 0xFFFFFF, "Enable Shadows");
 
 }
+ */

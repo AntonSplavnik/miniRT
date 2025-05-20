@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 #include <math.h>
 
 // Calculate squared length of a vector

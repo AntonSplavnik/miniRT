@@ -10,7 +10,7 @@
 ///*                                                                            */
 ///* ************************************************************************** */
 
-#include "platform.h"
+#include "miniRT.h"
 
 // Helper function for disc (=cap) intersection
 int ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
