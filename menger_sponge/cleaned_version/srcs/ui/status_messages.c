@@ -5,24 +5,11 @@ void display_status(t_scene *scene)
 {
 	char status[100];
 
-	if (!ft_strncmp(scene->name, "sphere", 6))
+	if (scene->name)
 	{
 		// Simple sphere status
-		snprintf(status, 100, "Simple Sphere | Camera: (%.1f, %.1f, %.1f)",
+		snprintf(status, 100, "%s | Camera: (%.1f, %.1f, %.1f)", scene->name,
 				scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
-	}
-	// Format status text based on scene type
-	else if (scene->is_3d)
-	{
-		// 3D mode status
-		snprintf(status, 100, "3D Mode | Iterations: %d | Resolution: %d",
-				scene->menger.iterations, scene->resolution_factor);
-	}
-	else
-	{
-		// 2D mode status
-		snprintf(status, 100, "scene: %s | Zoom: %.2f | Iterations: %d",
-				scene->name, scene->zoom, scene->iterations_defintion);
 	}
 
 	// Clear the window and display the status with a new image
