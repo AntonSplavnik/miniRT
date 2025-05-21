@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 15:30:00 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/14 18:05:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:51:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,23 +446,23 @@ int get_environment_color(t_vec3 direction)
 
 //Used
 // Helper function to reflect a ray
-t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal)
-{
-    double dot = incident.x * normal.x + incident.y * normal.y + incident.z * normal.z;
-    t_vec3 reflection;
+// t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal)
+// {
+//     double dot = incident.x * normal.x + incident.y * normal.y + incident.z * normal.z;
+//     t_vec3 reflection;
 
-    reflection.x = incident.x - 2.0 * dot * normal.x;
-    reflection.y = incident.y - 2.0 * dot * normal.y;
-    reflection.z = incident.z - 2.0 * dot * normal.z;
+//     reflection.x = incident.x - 2.0 * dot * normal.x;
+//     reflection.y = incident.y - 2.0 * dot * normal.y;
+//     reflection.z = incident.z - 2.0 * dot * normal.z;
 
-    // Normalize the reflection vector
-    double len = sqrt(reflection.x * reflection.x + reflection.y * reflection.y + reflection.z * reflection.z);
-    reflection.x /= len;
-    reflection.y /= len;
-    reflection.z /= len;
+//     // Normalize the reflection vector
+//     double len = sqrt(reflection.x * reflection.x + reflection.y * reflection.y + reflection.z * reflection.z);
+//     reflection.x /= len;
+//     reflection.y /= len;
+//     reflection.z /= len;
 
-    return reflection;
-}
+//     return reflection;
+// }
 
 //Used
 // Helper function to blend two colors with a given weight

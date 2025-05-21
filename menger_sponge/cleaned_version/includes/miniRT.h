@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 16:03:10 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:52:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define FOV 60.0
 # define NEAR_PLANE 0.1
 # define FAR_PLANE 100.0
+# define MAX_RAY_DEPTH 5
 # define MAX_BVH_DEPTH 8
 # define MAX_BVH_NODES 1000
 
@@ -192,5 +193,15 @@ void update_camera_matrix(t_scene *scene);
 int				motion_handler(int x, int y, t_scene *scene);
 int				control_mouse_handler(int button, int x, int y, t_scene *scene);
 int				mouse_release(int button, int x, int y, t_scene *scene);
+
+//refraction
+t_vec3	refract_ray(t_vec3 incident, t_vec3 normal, double ior_ratio);
+int		is_entering_medium(t_vec3 ray_dir, t_vec3 normal);
+double calculate_fresnel(t_vec3 incident, t_vec3 normal,
+                         double ior_incident, double ior_transmission);
+
+//test
+void *render_thread_with_checkerboard(void *arg);
+t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal);
 
 #endif

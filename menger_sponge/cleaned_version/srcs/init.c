@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/21 14:44:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:46:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	data_init(t_scene *scene)
     scene->app.enable_hard_shadows = true;
     scene->app.enable_reflections = true;
     scene->app.enable_specular = true;
+	scene->app.enable_refraction = true;
 	scene->app.resolution_factor = 1;
 
 	// Initialize control panel

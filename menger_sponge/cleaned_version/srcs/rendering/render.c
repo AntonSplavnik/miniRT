@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 15:33:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:48:05 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	render_complex_scene(t_scene *scene)
 		else
 			thread_data[i].end_row = (i + 1) * rows_per_thread;
 
-		if (pthread_create(&threads[i], NULL, render_thread, &thread_data[i]) != 0)
+		if (pthread_create(&threads[i], NULL, render_thread_with_checkerboard, &thread_data[i]) != 0)
         {
             // If thread creation fails, fall back to single-threaded rendering
             // (This would need to be implemented separately)

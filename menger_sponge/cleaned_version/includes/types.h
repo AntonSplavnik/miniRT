@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 15:43:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:45:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ typedef struct	s_material
 	double	reflectivity;
 	double	transparency; // 0.0 = opaque 1.0 = fully transparent
 	double	refractive_index; //Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
-	int		checkerboard;
+	int		has_checker;
+	double	checker_size;
 	t_color	checker_color;
 }	t_material;
 
@@ -232,6 +233,7 @@ typedef struct s_app {
     bool    enable_hard_shadows;
 	bool    enable_reflections;
     bool    enable_specular;
+	bool	enable_refraction;
 	double	resolution_factor; // For controlling render resolution
 	t_control_panel control_panel;  //store the control panel state
 } t_app;

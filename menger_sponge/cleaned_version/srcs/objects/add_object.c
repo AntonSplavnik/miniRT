@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   objects_creation.c                                 :+:      :+:    :+:   */
+/*   add_object.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:25:52 by abillote          #+#    #+#             */
-/*   Updated: 2025/04/30 10:06:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:18:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ void	add_object(t_scene *scene, t_object *object)
 	while (current->next)
 		current = current->next;
 	current->next = object;
+	printf("object is a %d and checker szie is %f it has a checkboard: %d\n", object->type, object->material.checker_size, object->material.has_checker);
 }

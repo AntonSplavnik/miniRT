@@ -85,6 +85,8 @@ SRC_FILES = main.c \
 			rendering/compute_rays.c	\
 			rendering/compute_intersections.c	\
 			rendering/render_utils.c	\
+			rendering/refraction.c		\
+			rendering/checkerboard.c	\
 			camera/camera.c \
 			scenes/old_scenes/mesh_sphere_sphere.c \
 			scenes/old_scenes/cube.c \
