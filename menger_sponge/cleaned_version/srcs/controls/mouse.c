@@ -13,7 +13,7 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
             render_complex_scene(scene);
             return (0);
         }
-        
+
         // Check reflections checkbox
         if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
             scene->app.enable_reflections = !scene->app.enable_reflections;
@@ -21,7 +21,7 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
             render_complex_scene(scene);
             return (0);
         }
-        
+
         // Check specular checkbox
         if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
             scene->app.enable_specular = !scene->app.enable_specular;
@@ -29,7 +29,7 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
             render_complex_scene(scene);
             return (0);
         }
-        
+
         // Check if render button was clicked
 /*         if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
             // Re-render with new settings
@@ -46,16 +46,16 @@ static void handle_3d_rotation(int x, int y, t_scene *scene)
 	// Calculate movement deltas
 	int dx = x - scene->prev_mouse_x;
 	int dy = y - scene->prev_mouse_y;
-	
+
 	// Update rotation (scale down the movement for smoother control)
 	// Use mouse for rotation, not position adjustment
 	scene->camera.rotation.y += dx * 0.01;  // Horizontal mouse movement rotates around Y axis
 	scene->camera.rotation.x += dy * 0.01;  // Vertical mouse movement rotates around X axis
-	
+
 	// Store new positions
 	scene->prev_mouse_x = x;
 	scene->prev_mouse_y = y;
-	
+
 	// Render at low resolution during dragging for better performance
 	// Use 4 instead of 8 for better quality during dragging
 	scene->app.resolution_factor = 4;
@@ -91,7 +91,11 @@ int	mouse_handler(int button, int x, int y, t_scene *scene)
             // draw_checkbox(scene);
         }
     } */
-   if (button == 2)
+#ifdef __APPLE__
+	if (button == MOUSE_RIGHT_BUTTON)
+#else
+	if (button == 3)
+#endif
    {
 		scene->is_dragging = 1;
 		scene->prev_mouse_x = x;
@@ -134,17 +138,17 @@ int	mouse_release(int button, int x, int y, t_scene *scene)
 	(void)button;
 	(void)x;
 	(void)y;
-	
+
 #ifdef __APPLE__
 	if (button == MOUSE_RIGHT_BUTTON)
 #else
-	if (button == Button2)
+	if (button == 3)
 #endif
-	
+
 	if (scene->is_dragging)
 	{
 		scene->is_dragging = false;
-		
+
 		// Render at full quality after release
 		if (scene)
 		{
@@ -169,7 +173,7 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 	{
 		return (0);
 	}
-	
+
 	// For 3D fractal types
 	if (fractal->is_3d)
 	{
@@ -184,7 +188,7 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 		{
 			// Zoom in (move camera forward)
 			fractal->camera.position.z += 0.3;
-			
+
 			if (!ft_strncmp(fractal->name, "menger", 6))
 			{
 				// Use a lower resolution for preview during movement
@@ -197,7 +201,7 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 				fractal->resolution_factor = 4;
 				render_mandelbrot3d(fractal);
 			}
-			
+
 			display_status(fractal);
 			return (0);
 		}
@@ -205,7 +209,7 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 		{
 			// Zoom out (move camera backward)
 			fractal->camera.position.z -= 0.3;
-			
+
 			if (!ft_strncmp(fractal->name, "menger", 6))
 			{
 				// Use a lower resolution for preview during movement
@@ -218,7 +222,7 @@ int	mouse_handler(int button, int x, int y, t_fractal *fractal)
 				fractal->resolution_factor = 4;
 				render_mandelbrot3d(fractal);
 			}
-			
+
 			display_status(fractal);
 			return (0);
 		}
@@ -232,25 +236,25 @@ int	mouse_release(int button, int x, int y, t_fractal *fractal)
 	(void)button;
 	(void)x;
 	(void)y;
-	
+
 	if (fractal->is_dragging)
 	{
 		fractal->is_dragging = 0;
-		
+
 		// If we were dragging in 3D mode, render at full quality after release
 		if (fractal->is_3d)
 		{
 			fractal->resolution_factor = 1;
-			
+
 			if (!ft_strncmp(fractal->name, "menger", 6))
 				render_menger_sponge(fractal);
 			else if (!ft_strncmp(fractal->name, "mandelbrot3d", 12))
 				render_mandelbrot3d(fractal);
-				
+
 			display_status(fractal);
 		}
 	}
-	
+
 	return (0);
 }
 */
