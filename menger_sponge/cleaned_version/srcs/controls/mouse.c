@@ -91,7 +91,7 @@ int	mouse_handler(int button, int x, int y, t_scene *scene)
             // draw_checkbox(scene);
         }
     } */
- #ifdef __APPLE__
+#ifdef __APPLE__
 	if (button == MOUSE_RIGHT_BUTTON)
 #else
 	if (button == 3)
