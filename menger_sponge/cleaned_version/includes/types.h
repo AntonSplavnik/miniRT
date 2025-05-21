@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 14:09:48 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:43:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,7 @@ typedef struct s_mesh
 	t_vec3		position;
 	t_vec3		rotation;
 	t_vec3		scale;
+	t_material	material;
 }	t_mesh;
 
 typedef struct s_cone

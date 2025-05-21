@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/14 11:01:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:41:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,11 @@ int	parse_cone(t_scene *scene, char *line)
 	double		radius;
 	double		height;
 	t_color		color;
+	char		*material_block;
 
+	material_block = extract_material_block(line);
+	if (material_block)
+		trim_material_block(line);
 	parts = ft_split(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
@@ -73,6 +77,11 @@ int	parse_cone(t_scene *scene, char *line)
 	if(!cone)
 		parse_error(scene, "Failed to create cone");
 	cone->material.color = color;
+	if(material_block)
+	{
+		parse_material_properties(material_block, &cone->material);
+		free(material_block);
+	}
 	add_object(scene, cone);
 	return (1);
 }

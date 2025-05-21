@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/15 11:22:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:41:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ int	parse_cube(t_scene *scene, char *line)
 	t_vec3		center;
 	double		side_length;
 	t_color		color;
+	char		*material_block;
 
+	material_block = extract_material_block(line);
+	if (material_block)
+		trim_material_block(line);
 	parts = ft_split(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
@@ -49,6 +53,11 @@ int	parse_cube(t_scene *scene, char *line)
 	cube = create_cube(center, side_length, color);
 	if (!cube)
 		parse_error(scene, "Failed to create cube");
+	if(material_block)
+	{
+		parse_material_properties(material_block, &cube->material);
+		free(material_block);
+	}
 	add_object(scene, cube);
 	return (1);
 }

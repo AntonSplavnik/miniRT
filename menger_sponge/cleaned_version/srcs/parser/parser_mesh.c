@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 11:37:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:43:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ int	parse_mesh(t_scene *scene, char *line)
 	double		scale;
 	t_color		color;
 	t_object	*mesh_obj;
+	char		*material_block;
 
+	material_block = extract_material_block(line);
+	if (material_block)
+		trim_material_block(line);
 	parts = ft_split(line, ' ');
 	if (!parts)
 		return (0);
@@ -134,6 +138,11 @@ int	parse_mesh(t_scene *scene, char *line)
 	mesh_obj->material = create_material(color);
 	mesh_obj->next = NULL;
 
+	if(material_block)
+	{
+		parse_material_properties(material_block, &mesh->material);
+		free(material_block);
+	}
 	// Add to scene
 	add_object(scene, mesh_obj);
 

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 15:26:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:03:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,10 @@
 # include "types.h"
 # include "parser.h"
 
-# ifdef __APPLE__
-#  define WIDTH 1440
-# else
 #  define WIDTH 1920
-# endif
+# define HEIGHT 1080
 
-# define RATIO 	(16.0/9.0)
-# define HEIGHT (WIDTH/RATIO)
-
-# define NUM_THREADS 8  // Number of threads for multithreaded rendering
+# define NUM_THREADS 8 // Number of threads for multithreaded rendering
 
 // 3D rendering constants
 # define FOV 60.0

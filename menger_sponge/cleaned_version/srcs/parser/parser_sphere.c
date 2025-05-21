@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 14:55:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:43:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	parse_sphere(t_scene *scene, char *line)
 	sphere = create_sphere(center, diameter, color);
 	if(!sphere)
 		parse_error(scene, "Failed to create sphere");
-	// Apply material properties if present
 	if (material_block)
 	{
 		parse_material_properties(material_block, &sphere->material);
