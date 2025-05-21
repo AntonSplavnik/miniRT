@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/20 11:13:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:24:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,6 +409,12 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 //rendering
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y);
 void		render_complex_scene(t_scene *scene);
+
+//compute light
+t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_point, t_vec3 normal, t_light *light);
+
+void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_vec3 *hit_point, t_vec3 *normal);
+
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);

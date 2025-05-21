@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:10:14 by asplavni          #+#    #+#             */
-/*   Updated: 2025/04/29 10:41:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:51:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@
 // Linux/X11 includes and defines
 #  include <X11/X.h>
 #  include <X11/keysym.h>
+#  include <X11/keysymdef.h>
 #  include "../minilibx-linux/mlx.h"
 
 // On Linux, we use X11's keysym.h, which already defines the key codes we need

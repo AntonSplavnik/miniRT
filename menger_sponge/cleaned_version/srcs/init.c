@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/20 10:44:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:10:19 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	malloc_error(void)
 //Used
 static void	data_init(t_scene *scene)
 {
-
+	scene->is_3d = 1;
 	scene->mlx_connection = NULL;
 	scene->mlx_window = NULL;
 	scene->width = WIDTH;

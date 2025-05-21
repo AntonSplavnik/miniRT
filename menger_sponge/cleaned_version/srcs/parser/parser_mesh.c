@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 17:32:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 11:37:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_mesh *load_obj_file(const char *filename)
 	mesh->scale = (t_vec3){1, 1, 1};
 
 	free(vertices);
-	printf("Loaded mesh with %d vertices and %d triangles\n", vertex_count, t_idx);
 	return (mesh);
 }
 
@@ -114,7 +113,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	{
 		free_split(parts);
 		parse_error(scene, "Invalid format for mesh file");
-		return (0); 
+		return (0);
 	}
 
 	// Load OBJ file

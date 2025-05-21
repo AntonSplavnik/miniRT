@@ -78,8 +78,11 @@ SRC_FILES = main.c \
 			objects/cone/cone_intersect.c \
 			close_handler.c \
 			rendering/render.c \
-			rendering/render_complex_scenes.c \
 			rendering/menger.c \
+			rendering/compute_light.c	\
+			rendering/compute_rays.c	\
+			rendering/compute_intersections.c	\
+			rendering/render_utils.c	\
 			camera/camera.c \
 			scenes/old_scenes/mesh_sphere_sphere.c \
 			scenes/old_scenes/cube.c \
