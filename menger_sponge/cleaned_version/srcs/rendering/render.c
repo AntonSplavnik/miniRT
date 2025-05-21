@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 11:19:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:33:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	*render_thread(void *arg)
 	t_light_result	light_info;
 	t_object		*hit_object;
 	t_light			*current_light;
-	double			light_intensity;
 	int				light_color;
 
 	in_shadow = 0;
@@ -55,7 +54,7 @@ void	*render_thread(void *arg)
 				compute_ray_intersection(ray, hit_object, t, &hit_point, &normal);
 
 				// Start with just the ambient light
-				color = get_pixel_color(hit_object, scene->ambient.ratio, scene->ambient.color);
+				color = get_pixel_color(hit_object, scene->ambient.ratio, 0.0, scene->ambient.color);
 
 				// Accumulate light from all lights
 				current_light = scene->lights;
@@ -70,14 +69,11 @@ void	*render_thread(void *arg)
 					if (!in_shadow)
 					{
 						// Add this light's contribution
-						// Start with ambient light
-						light_intensity = scene->ambient.ratio;
 
-						// Add diffuse and specular from this light
-						light_intensity += (current_light->intensity * light_info.diffuse) +
-							(current_light->intensity * light_info.specular_intensity);
-
-						light_color = get_pixel_color(hit_object, light_intensity, current_light->color);
+						// Add diffuse and specular:
+						double diffuse_intensity = scene->ambient.ratio + (current_light->intensity * light_info.diffuse);
+						double specular_intensity = current_light->intensity * light_info.specular_intensity;
+						light_color = get_pixel_color(hit_object, diffuse_intensity, specular_intensity, current_light->color);
 
 						// Extract RGB components
 						int r = (light_color >> 16) & 0xFF;

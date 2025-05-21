@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 11:24:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:26:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,15 @@
 # include "types.h"
 # include "parser.h"
 
-# define WIDTH	1280
-# define HEIGHT	1024
+# ifdef __APPLE__
+#  define WIDTH 1440
+# else
+#  define WIDTH 1920
+# endif
+
+# define RATIO 	(16.0/9.0)
+# define HEIGHT (WIDTH/RATIO)
+
 # define NUM_THREADS 8  // Number of threads for multithreaded rendering
 
 // 3D rendering constants
@@ -49,258 +56,6 @@
 # define HOT_PINK        0xFF66B2
 # define ELECTRIC_BLUE   0x0066FF
 # define LAVA_RED        0xFF3300
-/*
-typedef struct s_vec3
-{
-	double	x;
-	double	y;
-	double	z;
-}				t_vec3;
-
-typedef struct	s_color
-{
-	int	r;
-	int g;
-	int b;
-}	t_color;
-
-//material properties for objects (bonus)
-//for bonuses: nothing mentionned so we can add the material properties in the rt files
-typedef struct	s_material
-{
-	t_color	color;
-	double	specular; //specular reflection coeff
-	double	shininess; //shininess exponent for specular reflection
-	double	reflectivity; //reflectivity coeff
-	int		checkerboard; //flag for checkerboard pattern
-	t_color	checker_color; //Secondary color for checkerboard
-}	t_material;
-
-
-//Ambient lighting
-typedef struct s_ambient
-{
-	double	ratio; //Ambient lighting ratio (0.0 - 1.0)
-	t_color	color;
-}	t_ambient;
-
-typedef struct	s_light
-{
-	t_vec3	position;
-	double	intensity; //light brightness ratio (0.0 - 1.0)
-	t_color	color; //light color (for bonus)
-	struct s_light *next; //pointer to next light (bonuses)
-}	t_light;
-
-typedef struct s_aabb
-{
-	t_vec3	min;
-	t_vec3	max;
-}				t_aabb;
-
-typedef struct s_bvh_node
-{
-	t_aabb				bounds;
-	struct s_bvh_node	*left;
-	struct s_bvh_node	*right;
-	int					is_leaf;
-	int					iteration;
-}				t_bvh_node;
-
-typedef struct s_camera
-{
-	t_vec3	position;
-	t_vec3	rotation; //simple camera orientation, from parsing
-	double	fov; //range 0-180
-
-	//These three vectors together define a local coordinate system for the camera
-	t_vec3	forwards; //forward vector
-	t_vec3	right; //right vector
-	t_vec3	up; //up vector
-
-	double	aspect_ratio; //Initialized but not used yet
-	double	near; //Initialized but not used yet
-	double	far; //Initialized but not used yet
-
-	double  movement_speed; //Speed for camera movement
-	double	rotation_speed;	//Speed for camera rotation
-}				t_camera;
-
-typedef enum	e_object_type
-{
-	SPHERE,
-	PLANE,
-	CYLINDER,
-	CUBE,
-	TRIANGLE,
-	MESH,
-	CONE, //For bonus
-	HYPERBOLOID, //For bonus
-	PARABOLOID, //For bonus
-}	t_object_type;
-
-//Object structure, linked list
-typedef struct	s_object
-{
-	void			*data; //pointer to store any object struct
-	t_object_type	type;
-	t_material		material;
-	struct s_object	*next;
-}	t_object;
-
-typedef struct	s_sphere
-{
-	t_vec3	center; //from parsing
-	double	diameter; //from parsing
-	double	radius; //calculated from diameter
-}	t_sphere;
-
-typedef struct s_plane
-{
-	t_vec3	point; //from parsing
-	t_vec3	normal; //from parsing
-}	t_plane;
-
-typedef struct s_cylinder
-{
-	t_vec3	center; //parsing
-	t_vec3	axis; //parsing
-	double	diameter; //parsing
-	double	radius; //calculated from diameter
-	double height; //parsing
-}	t_cylinder;
-
-typedef struct s_cube
-{
-	t_vec3	center; //center point of the cube
-	double	side_length; //length of each side of the cube
-}	t_cube;
-
-typedef struct s_triangle
-{
-	t_vec3	v0; // First vertex
-	t_vec3	v1; // Second vertex
-	t_vec3	v2; // Third vertex
-	t_vec3	normal; // Precomputed normal
-}	t_triangle;
-
-typedef struct s_mesh
-{
-	t_triangle	*triangles; // Array of triangles
-	int			triangle_count; // Number of triangles
-	t_vec3		position; // Center position of the mesh
-	t_vec3		rotation; // Rotation of the mesh
-	t_vec3		scale; // Scale of the mesh
-}	t_mesh;
-
-typedef struct	s_ray
-{
-	t_vec3	origin;
-	t_vec3	direction; //normalized
-}	t_ray;
-
-typedef struct	s_hit_record
-{
-	double		t; //Ray parameter at the intersection
-	t_vec3		point; //Point of intersection
-	t_vec3		normal; //Surface normal at intersection
-	t_material	material; //material of the intersected object
-	t_object	*object; //Pointer to the intersected object
-	int			inside; //Flag indicating if the ray is inside the object
-}	t_hit_record;
-
-typedef struct s_img
-{
-	void	*img_ptr;
-	char	*pixels_ptr;
-	int		bpp;
-	int		endian;
-	int		line_len;
-}				t_img;
-
-typedef struct s_menger
-{
-	int			iterations;
-	double		size;
-	t_vec3		position;
-	t_vec3		rotation;
-	t_bvh_node	*bvh_root;
-}				t_menger;
-
-typedef struct s_bounds
-{
-	double	new_min;
-	double	new_max;
-	double	old_min;
-	double	old_max;
-}	t_bounds;
-
-// In the t_app struct or t_scene struct, add:
-typedef struct s_control_panel {
-    t_img   img;          // Using your existing t_img structure
-    bool    initialized;  // Flag to track initialization status
-} t_control_panel;
-
-typedef struct s_app {
-    void    *mlx;
-    void    *win;
-	void    *control_window;
-    bool    enable_hard_shadows;
-	bool    enable_reflections;
-    bool    enable_specular;
-	double	resolution_factor; // For controlling render resolution
-	t_control_panel control_panel;  //store the control panel state
-} t_app;
-
-
-typedef struct s_scene
-{
-	char		*name; //input file name
-	void		*mlx_connection; //MLX pointer
-	void		*mlx_window; //MLW window pointer
-	t_img		img; //Image struct
-	t_app		app;
-
-	int			width; // Window width
-	int			height; //Window height
-
-	int			background_color;
-
-	t_ambient	ambient;
-	t_camera	camera;
-	t_light		*lights; //Linked list of lights
-	t_object	*objects; //Linked list of objects
-
-	//for bonuses
-	int 		sample; //for anti-aliasing
-	int			max_depth; //Maximum recursion depth (for reflections)
-
-	double		escape_value;
-	int			iterations_defintion;
-	double		shift_x;
-	double		shift_y;
-	double		zoom;
-	double		julia_x;
-	double		julia_y;
-	int			mouse_control;
-	int			is_dragging;
-	int			prev_mouse_x;
-	int			prev_mouse_y;
-
-	t_menger	menger;	//menger delete or repurpose later
-	int			is_3d;	//menger delete or repurpose later
-	int			resolution_factor;  // For controlling render resolution menger (delete later)
-}				t_scene;
-
-typedef struct s_thread_data
-{
-	int			start_row;
-	int			end_row;
-	t_scene	*scene;
-}	t_thread_data;
- */
-
-
 
 //events
 int			close_handler(t_scene *scene);
@@ -310,8 +65,6 @@ int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
 void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
-
-
 
 //init
 void		scene_init(t_scene *scene);
@@ -367,7 +120,7 @@ t_vec3		vec3_normalize(t_vec3 v);
 
 //colors
 t_color		create_color(int r, int g, int b);
-int			get_pixel_color(t_object *object, double light_intensity, t_color light_color);
+int			get_pixel_color(t_object *object, double diffuse_intensity, double specular_intensity, t_color light_color);
 int			valid_color_range(int c);
 
 //material

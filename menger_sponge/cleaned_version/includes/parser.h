@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 10:54:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:57:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,19 @@ int		parse_scene_file(char *filename, t_scene *scene);
 int		parse_line(t_scene *scene, char *line);
 int		parse_parameters(t_scene *scene, char *line);
 int		copy_to_line(t_scene *scene, char *buffer, int *pos, char *line);
+
+
+//material
+/* Function declarations for material parser */
+char    *extract_material_block(char *line);
+void    trim_material_block(char *line);
+double  get_property_value(const char *material_block, const char *property);
+void    parse_material_properties(const char *material_block, t_material *material);
+double  ft_clamp(double value, double min, double max);
+
+/* Function declarations for string utilities */
+char    *ft_strchr(const char *s, int c);
+char    *ft_strstr(const char *haystack, const char *needle);
+size_t  ft_strlcat(char *dst, const char *src, size_t size);
 
 #endif

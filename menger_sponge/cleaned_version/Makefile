@@ -50,6 +50,8 @@ SRC_FILES = main.c \
 			parser/parser_triangle.c \
 			parser/parser_cube.c \
 			parser/parser_mesh.c \
+			parser/parser_material.c	\
+			parser/parser_utils_2.c		\
 			utils/ft_atof.c \
 			utils/ft_atoi.c	\
 			utils/ft_isspace.c \

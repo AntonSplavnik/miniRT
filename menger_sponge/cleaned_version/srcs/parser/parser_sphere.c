@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:32:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:55:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ int	parse_sphere(t_scene *scene, char *line)
 	t_vec3		center;
 	double		diameter;
 	t_color		color;
+	char		*material_block;
+
+	// Extract material block if present
+	material_block = extract_material_block(line);
+
+	// Trim material block from line for standard parsing
+	if (material_block)
+		trim_material_block(line);
 
 	parts = ft_split(line, ' ');
 	if (!parts)
@@ -53,6 +61,12 @@ int	parse_sphere(t_scene *scene, char *line)
 	sphere = create_sphere(center, diameter, color);
 	if(!sphere)
 		parse_error(scene, "Failed to create sphere");
+	// Apply material properties if present
+	if (material_block)
+	{
+		parse_material_properties(material_block, &sphere->material);
+		free(material_block);
+	}
 	add_object(scene, sphere);
 	return (1);
 }
