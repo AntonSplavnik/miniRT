@@ -1,0 +1,13 @@
+# Basic scene setup
+A 0.3 255,255,255
+C 0,0,-20 0,0,1 70
+L 10,10,-10 0.9 255,255,255
+
+# Floor plane
+pl 0,-5,0 0,1,0 255,255,255
+
+# Sphere with specular properties
+sp 0,0,0 6 255,0,0 {specular: 1.0, shininess: 64}
+
+# Cone with specular properties
+co 0,0,0 0,1,0 3 6 255,0,0 {specular: 1.0, shininess: 64}
