@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 10:54:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:40:42 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	parse_parameters(t_scene *scene, char *line)
 		return (parse_cube(scene, line));
 	else if (is_mesh(line))
 		return (parse_mesh(scene, line));
+	else if (is_resolution(line))
+		return (parse_resolution(scene, line));
 	else
 		return (0);
 }

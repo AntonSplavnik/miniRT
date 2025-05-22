@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/21 16:46:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:44:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ static void	data_init(t_scene *scene)
 	scene->is_3d = 1;
 	scene->mlx_connection = NULL;
 	scene->mlx_window = NULL;
-	scene->width = WIDTH;
-	scene->height = HEIGHT;
-	scene->ambient.ratio = 0.1; //default
-	scene->ambient.color = create_color(255,255 ,255); //white by default
+	//scene->width = WIDTH;
+	//scene->height = HEIGHT;
+	//scene->ambient.ratio = 0.1; //default
+	//scene->ambient.color = create_color(255,255 ,255); //white by default
 	scene->background_color = (0 << 16 | 0 << 8 | 0); // black
-	scene->lights = NULL;
-	scene->objects = NULL;
+	//scene->lights = NULL;
+	//scene->objects = NULL;
 
 	//app
 	scene->app.mlx = NULL;
@@ -69,12 +69,12 @@ static void	data_init(t_scene *scene)
 
 	// Initialize camera defaults for 3D scenes
 	scene->is_3d = 0;  // Default to 2D mode - needs to be cleaned out
-	scene->camera.fov = 60.0;
-	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
+	//scene->camera.fov = 60.0;
+	//scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
 	scene->camera.near = 0.1;
 	scene->camera.far = 100.0;
-	scene->camera.position = (t_vec3){0.0, 0.0, 0.0};
-	scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
+	//scene->camera.position = (t_vec3){0.0, 0.0, 0.0};
+	//scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
     scene->camera.movement_speed = 0.5;
     scene->camera.rotation_speed = 0.05;
 

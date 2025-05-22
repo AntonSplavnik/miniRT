@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/22 14:37:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:44:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,15 @@ void cleanup_scene(t_scene *scene)
 void	start_raytracer(t_scene *scene, char *name)
 {
 	scene->name = name;
-	scene_init(scene);
 	//init_3d(scene);
-
+	scene->lights = NULL;
 	if (!parse_scene_file(name, scene))
 	{
 		cleanup_scene(scene);
 		write_string_to_file_descriptor("Error: Failed to parse scene file\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	scene_init(scene);
 	render_complex_scene(scene);
 
     draw_control_panel(scene);

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 10:54:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:40:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,12 @@ int	is_mesh(char *line)
 		if (line[2] == ' ' || line[2] == '\t' || line[2] == '\0')
 			return (1);
 	}
+	return (0);
+}
+
+int	is_resolution(char *line)
+{
+	if (ft_strncmp(line, "R", 1) == 0)
+		return (1);
 	return (0);
 }

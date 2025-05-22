@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/22 14:40:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:41:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int		is_cone(char *line);
 int		is_triangle(char *line);
 int		is_cube(char *line);
 int		is_mesh(char *line);
+int		is_resolution(char *line);
 
 // Vector and color parsing
 int		read_vector(char *str, t_vec3 *vector);
@@ -54,6 +55,7 @@ int		parse_cone(t_scene *scene, char *line);
 int		parse_triangle(t_scene *scene, char *line);
 int		parse_cube(t_scene *scene, char *line);
 int		parse_mesh(t_scene *scene, char *line);
+int		parse_resolution(t_scene *scene, char *line);
 
 // File handling functions
 int		is_valid_filename(char *filename);

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 13:53:08 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/22 14:29:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:42:16 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,5 @@ int	parse_resolution(t_scene *scene, char *line)
 	}
 	scene->width = width;
 	scene->height = height;
-	scene->img.width = width;
-	scene->img.height = height;
 	return (1);
 }

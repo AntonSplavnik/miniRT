@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 16:52:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:41:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 #  define WIDTH 1920
 # define HEIGHT 1080
+# define MAX_RESOLUTION 2560
 
 # define NUM_THREADS 8 // Number of threads for multithreaded rendering
 
