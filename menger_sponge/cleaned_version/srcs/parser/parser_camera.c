@@ -6,18 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 15:34:03 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/22 14:39:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "platform.h"
-
-int check_camera_uniqueness(t_scene *scene)
-{
-	if (scene->camera.position.x != 0.0 || scene->camera.position.y != 0.0 || scene->camera.position.z != 0.0)
-		return (0);
-	return (1);
-}
 
 int	parse_camera(t_scene *scene, char *line)
 {
@@ -26,7 +19,7 @@ int	parse_camera(t_scene *scene, char *line)
 	t_vec3	direction;
 
 	direction = vec3_create(0.0, 0.0, 0.0);
-	if (!check_camera_uniqueness(scene))
+	if (scene->camera.has_camera)
 		parse_error(scene, "Camera can only be declared once");
 	parts = ft_split(line, ' ');
 	if (!parts)
@@ -51,5 +44,6 @@ int	parse_camera(t_scene *scene, char *line)
 	free_split(parts);
 	if (!check_range(scene->camera.fov, 0.0, 180.0))
 		parse_error(scene, "Camera FOV must be between 0.0 and 180.0");
+	scene->camera.has_camera = 1;
 	return (1);
 }
