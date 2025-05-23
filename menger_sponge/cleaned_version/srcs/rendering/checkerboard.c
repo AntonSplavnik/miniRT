@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/22 11:16:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:36:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,8 +219,6 @@ int trace_ray_with_checkerboard(t_scene *scene, t_ray ray, int depth)
     int in_shadow;
     int base_color;
     int reflected_color = 0;
-    int refracted_color = 0;
-    double fresnel_factor = 0.0;
 
     // Base case: maximum recursion depth reached or no intersection
     if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_object))
@@ -283,7 +281,7 @@ int trace_ray_with_checkerboard(t_scene *scene, t_ray ray, int depth)
         current_light = current_light->next;
     }
 
-    // Handle reflections and refractions if enabled and not at max depth
+    // Handle reflections if enabled and not at max depth
     if (depth < MAX_RAY_DEPTH)
     {
         // Calculate reflection if object is reflective
@@ -300,83 +298,15 @@ int trace_ray_with_checkerboard(t_scene *scene, t_ray ray, int depth)
             reflected_color = trace_ray_with_checkerboard(scene, reflect_ray, depth + 1);
         }
 
-        // Calculate refraction if object is transparent
-        if (scene->app.enable_refraction && hit_object->material.transparency > 0.0)
-        {
-            // Determine if we're entering or exiting the medium
-            int is_entering = is_entering_medium(ray.direction, normal);
-            double ior_ratio;
-
-            // Calculate index of refraction ratio based on whether we're entering or exiting
-            if (is_entering)
-            {
-                // Air to medium
-                ior_ratio = 1.0 / hit_object->material.refractive_index;
-            }
-            else
-            {
-                // Medium to air
-                ior_ratio = hit_object->material.refractive_index;
-            }
-
-            // Calculate Fresnel factor for realistic reflection/refraction balance
-            fresnel_factor = calculate_fresnel(ray.direction, normal,
-                                              is_entering ? 1.0 : hit_object->material.refractive_index,
-                                              is_entering ? hit_object->material.refractive_index : 1.0);
-
-            // Calculate the refracted direction
-            t_vec3 refract_dir = refract_ray(ray.direction, normal, ior_ratio);
-
-            // If refraction occurs (not total internal reflection)
-            if (refract_dir.x != 0.0 || refract_dir.y != 0.0 || refract_dir.z != 0.0)
-            {
-                t_ray refract_ray;
-
-                // Create a refraction ray slightly offset from the hit point in the opposite direction
-                // of the normal to ensure it starts inside the object
-                refract_ray.origin = vec3_add(hit_point, vec3_scale(vec3_negate(normal), 0.001));
-                refract_ray.direction = refract_dir;
-
-                // Trace the refraction ray
-                refracted_color = trace_ray_with_checkerboard(scene, refract_ray, depth + 1);
-            }
-            else
-            {
-                // Total internal reflection - use reflection instead
-                fresnel_factor = 1.0;
-                if (!reflected_color)
-                {
-                    t_vec3 reflect_dir = reflect_ray(ray.direction, normal);
-                    t_ray reflect_ray;
-
-                    reflect_ray.origin = vec3_add(hit_point, vec3_scale(normal, 0.001));
-                    reflect_ray.direction = reflect_dir;
-
-                    reflected_color = trace_ray_with_checkerboard(scene, reflect_ray, depth + 1);
-                }
-            }
-        }
-
         // Blend base color, reflection and refraction based on material properties
-        if (reflected_color || refracted_color)
+        if (reflected_color)
         {
             double reflection_contribution;
-            double refraction_contribution;
 
-            // Adjust reflection contribution based on Fresnel factor for transparent objects
-            if (hit_object->material.transparency > 0.0)
-            {
-                reflection_contribution = fresnel_factor;
-                refraction_contribution = hit_object->material.transparency * (1.0 - fresnel_factor);
-            }
-            else
-            {
-                reflection_contribution = hit_object->material.reflectivity;
-                refraction_contribution = 0.0;
-            }
+            reflection_contribution = hit_object->material.reflectivity;
 
             // Ensure the base material still contributes to opaque parts
-            double base_contribution = 1.0 - (reflection_contribution + refraction_contribution);
+            double base_contribution = 1.0 - reflection_contribution;
 
             // Extract RGB components
             int base_r = (base_color >> 16) & 0xFF;
@@ -387,20 +317,13 @@ int trace_ray_with_checkerboard(t_scene *scene, t_ray ray, int depth)
             int reflect_g = reflected_color ? ((reflected_color >> 8) & 0xFF) : 0;
             int reflect_b = reflected_color ? (reflected_color & 0xFF) : 0;
 
-            int refract_r = refracted_color ? ((refracted_color >> 16) & 0xFF) : 0;
-            int refract_g = refracted_color ? ((refracted_color >> 8) & 0xFF) : 0;
-            int refract_b = refracted_color ? (refracted_color & 0xFF) : 0;
-
             // Blend the colors
             int final_r = (base_r * base_contribution) +
-                          (reflect_r * reflection_contribution) +
-                          (refract_r * refraction_contribution);
+                          (reflect_r * reflection_contribution);
             int final_g = (base_g * base_contribution) +
-                          (reflect_g * reflection_contribution) +
-                          (refract_g * refraction_contribution);
+                          (reflect_g * reflection_contribution);
             int final_b = (base_b * base_contribution) +
-                          (reflect_b * reflection_contribution) +
-                          (refract_b * refraction_contribution);
+                          (reflect_b * reflection_contribution);
 
             return (valid_color_range(final_r) << 16) |
                    (valid_color_range(final_g) << 8) |

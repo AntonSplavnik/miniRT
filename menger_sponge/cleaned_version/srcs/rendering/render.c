@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 16:48:05 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:26:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,92 +18,92 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-void	*render_thread(void *arg)
-{
-	t_thread_data *data = (t_thread_data *)arg;
-	t_scene	*scene = data->scene;
+// void	*render_thread(void *arg)
+// {
+// 	t_thread_data *data = (t_thread_data *)arg;
+// 	t_scene	*scene = data->scene;
 
-	int				color;
-	int				in_shadow;
-	double			t;
-	double			fov_scale;
-	t_ray			ray;
-	t_vec3			hit_point;
-	t_vec3			normal;
-	t_light_result	light_info;
-	t_object		*hit_object;
-	t_light			*current_light;
-	int				light_color;
+// 	int				color;
+// 	int				in_shadow;
+// 	double			t;
+// 	double			fov_scale;
+// 	t_ray			ray;
+// 	t_vec3			hit_point;
+// 	t_vec3			normal;
+// 	t_light_result	light_info;
+// 	t_object		*hit_object;
+// 	t_light			*current_light;
+// 	int				light_color;
 
-	in_shadow = 0;
-	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
-	// int	samples_per_pixel = 4;
+// 	in_shadow = 0;
+// 	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+// 	// int	samples_per_pixel = 4;
 
-	for (int y = 0; y < scene->height; y+=scene->app.resolution_factor)
-	{
-		for (int x = 0; x < scene->width; x+=scene->app.resolution_factor)
-		{
-			color = scene->background_color;
+// 	for (int y = 0; y < scene->height; y+=scene->app.resolution_factor)
+// 	{
+// 		for (int x = 0; x < scene->width; x+=scene->app.resolution_factor)
+// 		{
+// 			color = scene->background_color;
 
-			// Initialize ray direction before using it
-			compute_ray_direction(scene, &ray, fov_scale, x, y);
+// 			// Initialize ray direction before using it
+// 			compute_ray_direction(scene, &ray, fov_scale, x, y);
 
-			// ray tracing
-			if (find_closest_intersection(scene, ray, &t, &hit_object))
-			{
-				compute_ray_intersection(ray, hit_object, t, &hit_point, &normal);
+// 			// ray tracing
+// 			if (find_closest_intersection(scene, ray, &t, &hit_object))
+// 			{
+// 				compute_ray_intersection(ray, hit_object, t, &hit_point, &normal);
 
-				// Start with just the ambient light
-				color = get_pixel_color(hit_object, scene->ambient.ratio, 0.0, scene->ambient.color);
+// 				// Start with just the ambient light
+// 				color = get_pixel_color(hit_object, scene->ambient.ratio, 0.0, scene->ambient.color);
 
-				// Accumulate light from all lights
-				current_light = scene->lights;
-				while (current_light)
-				{
-					light_info = compute_light(scene, hit_object, hit_point, normal, current_light);
+// 				// Accumulate light from all lights
+// 				current_light = scene->lights;
+// 				while (current_light)
+// 				{
+// 					light_info = compute_light(scene, hit_object, hit_point, normal, current_light);
 
-					//Check if the hit point is in shadow for this light
-					if(scene->app.enable_hard_shadows)
-						in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
+// 					//Check if the hit point is in shadow for this light
+// 					if(scene->app.enable_hard_shadows)
+// 						in_shadow = is_in_shadow(scene, hit_point, light_info.light_dir, light_info.light_distance);
 
-					if (!in_shadow)
-					{
-						// Add this light's contribution
+// 					if (!in_shadow)
+// 					{
+// 						// Add this light's contribution
 
-						// Add diffuse and specular:
-						double diffuse_intensity = scene->ambient.ratio + (current_light->intensity * light_info.diffuse);
-						double specular_intensity = current_light->intensity * light_info.specular_intensity;
-						light_color = get_pixel_color(hit_object, diffuse_intensity, specular_intensity, current_light->color);
+// 						// Add diffuse and specular:
+// 						double diffuse_intensity = scene->ambient.ratio + (current_light->intensity * light_info.diffuse);
+// 						double specular_intensity = current_light->intensity * light_info.specular_intensity;
+// 						light_color = get_pixel_color(hit_object, diffuse_intensity, specular_intensity, current_light->color);
 
-						// Extract RGB components
-						int r = (light_color >> 16) & 0xFF;
-						int g = (light_color >> 8) & 0xFF;
-						int b = light_color & 0xFF;
+// 						// Extract RGB components
+// 						int r = (light_color >> 16) & 0xFF;
+// 						int g = (light_color >> 8) & 0xFF;
+// 						int b = light_color & 0xFF;
 
-						// Add to final color
-						int final_r = valid_color_range(((color >> 16) & 0xFF) + r);
-						int final_g = valid_color_range(((color >> 8) & 0xFF) + g);
-						int final_b = valid_color_range((color & 0xFF) + b);
+// 						// Add to final color
+// 						int final_r = valid_color_range(((color >> 16) & 0xFF) + r);
+// 						int final_g = valid_color_range(((color >> 8) & 0xFF) + g);
+// 						int final_b = valid_color_range((color & 0xFF) + b);
 
-						color = (final_r << 16) | (final_g << 8) | final_b;
-					}
+// 						color = (final_r << 16) | (final_g << 8) | final_b;
+// 					}
 
-					current_light = current_light->next;
-				}
-			}
+// 					current_light = current_light->next;
+// 				}
+// 			}
 
-			// Fill the entire block with this color
-			for (int by = 0; by < scene->app.resolution_factor && y + by < HEIGHT; by++)
-			{
-				for (int bx = 0; bx < scene->app.resolution_factor && x + bx < WIDTH; bx++)
-				{
-					pixel_put(x + bx, y + by, &scene->img, color);
-				}
-			}
-		}
-	}
-	return (NULL);
-}
+// 			// Fill the entire block with this color
+// 			for (int by = 0; by < scene->app.resolution_factor && y + by < HEIGHT; by++)
+// 			{
+// 				for (int bx = 0; bx < scene->app.resolution_factor && x + bx < WIDTH; bx++)
+// 				{
+// 					pixel_put(x + bx, y + by, &scene->img, color);
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return (NULL);
+// }
 
 void	render_complex_scene(t_scene *scene)
 {
