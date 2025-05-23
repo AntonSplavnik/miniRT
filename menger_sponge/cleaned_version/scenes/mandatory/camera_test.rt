@@ -1,5 +1,5 @@
 #See scene along the z axis with negative z (= looking from the front)
-C 0,0,-10 0,0,1 90
+#C 0,0,-10 0,0,1 90
 
 #See scene along the z axis with positive z (= looking from the back)
 #C 0,0,10 0,0,-1 90
@@ -16,6 +16,12 @@ C 0,0,-10 0,0,1 90
 
 #See scene along the y axis with positive y (= looking down from above)
 #C 0,10,0 0,-1,0 90
+
+#See scene from a random point
+#Calculation: Direction = Target (0,0,0) - Cam pos (5, 15 ,3) = -5, -15, -3
+# Normalizing the direction vector : Length = √((-5)² + (-15)² + (-3)²) = √(25 + 225 + 9) = √259 ≈ 16.09
+#Normalized direction = (-5, -15, -3) / 16.09 ≈ (-0.31, -0.93, -0.19)
+C 5,15,3 -0.31,-0.93,0.-19 90
 
 A 0.2 255,255,255
 L 10,15,0 0.6 255,255,255
