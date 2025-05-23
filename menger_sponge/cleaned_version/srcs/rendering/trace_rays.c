@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 16:56:03 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:08:09 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 #include "platform.h"
 #include <math.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+
 
 
 /**

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:05:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 12:12:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:06:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,10 +116,6 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double ligh
 	t_ray		shadow_ray;
 	t_object	*hit_object;
 	double		t;
-
-	// If there are no objects, nothing can cast shadows
-	if (!scene->objects)
-		return (0);
 
 	//Create a shadow ray from the hit point towards the light
 	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001)); //offset to avoid self intersection

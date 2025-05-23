@@ -14,10 +14,6 @@
 #include "platform.h"
 #include <math.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
 {
 	t_object	*current;
