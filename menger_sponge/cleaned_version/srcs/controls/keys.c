@@ -1,9 +1,31 @@
 #include "miniRT.h"
 
 
-//Used
-int key_handler(int keysym, t_scene *scene)
+int	key_hendler(mlx_key_data_t keydata, t_scene *scene)
 {
+
+}
+
+//Used
+int key_handler_mlx42(mlx_Key_data_t keydata, void *param)
+{
+	t_scene *scene = (t_scene *)param;
+
+
+	// Only handle key press events (not repeat or release)
+    if (keydata.action != MLX_PRESS)
+        return;
+    
+    // Handle escape key - close window
+    if (keydata.key == MLX_KEY_ESCAPE)
+    {
+        // Call close_handler to clean up resources
+        close_handler(scene);
+        // MLX42 handles exit gracefully
+        mlx_close_window(scene->mlx);
+        return;
+    }
+
 #ifdef __APPLE__
 	if (keysym == KEY_ESC)
 #else

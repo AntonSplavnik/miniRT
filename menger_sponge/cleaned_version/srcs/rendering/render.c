@@ -162,9 +162,6 @@ void	render_complex_scene(t_scene *scene)
         pthread_join(threads[i], NULL);
     }
 
-    // Draw the final image to the window
-    draw_image_to_window(scene);
-
     // Display status (FPS, settings, etc.)
     display_status(scene);
 

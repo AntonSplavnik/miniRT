@@ -15,28 +15,20 @@
 #include <string.h>
 
 
-void	pixel_put(int x, int y, t_img *img, int color)
+void pixel_put(int x, int y, mlx_image_t *img, int color)
 {
-	int	offset;
+    // Safety checks
+    if (!img || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+        return;
 
-	// Safety checks
-	if (!img || !img->pixels_ptr || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-		return;
-
-	offset = (y * img->line_len) + (x * (img->bpp / 8));
-
-	// Make sure offset is valid
-	if (offset < 0 || offset >= img->line_len * HEIGHT)
-		return;
-
-	*(unsigned int *)(img->pixels_ptr + offset) = color;
-}
-
-
-void	draw_image_to_window(t_scene *scene)
-{
-	mlx_put_image_to_window(scene->mlx_connection, scene->mlx_window,
-		scene->img.img_ptr, 0, 0);
+    // Convert RGB to RGBA (MLX42 uses RGBA format)
+    uint8_t r = (color >> 16) & 0xFF;
+    uint8_t g = (color >> 8) & 0xFF;
+    uint8_t b = color & 0xFF;
+    uint32_t rgba = (r << 24) | (g << 16) | (b << 8) | 0xFF; // Full alpha
+    
+    // MLX42's put_pixel handles bounds checking internally
+    mlx_put_pixel(img, x, y, rgba);
 }
 
 void	scene_render(t_scene *scene)

@@ -90,38 +90,10 @@ static void	data_init(t_scene *scene)
 //Used
 static void	events_init(t_scene *scene)
 {
-#ifdef __APPLE__
-    // Main window hooks
-    mlx_hook(scene->mlx_window, 2, 1L<<0, key_handler, scene);
-    mlx_hook(scene->mlx_window, 4, 1L<<2, mouse_handler, scene);
-    mlx_hook(scene->mlx_window, 5, 1L<<3, mouse_release, scene);
-    mlx_hook(scene->mlx_window, 17, 0, close_handler, scene);
-	mlx_hook(scene->mlx_window, 6, 1L<<6, motion_handler, scene);
-
-
-    // Control window hooks
-    mlx_hook(scene->app.control_window, 4, 1L<<2, control_mouse_handler, scene);
-    mlx_hook(scene->app.control_window, 17, 0, close_handler, scene);
-#else
-    // Main window hooks
-    mlx_hook(scene->mlx_window, KeyPress,
-        KeyPressMask, key_handler, scene);
-    mlx_hook(scene->mlx_window, ButtonPress,
-        ButtonPressMask, mouse_handler, scene);
-    mlx_hook(scene->mlx_window, ButtonRelease,
-        ButtonReleaseMask, mouse_release, scene);
-    mlx_hook(scene->mlx_window, DestroyNotify,
-        StructureNotifyMask, close_handler, scene);
-	mlx_hook(scene->mlx_window, MotionNotify,
-		PointerMotionMask, motion_handler, scene);
-
-
-    // Control window hooks
-    mlx_hook(scene->app.control_window, ButtonPress,
-        ButtonPressMask, control_mouse_handler, scene);
-    mlx_hook(scene->app.control_window, DestroyNotify,
-        StructureNotifyMask, close_handler, scene);
-#endif
+ 	mlx_key_hook(scene->mlx, key_handler_mlx42, scene);
+    mlx_mouse_hook(scene->mlx, mouse_handler_mlx42, scene);
+    mlx_cursor_hook(scene->mlx, motion_handler_mlx42, scene);
+    mlx_close_hook(scene->mlx, close_handler_mlx42, scene);
 }
 
 void scene_mlx_init(t_scene *scene)
@@ -160,9 +132,15 @@ void scene_mlx_init(t_scene *scene)
 void	scene_init(t_scene *scene)
 {
 
-	data_init(scene);
-	scene_mlx_init(scene);
-	events_init(scene);
+	scene->mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
+	if (!scene->mlx)
+		malloc_error();
 
-	init_control_panel(scene);
+	scene->img = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
+	if (!scene->img)
+		malloc_error();
+
+	// Display the image in the window
+	if (mlx_image_to_window(scene->mlx, scene->img, 0, 0) < 0)
+		malloc_error();
 }

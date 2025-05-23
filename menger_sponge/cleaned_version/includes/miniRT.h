@@ -21,7 +21,7 @@
 # include <ctype.h>
 # include <stdbool.h>
 # include "platform_specifics.h"
-# include "types.h"
+# include "MLX/MLX42.h"
 # include "parser.h"
 
 #  define WIDTH 1920

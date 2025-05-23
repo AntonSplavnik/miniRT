@@ -1,24 +1,24 @@
 # Detect OS
 UNAME_S := $(shell uname -s)
 
-# Set variables based on OS
+# MLX42 configuration
+MLX42_PATH = MLX42
+MLX42_INCLUDE = $(MLX42_PATH)/include
+MLX42_BUILD = $(MLX42_PATH)/build
+
+# OS-specific settings
 ifeq ($(UNAME_S),Linux)
-    MLX_PATH = minilibx-linux/
-    MLX_LIB = libmlx.a
-    MLX_FLAGS = -lXext -lX11 -lm -lz
+    MLX42_FLAGS = -ldl -lglfw -pthread -lm
 endif
 ifeq ($(UNAME_S),Darwin)
-    MLX_PATH = minilibx_mms_20191025_beta/
-    MLX_LIB = libmlx.dylib
-    MLX_FLAGS = -framework OpenGL -framework AppKit
-    INSTALL_NAME = install_name_tool -change libmlx.dylib @executable_path/libmlx.dylib
+    MLX42_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw
 endif
 
 # Common compilation settings
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -O3 -pthread
-INCLUDES = -I$(MLX_PATH) -Iincludes
-LDFLAGS = -L$(MLX_PATH) -lmlx $(MLX_FLAGS)
+INCLUDES = -I$(MLX42_INCLUDE) -Iincludes
+LDFLAGS = -L$(MLX42_BUILD) -lmlx42 $(MLX42_FLAGS)
 
 # Directories
 SRC_DIR = srcs
