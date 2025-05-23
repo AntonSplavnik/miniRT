@@ -85,7 +85,9 @@ SRC_FILES = main.c \
 			rendering/compute_rays.c	\
 			rendering/compute_intersections.c	\
 			rendering/render_utils.c	\
-			rendering/checkerboard.c	\
+			rendering/trace_rays.c	\
+			rendering/reflection.c	\
+			rendering/checker.c	\
 			camera/camera.c \
 			ui/user_interface.c\
 			ui/control_panel.c\

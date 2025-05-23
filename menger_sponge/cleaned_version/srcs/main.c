@@ -6,11 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/14 17:37:56 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 15:33:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "platform.h"
 #include <string.h>
 
 void cleanup_scene(t_scene *scene)
@@ -38,34 +38,23 @@ void cleanup_scene(t_scene *scene)
 		free(light);
 		light = next_light;
 	}
-	destroy_control_panel(scene);
 }
 
-void	start_raytracer(t_scene *scene, char *name)
+void	start_raytracer(t_scene *scene, char *filename)
 {
-	scene->name = name;
+	scene->name = filename;
 	scene_init(scene);
-	//init_3d(scene);
-
-	if (!parse_scene_file(name, scene))
+	if (!parse_scene_file(filename, scene))
 	{
 		cleanup_scene(scene);
 		write_string_to_file_descriptor("Error: Failed to parse scene file\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	render_complex_scene(scene);
-
-    draw_control_panel(scene);
-
+	render_scene(scene);
+	draw_control_panel(scene);
 	display_status(scene);
-
-	// Start the event loop
 	mlx_loop(scene->mlx_connection);
-
-	// Once mlx_loop exits, call close_handler to clean up resources
 	close_handler(scene);
-
-	// Exit program after cleanup is complete
 	exit(EXIT_SUCCESS);
 }
 
@@ -81,9 +70,7 @@ int	main(int ac, char **av)
 {
 	t_scene	scene;
 
-	// Initialize the structure to zeros/NULL to avoid uninitialized memory
 	memset(&scene, 0, sizeof(t_scene));
-
 	if (ac == 2)
 		start_raytracer(&scene, av[1]);
 	else

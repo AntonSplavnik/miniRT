@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 16:52:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:56:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,9 @@ t_vec3		vec3_normalize(t_vec3 v);
 
 //colors
 t_color		create_color(int r, int g, int b);
-int			get_pixel_color(t_object *object, double diffuse_intensity, double specular_intensity, t_color light_color);
+int			get_pixel_color(t_hit_record hit_record, double light_intensity,
+                               t_color light_color,
+                               double specular_intensity);
 int			valid_color_range(int c);
 
 //material
@@ -156,12 +158,15 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 //rendering
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y);
-void		render_complex_scene(t_scene *scene);
+void		render_scene(t_scene *scene);
+int			trace_ray(t_scene *scene, t_ray ray, int depth);
+void		*render_thread(void *arg);
+t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
 
 //compute light
-t_light_result compute_light(t_scene *scene, t_object *hit_object, t_vec3 hit_point, t_vec3 normal, t_light *light);
+t_light_result compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
-void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_vec3 *hit_point, t_vec3 *normal);
+void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record);
 
 
 //shadows
@@ -187,21 +192,15 @@ t_vec3		get_forward_vector(t_vec3 rotation);
 t_vec3		get_right_vector(t_vec3 rotation);
 t_vec3		get_up_vector(t_vec3 rotation);
 t_vec3 camera_to_world(t_scene *scene, t_vec3 camera_dir);
-void update_camera_matrix(t_scene *scene);
 
 //controls
 int				motion_handler(int x, int y, t_scene *scene);
 int				control_mouse_handler(int button, int x, int y, t_scene *scene);
 int				mouse_release(int button, int x, int y, t_scene *scene);
 
-//refraction
-t_vec3	refract_ray(t_vec3 incident, t_vec3 normal, double ior_ratio);
-int		is_entering_medium(t_vec3 ray_dir, t_vec3 normal);
-double calculate_fresnel(t_vec3 incident, t_vec3 normal,
-                         double ior_incident, double ior_transmission);
 
-//test
-void *render_thread_with_checkerboard(void *arg);
-t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal);
+//Checkerboard
+int				is_checker_point(t_vec3 point, double checker_size);
+int				is_checker_point_plane(t_plane plane, t_vec3 point, double checker_size);
 
 #endif
