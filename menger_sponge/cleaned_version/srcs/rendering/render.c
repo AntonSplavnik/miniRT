@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 11:26:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 11:46:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,11 @@ void	render_complex_scene(t_scene *scene)
 	}
 
 	if (!scene->objects)
-		set_up_scene_triangle(scene);
+	{
+		printf("ERROR - No scene\n");
+		cleanup_scene(scene);
+		exit(EXIT_FAILURE);
+	}
 
 	pthread_t	threads[NUM_THREADS];
 	t_thread_data	thread_data[NUM_THREADS];

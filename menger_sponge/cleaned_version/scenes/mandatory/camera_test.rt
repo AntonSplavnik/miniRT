@@ -1,0 +1,29 @@
+#See scene along the z axis with negative z (= looking from the front)
+C 0,0,-10 0,0,1 90
+
+#See scene along the z axis with positive z (= looking from the back)
+#C 0,0,10 0,0,-1 90
+
+#See scene along the x axis with negative x (= looking to the right)
+#C -10,0,0 1,0,0 90
+
+#See scene along the x axis with positive x (= looking to the left)
+#C 10,0,0 -1,0,0 90
+
+#ISSUE WITH Y ROTATION - DOING THE OPPOSITE
+#See scene along the y axis with negative y (= looking up from down)
+#C 0,-10,0 0,1,0 90
+
+#See scene along the y axis with positive y (= looking down from above)
+#C 0,10,0 0,-1,0 90
+
+A 0.2 255,255,255
+L 10,15,0 0.6 255,255,255
+
+sp 0,0,0 6 255,0,0
+
+sp 8,0,0 4 0,0,255
+
+cy 8,0,0 1,0,0 1 30 0,255,0
+
+pl 0,0,0 1,0,0 255,255,0

@@ -87,12 +87,6 @@ SRC_FILES = main.c \
 			rendering/render_utils.c	\
 			rendering/checkerboard.c	\
 			camera/camera.c \
-			scenes/old_scenes/mesh_sphere_sphere.c \
-			scenes/old_scenes/cube.c \
-			scenes/old_scenes/triangle.c \
-			scenes/old_scenes/spheres_sylinder_plane.c \
-			scenes/old_scenes/sphere.c \
-			scenes/old_scenes/sphere_cylinder.c \
 			ui/user_interface.c\
 			ui/control_panel.c\
 			ui/status_messages.c\
