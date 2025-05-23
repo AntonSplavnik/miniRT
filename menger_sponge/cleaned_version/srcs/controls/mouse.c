@@ -10,7 +10,7 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
             scene->app.enable_hard_shadows = !scene->app.enable_hard_shadows;
             draw_control_panel(scene);
             // Re-render with new settings when checkbox is toggled
-            render_complex_scene(scene);
+            render_scene(scene);
             return (0);
         }
 
@@ -18,7 +18,7 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
         if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
             scene->app.enable_reflections = !scene->app.enable_reflections;
             draw_control_panel(scene);
-            render_complex_scene(scene);
+            render_scene(scene);
             return (0);
         }
 
@@ -26,14 +26,14 @@ int control_mouse_handler(int button, int x, int y, t_scene *scene)
         if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
             scene->app.enable_specular = !scene->app.enable_specular;
             draw_control_panel(scene);
-            render_complex_scene(scene);
+            render_scene(scene);
             return (0);
         }
 
         // Check if render button was clicked
 /*         if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
             // Re-render with new settings
-            render_complex_scene(scene);
+            render_scene(scene);
             return (0);
         } */
     }
@@ -66,7 +66,7 @@ int motion_handler(int x, int y, t_scene *scene)
     if (scene->is_dragging)
     {
         handle_3d_rotation(x, y, scene);
-		render_complex_scene(scene);
+		render_scene(scene);
     }
     return (0);
 }
@@ -85,7 +85,7 @@ int	mouse_handler(int button, int x, int y, t_scene *scene)
 
         if (x >= cb_x && x <= cb_x + cb_size && y >= cb_y && y <= cb_y + cb_size) {
             scene->app.enable_hard_shadows = !scene->app.enable_hard_shadows;
-			render_complex_scene(scene);
+			render_scene(scene);
 
             // mlx_clear_window(scene->mlx_connection, scene->mlx_window);
             // draw_checkbox(scene);
@@ -154,7 +154,7 @@ int	mouse_release(int button, int x, int y, t_scene *scene)
 		{
 			scene->is_dragging = 0;
 			scene->app.resolution_factor = 1;
-			render_complex_scene(scene);
+			render_scene(scene);
 			display_status(scene);
 		}
 	}

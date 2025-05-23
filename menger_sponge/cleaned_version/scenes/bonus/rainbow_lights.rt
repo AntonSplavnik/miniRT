@@ -1,0 +1,44 @@
+# Colorful lighting showcase scene
+# Ambient light - very low for dramatic effect
+A 0.05 255,255,255
+
+# Camera positioned for a nice view
+C 0,4,15 0,-0.15,-1 60
+
+# Ring of colored lights around the scene
+L -8,6,0 0.9 255,0,0
+L -4,6,-6 0.9 255,128,0
+L 4,6,-6 0.9 255,255,0
+L 8,6,0 0.9 0,255,0
+L 4,6,6 0.9 0,255,255
+L -4,6,6 0.9 0,0,255
+L 0,10,0 0.7 255,0,255
+
+# Floor - dark gray to show colored lighting well
+pl 0,-3,0 0,1,0 100,100,100
+
+# Central arrangement of objects
+sp 0,0,0 2.5 255,255,255
+
+# Ring of spheres around the center
+sp -5,0,0 1.8 255,255,255
+sp 5,0,0 1.8 255,255,255
+sp 0,0,-5 1.8 255,255,255
+sp 0,0,5 1.8 255,255,255
+
+# Diagonal spheres
+sp -3.5,0,-3.5 1.5 255,255,255
+sp 3.5,0,-3.5 1.5 255,255,255
+sp -3.5,0,3.5 1.5 255,255,255
+sp 3.5,0,3.5 1.5 255,255,255
+
+# Tall cylinders for dramatic shadows
+cy -8,-2,-8 0,1,0 1.0 8.0 220,220,220
+cy 8,-2,-8 0,1,0 1.0 8.0 220,220,220
+cy -8,-2,8 0,1,0 1.0 8.0 220,220,220
+cy 8,-2,8 0,1,0 1.0 8.0 220,220,220
+
+# Elevated spheres
+sp 0,3,0 1.0 255,255,255
+sp -2,2,-2 0.8 255,255,255
+sp 2,2,-2 0.8 255,255,255

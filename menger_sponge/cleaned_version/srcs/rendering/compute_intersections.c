@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_complex_scene.c                               :+:      :+:    :+:   */
+/*   render_scene.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,10 +13,6 @@
 #include "miniRT.h"
 #include "platform.h"
 #include <math.h>
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
 {
@@ -113,47 +109,51 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 	return (hit_something);
 }
 
-void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_vec3 *hit_point, t_vec3 *normal)
+void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record)
 {
 	//calculate where the ray hit the object
-	*hit_point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
+	hit_record->point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
+	hit_record->t = t;
+	hit_record->object = hit_object;
+	hit_record->material = hit_object->material;
+	hit_record->inside = 0;  // Initialize to false, can be set later if needed
 
 	//calculate the normal at the hit point
 	if (hit_object->type == SPHERE)
 	{
 		t_sphere *sphere = (t_sphere *)(hit_object->data);
-		*normal = sphere_normal_at_point(*hit_point, *sphere);
+		hit_record->normal = sphere_normal_at_point(hit_record->point, *sphere);
 	}
 	else if (hit_object->type == CYLINDER)
 	{
 		t_cylinder *cylinder = (t_cylinder *)(hit_object->data);
-		*normal = cylinder_normal_at_point(*hit_point, *cylinder);
+		hit_record->normal = cylinder_normal_at_point(hit_record->point, *cylinder);
 	}
 	else if (hit_object->type == PLANE)
 	{
 		t_plane *plane = (t_plane *)(hit_object->data);
-		*normal = plane->normal;
+		hit_record->normal = plane->normal;
 		//double sided plane
-		if (vec3_dot(ray.direction, *normal) > 0)
-			*normal = vec3_negate(*normal);
+		if (vec3_dot(ray.direction, hit_record->normal) > 0)
+			hit_record->normal = vec3_negate(hit_record->normal);
 	}
 	else if (hit_object->type == CUBE)
 	{
 		t_cube *cube = (t_cube *)(hit_object->data);
-		*normal = cube_normal_at_point(*hit_point, *cube);
+		hit_record->normal = cube_normal_at_point(hit_record->point, *cube);
 	}
 	else if (hit_object->type == TRIANGLE)
 	{
 		t_triangle *triangle = (t_triangle *)(hit_object->data);
-		*normal = triangle->normal;
+		hit_record->normal = triangle->normal;
 		// Handle double-sided triangles by flipping normal if needed
-		if (vec3_dot(ray.direction, *normal) > 0)
-			*normal = vec3_negate(*normal);
+		if (vec3_dot(ray.direction, hit_record->normal) > 0)
+			hit_record->normal = vec3_negate(hit_record->normal);
 	}
 	else if (hit_object->type == CONE)
 	{
 		t_cone *cone = (t_cone *)(hit_object->data);
-		*normal = cone_normal_at_point(*hit_point, *cone);
+		hit_record->normal = cone_normal_at_point(hit_record->point, *cone);
 	}
 	else if (hit_object->type == MESH)
 	{
@@ -161,15 +161,15 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_vec3 
 		int triangle_idx = (int)hit_object->material.reflectivity;
 		if (triangle_idx >= 0 && triangle_idx < mesh->triangle_count)
 		{
-			*normal = mesh->triangles[triangle_idx].normal;
+			hit_record->normal = mesh->triangles[triangle_idx].normal;
 			// Handle double-sided triangles by flipping normal if needed
-			if (vec3_dot(ray.direction, *normal) > 0)
-				*normal = vec3_negate(*normal);
+			if (vec3_dot(ray.direction, hit_record->normal) > 0)
+				hit_record->normal = vec3_negate(hit_record->normal);
 		}
 		else
 		{
 			// Fallback normal if index is out of bounds
-			*normal = vec3_create(0, 1, 0);
+			hit_record->normal = vec3_create(0, 1, 0);
 		}
 	}
 }
