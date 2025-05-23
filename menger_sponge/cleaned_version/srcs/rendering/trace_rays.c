@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:08:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:23:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 			// Get color with both diffuse and specular components
 			int light_color = get_pixel_color(
 				hit_record,
-				diffuse_intensity + scene->ambient.ratio, // Diffuse + ambient
+				diffuse_intensity, // Diffuse + ambient
 				current_light->color,
 				specular_intensity
 			);
