@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 10:35:04 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:05:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ typedef struct	s_hit_record
 	t_material	material;
 	t_object	*object;
 	int			inside;
+	int			triangle_idx;
 }	t_hit_record;
 
 typedef struct s_img

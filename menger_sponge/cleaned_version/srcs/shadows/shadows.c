@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 10:05:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:06:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:09:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int any_intersection(t_scene *scene, t_ray ray, double max_dist)
 // 	return (0);
 // }
 
-int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance)
+int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
 {
 	t_ray		shadow_ray;
 	t_object	*hit_object;
@@ -121,7 +121,7 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double ligh
 	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001)); //offset to avoid self intersection
 	shadow_ray.direction = light_dir;
 
-	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object) && t < light_distance)
+	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object, &hit_record) && t < light_distance)
 		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 11:02:19 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:10:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_object	*create_cube_mesh(t_vec3 center, double size, t_color color);
 
 //object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
-int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object);
+int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record);
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
@@ -170,7 +170,7 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 
 
 //shadows
-int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance);
+int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
 
 //scenes
 void	set_up_scene_triangle(t_scene *scene);

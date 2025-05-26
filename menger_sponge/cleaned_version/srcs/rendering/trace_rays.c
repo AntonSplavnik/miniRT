@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:23:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 12:23:13 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 	int base_color;
 	int reflected_color = 0;
 
-	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object))
+	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object, &hit_record))
 		return scene->background_color;
 	compute_ray_intersection(ray, hit_record.object, t, &hit_record);
 
@@ -86,7 +86,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 
 		// Check if the hit point is in shadow for this light
 		if (scene->app.enable_hard_shadows)
-			in_shadow = is_in_shadow(scene, hit_record.point, light_info.light_dir, light_info.light_distance);
+			in_shadow = is_in_shadow(scene, hit_record.point, light_info.light_dir, light_info.light_distance, hit_record);
 		else
 			in_shadow = 0;
 		if (!in_shadow)
@@ -173,5 +173,3 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 
     return base_color;
 }
-
-
