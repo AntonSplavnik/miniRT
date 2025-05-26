@@ -62,7 +62,6 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 
 	
 
-	
 	if (action == MLX_PRESS)
 	{
 		if (button == MLX_MOUSE_BUTTON_RIGHT)
@@ -94,30 +93,43 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 void	cursor_position_callback(double xpos, double ypos, void* param)
 {
 	t_scene	*scene;
-
-	int	dx;
-	int	dy;
+	static double last_render_time = 0;
+	double current_time;
 
 	scene = (t_scene *)param;
 
+	// Track mouse position
 	scene->mouse_state.x = (int32_t)xpos;
 	scene->mouse_state.y = (int32_t)ypos;
 
 	if(scene->mouse_state.right_button_down && scene->mouse_state.is_dragging)
 	{
-		dx = scene->mouse_state.x - scene->mouse_state.prev_mouse_x;
-		dy = scene->mouse_state.y - scene->mouse_state.prev_mouse_y;
+		// Calculate movement deltas with floating point precision
+		double dx = (double)scene->mouse_state.x - scene->mouse_state.prev_mouse_x;
+		double dy = (double)scene->mouse_state.y - scene->mouse_state.prev_mouse_y;
 		
-		if (dx != 0 && dy != 0)
+		// Apply movement if there's any change
+		if (dx != 0.0 || dy != 0.0)
 		{
-		scene->camera.rotation.y += dx * 0.01;
-		scene->camera.rotation.x += dy * 0.01;
-		
-		scene->mouse_state.prev_mouse_x = scene->mouse_state.x;
-		scene->mouse_state.prev_mouse_y = scene->mouse_state.y;
-
-		// scene->graphic_settings.resolution_factor = 4;
-		render_scene(scene);
+			// Apply smoother movement with adjusted sensitivity
+			scene->camera.rotation.y += dx * 0.005;  // Reduced sensitivity
+			scene->camera.rotation.x += dy * 0.005;  // Reduced sensitivity
+			
+			// Store new positions with floating point precision
+			scene->mouse_state.prev_mouse_x = scene->mouse_state.x;
+			scene->mouse_state.prev_mouse_y = scene->mouse_state.y;
+			
+			// Set low resolution for dragging
+			scene->graphic_settings.resolution_factor = 4;
+			
+			// Get current time
+			current_time = mlx_get_time();
+			
+			// Limit rendering to 30 frames per second during dragging
+			if (current_time - last_render_time > 0.066) { // ~30 FPS
+				render_scene(scene);
+				last_render_time = current_time;
+			}
 		}
 	}
 }
