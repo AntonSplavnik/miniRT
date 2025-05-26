@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 16:56:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 11:02:19 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,6 @@ t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 t_vec3		get_forward_vector(t_vec3 rotation);
 t_vec3		get_right_vector(t_vec3 rotation);
 t_vec3		get_up_vector(t_vec3 rotation);
-t_vec3 camera_to_world(t_scene *scene, t_vec3 camera_dir);
 
 //controls
 int				motion_handler(int x, int y, t_scene *scene);
