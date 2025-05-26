@@ -1,4 +1,4 @@
-#include "miniRT.h"
+#include "../../includes/miniRT.h"
 
 //set up scene with a cylinder
 void	set_up_scene_cylinder(t_scene *scene)

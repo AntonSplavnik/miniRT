@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 void	parse_cube_data(t_scene *scene, char **parts, t_vec3 *center, double *side_length, t_color *color)
 {
@@ -34,7 +34,7 @@ void	parse_cube_data(t_scene *scene, char **parts, t_vec3 *center, double *side_
 
 int	parse_cube(t_scene *scene, char *line)
 {
-	char	**parts;
+	char		**parts;
 	t_object	*cube;
 	t_vec3		center;
 	double		side_length;

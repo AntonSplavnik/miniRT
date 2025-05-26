@@ -10,7 +10,7 @@
 ///*                                                                            */
 ///* ************************************************************************** */
 
-#include "platform.h"
+#include "../../../includes/miniRT.h"
 
 int ray_cone_intersect(t_ray ray, t_cone cone, double *t)
 {

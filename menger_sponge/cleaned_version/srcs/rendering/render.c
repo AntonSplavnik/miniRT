@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
-
+#include "../../includes/miniRT.h"
 
 
 // void	*render_thread_old(void *arg)
@@ -134,19 +131,19 @@ void *render_thread(void *arg)
 			compute_ray_direction(scene, &ray, fov_scale, x, y);
 			color = trace_ray(scene, ray, 0);
 			by = 0;
-			while (by < scene->app.resolution_factor && y + by < HEIGHT)
+			while (by < scene->graphic_settings.resolution_factor && y + by < HEIGHT)
 			{
 				bx = 0;
-				while (bx < scene->app.resolution_factor && x + bx < WIDTH)
+				while (bx < scene->graphic_settings.resolution_factor && x + bx < WIDTH)
 				{
-					pixel_put(x + bx, y + by, &scene->img, color);
+					pixel_put(x + bx, y + by, scene->app.img, color);
 					bx++;
 				}
 				by++;
 			}
-			x += scene->app.resolution_factor;
+			x += scene->graphic_settings.resolution_factor;
 		}
-		y += scene->app.resolution_factor;
+		y += scene->graphic_settings.resolution_factor;
 	}
 	return NULL;
 }

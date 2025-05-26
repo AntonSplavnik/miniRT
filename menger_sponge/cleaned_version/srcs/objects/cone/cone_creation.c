@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../../includes/miniRT.h"
 
 t_object	*create_cone(t_vec3 apex, t_vec3 axis, double radius, double height)
 {

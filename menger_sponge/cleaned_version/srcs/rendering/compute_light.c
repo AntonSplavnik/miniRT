@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 
 
@@ -40,7 +39,7 @@ t_light_result compute_light(t_scene *scene, t_hit_record hit_record, t_light *l
 
 	// 3. Calculate specular component
 	result.specular_intensity = 0.0;
-	if(scene->app.enable_specular)
+	if(scene->graphic_settings.enable_specular)
 	{
 		double specular = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), hit_record.object->material.shininess);
 		result.specular_intensity = hit_record.object->material.specular * specular;

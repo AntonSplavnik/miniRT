@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 // Calculate squared length of a vector
 double	vec3_length_squared(t_vec3 v)

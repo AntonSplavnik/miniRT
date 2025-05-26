@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../includes/miniRT.h"
 
 //Used
 static void	malloc_error(void)
@@ -22,31 +22,44 @@ static void	malloc_error(void)
 //Used
 static void	data_init(t_scene *scene)
 {
-	scene->is_3d = 1;
-	scene->mlx_connection = NULL;
-	scene->mlx_window = NULL;
+	//app
+	scene->app.mlx = NULL;
+	scene->app.img = NULL;
+
+	// window
 	scene->width = WIDTH;
 	scene->height = HEIGHT;
+
+	// mouse
+	scene->mouse_state.left_button_down = false;
+	scene->mouse_state.right_button_down = false;
+	scene->mouse_state.middle_button_down = false;
+
+	scene->mouse_state.is_dragging = false;
+
+	scene->mouse_state.x = 0;
+	scene->mouse_state.y = 0;
+	
+	scene->mouse_state.prev_mouse_x = 0;
+	scene->mouse_state.prev_mouse_y = 0;
+
+	// ambient
 	scene->ambient.ratio = 0.1; //default
 	scene->ambient.color = create_color(255,255 ,255); //white by default
+
+	// background
 	scene->background_color = (0 << 16 | 0 << 8 | 0); // black
+
+	// lights
 	scene->lights = NULL;
 	scene->objects = NULL;
 
-	//app
-	scene->app.mlx = NULL;
-	scene->app.win = NULL;
-
 	// Initialize control window
-    scene->app.control_window = NULL;
-    scene->app.enable_hard_shadows = true;
-    scene->app.enable_reflections = true;
-    scene->app.enable_specular = true;
-	scene->app.enable_refraction = true;
-	scene->app.resolution_factor = 1;
-
-	// Initialize control panel
-    scene->app.control_panel.initialized = false;
+    // scene->app.enable_hard_shadows = true;
+    // scene->app.enable_reflections = true;
+    // scene->app.enable_specular = true;
+	// scene->app.enable_refraction = true;
+	// scene->app.resolution_factor = 1;
 
 
 	//Bonus
@@ -60,15 +73,11 @@ static void	data_init(t_scene *scene)
 	scene->shift_x = 0.0;
 	scene->shift_y = 0.0;
 	scene->zoom = 1.0;
-	scene->mouse_control = 1;
-	scene->is_dragging = 0;
-	scene->prev_mouse_x = 0;
-	scene->prev_mouse_y = 0;
-	scene->resolution_factor = 4;  // Default resolution factor
+
+	scene->graphic_settings.resolution_factor = 1;  // Default resolution factor
 
 
 	// Initialize camera defaults for 3D scenes
-	scene->is_3d = 0;  // Default to 2D mode - needs to be cleaned out
 	scene->camera.fov = 60.0;
 	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
 	scene->camera.near = 0.1;
@@ -87,60 +96,39 @@ static void	data_init(t_scene *scene)
 	scene->menger.bvh_root = NULL;
 }
 
-//Used
-static void	events_init(t_scene *scene)
+static void	setup_hooks(t_scene *scene)
 {
- 	mlx_key_hook(scene->mlx, key_handler_mlx42, scene);
-    mlx_mouse_hook(scene->mlx, mouse_handler_mlx42, scene);
-    mlx_cursor_hook(scene->mlx, motion_handler_mlx42, scene);
-    mlx_close_hook(scene->mlx, close_handler_mlx42, scene);
+ 	setup_mouse_hook(scene);
+	setup_key_hooks(scene);
+	setup_close_hook(scene);
 }
 
-void scene_mlx_init(t_scene *scene)
+void scene_init(t_scene *scene)
 {
-	scene->mlx_connection = mlx_init();
-	if (NULL == scene->mlx_connection)
-		malloc_error();
-	scene->mlx_window = mlx_new_window(scene->mlx_connection,
-			WIDTH, HEIGHT, scene->name);
-	scene->app.control_window = mlx_new_window(scene->mlx_connection,
-            250, 300, "Controls");
-	if (NULL == scene->mlx_window)
-	{
-#ifdef __linux__
-		mlx_destroy_display(scene->mlx_connection);
-#endif
-		free(scene->mlx_connection);
-		malloc_error();
-	}
-	scene->img.img_ptr = mlx_new_image(scene->mlx_connection,
-			WIDTH, HEIGHT);
-	if (NULL == scene->img.img_ptr)
-	{
-		mlx_destroy_window(scene->mlx_connection, scene->mlx_window);
-#ifdef __linux__
-		mlx_destroy_display(scene->mlx_connection);
-#endif
-		free(scene->mlx_connection);
-		malloc_error();
-	}
-	scene->img.pixels_ptr = mlx_get_data_addr(scene->img.img_ptr,
-			&scene->img.bpp, &scene->img.line_len, &scene->img.endian);
-}
-
-//Used
-void	scene_init(t_scene *scene)
-{
-
-	scene->mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
-	if (!scene->mlx)
-		malloc_error();
-
-	scene->img = mlx_new_image(scene->mlx, WIDTH, HEIGHT);
-	if (!scene->img)
-		malloc_error();
-
-	// Display the image in the window
-	if (mlx_image_to_window(scene->mlx, scene->img, 0, 0) < 0)
-		malloc_error();
+    // Initialize data
+    data_init(scene);
+    
+    // Initialize MLX42
+    scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
+    if (!scene->app.mlx)
+        malloc_error();
+    
+    // Create main image
+    scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
+    if (!scene->app.img)
+    {
+        mlx_terminate(scene->app.mlx);
+        malloc_error();
+    }
+    
+    // Display the image in the window
+    if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
+    {
+        mlx_delete_image(scene->app.mlx, scene->app.img);
+        mlx_terminate(scene->app.mlx);
+        malloc_error();
+    }
+    
+    // Set up event hooks
+    setup_hooks(scene);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 void	parse_triangle_data(t_scene *scene, char **parts, t_vec3 *v0, t_vec3 *v1, t_vec3 *v2)
 {

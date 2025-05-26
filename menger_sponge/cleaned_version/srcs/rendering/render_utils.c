@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include <sys/time.h>
-#include <string.h>
+#include "../../includes/miniRT.h"
 
 
-void pixel_put(int x, int y, mlx_image_t *img, int color)
+
+void	pixel_put(int x, int y, mlx_image_t *img, int color)
 {
     // Safety checks
     if (!img || x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
@@ -31,51 +30,41 @@ void pixel_put(int x, int y, mlx_image_t *img, int color)
     mlx_put_pixel(img, x, y, rgba);
 }
 
-void	scene_render(t_scene *scene)
-{
-	// Display progress at start of rendering
-	display_progress(scene, "Rendering...");
-
-	// Check if the scene is 3D (Menger sponge)
-	if (scene->is_3d && !ft_strncmp(scene->name, "menger", 6))
-	{
-		// Use the dedicated Menger sponge renderer
-		render_menger_sponge(scene);
-		return; // Exit early to prevent any 2D rendering
-	}
-}
-
-
 // Function to display progress visually on the window
 void display_progress(t_scene *scene, const char *status_text)
 {
-	// Only proceed if MLX is properly initialized
-	if (!scene || !scene->mlx_connection || !scene->mlx_window)
-		return;
-
-	// Special case: empty message means clear any previous message
-	if (status_text[0] == '\0') {
-		mlx_string_put(scene->mlx_connection, scene->mlx_window,
-					10, HEIGHT - 15, 0x000000, "                                   ");
-		return;
-	}
-
-	// For Menger sponge, keep displaying messages
-	if (scene->is_3d && !ft_strncmp(scene->name, "menger", 6))
-	{
-		// Display the text with a bright color (yellow text)
-		mlx_string_put(scene->mlx_connection, scene->mlx_window,
-					10, HEIGHT - 15, 0xFFFF00, (char *)status_text);
-	}
-	else if (ft_strncmp((char *)status_text, "Rendering...", 12) == 0)
-	{
-		// For 2D scenes, only show "Rendering..." message
-		// Display the text with a bright color (yellow text)
-		mlx_string_put(scene->mlx_connection, scene->mlx_window,
-					10, HEIGHT - 15, 0xFFFF00, (char *)status_text);
-	}
-	// For 2D scenes, don't show "Rendering complete" message
-
-	// Force immediate processing of the window update
-	mlx_do_sync(scene->mlx_connection);
+	   static mlx_image_t *text_img = NULL;
+    
+    // Only proceed if MLX is properly initialized
+    if (!scene || !scene->app.mlx)
+        return;
+    
+    // Delete previous text image if it exists
+    if (text_img != NULL) {
+        mlx_delete_image(scene->app.mlx, text_img);
+        text_img = NULL;
+    }
+    
+    // Special case: empty message means clear any previous message
+    if (status_text[0] == '\0') {
+        return;
+    }
+    
+    // Create new text image with the status message
+    // MLX42 uses white text by default with black outline
+    text_img = mlx_put_string(scene->app.mlx, (char *)status_text, 10, HEIGHT - 25);
+    
+    // If we want to change the color (optional)
+    if (text_img && ft_strncmp((char *)status_text, "Rendering...", 12) == 0) {
+        // Change text color to yellow for rendering message
+        for (uint32_t i = 0; i < text_img->width * text_img->height; i++) {
+            uint8_t *pixel = &text_img->pixels[i * 4];
+            if (pixel[3] != 0) { // If pixel is not transparent
+                pixel[0] = 255; // R
+                pixel[1] = 255; // G
+                pixel[2] = 0;   // B
+                pixel[3] = 255; // A
+            }
+        }
+    }
 }

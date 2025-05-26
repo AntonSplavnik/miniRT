@@ -10,35 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
-#include <string.h>
-
-void cleanup_scene(t_scene *scene)
-{
-	t_object *obj;
-	t_object *next_obj;
-	t_light *light;
-	t_light *next_light;
-
-	if (!scene)
-		return;
-	obj = scene->objects;
-	while (obj)
-	{
-		next_obj = obj->next;
-		if (obj->data)
-			free(obj->data);
-		free(obj);
-		obj = next_obj;
-	}
-	light = scene->lights;
-	while (light)
-	{
-		next_light = light->next;
-		free(light);
-		light = next_light;
-	}
-}
+#include "../includes/miniRT.h"
 
 void	start_raytracer(t_scene *scene, char *filename)
 {
@@ -51,13 +23,11 @@ void	start_raytracer(t_scene *scene, char *filename)
 		exit(EXIT_FAILURE);
 	}
 	render_scene(scene);
-	draw_control_panel(scene);
 	display_status(scene);
-	mlx_loop(scene->mlx_connection);
-	close_handler(scene);
+	mlx_loop(scene->app.mlx);
+	close_callback(scene);
 	exit(EXIT_SUCCESS);
 }
-
 
 void	print_usage_and_exit(void)
 {

@@ -1,4 +1,4 @@
-#include "miniRT.h"
+#include "../../../includes/miniRT.h"
 
 t_object	*create_sphere(t_vec3 center, double diameter, t_color color)
 {

@@ -5,13 +5,34 @@ UNAME_S := $(shell uname -s)
 MLX42_PATH = MLX42
 MLX42_INCLUDE = $(MLX42_PATH)/include
 MLX42_BUILD = $(MLX42_PATH)/build
+MLX42_REPO = https://github.com/codam-coding-college/MLX42.git
+
+
+# Check if MLX42 exists and clone if needed
+mlx_check:
+	@if [ ! -d "$(MLX42_PATH)" ]; then \
+		echo "MLX42 not found. Cloning from GitHub..."; \
+		git clone $(MLX42_REPO) $(MLX42_PATH); \
+	fi
+
+# Build MLX
+mlx: mlx_check
+	@mkdir -p $(MLX42_BUILD)
+	@cd $(MLX42_BUILD) && cmake .. -DDEBUG=1
+	@$(MAKE) -C $(MLX42_BUILD)
+
+# Clean MLX42
+mlx_clean:
+	@if [ -d "$(MLX42_BUILD)" ]; then \
+		rm -rf $(MLX42_BUILD); \
+	fi
 
 # OS-specific settings
 ifeq ($(UNAME_S),Linux)
     MLX42_FLAGS = -ldl -lglfw -pthread -lm
 endif
 ifeq ($(UNAME_S),Darwin)
-    MLX42_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -lglfw
+    MLX42_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit $(shell pkg-config --libs glfw3)
 endif
 
 # Common compilation settings
@@ -80,7 +101,6 @@ SRC_FILES = main.c \
 			objects/cone/cone_intersect.c \
 			close_handler.c \
 			rendering/render.c \
-			rendering/menger.c \
 			rendering/compute_light.c	\
 			rendering/compute_rays.c	\
 			rendering/compute_intersections.c	\
@@ -90,10 +110,10 @@ SRC_FILES = main.c \
 			rendering/checker.c	\
 			camera/camera.c \
 			ui/user_interface.c\
-			ui/control_panel.c\
 			ui/status_messages.c\
 			controls/keys.c\
-			controls/mouse.c
+			controls/mouse.c\
+			cleanup.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
@@ -101,13 +121,9 @@ OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 # Output files
 NAME = minirt
 
-.PHONY: all clean fclean re obj_dir mlx
+.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean
 
 all: mlx obj_dir $(NAME)
-
-# Build MLX
-mlx:
-	@$(MAKE) -C $(MLX_PATH)
 
 # Create obj directory and subdirectories
 obj_dir:
@@ -135,9 +151,8 @@ $(NAME): $(OBJECTS)
 	@echo "Linking $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME)
 ifeq ($(UNAME_S),Darwin)
-	@echo "Setting up dylib for macOS..."
-	@cp $(MLX_PATH)$(MLX_LIB) .
-	@$(INSTALL_NAME) $(NAME)
+	@echo "Setting up for macOS..."
+	@cp $(MLX42_BUILD)/libmlx42.a ./
 endif
 	@echo "Build complete: $(NAME)"
 
@@ -149,13 +164,15 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 clean:
 	@echo "Cleaning object files..."
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) -C $(MLX_PATH) clean
+	@if [ -d "$(MLX42_BUILD)" ]; then \
+		rm -rf $(MLX42_BUILD); \
+	fi
 
 fclean: clean
 	@echo "Removing executable and libraries..."
 	@rm -f $(NAME)
 ifeq ($(UNAME_S),Darwin)
-	@rm -f $(MLX_LIB)
+	@rm -f ./libmlx42.a
 endif
 
 re: fclean all

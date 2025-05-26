@@ -8,7 +8,7 @@ L 15,10,-10 0.8 255,240,220
 pl 0,-5,0 0,1,0 34,139,34
 
 # Cabin
-me srcs/scenes/3D_models/cottage.obj 0,-2.5,-1 0,1.3,0 0.35 72,6,7
+me scenes/3D_models/cottage.obj 0,-2.5,-1 0,1.3,0 0.35 72,6,7
 
 # TEXTURED MOUNTAINS - Left mountain range
 # Main peak

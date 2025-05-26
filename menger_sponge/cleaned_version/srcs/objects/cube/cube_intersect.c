@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../../../includes/miniRT.h"
 
 // Helper function to find the minimum of two values
 static double	min(double a, double b)

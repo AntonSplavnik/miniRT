@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
 {

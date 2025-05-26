@@ -1,4 +1,4 @@
-#include "miniRT.h"
+#include "../../includes/miniRT.h"
 
 // Helper function to print status messages
 void display_status(t_scene *scene)
@@ -13,11 +13,10 @@ void display_status(t_scene *scene)
 	}
 
 	// Clear the window and display the status with a new image
-	if (scene->mlx_connection && scene->mlx_window)
+	if (scene->app.mlx)
 	{
 		// Create a status bar at the top using a separate string display
 		// Draw a black rectangle at coordinates (0,0) with width WIDTH and height 30
-		mlx_string_put(scene->mlx_connection, scene->mlx_window,
-					10, 20, 0xFFFF00, status);
+		mlx_put_string(scene->app.mlx, status, 10, 20);
 	}
 }

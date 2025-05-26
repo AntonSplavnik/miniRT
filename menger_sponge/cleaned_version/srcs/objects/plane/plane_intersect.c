@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../../../includes/miniRT.h"
 
 int	ray_plane_intersect(t_ray ray, t_plane plane, double *t)
 {

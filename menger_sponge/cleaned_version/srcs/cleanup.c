@@ -1,39 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   close_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/15 17:54:11 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 10:52:06 by abillote         ###   ########.fr       */
+/*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
+/*   Updated: 2025/05/23 15:35:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/miniRT.h"
+#include "../includes/miniRT.h"
 
-int	ft_atoi(const char *nptr)
+
+void cleanup_scene(t_scene *scene)
 {
-	size_t	i;
-	int		number;
-	int		sign;
+	t_object *obj;
+	t_object *next_obj;
+	t_light *light;
+	t_light *next_light;
 
-	i = 0;
-	number = 0;
-	sign = 1;
-	while ((nptr[i] > 8 && nptr[i] < 14) || nptr[i] == 32)
-		i++;
-	if (nptr[i] == '-' || nptr[i] == '+')
+	if (!scene)
+		return;
+	obj = scene->objects;
+	while (obj)
 	{
-		if (nptr[i] == '-')
-			sign = sign * -1;
-		i++;
+		next_obj = obj->next;
+		if (obj->data)
+			free(obj->data);
+		free(obj);
+		obj = next_obj;
 	}
-	while (nptr[i] >= 48 && nptr[i] <= 57)
+	light = scene->lights;
+	while (light)
 	{
-		number = number * 10 + (nptr[i] - '0');
-		i++;
+		next_light = light->next;
+		free(light);
+		light = next_light;
 	}
-	number *= sign;
-	return (number);
 }
+
