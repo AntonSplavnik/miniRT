@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 10:54:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:41:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,17 @@ int	parse_parameters(t_scene *scene, char *line)
 		return (0);
 }
 
+// Remove inline comments from a line
+static char *remove_inline_comments(char *line)
+{
+	char *comment_start;
+
+	comment_start = ft_strchr(line, '#');
+	if (comment_start)
+		*comment_start = '\0';
+	return (line);
+}
+
 int	parse_line(t_scene *scene, char *line)
 {
 	char	*trimmed;
@@ -66,7 +77,15 @@ int	parse_line(t_scene *scene, char *line)
 	trimmed = ft_strtrim(line);
 	if (!trimmed)
 		return (0);
-	if (trimmed[0] == '\0' || trimmed[0] == '#')
+	if (trimmed[0] == '\0')
+	{
+		free(trimmed);
+		return (1);
+	}
+	// Remove inline comments before parsing
+	trimmed = remove_inline_comments(trimmed);
+	trimmed = ft_strtrim(trimmed); // Trim again after removing comments
+	if (trimmed[0] == '\0')
 	{
 		free(trimmed);
 		return (1);
