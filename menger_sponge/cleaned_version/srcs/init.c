@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/21 16:46:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:36:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	data_init(t_scene *scene)
 	scene->height = HEIGHT;
 	scene->ambient.ratio = 0.1; //default
 	scene->ambient.color = create_color(255,255 ,255); //white by default
+	scene->ambient.has_ambient = 0;
 	scene->background_color = (0 << 16 | 0 << 8 | 0); // black
 	scene->lights = NULL;
 	scene->objects = NULL;
@@ -69,6 +70,7 @@ static void	data_init(t_scene *scene)
 
 	// Initialize camera defaults for 3D scenes
 	scene->is_3d = 0;  // Default to 2D mode - needs to be cleaned out
+	scene->camera.has_camera = 0;
 	scene->camera.fov = 60.0;
 	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
 	scene->camera.near = 0.1;

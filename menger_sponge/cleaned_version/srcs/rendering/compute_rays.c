@@ -6,15 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:17:22 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:08:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:56:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "platform.h"
 #include <math.h>
-
-
 
 void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y)
 {

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 16:48:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:35:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ typedef struct s_ambient
 {
 	double	ratio;
 	t_color	color;
+	int		has_ambient;
 }	t_ambient;
 
 typedef struct	s_light
@@ -96,7 +97,7 @@ typedef struct s_camera
 	double	aspect_ratio;
 	double	near;
 	double	far;
-	double	cam_matrix[3][3];
+	int		has_camera;
 
 	double  movement_speed; //Speed for camera movement
 	double	rotation_speed;	//Speed for camera rotation

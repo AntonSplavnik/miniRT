@@ -6,15 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:18:55 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:08:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:56:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include "platform.h"
 #include <math.h>
-
-
 
 t_light_result compute_light(t_scene *scene, t_hit_record hit_record, t_light *light)
 {

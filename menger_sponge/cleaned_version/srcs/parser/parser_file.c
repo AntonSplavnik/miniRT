@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:33:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:57:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,7 @@ int	parse_scene_file(char *filename, t_scene *scene)
 		return (0);
 	}
 	close(fd);
+	if (!scene->camera.has_camera)
+		parse_error(scene, "Camera not found");
 	return (1);
 }
