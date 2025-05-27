@@ -2,6 +2,11 @@
 
 **MiniRT** is a lightweight ray tracing engine written in pure C. Built as part of the 42 school curriculum, the project focuses on rendering 3D scenes by simulating the path of rays through a virtual environment.
 
+## Screenshots
+
+### Basic Scene
+![Scene 1](menger_sponge/screenshots/scene1.png)
+
 ## Features
 - Ray-object intersection with **spheres**, **planes**, and **cylinders**
 - Support for **shadows**, **reflections**, and **multiple light sources**
