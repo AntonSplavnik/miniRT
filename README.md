@@ -57,7 +57,7 @@ cd miniRT
 
 ### 2. Build MLX42 and the project
 ```bash
-mask
+make
 ```
 This will automatically:
 
