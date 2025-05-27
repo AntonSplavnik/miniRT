@@ -190,6 +190,9 @@ void	render_scene(t_scene *scene)
         i++;
     }
 
+    // Draw the UI panel
+    draw_ui_panel(scene);
+
     // Display status (FPS, settings, etc.)
     display_status(scene);
 }

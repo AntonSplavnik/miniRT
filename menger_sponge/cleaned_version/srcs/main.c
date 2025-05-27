@@ -12,6 +12,29 @@
 
 #include "../includes/miniRT.h"
 
+/**
+ * UI animation loop function - updates the UI panel animation
+ * This is registered as a loop hook with MLX
+ */
+void ui_animation_loop(void *param)
+{
+	t_scene *scene = (t_scene *)param;
+	static double last_update_time = 0;
+	double current_time;
+	
+	// Get current time
+	current_time = mlx_get_time();
+	
+	// Limit UI updates to 60 FPS for smooth animation
+	if (current_time - last_update_time > 0.016) { // ~60 FPS
+		// Update and redraw the UI panel if animation is active
+		if (draw_ui_panel(scene)) {
+			// Animation is still active, no need to re-render the entire scene
+		}
+		last_update_time = current_time;
+	}
+}
+
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
@@ -22,6 +45,13 @@ void	start_raytracer(t_scene *scene, char *filename)
 		write_string_to_file_descriptor("Error: Failed to parse scene file\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	
+	// Initialize UI panel
+	init_ui_panel(scene);
+	
+	// Register the UI animation loop
+	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);
+	
 	render_scene(scene);
 	display_status(scene);
 	mlx_loop(scene->app.mlx);

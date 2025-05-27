@@ -174,6 +174,11 @@ void	set_up_scene_cube(t_scene *scene);
 // void	draw_control_panel(t_scene *scene);
 // void	destroy_control_panel(t_scene *scene);
 
+// UI Panel functions
+void    init_ui_panel(t_scene *scene);
+bool    draw_ui_panel(t_scene *scene);
+bool    ui_panel_mouse_click(t_scene *scene, int x, int y);
+void    cleanup_ui_panel(t_scene *scene);
 
 // camera
 t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);

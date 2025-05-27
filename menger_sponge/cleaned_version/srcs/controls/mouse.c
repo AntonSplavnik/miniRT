@@ -1,51 +1,9 @@
 #include "../../includes/miniRT.h"
 
-// Handle mouse events in the control window
-// int control_mouse_handler(int button, int x, int y, t_scene *scene)
-// {
-//     // Only process left clicks
-//     if (button == 1) {
-//         // Check shadow checkbox
-//         if (x >= 30 && x <= 45 && y >= 50 && y <= 65) {
-//             scene->app.enable_hard_shadows = !scene->app.enable_hard_shadows;
-//             draw_control_panel(scene);
-//             // Re-render with new settings when checkbox is toggled
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check reflections checkbox
-//         if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
-//             scene->app.enable_reflections = !scene->app.enable_reflections;
-//             draw_control_panel(scene);
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check specular checkbox
-//         if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
-//             scene->app.enable_specular = !scene->app.enable_specular;
-//             draw_control_panel(scene);
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check if render button was clicked
-// /*         if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
-//             // Re-render with new settings
-//             render_scene(scene);
-//             return (0);
-//         } */
-//     }
-//     return (0);
-// }
-
 
 void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
 {
 	t_scene *scene;
-	// int	x;
-	// int y;
 
 	(void)mods;
 	scene  = (t_scene *)param;
@@ -60,7 +18,21 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
         scene->mouse_state.middle_button_down = (action == MLX_PRESS);
     }
 
-	
+	// Handle UI panel clicks first when left mouse button is pressed
+	if (button == MLX_MOUSE_BUTTON_LEFT && action == MLX_PRESS) {
+		
+		int x; 
+		int	y;
+		
+		mlx_get_mouse_pos(scene->app.mlx, &x, &y);
+		
+		// If UI handled the click, return early
+		if (ui_panel_mouse_click(scene, x, y)) {
+			// Re-render the scene if settings changed
+			render_scene(scene);
+			return;
+		}
+	}
 
 	if (action == MLX_PRESS)
 	{

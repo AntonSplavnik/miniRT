@@ -254,7 +254,7 @@ typedef struct graphic_settings
 	bool		enable_reflections;
     bool    	enable_specular;
 	bool		enable_refraction;
-	double		resolution_factor; // For controlling render resolution
+	int		resolution_factor; // For controlling render resolution
 } t_graphic_settings;
 
 typedef struct s_app
