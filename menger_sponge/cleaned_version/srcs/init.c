@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/21 16:46:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:35:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	data_init(t_scene *scene)
 
 	scene->mouse_state.x = 0;
 	scene->mouse_state.y = 0;
-	
+
 	scene->mouse_state.prev_mouse_x = 0;
 	scene->mouse_state.prev_mouse_y = 0;
 
@@ -55,11 +55,11 @@ static void	data_init(t_scene *scene)
 	scene->objects = NULL;
 
 	// Initialize control window
-    // scene->app.enable_hard_shadows = true;
-    // scene->app.enable_reflections = true;
-    // scene->app.enable_specular = true;
-	// scene->app.enable_refraction = true;
-	// scene->app.resolution_factor = 1;
+    scene->graphic_settings.enable_hard_shadows = true;
+    scene->graphic_settings.enable_reflections = true;
+    scene->graphic_settings.enable_specular = true;
+	scene->graphic_settings.enable_refraction = true;
+	scene->graphic_settings.resolution_factor = 1;
 
 
 	//Bonus
@@ -107,12 +107,12 @@ void scene_init(t_scene *scene)
 {
     // Initialize data
     data_init(scene);
-    
+
     // Initialize MLX42
     scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
     if (!scene->app.mlx)
         malloc_error();
-    
+
     // Create main image
     scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
     if (!scene->app.img)
@@ -120,7 +120,7 @@ void scene_init(t_scene *scene)
         mlx_terminate(scene->app.mlx);
         malloc_error();
     }
-    
+
     // Display the image in the window
     if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
     {
@@ -128,7 +128,7 @@ void scene_init(t_scene *scene)
         mlx_terminate(scene->app.mlx);
         malloc_error();
     }
-    
+
     // Set up event hooks
     setup_hooks(scene);
 }
