@@ -768,7 +768,7 @@ void *render_menger_thread(void *arg)
 void	render_menger_sponge(t_scene *scene)
 {
     // Safety check - ensure we're in 3D mode and it's actually the Menger sponge
-    if (!scene->is_3d || ft_strncmp(scene->name, "menger", 6) != 0)
+    if (ft_strncmp(scene->name, "menger", 6) != 0)
         return;
 
     // Display rendering status

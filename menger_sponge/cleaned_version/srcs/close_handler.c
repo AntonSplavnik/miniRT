@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
-#include <stdio.h>
-
 
 void    mlx_cleanup(t_scene *scene)
 {

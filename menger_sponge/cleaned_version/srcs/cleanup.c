@@ -12,7 +12,6 @@
 
 #include "../includes/miniRT.h"
 
-
 void cleanup_scene(t_scene *scene)
 {
 	t_object *obj;

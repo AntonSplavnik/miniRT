@@ -13,7 +13,6 @@
 #include "../../includes/miniRT.h"
 
 
-
 // Convert string to float - handle integer part
 static void ft_atof_integer_part(const char *str, int *i, double *result)
 {
