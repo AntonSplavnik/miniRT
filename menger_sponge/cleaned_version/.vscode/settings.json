@@ -1,6 +1,5 @@
 {
 	"files.associations": {
-		"math.h": "c",
-		"ranges": "c"
+		"mlx42.h": "c"
 	}
 }

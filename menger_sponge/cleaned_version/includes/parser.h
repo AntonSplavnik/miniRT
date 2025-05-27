@@ -6,14 +6,14 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 14:57:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:37:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "types.h"
+#include "types.h"
 
 # define MAX_LINE_LEN 8192
 
@@ -36,8 +36,6 @@ int		is_cone(char *line);
 int		is_triangle(char *line);
 int		is_cube(char *line);
 int		is_mesh(char *line);
-int		check_ambient_uniqueness(t_scene *scene);
-int		check_camera_uniqueness(t_scene *scene);
 
 // Vector and color parsing
 int		read_vector(char *str, t_vec3 *vector);

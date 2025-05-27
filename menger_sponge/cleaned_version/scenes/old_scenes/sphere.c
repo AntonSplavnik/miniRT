@@ -1,4 +1,4 @@
-#include "miniRT.h"
+#include "../../includes/miniRT.h"
 
 //set up scene with two spheres
 void	set_up_scene_two_sphere(t_scene *scene)

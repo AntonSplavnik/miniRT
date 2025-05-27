@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 void	parse_plane_data(t_scene *scene, char **parts, t_vec3 *point, t_vec3 *normal, t_color *color)
 {

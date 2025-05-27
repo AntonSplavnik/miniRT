@@ -10,36 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../includes/miniRT.h"
 #include <stdio.h>
 
-int	close_handler(t_scene *scene)
-{
-	static int	freed = 0;
 
-	if (freed)
-		return (0);
-	freed = 1;
-	cleanup_scene(scene);
-	if (scene->img.img_ptr && scene->mlx_connection)
-	{
-		mlx_destroy_image(scene->mlx_connection, scene->img.img_ptr);
-		scene->img.img_ptr = NULL;
-	}
-	if (scene->mlx_window && scene->mlx_connection)
-	{
-		mlx_destroy_window(scene->mlx_connection, scene->mlx_window);
-		scene->mlx_window = NULL;
-	}
-	if (scene->mlx_connection)
-	{
-#ifdef __linux__
-		mlx_destroy_display(scene->mlx_connection);
-#endif
-		free(scene->mlx_connection);
-		scene->mlx_connection = NULL;
-	}
-	exit(EXIT_SUCCESS);
-	return (0);
+void    mlx_cleanup(t_scene *scene)
+{
+    if (scene->app.mlx)
+    {
+        if (scene->app.img)
+        {
+            mlx_delete_image(scene->app.mlx, scene->app.img);
+        }
+        mlx_terminate(scene->app.mlx);
+    }
 }
 
+void    close_callback(void *param)
+{
+	t_scene	*scene;
+
+	scene = (t_scene *)param;
+	cleanup_scene(scene);
+	mlx_cleanup(scene);
+	exit(EXIT_SUCCESS);
+}
+
+void	setup_close_hook(t_scene *scene)
+{
+    mlx_close_hook(scene->app.mlx, close_callback, scene);
+}

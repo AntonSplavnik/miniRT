@@ -6,16 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:23:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:44:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
-
-
-
+#include "../../includes/miniRT.h"
 
 /**
  * @brief Primary ray tracing function that recursively traces rays through a 3D scene
@@ -71,7 +66,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 	int base_color;
 	int reflected_color = 0;
 
-	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object))
+	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object, &hit_record))
 		return scene->background_color;
 	compute_ray_intersection(ray, hit_record.object, t, &hit_record);
 
@@ -85,8 +80,8 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 		light_info = compute_light(scene, hit_record, current_light);
 
 		// Check if the hit point is in shadow for this light
-		if (scene->app.enable_hard_shadows)
-			in_shadow = is_in_shadow(scene, hit_record.point, light_info.light_dir, light_info.light_distance);
+		if (scene->graphic_settings.enable_hard_shadows)
+			in_shadow = is_in_shadow(scene, hit_record.point, light_info.light_dir, light_info.light_distance, hit_record);
 		else
 			in_shadow = 0;
 		if (!in_shadow)
@@ -125,7 +120,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
     if (depth < MAX_RAY_DEPTH)
     {
         // Calculate reflection if object is reflective
-        if (scene->app.enable_reflections && hit_record.object->material.reflectivity > 0.0)
+        if (scene->graphic_settings.enable_reflections && hit_record.object->material.reflectivity > 0.0)
         {
             t_vec3 reflect_dir = reflect_ray(ray.direction, hit_record.normal);
             t_ray reflect_ray;
@@ -173,5 +168,3 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 
     return base_color;
 }
-
-

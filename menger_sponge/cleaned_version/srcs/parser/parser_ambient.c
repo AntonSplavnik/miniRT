@@ -6,20 +6,12 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:44:28 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/26 10:36:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
-int	check_ambient_uniqueness(t_scene *scene)
-{
-	if (scene->ambient.ratio != 0.1)
-		return (0);
-	if (scene->ambient.color.r != 255 || scene->ambient.color.g != 255 || scene->ambient.color.b != 255)
-		return (0);
-	return (1);
-}
 
 int	read_ambient_ratio(t_scene *scene, char **str, double *ratio)
 {
@@ -41,7 +33,7 @@ int	parse_ambient(t_scene *scene, char *line)
 	int		parts_count;
 	int		parse_color;
 
-	if (!check_ambient_uniqueness(scene))
+	if (scene->ambient.has_ambient)
 		parse_error(scene, "Ambient lighting can only be declared once");
 	parts = ft_split(line, ' ');
 	if (!parts)
@@ -59,5 +51,6 @@ int	parse_ambient(t_scene *scene, char *line)
 	free_split(parts);
 	if (!parse_color)
 		parse_error(scene, "Invalid color format for ambient lighting. Expected: r,g,b");
+	scene->ambient.has_ambient = 1;
 	return (1);
 }

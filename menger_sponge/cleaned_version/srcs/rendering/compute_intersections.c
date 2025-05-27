@@ -10,11 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
 
-int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object)
+
+int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
+{
+	t_ray		shadow_ray;
+	t_object	*hit_object;
+	double		t;
+
+	//Create a shadow ray from the hit point towards the light
+	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001)); //offset to avoid self intersection
+	shadow_ray.direction = light_dir;
+
+	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object, &hit_record) && t < light_distance)
+		return (1);
+	return (0);
+}
+
+int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record)
 {
 	t_object	*current;
 	double		t_closest;
@@ -89,7 +103,7 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 				// Store the triangle index in the hit object for later normal computation
 				// Note: This is a hack - we're assuming the user won't mess with the pointer
 				// In a real implementation, this should be stored in a hit record structure
-				current->material.reflectivity = triangle_idx;
+				hit_record->triangle_idx = triangle_idx;
 			}
 		}
 		else if (current->type == CONE)
@@ -158,7 +172,7 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	else if (hit_object->type == MESH)
 	{
 		t_mesh *mesh = (t_mesh *)(hit_object->data);
-		int triangle_idx = (int)hit_object->material.reflectivity;
+		int triangle_idx = (int)hit_record->triangle_idx;
 		if (triangle_idx >= 0 && triangle_idx < mesh->triangle_count)
 		{
 			hit_record->normal = mesh->triangles[triangle_idx].normal;

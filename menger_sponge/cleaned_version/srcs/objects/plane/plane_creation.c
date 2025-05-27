@@ -1,4 +1,4 @@
-#include "miniRT.h"
+#include "../../../includes/miniRT.h"
 
 t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color)
 {
