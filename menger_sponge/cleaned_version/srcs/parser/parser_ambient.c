@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
+
 
 int	read_ambient_ratio(t_scene *scene, char **str, double *ratio)
 {

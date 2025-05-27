@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 #include <fcntl.h>
 
 //Find the end of the current line in the buffer if it exists otherwise return the end of the buffer

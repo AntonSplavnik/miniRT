@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 void	parse_cone_vectors(t_scene *scene, char **parts, t_vec3 *apex, t_vec3 *axis)
 {

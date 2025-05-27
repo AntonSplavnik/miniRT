@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../../includes/miniRT.h"
 
 /*
  * FIXED ray_disc_intersect for cone base - ensures exact positioning

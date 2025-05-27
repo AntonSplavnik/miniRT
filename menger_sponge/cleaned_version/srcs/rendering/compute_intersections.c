@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
 {

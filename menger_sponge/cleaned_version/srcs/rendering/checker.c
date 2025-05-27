@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
 
 
 //TO DO - Make a function calling specific texture functions based on object type.

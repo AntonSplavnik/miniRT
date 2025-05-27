@@ -10,10 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
-#include <math.h>
-#include <stdlib.h>
-#include <pthread.h>
+#include "../../includes/miniRT.h"
+
 
 #if defined(__ARM_NEON) || defined(__ARM_NEON__)
 # include <arm_neon.h>

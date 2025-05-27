@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 int parse_light(t_scene *scene, char *line)
 {

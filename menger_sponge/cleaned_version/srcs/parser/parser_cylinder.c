@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 void	parse_cylinder_vectors(t_scene *scene, char **parts, t_vec3 *center, t_vec3 *axis)
 {

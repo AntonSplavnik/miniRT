@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 // Create a new vector with given components
 t_vec3	vec3_create(double x, double y, double z)

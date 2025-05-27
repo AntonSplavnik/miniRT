@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 int	parse_sphere_data(t_scene *scene, char **parts, t_vec3 *center, double *diameter, t_color *color)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "platform.h"
+#include "../../includes/miniRT.h"
 
 //Copy the current line from the buffer to the line array
 int	copy_to_line(t_scene *scene, char *buffer, int *pos, char *line)

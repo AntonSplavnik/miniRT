@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../../includes/miniRT.h"
 
 t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
 {

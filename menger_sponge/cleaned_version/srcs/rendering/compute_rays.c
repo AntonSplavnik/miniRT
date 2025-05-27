@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
-#include "platform.h"
-#include <math.h>
+#include "../../includes/miniRT.h"
+
 
 void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y)
 {

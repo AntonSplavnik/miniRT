@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../../includes/miniRT.h"
 
 /**
  * Extracts the material block (if any) from a line in the RT file

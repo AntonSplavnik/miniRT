@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "../../../includes/miniRT.h"
 
 /**
  * Creates a new mesh object from an array of triangles
