@@ -1,80 +1,101 @@
 # MiniRT
 
-**MiniRT** is a lightweight ray tracing engine written in pure C. Built as part of the 42 school curriculum, the project focuses on rendering 3D scenes by simulating the path of rays through a virtual environment.
-
-## Screenshots
-
-### Shadows and Reflections
-![Scene 1](sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
-
-## Features
-
-- Ray-object intersection with **spheres**, **planes**, **cylinders**, **triangles**, **cones**, and **meshes**
-- Support for **shadows**, **reflections**, and **multiple light sources**
-- **Scene parsing** from `.rt` files
-- Basic **camera movement** and field of view
-- **Phong lighting model** for realistic shading
-- Uses **MLX42**, a modern OpenGL-based graphics library
-
-## What I Learned
-
-- Ray tracing fundamentals and vector math
-- Optimizing render performance in C
-- Parsing custom scene files and building a minimal 3D renderer
-- Laying the groundwork for BVH acceleration structures
-
-## Technologies
-
-- Language: **C**
-- Graphics: **MLX42** (based on GLFW and OpenGL)
-- Platform: Unix/Linux, macOS (including M1)
-- Build system: `Makefile`, uses `CMake` for MLX42
+**MiniRT** is a lightweight, efficient ray tracing engine developed in pure C. This project was created as part of the curriculum at 42 School and is designed to render realistic 3D scenes by simulating the path of rays through virtual environments.
 
 ---
 
-## 🛠️ Getting Started
+## 🌟 Features
 
-### ✅ Requirements
+* **Ray-Object Intersection**: Supports **spheres**, **planes**, **cylinders**, **triangles**, **cones**, and complex **meshes**.
+* **Advanced Lighting**: Implements **shadows**, **reflections**, and **multiple light sources**.
+* **Scene Parsing**: Custom `.rt` scene file parsing to define scene elements easily.
+* **Camera Controls**: Basic interactive **camera movement** and adjustable field of view.
+* **Realistic Shading**: Utilizes the **Phong lighting model** for natural-looking rendering.
+* **Graphics Engine**: Built on **MLX42**, a modern graphics library leveraging OpenGL and GLFW.
 
-#### macOS (via Homebrew)
+---
+
+## 📸 Screenshots
+
+### Shadows and Reflections
+
+![Shadows and Reflections](screenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
+
+---
+
+## 💡 What I Learned
+
+* **Ray tracing fundamentals** including vector math and ray-object intersections.
+* **Performance optimization** techniques for rendering in C.
+* Efficiently **parsing and managing custom scene files**.
+* Preparing the foundation for implementing **BVH acceleration structures**.
+
+---
+
+## 🛠️ Technologies
+
+* **Programming Language**: C
+* **Graphics Library**: MLX42 (built on GLFW and OpenGL)
+* **Supported Platforms**: Unix/Linux, macOS (including Apple M1)
+* **Build Tools**: `Makefile`, integrating `CMake` for MLX42
+
+---
+
+## 🚀 Quick Start
+
+### ✅ Installation Requirements
+
+#### macOS (with Homebrew)
 
 ```bash
 brew install glfw cmake
 ```
 
-#### Linux (via APT)
-``` bash
+#### Linux (with APT)
+
+```bash
 sudo apt install libglfw3-dev cmake
 ```
 
-## 🔧 Build Instructions
+---
 
-### 1. Clone the repository
-``` bash
+## 🔧 Building the Project
+
+### 1. Clone the Repository
+
+```bash
 git clone https://github.com/AntonSplavnik/miniRT.git
 cd miniRT
 ```
 
-### 2. Build MLX42 and the project
+### 2. Compile and Build
+
 ```bash
 make
 ```
-This will automatically:
 
- - Check if MLX42 exists (and clone it if not)
- - Build MLX42 using cmake
- - Compile MiniRT using the system's gcc
+This command automatically:
 
-## 🚀 Running the Program
+* Checks and clones MLX42 if it’s missing.
+* Builds MLX42 via `cmake`.
+* Compiles MiniRT using the system's default compiler (`gcc`).
 
-### To render a scene:
-```bash 
+---
+
+## ▶️ Running MiniRT
+
+To render a scene, run:
+
+```bash
 ./minirt path/to/scene.rt
 ```
 
+---
+
 ## 📁 Scene File Format (.rt)
 
-#### A minimal example:
+#### Minimal Example
+
 ```c
 A 0.2 255,255,255
 C 0,0,20 0,0,-1 70
@@ -83,15 +104,16 @@ sp 0,0,0 2 255,0,0
 pl 0,-1,0 0,1,0 0,255,0
 ```
 
-- A: Ambient light
-- C: Camera position, direction, FOV
-- L: Light source position, brightness, color
-- sp: Sphere
-- pl: Plane
+* **A**: Ambient light (intensity, RGB color)
+* **C**: Camera (position, orientation, field of view)
+* **L**: Light source (position, intensity, RGB color)
+* **sp**: Sphere (position, radius, RGB color)
+* **pl**: Plane (position, normal vector, RGB color)
 
-#### More examples can be found in the scenes/ directory.
+Additional examples are available in the `scenes/` directory.
 
+---
 
-🚧 Status
-Currently implementing object transformations and optimizing render loop performance.
+## 🚧 Project Status
 
+Currently working on implementing object transformations and further optimizing the render loop for better performance.
