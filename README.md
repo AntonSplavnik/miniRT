@@ -83,13 +83,13 @@ sp 0,0,0 2 255,0,0
 pl 0,-1,0 0,1,0 0,255,0
 ```
 
-A: Ambient light
-C: Camera position, direction, FOV
-L: Light source position, brightness, color
-sp: Sphere
-pl: Plane
+- A: Ambient light
+- C: Camera position, direction, FOV
+- L: Light source position, brightness, color
+- sp: Sphere
+- pl: Plane
 
-More examples can be found in the scenes/ directory.
+- More examples can be found in the scenes/ directory.
 
 
 🚧 Status
