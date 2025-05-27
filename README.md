@@ -19,8 +19,7 @@
 
 ### Shadows and Reflections
 
-![Shadows and Reflections](screenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
-
+![Shadows and Reflections](sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
 ---
 
 ## 💡 What I Learned
