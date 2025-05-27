@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:25:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:28:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ t_color get_checker_color(t_material material, t_object *object, t_vec3 point)
 	}
 	if (object->type == SPHERE)
 	{
-		printf("here\n");
-		t_vec2 point_2d = spherical_map(point);
+		t_sphere *sphere = (t_sphere *)object->data;
+		// Convert point to sphere local coordinates before mapping
+		t_vec3 sphere_local_point = vec3_subtract(point, sphere->center);
+		t_vec2 point_2d = spherical_map(sphere_local_point);
 		if (is_checker_point_2d(point_2d.u, point_2d.v, material.checker_size))
 			return material.checker_color;
 		else
@@ -129,12 +131,16 @@ int is_checker_point(t_vec3 point, double checker_size)
  */
 int	is_checker_point_2d(double u, double v, double checker_size)
 {
-	u = floor(u / checker_size);
-	v = floor(v / checker_size);
-	if (((int)u + (int)v) % 2 == 0)
-		return 1; // Use checker color
-	else
-		return 0; // Use primary color
+	// Scale u and v by checker_size
+	double scaled_u = u * (2.0 / checker_size);
+	double scaled_v = v * (2.0 / checker_size);
+
+	// Floor to get integer coordinates
+	int cell_u = (int)floor(scaled_u);
+	int cell_v = (int)floor(scaled_v);
+
+	// Check if the sum is even or odd
+	return (cell_u + cell_v) % 2;
 }
 
 t_vec2 spherical_map(t_vec3 point)
@@ -145,6 +151,7 @@ t_vec2 spherical_map(t_vec3 point)
 	double u;
 	double v;
 
+	point = vec3_normalize(point);
 	theta = atan2(point.x, point.z);
 	radius = vec3_length(point);
 	if (radius == 0)
