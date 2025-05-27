@@ -67,7 +67,7 @@ This will automatically:
 
 ## 🚀 Running the Program
 
-###To render a scene:
+### To render a scene:
 ```bash 
 ./minirt path/to/scene.rt
 ```
@@ -89,7 +89,7 @@ pl 0,-1,0 0,1,0 0,255,0
 - sp: Sphere
 - pl: Plane
 
-- More examples can be found in the scenes/ directory.
+#### More examples can be found in the scenes/ directory.
 
 
 🚧 Status
