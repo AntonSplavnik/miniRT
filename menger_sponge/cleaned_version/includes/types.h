@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 10:52:24 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:21:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 typedef struct s_vec2
 {
-	double	x;
-	double	y;
+	double	u;
+	double	v;
 }				t_vec2;
 
 

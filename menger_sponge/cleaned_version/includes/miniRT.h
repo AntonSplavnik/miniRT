@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 10:42:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:23:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,4 +202,6 @@ int				mouse_release(int button, int x, int y, t_scene *scene);
 int				is_checker_point(t_vec3 point, double checker_size);
 int				is_checker_point_plane(t_plane plane, t_vec3 point, double checker_size);
 t_color			get_checker_color(t_material material, t_object *object, t_vec3 point);
+t_vec2			spherical_map(t_vec3 point);
+int				is_checker_point_2d(double u, double v, double checker_size);
 #endif

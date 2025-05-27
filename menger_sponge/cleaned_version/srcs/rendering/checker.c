@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:08:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 11:25:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <math.h>
 
 
-
+//TO DO - Make a function calling specific texture functions based on object type.
 /**
  * Gets the appropriate color at a point for a material with potential checkerboard
  *
@@ -34,6 +34,15 @@ t_color get_checker_color(t_material material, t_object *object, t_vec3 point)
 	{
 		t_plane *plane = (t_plane *)object->data;
 		if (is_checker_point_plane(*plane, point, material.checker_size))
+			return material.checker_color;
+		else
+			return material.color;
+	}
+	if (object->type == SPHERE)
+	{
+		printf("here\n");
+		t_vec2 point_2d = spherical_map(point);
+		if (is_checker_point_2d(point_2d.u, point_2d.v, material.checker_size))
 			return material.checker_color;
 		else
 			return material.color;
