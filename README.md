@@ -4,8 +4,8 @@
 
 ## Screenshots
 
-### Basic Scene
-![Scene 1](menger_sponge/screenshots/scene1.png)
+### Shadows and Reflections
+![Scene 1](sreenshots/sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
 
 ## Features
 - Ray-object intersection with **spheres**, **planes**, and **cylinders**
