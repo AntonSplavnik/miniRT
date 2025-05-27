@@ -40,66 +40,58 @@
 
 ```bash
 brew install glfw cmake
-Linux (via APT)
-bash
-Copy
-Edit
-sudo apt install libglfw3-dev cmake
-📦 Build Instructions
-Clone the repo:
+```
 
-bash
-Copy
-Edit
+#### Linux (via APT)
+``` bash
+sudo apt install libglfw3-dev cmake
+```
+
+## 🔧 Build Instructions
+
+### 1. Clone the repository
+``` bash
 git clone https://github.com/AntonSplavnik/miniRT.git
 cd miniRT
-Build MLX42 and the project:
+```
 
-bash
-Copy
-Edit
-make
-This will automatically check for and clone MLX42 (if missing), compile it using CMake, and then build miniRT.
+### 2. Build MLX42 and the project
+```bash
+mask
+```
+This will automatically:
 
-🚀 Running the Program
-Basic Run
-bash
-Copy
-Edit
+ - Check if MLX42 exists (and clone it if not)
+ - Build MLX42 using cmake
+ - Compile MiniRT using the system's gcc
+
+## 🚀 Running the Program
+
+###To render a scene:
+```bash 
 ./minirt path/to/scene.rt
-Save Screenshot
-bash
-Copy
-Edit
-./minirt path/to/scene.rt --save
-This saves a .bmp screenshot of the rendered frame using screenshot.c.
+```
 
-📂 Scene Files
-Scene files must follow the .rt format expected by the parser. A minimal example:
+## 📁 Scene File Format (.rt)
 
-css
-Copy
-Edit
+#### A minimal example:
+```c
 A 0.2 255,255,255
 C 0,0,20 0,0,-1 70
 L 10,10,10 0.8 255,255,255
 sp 0,0,0 2 255,0,0
 pl 0,-1,0 0,1,0 0,255,0
-You can find more examples in the scenes/ directory.
+```
+
+A: Ambient light
+C: Camera position, direction, FOV
+L: Light source position, brightness, color
+sp: Sphere
+pl: Plane
+
+More examples can be found in the scenes/ directory.
+
 
 🚧 Status
 Currently implementing object transformations and optimizing render loop performance.
-
-yaml
-Copy
-Edit
-
----
-
-Let me know if you'd like a section about **writing `.rt` files**, **keyboard controls**, or **debugging tips** added next!
-
-
-
-
-
 
