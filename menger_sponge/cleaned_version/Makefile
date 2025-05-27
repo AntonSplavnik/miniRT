@@ -29,7 +29,6 @@ OBJ_DIR = obj
 SRC_FILES = main.c \
 			init.c \
 			string_utils.c \
-			colors.c \
 			material.c \
 			vector_utils/vec3_basic_op.c \
 			vector_utils/vec3_length.c \
@@ -87,6 +86,7 @@ SRC_FILES = main.c \
 			rendering/trace_rays.c	\
 			rendering/reflection.c	\
 			rendering/checker.c	\
+			rendering/colors.c \
 			camera/camera.c \
 			ui/user_interface.c\
 			ui/control_panel.c\

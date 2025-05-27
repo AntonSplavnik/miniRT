@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 11:51:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:42:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,38 +30,6 @@ t_color	create_color(int r, int g, int b)
 	color.g = valid_color_range(g);
 	color.b = valid_color_range(b);
 	return (color);
-}
-
-/**
- * Gets the appropriate color at a point for a material with potential checkerboard
- *
- * @param material The material properties
- * @param point The intersection point
- * @return The color at that point
- */
-t_color get_color_at_point(t_material material, t_object *object, t_vec3 point)
-{
-    // If this material doesn't have a checkerboard pattern, just return the primary color
-    if (!material.has_checker)
-        return material.color;
-
-    // Choose the appropriate checker pattern function based on object type
-    if (object->type == PLANE)
-    {
-        t_plane *plane = (t_plane *)object->data;
-        if (is_checker_point_plane(*plane, point, material.checker_size))
-            return material.checker_color;
-        else
-            return material.color;
-    }
-    else
-    {
-        // For other objects, use the general 3D checker pattern
-        if (is_checker_point(point, material.checker_size))
-            return material.checker_color;
-        else
-            return material.color;
-    }
 }
 
 /**
@@ -94,7 +62,7 @@ int get_pixel_color(t_hit_record hit_record, double light_intensity,
                                double specular_intensity)
 {
     // Get the base color from the material, considering checkerboard pattern
-    t_color base_color = get_color_at_point(hit_record.object->material, hit_record.object, hit_record.point);
+    t_color base_color = get_checker_color(hit_record.object->material, hit_record.object, hit_record.point);
 
     // Calculate diffuse component (subtract specular from total light)
     double diffuse_component = light_intensity - specular_intensity;
