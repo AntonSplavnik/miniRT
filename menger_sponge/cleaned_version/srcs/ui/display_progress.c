@@ -26,7 +26,8 @@ void display_progress(t_scene *scene, const char *status_text)
     text_img = mlx_put_string(scene->app.mlx, (char *)status_text, 10, HEIGHT - 25);
     
     // If we want to change the color (optional)
-    if (text_img && ft_strncmp((char *)status_text, "Rendering...", 12) == 0) {
+    if (text_img && ft_strncmp((char *)status_text, "Rendering...", 12) == 0)
+    {
         // Change text color to yellow for rendering message
         for (uint32_t i = 0; i < text_img->width * text_img->height; i++) {
             uint8_t *pixel = &text_img->pixels[i * 4];

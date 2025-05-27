@@ -15,18 +15,26 @@ void display_status(t_scene *scene)
 		mlx_delete_image(scene->app.mlx, status_img);
 		status_img = NULL;
 	}
-
-	if (scene->name)
+	if (scene->graphic_settings.enable_status_message)
 	{
-		// Simple sphere status
-		snprintf(status, 100, "%s | Camera: (%.1f, %.1f, %.1f)", scene->name,
-				scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
-	}
 
-	// Display the status with a new image
-	if (scene->app.mlx)
-	{
-		// Create a new text image with the status message
-		status_img = mlx_put_string(scene->app.mlx, status, 10, 20);
+		if (scene->name)
+		{
+			snprintf(status, 
+					100, 
+					"%s | Camera: (%.1f, %.1f, %.1f)", 
+					scene->name,
+					scene->camera.position.x, 
+					scene->camera.position.y, 
+					scene->camera.position.z);
+		}
+
+		// Display the status with a new image
+		if (scene->app.mlx)
+		{
+			// Create a new text image with the status message
+			status_img = mlx_put_string(scene->app.mlx, status, 10, 20);
+		}
+
 	}
 }

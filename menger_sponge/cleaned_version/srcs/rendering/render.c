@@ -189,10 +189,6 @@ void	render_scene(t_scene *scene)
         pthread_join(threads[i], NULL);
         i++;
     }
-
-    // Draw the UI panel
-    draw_ui_panel(scene);
-
-    // Display status (FPS, settings, etc.)
-    display_status(scene);
+	
+    draw_ui(scene);
 }
