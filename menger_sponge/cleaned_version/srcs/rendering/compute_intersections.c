@@ -14,6 +14,21 @@
 #include "platform.h"
 #include <math.h>
 
+int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
+{
+	t_ray		shadow_ray;
+	t_object	*hit_object;
+	double		t;
+
+	//Create a shadow ray from the hit point towards the light
+	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001)); //offset to avoid self intersection
+	shadow_ray.direction = light_dir;
+
+	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object, &hit_record) && t < light_distance)
+		return (1);
+	return (0);
+}
+
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record)
 {
 	t_object	*current;

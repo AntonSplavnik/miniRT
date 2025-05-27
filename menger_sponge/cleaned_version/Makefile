@@ -62,7 +62,6 @@ SRC_FILES = main.c \
 			utils/ft_memset.c	\
 			utils/ft_strlcpy.c	\
 			light/lights.c \
-			shadows/shadows.c \
 			objects/add_object.c \
 			objects/cylinder/cylinder_intersect.c \
 			objects/cylinder/cylinder_creation.c \
