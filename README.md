@@ -5,7 +5,7 @@
 ## Screenshots
 
 ### Shadows and Reflections
-![Scene 1](sreenshots/sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
+![Scene 1](sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
 
 ## Features
 - Ray-object intersection with **spheres**, **planes**, and **cylinders**
