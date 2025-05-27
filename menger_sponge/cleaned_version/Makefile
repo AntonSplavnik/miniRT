@@ -7,27 +7,12 @@ MLX42_INCLUDE = $(MLX42_PATH)/include
 MLX42_BUILD = $(MLX42_PATH)/build
 MLX42_REPO = https://github.com/codam-coding-college/MLX42.git
 
+# Compiler & Flags
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
+INCLUDES = -I$(MLX42_INCLUDE) -Iincludes
 
-# Check if MLX42 exists and clone if needed
-mlx_check:
-	@if [ ! -d "$(MLX42_PATH)" ]; then \
-		echo "MLX42 not found. Cloning from GitHub..."; \
-		git clone $(MLX42_REPO) $(MLX42_PATH); \
-	fi
-
-# Build MLX
-mlx: mlx_check
-	@mkdir -p $(MLX42_BUILD)
-	@cd $(MLX42_BUILD) && cmake .. -DDEBUG=1
-	@$(MAKE) -C $(MLX42_BUILD)
-
-# Clean MLX42
-mlx_clean:
-	@if [ -d "$(MLX42_BUILD)" ]; then \
-		rm -rf $(MLX42_BUILD); \
-	fi
-
-# OS-specific settings
+# OS-specific linker flags
 ifeq ($(UNAME_S),Linux)
     MLX42_FLAGS = -ldl -lglfw -pthread -lm
 endif
@@ -35,97 +20,113 @@ ifeq ($(UNAME_S),Darwin)
     MLX42_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit $(shell pkg-config --libs glfw3)
 endif
 
-# Common compilation settings
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3 -pthread
-INCLUDES = -I$(MLX42_INCLUDE) -Iincludes
 LDFLAGS = -L$(MLX42_BUILD) -lmlx42 $(MLX42_FLAGS)
 
 # Directories
 SRC_DIR = srcs
-INC_DIR = includes
 OBJ_DIR = obj
+INC_DIR = includes
 
-# Source files
+# All source files (preserve subdirectory structure)
 SRC_FILES = main.c \
-			init.c \
-			string_utils.c \
-			colors.c \
-			material.c \
-			vector_utils/vec3_basic_op.c \
-			vector_utils/vec3_length.c \
-			vector_utils/vec3_product.c \
-			parser/parser_utils.c \
-			parser/parser_identifiers.c \
-			parser/parser_identifiers2.c \
-			parser/parser_camera.c \
-			parser/parser_ambient.c \
-			parser/parser_light.c \
-			parser/parser_sphere.c \
-			parser/parser_plane.c \
-			parser/parser_cylinder.c \
-			parser/parser_cone.c \
-			parser/parser_file.c \
-			parser/parser_line.c \
-			parser/parser_types.c \
-			parser/parser_triangle.c \
-			parser/parser_cube.c \
-			parser/parser_mesh.c \
-			parser/parser_material.c	\
-			parser/parser_utils_2.c		\
-			utils/ft_atof.c \
-			utils/ft_atoi.c	\
-			utils/ft_isspace.c \
-			utils/ft_split.c	\
-			utils/ft_strtrim.c \
-			utils/ft_calloc.c \
-			utils/ft_bzero.c \
-			utils/ft_memset.c	\
-			utils/ft_strlcpy.c	\
-			light/lights.c \
-			shadows/shadows.c \
-			objects/add_object.c \
-			objects/cylinder/cylinder_intersect.c \
-			objects/cylinder/cylinder_creation.c \
-			objects/sphere/sphere_intersect.c \
-			objects/sphere/sphere_creation.c \
-			objects/plane/plane_intersect.c \
-			objects/plane/plane_creation.c \
-			objects/cube/cube_intersect.c \
-			objects/cube/cube_creation.c \
-			objects/triangle/triangle_intersect.c \
-			objects/triangle/triangle_creation.c \
-			objects/mesh/mesh_intersect.c \
-			objects/mesh/mesh_creation.c \
-			objects/cone/cone_creation.c \
-			objects/cone/cone_intersect.c \
-			close_handler.c \
-			rendering/render.c \
-			rendering/compute_light.c	\
-			rendering/compute_rays.c	\
-			rendering/compute_intersections.c	\
-			rendering/render_utils.c	\
-			rendering/trace_rays.c	\
-			rendering/reflection.c	\
-			rendering/checker.c	\
-			camera/camera.c \
-			ui/user_interface.c\
-			ui/status_messages.c\
-			controls/keys.c\
-			controls/mouse.c\
-			cleanup.c
+	init.c \
+	string_utils.c \
+	colors.c \
+	material.c \
+	vector_utils/vec3_basic_op.c \
+	vector_utils/vec3_length.c \
+	vector_utils/vec3_product.c \
+	parser/parser_utils.c \
+	parser/parser_identifiers.c \
+	parser/parser_identifiers2.c \
+	parser/parser_camera.c \
+	parser/parser_ambient.c \
+	parser/parser_light.c \
+	parser/parser_sphere.c \
+	parser/parser_plane.c \
+	parser/parser_cylinder.c \
+	parser/parser_cone.c \
+	parser/parser_file.c \
+	parser/parser_line.c \
+	parser/parser_types.c \
+	parser/parser_triangle.c \
+	parser/parser_cube.c \
+	parser/parser_mesh.c \
+	parser/parser_material.c \
+	parser/parser_utils_2.c \
+	utils/ft_atof.c \
+	utils/ft_atoi.c \
+	utils/ft_isspace.c \
+	utils/ft_split.c \
+	utils/ft_strtrim.c \
+	utils/ft_calloc.c \
+	utils/ft_bzero.c \
+	utils/ft_memset.c \
+	utils/ft_strlcpy.c \
+	light/lights.c \
+	shadows/shadows.c \
+	objects/add_object.c \
+	objects/cylinder/cylinder_intersect.c \
+	objects/cylinder/cylinder_creation.c \
+	objects/sphere/sphere_intersect.c \
+	objects/sphere/sphere_creation.c \
+	objects/plane/plane_intersect.c \
+	objects/plane/plane_creation.c \
+	objects/cube/cube_intersect.c \
+	objects/cube/cube_creation.c \
+	objects/triangle/triangle_intersect.c \
+	objects/triangle/triangle_creation.c \
+	objects/mesh/mesh_intersect.c \
+	objects/mesh/mesh_creation.c \
+	objects/cone/cone_creation.c \
+	objects/cone/cone_intersect.c \
+	close_handler.c \
+	rendering/render.c \
+	rendering/compute_light.c \
+	rendering/compute_rays.c \
+	rendering/compute_intersections.c \
+	rendering/render_utils.c \
+	rendering/trace_rays.c \
+	rendering/reflection.c \
+	rendering/checker.c \
+	camera/camera.c \
+	ui/user_interface.c \
+	ui/status_messages.c \
+	controls/keys.c \
+	controls/mouse.c \
+	cleanup.c
 
+# File generation
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
 
-# Output files
+# Output
 NAME = minirt
 
-.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean
+# Tell Make where to find .c files
+vpath %.c $(SRC_DIR)
 
+.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean print
+
+# Default rule
 all: mlx obj_dir $(NAME)
 
-# Create obj directory and subdirectories
+# Executable linking
+$(NAME): $(OBJECTS)
+	@echo "Linking $(NAME)..."
+	@$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME)
+ifeq ($(UNAME_S),Darwin)
+	@cp $(MLX42_BUILD)/libmlx42.a ./
+endif
+	@echo "Build complete: $(NAME)"
+
+# Build object files
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@echo "Compiling $< -> $@"
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+# Create object directory tree
 obj_dir:
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/vector_utils
@@ -139,40 +140,42 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/cube
 	@mkdir -p $(OBJ_DIR)/objects/triangle
 	@mkdir -p $(OBJ_DIR)/objects/mesh
-	@mkdir -p $(OBJ_DIR)/scenes
+	@mkdir -p $(OBJ_DIR)/objects/cone
+	@mkdir -p $(OBJ_DIR)/rendering
 	@mkdir -p $(OBJ_DIR)/ui
 	@mkdir -p $(OBJ_DIR)/controls
 	@mkdir -p $(OBJ_DIR)/camera
 	@mkdir -p $(OBJ_DIR)/utils
-	@mkdir -p $(OBJ_DIR)/objects/cone
 
-# Build executable
-$(NAME): $(OBJECTS)
-	@echo "Linking $(NAME)..."
-	@$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME)
-ifeq ($(UNAME_S),Darwin)
-	@echo "Setting up for macOS..."
-	@cp $(MLX42_BUILD)/libmlx42.a ./
-endif
-	@echo "Build complete: $(NAME)"
+# Clone MLX42 if missing
+mlx_check:
+	@if [ ! -d "$(MLX42_PATH)" ]; then \
+		echo "MLX42 not found. Cloning from GitHub..."; \
+		git clone $(MLX42_REPO) $(MLX42_PATH); \
+	fi
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@echo "Compiling $<..."
-	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+# Build MLX42
+mlx: mlx_check
+	@mkdir -p $(MLX42_BUILD)
+	@cd $(MLX42_BUILD) && cmake .. -DDEBUG=1
+	@$(MAKE) -C $(MLX42_BUILD)
 
+# Clean build files
 clean:
 	@echo "Cleaning object files..."
 	@rm -rf $(OBJ_DIR)
-	@if [ -d "$(MLX42_BUILD)" ]; then \
-		rm -rf $(MLX42_BUILD); \
-	fi
+	@if [ -d "$(MLX42_BUILD)" ]; then rm -rf $(MLX42_BUILD); fi
 
 fclean: clean
-	@echo "Removing executable and libraries..."
+	@echo "Removing binary and static libs..."
 	@rm -f $(NAME)
 ifeq ($(UNAME_S),Darwin)
-	@rm -f ./libmlx42.a
+	@rm -f libmlx42.a
 endif
 
 re: fclean all
+
+# Debug rule
+print:
+	@echo "SOURCES: $(SOURCES)"
+	@echo "OBJECTS: $(OBJECTS)"
