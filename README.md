@@ -20,6 +20,11 @@
 ### Shadows and Reflections
 
 ![Shadows and Reflections](sreenshots/Screenshot%202025-05-26%20at%2020.29.59.png)
+
+![Colored Lights](sreenshots/Screenshot%202025-05-26%20at%2020.30.35.png)
+
+![Checker board and reflections](sreenshots/Screenshot%202025-05-26%20at%2020.32.49.png)
+
 ---
 
 ## 💡 What I Learned
