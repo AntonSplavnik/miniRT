@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:47:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:08:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,5 +202,10 @@ int				is_checker_point(t_vec3 point, double checker_size);
 int				is_checker_point_plane(t_plane plane, t_vec3 point, double checker_size);
 t_color			get_checker_color(t_material material, t_object *object, t_vec3 point);
 t_vec2			spherical_map(t_vec3 point);
+t_vec2			cylindrical_map(t_vec3 point, double radius, t_vec3 axis);
+int				is_on_cylinder_cap(t_vec3 point, t_cylinder *cylinder);
+t_vec2			circular_map(t_vec3 point, t_cylinder *cylinder);
+t_vec2			cubic_map(t_cube *cube, t_vec3 point);
+t_vec2			planar_map(t_plane *plane, t_vec3 point);
 int				is_checker_point_2d(double u, double v, double checker_size);
 #endif

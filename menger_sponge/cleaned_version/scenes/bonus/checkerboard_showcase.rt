@@ -15,65 +15,26 @@ sp -9,0,0 2 220,220,220 {checker_color:50,50,50,checker_size:0.5}
 sp -6,0,0 2 200,200,200 {checker_color:50,50,50,checker_size:0.2}
 
 # # Colored checkerboard sphere
-# sp -3,0,0 2 255,200,200 {checker_color:200,255,200,checker_size:0.3}
+sp -3,0,0 2 255,200,200 {checker_color:200,255,200,checker_size:0.3}
 
-# Glass sphere
-sp 0,0,0 2 220,240,255 {transparency:0.8,refractive_index:1.52}
-
-# Reflective sphere with elaborate checkerboard
-sp 3,0,0 2 200,200,230 {reflectivity:0.6,checker_color:100,100,150,checker_size:0.25}
+# Reflective sphere
+sp 3,0,0 2 200,200,230 {reflectivity:0.6}
 
 # Checkerboard with high contrast
-sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:0.4}
+sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:0.3}
 
 # Very large checkerboard pattern
-sp 9,0,0 2 200,100,100 {checker_color:100,200,100,checker_size:2.0}
+sp 9,0,0 2 200,100,100 {checker_color:100,200,100,checker_size:0.5}
 
-# # Row of cylinders with different checkerboard patterns
-# # Vertical stripe cylinder (very narrow checkerboard)
-# cy -9,-2,4 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200,checker_size:0.1}
+# Row of cylinders with different checkerboard patterns
+# Vertical stripe cylinder (very narrow checkerboard)
+cy -9,-2,4 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200,checker_size:0.1}
 
-# # Medium checkerboard cylinder
-# cy -6,-2,4 0,1,0 1.5 4 200,200,255 {checker_color:255,200,200,checker_size:0.5}
+# Diagonal pattern cylinder (angled axis)
+cy -1,-2,4 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200,checker_size:0.3}
 
-# # Large checkerboard cylinder
-# cy -3,-2,4 0,1,0 1.5 4 200,255,200 {checker_color:255,200,255,checker_size:1.0}
-
-# # Horizontal stripes cylinder (rotated checkerboard)
-# cy 0,-2,4 1,0,0 1.5 4 255,255,200 {checker_color:200,200,255,checker_size:0.2}
-
-# # Diagonal pattern cylinder (angled axis)
-# cy 3,-2,4 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200,checker_size:0.3}
-
-# # Glass cylinder with fine checkerboard
-cy 6,-2,4 0,1,0 1.5 4 220,240,255 {transparency:0.8,refractive_index:1.52,checker_color:180,200,255,checker_size:0.3}
-
-# # Reflective cylinder with checkerboard
-# cy 9,-2,4 0,1,0 1.5 4 200,200,230 {reflectivity:0.6,checker_color:100,100,150,checker_size:0.4}
-
-# Row of cones with different checkerboard patterns
-# Standard checkerboard cone
-co -9,-2,8 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200,checker_size:0.5}
-
-# # Fine checkerboard cone
-# co -6,-2,8 0,1,0 1.5 4 200,200,255 {checker_color:255,200,200,checker_size:0.2}
-
-# # Large checkerboard cone
-# co -3,-2,8 0,1,0 1.5 4 200,255,200 {checker_color:255,200,255,checker_size:1.0}
-
-# # Horizontal bands cone (rotated checkerboard)
-# co 0,-2,8 1,0,0 1.5 4 255,255,200 {checker_color:200,200,255,checker_size:0.2}
-
-# # Diagonal pattern cone (angled axis)
-# co 3,-2,8 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200,checker_size:0.3}
-
-# # # Glass cone with checkerboard
-# co 6,2,0 0,1,0 1.5 4 220,240,255 {transparency:1,refractive_index:1.7}
-# sp 6,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:0.4}
-# sp 7,4,3 1.5 0,255,0 {checker_color:10,10,10,checker_size:0.4}
-
-# # Reflective cone with checkerboard
-# co 9,-2,8 0,1,0 1.5 4 200,200,230 {reflectivity:0.6,checker_color:100,100,150,checker_size:0.4}
+# Cube with checkerboard pattern
+cu 6,-2,4 2 0,255,0 {checker_color:100,100,255,checker_size:0.5}
 
 # # Wall with giant checkerboard
 pl 0,0,12 0,0,-1 255,255,255 {checker_color:100,100,255,checker_size:8.0}
