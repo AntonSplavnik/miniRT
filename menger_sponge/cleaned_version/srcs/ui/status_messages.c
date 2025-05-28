@@ -1,4 +1,5 @@
 #include "../../includes/miniRT.h"
+#include <stdbool.h>
 
 // Helper function to print status messages
 void display_status(t_scene *scene)
@@ -34,6 +35,8 @@ void display_status(t_scene *scene)
 		{
 			// Create a new text image with the status message
 			status_img = mlx_put_string(scene->app.mlx, status, 10, 20);
+			if(status_img)
+				status_img->enabled = true;
 		}
 
 	}

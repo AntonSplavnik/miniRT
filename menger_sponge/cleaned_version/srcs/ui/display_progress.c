@@ -17,9 +17,8 @@ void display_progress(t_scene *scene, const char *status_text)
     }
     
     // Special case: empty message means clear any previous message
-    if (status_text[0] == '\0') {
+    if (status_text[0] == '\0')
         return;
-    }
     
     // Create new text image with the status message
     // MLX42 uses white text by default with black outline

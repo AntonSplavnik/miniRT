@@ -155,7 +155,7 @@ void	render_scene(t_scene *scene)
 	pthread_t	threads[NUM_THREADS];
 	t_thread_data	thread_data[NUM_THREADS];
 
-	display_progress(scene, "Rendering...");
+	// display_progress(scene, "Rendering...");
 	if (!scene)
 	{
 		printf("ERROR - Scene pointer is NULL\n");
@@ -189,6 +189,6 @@ void	render_scene(t_scene *scene)
         pthread_join(threads[i], NULL);
         i++;
     }
-	
+
     draw_ui(scene);
 }

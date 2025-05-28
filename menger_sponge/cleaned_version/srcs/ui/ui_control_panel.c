@@ -1,6 +1,4 @@
 #include "../../includes/miniRT.h"
-#include "../../MLX42/include/MLX42/MLX42.h"
-#include <string.h>
 
 #define PANEL_WIDTH     250
 #define PANEL_HEIGHT    400
@@ -172,7 +170,8 @@ static bool update_panel_animation(void) {
     return false;
 }
 
-bool draw_ui_panel(t_scene *scene) {
+bool draw_ui_panel(t_scene *scene)
+{
     bool animating = update_panel_animation();
     clear_panel_image();
     draw_toggle_button();
@@ -207,7 +206,8 @@ static bool is_point_in_checkbox(int x, int y, int checkbox_x, int checkbox_y) {
             y >= checkbox_y && y <= checkbox_y + g_panel.checkbox_size);
 }
 
-bool ui_panel_mouse_click(t_scene *scene, int x, int y) {
+bool ui_panel_mouse_click(t_scene *scene, int x, int y)
+{
     int checkbox_x = g_panel.padding, base_y = g_panel.y + 50, spacing = 35;
     if (is_point_in_toggle_button(x, y)) {
         g_panel.visible = !g_panel.visible;
@@ -248,7 +248,8 @@ void init_ui_panel(t_scene *scene) {
     clear_panel_image();
 }
 
-void cleanup_ui_panel(t_scene *scene) {
+void cleanup_ui_panel(t_scene *scene)
+{
     if (g_panel.panel_img) {
         mlx_delete_image(scene->app.mlx, g_panel.panel_img);
         g_panel.panel_img = NULL;
@@ -264,23 +265,23 @@ void cleanup_ui_panel(t_scene *scene) {
 
 // --- STATUS MESSAGE AT TOP ---
 
-// void draw_status_message(t_scene *scene)
-// {
-//     // Remove previous status image if any
-//     if (g_panel.status_text_img) {
-//         mlx_delete_image(scene->app.mlx, g_panel.status_text_img);
-//         g_panel.status_text_img = NULL;
-//     }
-//     if (scene->graphic_settings.enable_status_message) {
-//         // Center at top
-//         const char *msg = "Hello, this is a status!";
-//         int msg_x = (WIDTH - (int)strlen(msg) * 8) / 2;
-//         int msg_y = 8;
-//         g_panel.status_text_img = mlx_put_string(scene->app.mlx, msg, msg_x, msg_y);
-//         if (g_panel.status_text_img)
-//             g_panel.status_text_img->enabled = true;
-//     }
-// }
+void draw_status_message(t_scene *scene)
+{
+    // Remove previous status image if any
+    if (g_panel.status_text_img) {
+        mlx_delete_image(scene->app.mlx, g_panel.status_text_img);
+        g_panel.status_text_img = NULL;
+    }
+    if (scene->graphic_settings.enable_status_message) {
+        // Center at top
+        const char *msg = "Hello, this is a status!";
+        int msg_x = (WIDTH - (int)strlen(msg) * 8) / 2;
+        int msg_y = 8;
+        g_panel.status_text_img = mlx_put_string(scene->app.mlx, msg, msg_x, msg_y);
+        if (g_panel.status_text_img)
+            g_panel.status_text_img->enabled = true;
+    }
+}
 
 // Call this in your main rendering/UI loop, **after** draw_ui_panel(scene)
 void draw_ui(t_scene *scene)

@@ -19,6 +19,7 @@
 void ui_animation_loop(void *param)
 {
 	t_scene *scene = (t_scene *)param;
+
 	static double last_update_time = 0;
 	double current_time;
 	
@@ -26,9 +27,11 @@ void ui_animation_loop(void *param)
 	current_time = mlx_get_time();
 	
 	// Limit UI updates to 60 FPS for smooth animation
-	if (current_time - last_update_time > 0.016) { // ~60 FPS
+	if (current_time - last_update_time > 0.016)  // ~60 FPS
+	{
 		// Update and redraw the UI panel if animation is active
-		if (draw_ui_panel(scene)) {
+		if (draw_ui_panel(scene))
+		{
 			// Animation is still active, no need to re-render the entire scene
 		}
 		last_update_time = current_time;
@@ -38,7 +41,9 @@ void ui_animation_loop(void *param)
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
+
 	scene_init(scene);
+	
 	if (!parse_scene_file(filename, scene))
 	{
 		cleanup_scene(scene);
@@ -53,9 +58,13 @@ void	start_raytracer(t_scene *scene, char *filename)
 	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);
 	
 	render_scene(scene);
+	
 	display_status(scene);
+	
 	mlx_loop(scene->app.mlx);
+	
 	close_callback(scene);
+	
 	exit(EXIT_SUCCESS);
 }
 
