@@ -82,7 +82,7 @@ SRC_FILES = main.c \
     rendering/trace_rays.c \
     ui/display_progress.c \
     ui/status_messages.c \
-    ui/ui_control_panel.c \
+    ui/ui_control_panel2.c \
     utils/ft_atof.c \
     utils/ft_atoi.c \
     utils/ft_bzero.c \

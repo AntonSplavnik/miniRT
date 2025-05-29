@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:47:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:21:42 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,10 +171,12 @@ void	set_up_scene_cube(t_scene *scene);
 
 
 // UI Panel functions
+void	init_toggle_button(t_scene *scne);
 void	init_ui_panel(t_scene *scene);
 bool	draw_ui_panel(t_scene *scene);
 void	cleanup_ui_panel(t_scene *scene);
 bool	ui_panel_mouse_click(t_scene *scene, int x, int y);
+void	ui_animation_loop(void *param);
 void	draw_ui(t_scene *scene);
 
 // camera

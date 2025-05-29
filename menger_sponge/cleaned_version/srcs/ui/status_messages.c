@@ -1,5 +1,5 @@
 #include "../../includes/miniRT.h"
-#include <stdbool.h>
+
 
 // Helper function to print status messages
 void display_status(t_scene *scene)
@@ -21,12 +21,12 @@ void display_status(t_scene *scene)
 
 		if (scene->name)
 		{
-			snprintf(status, 
-					100, 
-					"%s | Camera: (%.1f, %.1f, %.1f)", 
+			snprintf(status,
+					100,
+					"%s | Camera: (%.1f, %.1f, %.1f)",
 					scene->name,
-					scene->camera.position.x, 
-					scene->camera.position.y, 
+					scene->camera.position.x,
+					scene->camera.position.y,
 					scene->camera.position.z);
 		}
 
