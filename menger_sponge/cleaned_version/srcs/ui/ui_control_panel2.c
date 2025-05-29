@@ -348,7 +348,7 @@ void ui_animation_loop(void *param) {
 void draw_ui(t_scene *scene)
 {
     draw_toggle_button();
-    draw_ui_panel(scene);    // Draws the panel and content
+    draw_ui_panel(scene);
     display_status(scene);
     // draw_status_message(scene);
 }
