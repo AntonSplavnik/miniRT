@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/02 11:26:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:10:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,20 @@ t_vec2 planar_map(t_plane *plane, t_vec3 point)
 	t_vec3 u_axis, v_axis;
 
 	// Find two basis vectors that form a coordinate system on the plane
+	// We need two vectors that are perpendicular to the normal
+	// and to each other, to create a 2D mapping
+	// We use plane properties to find these axes: a plane is the set of all points such that is you draw a vector
+	// from the plane point to any point on the plane, this vector is perpendicular to the plane normal.
+	// We use cross product properties to find these axes: the result of a cross product is perpendicular to both input vectors.
+	// We add a condition to deal with the case where the normal is aligned with the x axis
+	// if the z or y component of the normal is large, we can use the x axis as a reference (1, 0, 0)
 	if (fabs(normal.z) > 0.1 || fabs(normal.y) > 0.1)
 		u_axis = vec3_normalize(vec3_cross(normal, vec3_create(1, 0, 0)));
 	else
 		u_axis = vec3_normalize(vec3_cross(normal, vec3_create(0, 1, 0)));
 
+	// The second axis is simply the cross product of the normal and the first axis
+	// This ensures that both axes are perpendicular to the normal and to each other
 	v_axis = vec3_normalize(vec3_cross(normal, u_axis));
 
 	// Project the point onto the plane's coordinate system
@@ -214,28 +223,28 @@ t_vec2 cubic_map(t_cube *cube, t_vec3 point)
 	return ((t_vec2){u, v});
 }
 
-/**
- * Fallback for other objects
- * Determines whether a point should use the primary or checker color
- *
- * @param point The intersection point in 3D space
- * @param checker_size The size of each checker square
- * @return 1 if should use checker color, 0 if should use primary color
- */
-int is_checker_point(t_vec3 point, double checker_size)
-{
-	// Scale the point by the checker size
-	double scale = 1.0 / checker_size;
-	double x = point.x * scale;
-	double y = point.y * scale;
-	double z = point.z * scale;
+///**
+// * Fallback for other objects
+// * Determines whether a point should use the primary or checker color
+// *
+// * @param point The intersection point in 3D space
+// * @param checker_size The size of each checker square
+// * @return 1 if should use checker color, 0 if should use primary color
+// */
+//int is_checker_point(t_vec3 point, double checker_size)
+//{
+//	// Scale the point by the checker size
+//	double scale = 1.0 / checker_size;
+//	double x = point.x * scale;
+//	double y = point.y * scale;
+//	double z = point.z * scale;
 
-	// Get the integer parts
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
-	int iz = (int)floor(z);
+//	// Get the integer parts
+//	int ix = (int)floor(x);
+//	int iy = (int)floor(y);
+//	int iz = (int)floor(z);
 
-	// The sum of the integer parts being even or odd determines the pattern
-	// This creates a 3D checkerboard pattern
-	return ((ix + iy + iz) % 2 == 0) ? 1 : 0;
-}
+//	// The sum of the integer parts being even or odd determines the pattern
+//	// This creates a 3D checkerboard pattern
+//	return ((ix + iy + iz) % 2 == 0) ? 1 : 0;
+//}

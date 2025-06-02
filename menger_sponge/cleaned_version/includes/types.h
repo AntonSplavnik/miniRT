@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:41:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:27:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,23 @@ typedef struct	s_color
 	int b;
 }	t_color;
 
+typedef struct s_texture
+{
+	char	*filename;
+	int		width;
+	int		height;
+	unsigned char	*data; // Raw pixel data (RGB or RGBA)
+	void	*mlx_texture; // Pointer to the MLX42 texture object
+}	t_texture;
+
+typedef struct s_bump_map
+{
+	char	*filename;
+	int		width;
+	int		height;
+	float	*height_data; // height values (between 0.0 and 1.0)
+}	t_bump_map;
+
 typedef struct	s_material
 {
 	t_color	color;
@@ -63,6 +80,10 @@ typedef struct	s_material
 	int		has_checker;
 	double	checker_size;
 	t_color	checker_color;
+	int		has_texture;
+	t_texture	*texture;
+	int		has_bump_map;
+	t_bump_map	*bump_map;
 }	t_material;
 
 typedef struct s_ambient
@@ -204,6 +225,7 @@ typedef struct	s_hit_record
 	t_object	*object;
 	int			inside;
 	int			triangle_idx;
+	t_vec2		uv; // For texture mapping
 }	t_hit_record;
 
 typedef struct s_img
