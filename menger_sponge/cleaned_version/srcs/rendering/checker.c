@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 16:11:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/02 11:26:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_vec2 planar_map(t_plane *plane, t_vec3 point)
 	// Project onto the two axes and apply a consistent scaling factor
 	// This ensures the checkerboard pattern has a consistent size
 	// regardless of the plane's orientation or position
-	double scale = 1.0; // Base scale for consistent size across all planes
+	double scale = 0.1; // Base scale for consistent size across all planes
 	double u = vec3_dot(to_point, u_axis) * scale;
 	double v = vec3_dot(to_point, v_axis) * scale;
 
@@ -100,8 +100,8 @@ t_vec2 planar_map(t_plane *plane, t_vec3 point)
 int	is_checker_point_2d(double u, double v, double checker_size)
 {
 	// Scale u and v by checker_size
-	double scaled_u = u * (2.0 / checker_size);
-	double scaled_v = v * (2.0 / checker_size);
+	double scaled_u = u * checker_size;
+	double scaled_v = v * checker_size;
 
 	// Floor to get integer coordinates
 	int cell_u = (int)floor(scaled_u);
