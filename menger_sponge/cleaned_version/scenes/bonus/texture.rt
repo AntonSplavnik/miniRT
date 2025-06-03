@@ -1,6 +1,0 @@
-A 0.2 255,255,255
-C 0,-1,-14.9 0,-0.3,1 70
-L 8,8,-5 0.5 255,240,220
-L -8,8,-5 0.5 255,240,220
-
-sp -3,-2,0 3 220,220,220 {texture: scenes/textures/partly_cloudy_puresky.png bumpmap: scenes/bumpmaps/Brick_bump.ppm}

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:16:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:00:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ typedef struct	s_hit_record
 	double		t;
 	t_vec3		point;
 	t_vec3		normal;
+	t_vec3		original_normal;
 	t_material	material;
 	t_object	*object;
 	int			inside;

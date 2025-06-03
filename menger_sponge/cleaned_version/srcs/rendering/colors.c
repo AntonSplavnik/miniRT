@@ -6,11 +6,46 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 10:42:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:34:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
+
+// Sample texture at UV coordinates - works with MLX-loaded textures
+t_color sample_texture(t_texture *texture, double u, double v)
+{
+    t_color color = {255, 255, 255}; // Default white
+
+    if (!texture || !texture->data)
+        return color;
+
+    // Wrap UV coordinates to [0, 1] range
+    u = u - floor(u);
+    v = v - floor(v);
+    if (u < 0) u += 1.0;
+    if (v < 0) v += 1.0;
+
+    // Convert UV to pixel coordinates
+    int x = (int)(u * (texture->width - 1));
+    int y = (int)(v * (texture->height - 1));
+
+    // Clamp to texture bounds (safety check)
+    if (x < 0) x = 0;
+    if (x >= texture->width) x = texture->width - 1;
+    if (y < 0) y = 0;
+    if (y >= texture->height) y = texture->height - 1;
+
+    // Calculate pixel index
+    // MLX textures are typically RGBA (4 channels)
+    int index = (y * texture->width + x) * 4;
+
+    color.r = texture->data[index + 0]; // Red
+    color.g = texture->data[index + 1]; // Green
+    color.b = texture->data[index + 2]; // Blue
+
+    return color;
+}
 
 int	valid_color_range(int c)
 {
@@ -47,6 +82,26 @@ int color_to_int(t_color color)
 	return (r << 16) | (g << 8) | b;
 }
 
+// Updated color sampling function with texture support
+t_color get_surface_color_with_texture(t_hit_record *hit_record)
+{
+    t_material *material = &hit_record->object->material;
+
+    // If the material has a texture, sample it
+    if (material->has_texture && material->texture)
+    {
+        return sample_texture(material->texture, hit_record->uv.u, hit_record->uv.v);
+    }
+
+    // Fall back to existing color logic (checkerboard or solid color)
+    if (material->has_checker)
+    {
+        return get_checker_color(*material, hit_record->object, hit_record->point);
+    }
+
+    return material->color;
+}
+
 /**
  * Get pixel color for a material at a specific point with lighting applied
  * Supports checkerboard textures
@@ -57,12 +112,12 @@ int color_to_int(t_color color)
  * @param hit_point The point of intersection
  * @return The final pixel color
  */
-int get_pixel_color(t_hit_record hit_record, double light_intensity,
+int get_pixel_color(t_hit_record *hit_record, double light_intensity,
                                t_color light_color,
                                double specular_intensity)
 {
     // Get the base color from the material, considering checkerboard pattern
-    t_color base_color = get_checker_color(hit_record.object->material, hit_record.object, hit_record.point);
+    t_color base_color = get_surface_color_with_texture(hit_record);
 
     // Calculate diffuse component (subtract specular from total light)
     double diffuse_component = light_intensity - specular_intensity;

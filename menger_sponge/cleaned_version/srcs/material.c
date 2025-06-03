@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:22:16 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/22 12:25:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:34:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,9 @@ t_material	create_material(t_color color)
 	material.has_checker = 0;
 	material.checker_size = 0;
 	material.checker_color = create_color(0, 0, 0);
+	material.has_texture = 0;
+	material.texture = NULL;
+	material.has_bump_map = 0;
+	material.bump_map = NULL;
 	return (material);
 }

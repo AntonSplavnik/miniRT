@@ -12,19 +12,19 @@ pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30,checker_size:4.0,reflectivit
 sp -9,0,0 2 220,220,220 {checker_color:50,50,50,checker_size:5}
 
 # Fine checkerboard sphere
-sp -6,0,0 2 200,200,200 {checker_color:50,50,50,checker_size:2}
+sp -6,0,0 2 200,200,200 {checker_color:50,50,50,checker_size:16}
 
 # # Colored checkerboard sphere
-sp -3,0,0 2 255,200,200 {checker_color:200,255,200,checker_size:3}
+sp -3,0,0 2 255,200,200 {checker_color:200,255,200,checker_size:16}
 
 # Reflective sphere
 sp 3,0,0 2 200,200,230 {reflectivity:0.6}
 
 # Checkerboard with high contrast
-sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:3}
+sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:8}
 
 # Very large checkerboard pattern
-sp 9,0,0 2 200,100,100 {checker_color:100,200,100,checker_size:5}
+sp 9,0,0 2 200,100,100 {checker_color:100,200,100,checker_size:4}
 
 # Row of cylinders with different checkerboard patterns
 # Vertical stripe cylinder (very narrow checkerboard)

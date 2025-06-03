@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 11:44:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:24:04 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 	compute_ray_intersection(ray, hit_record.object, t, &hit_record);
 
 	// Start with ambient light
-	base_color = get_pixel_color(hit_record, scene->ambient.ratio, scene->ambient.color, 0.0);
+	base_color = get_pixel_color(&hit_record, scene->ambient.ratio, scene->ambient.color, 0.0);
 
 	// Add contribution from all lights
 	current_light = scene->lights;
@@ -92,7 +92,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 
 			// Get color with both diffuse and specular components
 			int light_color = get_pixel_color(
-				hit_record,
+				&hit_record,
 				diffuse_intensity, // Diffuse + ambient
 				current_light->color,
 				specular_intensity

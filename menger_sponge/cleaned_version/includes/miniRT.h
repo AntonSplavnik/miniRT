@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:16:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:23:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,11 @@ t_vec3		vec3_normalize(t_vec3 v);
 
 // colors
 t_color		create_color(int r, int g, int b);
-int			get_pixel_color(t_hit_record hit_record, double light_intensity,
-                               t_color light_color, double specular_intensity);
+int get_pixel_color(t_hit_record *hit_record, double light_intensity,
+                               t_color light_color,
+                               double specular_intensity);
 int			valid_color_range(int c);
+t_color 	get_surface_color_with_texture(t_hit_record *hit_record);
 
 // material
 t_material	create_material(t_color color);
@@ -151,6 +153,9 @@ void		render_scene(t_scene *scene);
 int			trace_ray(t_scene *scene, t_ray ray, int depth);
 void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
+t_vec2 		calculate_uv_coordinates(t_vec3 point, t_object *object);
+t_vec3 		calculate_bump_normal(t_hit_record *hit_record);
+
 
 // compute light
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);

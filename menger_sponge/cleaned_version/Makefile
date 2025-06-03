@@ -86,6 +86,8 @@ SRC_FILES = main.c \
 	rendering/render.c \
 	rendering/render_utils.c \
 	rendering/trace_rays.c \
+	rendering/texture_uv_mapping.c \
+	rendering/bumpmap.c	\
 	ui/control_panel.c \
 	ui/status_messages.c \
 	ui/user_interface.c \
