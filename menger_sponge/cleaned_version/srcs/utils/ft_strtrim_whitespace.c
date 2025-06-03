@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:48 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:56:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:11:12 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int find_trim_end(char *s, int start)
 }
 
 // Trim whitespace from the start and end of a string
-char *ft_strtrim(char *s)
+char *ft_strtrim_whitespace(char *s)
 {
 	int start;
 	int end;

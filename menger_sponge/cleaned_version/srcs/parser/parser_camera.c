@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 10:37:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:13:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	parse_camera(t_scene *scene, char *line)
 	direction = vec3_create(0.0, 0.0, 0.0);
 	if (scene->camera.has_camera)
 		parse_error(scene, "Camera can only be declared once");
-	parts = ft_split(line, ' ');
+	parts = ft_split_line(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
 	check_parts_count(scene, parts, 4, "camera");

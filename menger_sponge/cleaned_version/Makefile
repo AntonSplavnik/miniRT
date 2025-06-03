@@ -75,6 +75,8 @@ SRC_FILES = main.c \
 	parser/parser_types.c \
 	parser/parser_utils.c \
 	parser/parser_utils_2.c \
+	parser/parser_bumpmap.c \
+	parser/parser_texture.c \
 	rendering/checker.c \
 	rendering/colors.c \
 	rendering/compute_intersections.c \
@@ -93,9 +95,9 @@ SRC_FILES = main.c \
 	utils/ft_calloc.c \
 	utils/ft_isspace.c \
 	utils/ft_memset.c \
-	utils/ft_split.c \
+	utils/ft_split_line.c \
 	utils/ft_strlcpy.c \
-	utils/ft_strtrim.c \
+	utils/ft_strtrim_whitespace.c \
 	vector_utils/vec3_basic_op.c \
 	vector_utils/vec3_length.c \
 	vector_utils/vec3_product.c

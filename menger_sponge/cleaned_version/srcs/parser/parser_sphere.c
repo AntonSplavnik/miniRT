@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 15:43:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:12:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	parse_sphere(t_scene *scene, char *line)
 	if (material_block)
 		trim_material_block(line);
 
-	parts = ft_split(line, ' ');
+	parts = ft_split_line(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
 	check_parts_count(scene, parts, 4, "sphere");

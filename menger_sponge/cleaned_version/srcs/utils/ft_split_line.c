@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 16:34:59 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 13:38:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:13:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_whitespace(char c)
 	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
 }
 
-char	**ft_split(char *str, char c)
+char	**ft_split_line(char *str, char c)
 {
 	char	**result;
 	int		word_count;

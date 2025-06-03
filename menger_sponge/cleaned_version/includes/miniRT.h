@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/27 16:08:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:16:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "types.h"
 #include "parser.h"
+#include "libft.h"
 
 #  define WIDTH 1920
 # define HEIGHT 1080
@@ -65,9 +66,8 @@ void		draw_image_to_window(t_scene *scene);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void		write_string_to_file_descriptor(char *str, int file_descriptor);
 int			ft_strcmp(char *s1, char *s2);
-int			ft_strlen(char *str);
-char		*ft_strtrim(char *s);
-char		**ft_split(char *s, char c);
+char		*ft_strtrim_whitespace(char *s);
+char		**ft_split_line(char *s, char c);
 int			ft_atoi(const char *nptr);
 int			ft_isspace(char c);
 double		ft_atof(const char *str);

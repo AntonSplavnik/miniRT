@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 14:41:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:11:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	parse_line(t_scene *scene, char *line)
 	char	*trimmed;
 	int		result;
 
-	trimmed = ft_strtrim(line);
+	trimmed = ft_strtrim_whitespace(line);
 	if (!trimmed)
 		return (0);
 	if (trimmed[0] == '\0')
@@ -84,7 +84,7 @@ int	parse_line(t_scene *scene, char *line)
 	}
 	// Remove inline comments before parsing
 	trimmed = remove_inline_comments(trimmed);
-	trimmed = ft_strtrim(trimmed); // Trim again after removing comments
+	trimmed = ft_strtrim_whitespace(trimmed); // Trim again after removing comments
 	if (trimmed[0] == '\0')
 	{
 		free(trimmed);

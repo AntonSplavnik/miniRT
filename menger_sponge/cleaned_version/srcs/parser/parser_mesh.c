@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 14:41:49 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:12:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	material_block = extract_material_block(line);
 	if (material_block)
 		trim_material_block(line);
-	parts = ft_split(line, ' ');
+	parts = ft_split_line(line, ' ');
 	if (!parts)
 		return (0);
 	check_parts_count(scene, parts, 6, "mesh");

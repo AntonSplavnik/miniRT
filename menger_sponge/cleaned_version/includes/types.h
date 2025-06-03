@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/02 14:27:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:16:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <string.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include <fcntl.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 
 typedef struct s_vec2

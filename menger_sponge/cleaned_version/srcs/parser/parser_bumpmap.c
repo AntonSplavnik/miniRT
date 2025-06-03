@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:06:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/02 14:32:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 09:44:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-t_bump_map	*parse_ppm(const char *filename)
+t_bump_map	*create_bump_map(const char *filename)
 {
 	t_bump_map	*bump_map;
 	int			fd;
@@ -27,15 +27,14 @@ t_bump_map	*parse_ppm(const char *filename)
 	bump_map->filename = ft_strdup(filename);
 	if (!bump_map->filename)
 	{
-		free(bump_map);
+		free_bump_map(bump_map);
 		return (NULL);
 	}
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
 		printf("Error: Could not open file %s\n", filename);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		return (NULL);
 	}
 	line = get_next_line(fd);
@@ -43,8 +42,7 @@ t_bump_map	*parse_ppm(const char *filename)
 	{
 		printf("Error: Invalid PPM file format in %s\n", filename);
 		free(line);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		close(fd);
 		return (NULL);
 	}
@@ -58,8 +56,7 @@ t_bump_map	*parse_ppm(const char *filename)
 	if (!line)
 	{
 		printf("Error: Could not read width and height from %s\n", filename);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		close(fd);
 		return (NULL);
 	}
@@ -70,8 +67,7 @@ t_bump_map	*parse_ppm(const char *filename)
 	if (width <= 0 || height <= 0 || width > 4096 || height > 4096)
 	{
 		printf("Error: Invalid width or height in %s\n", filename);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		close(fd);
 		return (NULL);
 	}
@@ -81,8 +77,7 @@ t_bump_map	*parse_ppm(const char *filename)
 	if (!bump_map->height_data)
 	{
 		printf("Error: Could not allocate memory for height data in %s\n", filename);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		close(fd);
 		return (NULL);
 	}
@@ -90,9 +85,7 @@ t_bump_map	*parse_ppm(const char *filename)
 	if(ft_strncmp(line, "255", 3) != 0)
 	{
 		printf("Error: Invalid max color value in %s\n", filename);
-		free(bump_map->height_data);
-		free(bump_map->filename);
-		free(bump_map);
+		free_bump_map(bump_map);
 		close(fd);
 		return (NULL);
 	}
@@ -109,9 +102,7 @@ t_bump_map	*parse_ppm(const char *filename)
 		if (!r_line)
 		{
 			printf("Error: Unexpected end of file while reading pixel data in %s\n", filename);
-			free(bump_map->height_data);
-			free(bump_map->filename);
-			free(bump_map);
+			free_bump_map(bump_map);
 			close(fd);
 			return (NULL);
 		}
@@ -123,9 +114,7 @@ t_bump_map	*parse_ppm(const char *filename)
 		if (!g_line)
 		{
 			printf("Error: Unexpected end of file while reading pixel data in %s\n", filename);
-			free(bump_map->height_data);
-			free(bump_map->filename);
-			free(bump_map);
+			free_bump_map(bump_map);
 			close(fd);
 			return (NULL);
 		}
@@ -137,9 +126,7 @@ t_bump_map	*parse_ppm(const char *filename)
 		if (!b_line)
 		{
 			printf("Error: Unexpected end of file while reading pixel data in %s\n", filename);
-			free(bump_map->height_data);
-			free(bump_map->filename);
-			free(bump_map);
+			free_bump_map(bump_map);;
 			close(fd);
 			return (NULL);
 		}
@@ -150,9 +137,7 @@ t_bump_map	*parse_ppm(const char *filename)
 		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 		{
 			printf("Error: Invalid RGB values in %s\n", filename);
-			free(bump_map->height_data);
-			free(bump_map->filename);
-			free(bump_map);
+			free_bump_map(bump_map);
 			close(fd);
 			return (NULL);
 		}
@@ -162,4 +147,17 @@ t_bump_map	*parse_ppm(const char *filename)
 		i += 3;
 	}
 	return (bump_map);
+}
+
+// Free bump map memory
+void free_bump_map(t_bump_map *bump_map)
+{
+	if (bump_map)
+	{
+		if (bump_map->height_data)
+			free(bump_map->height_data);
+		if (bump_map->filename)
+			free(bump_map->filename);
+		free(bump_map);
+	}
 }

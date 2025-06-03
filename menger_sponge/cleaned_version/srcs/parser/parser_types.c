@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:42:18 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 18:47:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:12:59 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	read_vector(char *str, t_vec3 *vector)
 	double	z;
 	int		parts_count;
 
-	parts = ft_split(str, ',');
+	parts = ft_split_line(str, ',');
 	if (!parts)
 		return (0);
 	parts_count = count_parts(parts);
@@ -63,7 +63,7 @@ int	read_color(char *str, t_color *color)
 	int		g;
 	int		parse_result;
 
-	parts = ft_split(str, ',');
+	parts = ft_split_line(str, ',');
 	if (!parts)
 		return (0);
 	parts_count = 0;

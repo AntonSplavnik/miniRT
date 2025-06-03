@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 10:36:32 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:13:51 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	parse_ambient(t_scene *scene, char *line)
 
 	if (scene->ambient.has_ambient)
 		parse_error(scene, "Ambient lighting can only be declared once");
-	parts = ft_split(line, ' ');
+	parts = ft_split_line(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");
 	parts_count = 0;

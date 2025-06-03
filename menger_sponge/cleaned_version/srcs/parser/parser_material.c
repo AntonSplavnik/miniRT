@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 17:27:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:42:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,46 @@ double get_property_value(const char *material_block, const char *property)
 	return (ft_atof(prop_pos));
 }
 
+void	*get_property_filename(const char *material_block, const char *property, char **filename)
+{
+	char *prop_pos;
+	char property_with_colon[50];
+
+	// Create the property string with colon (e.g., "texture:")
+	ft_strlcpy(property_with_colon, property, sizeof(property_with_colon));
+	ft_strlcat(property_with_colon, ": ", sizeof(property_with_colon));
+
+	// Find the property in the material block
+	prop_pos = ft_strstr(material_block, property_with_colon);
+	if (!prop_pos)
+		return (NULL);
+
+	// Move past the property name and colon
+	prop_pos += ft_strlen(property_with_colon);
+
+	//Find the end of the texture filename
+	char *end_pos = ft_strchr(prop_pos, ' ');
+	if (!end_pos)
+		end_pos = ft_strchr(prop_pos, '}'); // If no space, look for closing brace
+	if (!end_pos)
+	{
+		printf("Error: missing closing bracket in material block\n");
+		return (NULL);
+	}
+	// Calculate the length of the texture filename
+	int length = end_pos - prop_pos;
+	// Allocate memory for the texture filename
+	if (length <= 0)
+		return (NULL);
+	*filename = (char *)malloc(length + 1);
+	if (!*filename)
+		return (NULL);
+	// Copy the texture filename
+	ft_strlcpy(*filename, prop_pos, length + 1);
+	// Return the texture filename
+	return (*filename);
+}
+
 /**
  * Parses material properties from a material block and applies them to a material
  *
@@ -178,6 +218,8 @@ void parse_material_properties(const char *material_block, t_material *material)
 {
 	double	value;
 	t_color	checker_color;
+	char *texture_filename;
+	char *bump_map_filename;
 
 	// Parse reflectivity
 	value = get_property_value(material_block, "reflectivity");
@@ -214,6 +256,22 @@ void parse_material_properties(const char *material_block, t_material *material)
 	{
 		material->checker_color = checker_color;
 		material->has_checker = 1;
+	}
+
+	if (get_property_filename(material_block, "texture", &texture_filename))
+	{
+		material->has_texture = 1;
+		material->texture = create_texture(texture_filename);
+		printf("Texture filename: %s\n", texture_filename);
+		free(texture_filename); // Free the texture filename after use
+	}
+
+	if (get_property_filename(material_block, "bumpmap", &bump_map_filename))
+	{
+		material->has_bump_map = 1;
+		material->bump_map = create_bump_map(bump_map_filename);
+		printf("Bumpmap filename: %s\n", bump_map_filename);
+		free(bump_map_filename); // Free the bump map filename after use
 	}
 }
 
