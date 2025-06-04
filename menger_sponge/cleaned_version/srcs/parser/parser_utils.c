@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 11:49:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:58:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	check_parts_count(t_scene *scene, char **parts, int expected_count, char *e
 		else if (ft_strcmp(element_name, "light") == 0)
 			parse_error(scene, "Invalid format for light. Expected: L x,y,z ratio r,g,b");
 		else if (ft_strcmp(element_name, "sphere") == 0)
-			parse_error(scene, "Invalid format for sphere. Expected: sp x,y,z r r,g,b");
+			parse_error(scene, "Invalid format for sphere. Expected: sp x,y,z d r,g,b");
 		else if (ft_strcmp(element_name, "plane") == 0)
 			parse_error(scene, "Invalid format for plane. Expected: pl x,y,z nx,ny,nz r,g,b");
 		else if (ft_strcmp(element_name, "cylinder") == 0)
