@@ -5,4 +5,4 @@ L -5,5,-5 1.0 255,255,255
 
 #pl 0,0,12 0,0,-1 255,255,255 {texture: scenes/textures/red_brick_diff_4k.png bumpmap: scenes/bumpmaps/Brick_bump.ppm}
 
-cu 0,0,0 6 255,255,255 {texture: scenes/textures/red_brick_diff_4k.png bumpmap: scenes/bumpmaps/Brick_bump.ppm}
+cu 0,0,0 6 255,255,255 {texture:scenes/textures/red_brick_diff_4k.png bumpmap:scenes/bumpmaps/Brick_bump.ppm}

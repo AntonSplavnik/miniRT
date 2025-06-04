@@ -5,4 +5,4 @@ L -5,5,-20 1.0 255,255,255
 L -5,5,20 1.0 255,255,255
 
 
-sp 0,0,0 7 255,255,255 {texture: scenes/textures/earthmap1k.png}
+sp 0,0,0 7 255,255,255 {texture:scenes/textures/earthmap1k.png}

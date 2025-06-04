@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:22:16 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 11:34:08 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:06:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ t_material	create_material(t_color color)
 	material.specular = 0.5;
 	material.shininess = 64;
 	material.reflectivity = 0.0;
-	material.refractive_index = 1.0;
-	material.transparency = 0.0;
 	material.has_checker = 0;
 	material.checker_size = 0;
 	material.checker_color = create_color(0, 0, 0);

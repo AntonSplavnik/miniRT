@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 09:44:33 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:52:25 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,17 @@ int		copy_to_line(t_scene *scene, char *buffer, int *pos, char *line);
 char    *extract_material_block(char *line);
 void    trim_material_block(char *line);
 double  get_property_value(const char *material_block, const char *property);
-void    parse_material_properties(const char *material_block, t_material *material);
+void    parse_material_properties(t_scene *scene, const char *material_block, t_material *material);
 double  ft_clamp(double value, double min, double max);
 
 //texture
 /* Function declarations for texture parser */
-t_texture *create_texture(const char *filename);
+t_texture *create_texture(t_scene *scene, const char *filename);
 void    free_texture_mlx(t_texture *texture);
 
 //bump map
 /* Function declarations for bump map parser */
-t_bump_map *create_bump_map(const char *filename);
+t_bump_map *create_bump_map(t_scene *scene, const char *filename);
 void    free_bump_map(t_bump_map *bump_map);
 
 /* Function declarations for string utilities */

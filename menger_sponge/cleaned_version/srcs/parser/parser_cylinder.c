@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:13:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:05:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	parse_cylinder(t_scene *scene, char *line)
 	cylinder->material.color = color;
 	if(material_block)
 	{
-		parse_material_properties(material_block, &cylinder->material);
+		parse_material_properties(scene, material_block, &cylinder->material);
 		free(material_block);
 	}
 	add_object(scene, cylinder);

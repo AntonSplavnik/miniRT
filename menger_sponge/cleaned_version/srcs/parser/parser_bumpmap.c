@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 14:06:23 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 13:42:01 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:10:32 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int count_tokens(char **tokens)
 	return (count);
 }
 
-t_bump_map	*create_bump_map(const char *filename)
+t_bump_map	*create_bump_map(t_scene *scene, const char *filename)
 {
 	t_bump_map	*bump_map;
 	int			fd;
@@ -97,26 +97,27 @@ t_bump_map	*create_bump_map(const char *filename)
 	bump_map->filename = ft_strdup(filename);
 	if (!bump_map->filename)
 	{
-		free_bump_map(bump_map);
-		return (NULL);
+		free(bump_map);
+		parse_error(scene, "Could not allocate memory for bump map filename");
 	}
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{
-		printf("Error: Could not open file %s\n", filename);
-		free_bump_map(bump_map);
-		return (NULL);
+		free(bump_map->filename);
+		free(bump_map);
+		parse_error(scene, "Could not open bump map file");
 	}
 
 	// Read magic number
 	line = get_next_line(fd);
 	if (!line || ft_strncmp(line, "P3", 2) != 0)
 	{
-		printf("Error: Invalid PPM file format in %s\n", filename);
-		free(line);
-		free_bump_map(bump_map);
+		if (line)
+			free(line);
+		free(bump_map->filename);
+		free(bump_map);
 		close(fd);
-		return (NULL);
+		parse_error(scene, "Invalid PPM file format");
 	}
 	free(line);
 
@@ -131,10 +132,10 @@ t_bump_map	*create_bump_map(const char *filename)
 	// Read width and height
 	if (!line)
 	{
-		printf("Error: Could not read width and height from %s\n", filename);
-		free_bump_map(bump_map);
 		close(fd);
-		return (NULL);
+		free(bump_map->filename);
+		free(bump_map);
+		parse_error(scene, "Could not read width and height from PPM file");
 	}
 	width = ft_atoi(line);
 	inline_position = ft_strchr(line, ' ') - line + 1;
@@ -143,10 +144,10 @@ t_bump_map	*create_bump_map(const char *filename)
 
 	if (width <= 0 || height <= 0 || width > 4096 || height > 4096)
 	{
-		printf("Error: Invalid width or height in %s\n", filename);
-		free_bump_map(bump_map);
+		free(bump_map->filename);
+		free(bump_map);
 		close(fd);
-		return (NULL);
+		parse_error(scene, "Invalid width or height in PPM file");
 	}
 	bump_map->width = width;
 	bump_map->height = height;
@@ -155,22 +156,22 @@ t_bump_map	*create_bump_map(const char *filename)
 	bump_map->height_data = malloc(width * height * sizeof(float));
 	if (!bump_map->height_data)
 	{
-		printf("Error: Could not allocate memory for height data in %s\n", filename);
-		free_bump_map(bump_map);
+		free(bump_map->filename);
+		free(bump_map);
 		close(fd);
-		return (NULL);
+		parse_error(scene, "Could not allocate memory for height data in PPM file");
 	}
 
 	// Read max color value
 	line = get_next_line(fd);
 	if(!line || ft_strncmp(line, "255", 3) != 0)
 	{
-		printf("Error: Invalid max color value in %s\n", filename);
 		if (line)
 			free(line);
-		free_bump_map(bump_map);
+		free(bump_map->filename);
+		free(bump_map);
 		close(fd);
-		return (NULL);
+		parse_error(scene, "Invalid max color value in PPM file");
 	}
 	free(line);
 
@@ -181,19 +182,18 @@ t_bump_map	*create_bump_map(const char *filename)
 
 	if (!rgb_tokens)
 	{
-		printf("Error: Could not read RGB data from %s\n", filename);
-		free_bump_map(bump_map);
-		return (NULL);
+		free(bump_map->filename);
+		free(bump_map);
+		parse_error(scene, "Could not read RGB data from PPM file");
 	}
 
 	token_count = count_tokens(rgb_tokens);
 	if (token_count != expected_values)
 	{
-		printf("Error: Expected %d RGB values, got %d in %s\n",
-			expected_values, token_count, filename);
 		free_split(rgb_tokens);
-		free_bump_map(bump_map);
-		return (NULL);
+		free(bump_map->filename);
+		free(bump_map);
+		parse_error(scene, "Invalid number of RGB values in PPM file");
 	}
 
 	// Process RGB values
@@ -208,11 +208,10 @@ t_bump_map	*create_bump_map(const char *filename)
 		// Validate RGB values
 		if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 		{
-			printf("Error: Invalid RGB values (%d, %d, %d) at pixel %d in %s\n",
-				r, g, b, i, filename);
 			free_split(rgb_tokens);
-			free_bump_map(bump_map);
-			return (NULL);
+			free(bump_map->filename);
+			free(bump_map);
+			parse_error(scene, "Invalid RGB values in PPM file");
 		}
 
 		// Convert RGB to grayscale height value

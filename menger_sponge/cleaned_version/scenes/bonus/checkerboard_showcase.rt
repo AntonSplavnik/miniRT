@@ -5,36 +5,36 @@ L 8,10,-5 0.7 255,255,255
 L -8,8,-10 0.6 255,240,220
 
 # Classic checkered floor (large pattern)
-pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30,checker_size:4.0,reflectivity:0.2}
+pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30 checker_size:4.0 reflectivity:0.2}
 
 # Row of spheres with different checkerboard patterns
 # Standard 3D checkerboard sphere
-sp -9,0,0 2 220,220,220 {checker_color:50,50,50,checker_size:5}
+sp -9,0,0 2 220,220,220 {checker_color:50,50,50 checker_size:5}
 
 # Fine checkerboard sphere
-sp -6,0,0 2 200,200,200 {checker_color:50,50,50,checker_size:16}
+sp -6,0,0 2 200,200,200 {checker_color:50,50,50 checker_size:16}
 
 # # Colored checkerboard sphere
-sp -3,0,0 2 255,200,200 {checker_color:200,255,200,checker_size:16}
+sp -3,0,0 2 255,200,200 {checker_color:200,255,200 checker_size:16}
 
 # Reflective sphere
 sp 3,0,0 2 200,200,230 {reflectivity:0.6}
 
 # Checkerboard with high contrast
-sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10,checker_size:8}
+sp 2,0,3 1.5 250,0,0 {checker_color:10,10,10 checker_size:8}
 
 # Very large checkerboard pattern
-sp 9,0,0 2 200,100,100 {checker_color:100,200,100,checker_size:4}
+sp 9,0,0 2 200,100,100 {checker_color:100,200,100 checker_size:4}
 
 # Row of cylinders with different checkerboard patterns
 # Vertical stripe cylinder (very narrow checkerboard)
-cy -9,-2,4 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200,checker_size:10}
+cy -9,-2,4 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200 checker_size:10}
 
 # Diagonal pattern cylinder (angled axis)
-cy -1,-2,4 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200,checker_size:9}
+cy -1,-2,4 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200 checker_size:9}
 
 # Cube with checkerboard pattern
-cu 6,-2,4 2 0,255,0 {checker_color:100,100,255,checker_size:5}
+cu 6,-2,4 2 0,255,0 {checker_color:100,100,255 checker_size:5}
 
 # # Wall with giant checkerboard
-pl 0,0,12 0,0,-1 255,255,255 {checker_color:100,100,255,checker_size:8.0}
+pl 0,0,12 0,0,-1 255,255,255 {checker_color:100,100,255 checker_size:8.0}

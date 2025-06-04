@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close_handler.c                                    :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/23 15:35:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:50:05 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ void cleanup_scene(t_scene *scene)
 		next_obj = obj->next;
 		if (obj->data)
 			free(obj->data);
+		if (obj->material.texture)
+			free_texture_mlx(obj->material.texture);
+		if (obj->material.bump_map)
+			free_bump_map(obj->material.bump_map);
 		free(obj);
 		obj = next_obj;
 	}

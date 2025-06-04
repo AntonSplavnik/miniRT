@@ -6,13 +6,13 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 13:36:27 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:17:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:38:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-t_texture *create_texture(const char *filename)
+t_texture *create_texture(t_scene *scene, const char *filename)
 {
 	t_texture *texture;
 	mlx_texture_t *mlx_texture;
@@ -29,9 +29,9 @@ t_texture *create_texture(const char *filename)
 	mlx_texture = mlx_load_png(texture->filename);
 	if (!mlx_texture)
 	{
-		printf("Error: Could not load texture from file %s\n", texture->filename);
-		free_texture_mlx(texture);
-		return NULL;
+		free(texture->filename);
+		free(texture);
+		parse_error(scene, "Failed to load texture from file");
 	}
 	texture->width = mlx_texture->width;
 	texture->height = mlx_texture->height;
@@ -49,19 +49,29 @@ t_texture *create_texture(const char *filename)
 
 void free_texture_mlx(t_texture *texture)
 {
-	if (texture)
+	if (!texture)
+		return;
+
+	// Free the filename if it exists
+	if (texture->filename)
 	{
-		// Only free data if we allocated it ourselves (not direct access)
-		if (texture->data && texture->data != (unsigned char *)((mlx_texture_t *)texture->mlx_texture)->pixels)
-			free(texture->data);
-
-		// Free the MLX texture
-		if (texture->mlx_texture)
-			mlx_delete_texture((mlx_texture_t *)texture->mlx_texture);
-
-		if (texture->filename)
-			free(texture->filename);
-
-		free(texture);
+		free(texture->filename);
+		texture->filename = NULL;
 	}
+
+	// Free the MLX texture if it exists
+	if (texture->mlx_texture)
+	{
+		mlx_delete_texture(texture->mlx_texture);
+		texture->mlx_texture = NULL;
+	}
+
+	// Free the data if it exists
+	if (texture->data)
+	{
+		free(texture->data);
+		texture->data = NULL;
+	}
+
+	free(texture);
 }
