@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 10:57:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:35:45 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,7 @@ int	parse_scene_file(char *filename, t_scene *scene)
 	close(fd);
 	if (!scene->camera.has_camera)
 		parse_error(scene, "Camera not found");
+	if (!scene->ambient.has_ambient)
+		parse_error(scene, "Ambient light not found");
 	return (1);
 }
