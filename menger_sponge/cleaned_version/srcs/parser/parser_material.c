@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:42:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 10:31:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,10 @@ int get_property_color(const char *material_block, const char *property, t_color
     // Find the property in the material block
     prop_pos = ft_strstr(material_block, property_with_colon);
     if (!prop_pos)
-    {
-        printf("Property '%s' not found in material block\n", property);
         return (0);
-    }
 
     // Move past the property name and colon
     prop_pos += ft_strlen(property_with_colon);
-
-    // Debug the entire material block and the position
-    printf("Material block: %s\n", material_block);
-    printf("Position after property: %s\n", prop_pos);
 
     // Try to manually parse the RGB values
     // Parse first value (red)
@@ -129,13 +122,12 @@ int get_property_color(const char *material_block, const char *property, t_color
 
     // Check if we got all three components
     if (values_read == 3) {
-        printf("Successfully parsed RGB: %d,%d,%d\n", r, g, b);
         color->r = r;
         color->g = g;
         color->b = b;
         return 1;
     } else {
-        printf("Only parsed %d values instead of 3\n", values_read);
+        printf("Only parsed %d rgb values instead of 3\n", values_read);
         return 0;
     }
 }
@@ -262,7 +254,6 @@ void parse_material_properties(const char *material_block, t_material *material)
 	{
 		material->has_texture = 1;
 		material->texture = create_texture(texture_filename);
-		printf("Texture filename: %s\n", texture_filename);
 		free(texture_filename); // Free the texture filename after use
 	}
 
@@ -270,7 +261,6 @@ void parse_material_properties(const char *material_block, t_material *material)
 	{
 		material->has_bump_map = 1;
 		material->bump_map = create_bump_map(bump_map_filename);
-		printf("Bumpmap filename: %s\n", bump_map_filename);
 		free(bump_map_filename); // Free the bump map filename after use
 	}
 }
