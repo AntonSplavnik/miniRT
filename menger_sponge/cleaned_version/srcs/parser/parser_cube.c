@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:13:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:34:38 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	parse_cube(t_scene *scene, char *line)
 		parse_error(scene, "Failed to create cube");
 	if(material_block)
 	{
-		parse_material_properties(material_block, &cube->material);
+		parse_material_properties(scene, material_block, &cube->material);
 		free(material_block);
 	}
 	add_object(scene, cube);
