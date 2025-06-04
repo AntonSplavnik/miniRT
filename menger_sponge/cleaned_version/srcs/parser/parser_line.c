@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:11:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:17:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static char *remove_inline_comments(char *line)
 int	parse_line(t_scene *scene, char *line)
 {
 	char	*trimmed;
+	char	*final_trimmed;
 	int		result;
 
 	trimmed = ft_strtrim_whitespace(line);
@@ -83,20 +84,23 @@ int	parse_line(t_scene *scene, char *line)
 		return (1);
 	}
 	// Remove inline comments before parsing
-	trimmed = remove_inline_comments(trimmed);
-	trimmed = ft_strtrim_whitespace(trimmed); // Trim again after removing comments
-	if (trimmed[0] == '\0')
+	remove_inline_comments(trimmed);
+	final_trimmed = ft_strtrim_whitespace(trimmed); // Trim again after removing comments
+	free(trimmed);
+	if (!final_trimmed)
+		return (0);
+	if (final_trimmed[0] == '\0')
 	{
-		free(trimmed);
+		free(final_trimmed);
 		return (1);
 	}
-	result = parse_parameters(scene, trimmed);
+	result = parse_parameters(scene, final_trimmed);
 	if (result == 0)
 	{
-		free(trimmed);
+		free(final_trimmed);
 		parse_error(scene, "Unknown element identifier");
 		return (0);
 	}
-	free(trimmed);
+	free(final_trimmed);
 	return (result);
 }
