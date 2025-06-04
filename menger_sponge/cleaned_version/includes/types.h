@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 15:39:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:00:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef struct	s_material
 	double	specular;
 	double	shininess;
 	double	reflectivity;
+	double	transparency; // 0.0 = opaque 1.0 = fully transparent
+	double	refractive_index; //Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
 	int		has_checker;
 	double	checker_size;
 	t_color	checker_color;

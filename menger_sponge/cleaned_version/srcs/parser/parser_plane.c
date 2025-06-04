@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 15:34:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:12:55 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	parse_plane(t_scene *scene, char *line)
 		parse_error(scene, "Failed to create plane");
 	if(material_block)
 	{
-		parse_material_properties(scene, material_block, &plane->material);
+		parse_material_properties(material_block, &plane->material);
 		free(material_block);
 	}
 	add_object(scene, plane);
