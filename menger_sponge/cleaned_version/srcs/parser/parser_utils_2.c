@@ -6,31 +6,12 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/21 14:53:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:34:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-/**
- * Find the first occurrence of character in a string (like standard strchr)
- *
- * @param s The string to search
- * @param c The character to find
- * @return Pointer to the character in the string, or NULL if not found
- */
-char *ft_strchr(const char *s, int c)
-{
-    while (*s)
-    {
-        if (*s == (char)c)
-            return ((char *)s);
-        s++;
-    }
-    if ((char)c == '\0')
-        return ((char *)s);
-    return (NULL);
-}
 
 /**
  * Find the substring in a string (like standard strstr)

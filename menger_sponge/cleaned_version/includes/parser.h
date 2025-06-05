@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:21:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:35:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ t_bump_map *create_bump_map(t_scene *scene, const char *filename);
 void    free_bump_map(t_bump_map *bump_map);
 
 /* Function declarations for string utilities */
-char    *ft_strchr(const char *s, int c);
 char    *ft_strstr(const char *haystack, const char *needle);
 size_t  ft_strlcat(char *dst, const char *src, size_t size);
 

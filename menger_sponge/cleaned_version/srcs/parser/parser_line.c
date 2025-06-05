@@ -6,12 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:18:56 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:39:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
 
 int	parse_parameters(t_scene *scene, char *line)
 {
@@ -40,9 +39,9 @@ int	parse_parameters(t_scene *scene, char *line)
 }
 
 // Remove inline comments from a line
-static char *remove_inline_comments(char *line)
+static char	*remove_inline_comments(char *line)
 {
-	char *comment_start;
+	char	*comment_start;
 
 	comment_start = ft_strchr(line, '#');
 	if (comment_start)
@@ -53,9 +52,9 @@ static char *remove_inline_comments(char *line)
 int	parse_line(t_scene *scene, char *line)
 {
 	char	*trimmed;
-	char	*final_trimmed;
 	int		result;
 
+	remove_inline_comments(line);
 	trimmed = ft_strtrim_whitespace(line);
 	if (!trimmed)
 		return (0);
@@ -64,24 +63,13 @@ int	parse_line(t_scene *scene, char *line)
 		free(trimmed);
 		return (1);
 	}
-	// Remove inline comments before parsing
-	remove_inline_comments(trimmed);
-	final_trimmed = ft_strtrim_whitespace(trimmed); // Trim again after removing comments
-	free(trimmed);
-	if (!final_trimmed)
-		return (0);
-	if (final_trimmed[0] == '\0')
-	{
-		free(final_trimmed);
-		return (1);
-	}
-	result = parse_parameters(scene, final_trimmed);
+	result = parse_parameters(scene, trimmed);
 	if (result == 0)
 	{
-		free(final_trimmed);
+		free(trimmed);
 		parse_error(scene, "Unknown element identifier");
 		return (0);
 	}
-	free(final_trimmed);
+	free(trimmed);
 	return (result);
 }
