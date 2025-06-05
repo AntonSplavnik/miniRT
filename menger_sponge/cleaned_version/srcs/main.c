@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/23 15:33:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:58:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	start_raytracer(t_scene *scene, char *filename)
 	if (!parse_scene_file(filename, scene))
 	{
 		cleanup_scene(scene);
-		write_string_to_file_descriptor("Error: Failed to parse scene file\n", STDERR_FILENO);
+		ft_putendl_fd("Error: Failed to parse scene file\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	render_scene(scene);
@@ -31,7 +31,7 @@ void	start_raytracer(t_scene *scene, char *filename)
 
 void	print_usage_and_exit(void)
 {
-	write_string_to_file_descriptor("Please enter a valid arg\n", STDERR_FILENO);
+	ft_putendl_fd("Please enter a valid arg\n", STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 

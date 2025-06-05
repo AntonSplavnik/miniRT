@@ -6,31 +6,12 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 12:17:21 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:18:56 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-//Copy the current line from the buffer to the line array
-int	copy_to_line(t_scene *scene, char *buffer, int *pos, char *line)
-{
-	int	start;
-	int	end;
-
-	start = pos[0];
-	end = pos[1];
-	if (pos[2] + (end - start) >= MAX_LINE_LEN)
-		parse_error(scene, "Line too long in scene file");
-	while (start < end)
-	{
-		line[pos[2]] = buffer[start];
-		pos[2]++;
-		start++;
-	}
-	line[pos[2]] = '\0';
-	return (1);
-}
 
 int	parse_parameters(t_scene *scene, char *line)
 {

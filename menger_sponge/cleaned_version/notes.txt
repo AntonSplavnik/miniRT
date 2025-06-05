@@ -6,3 +6,5 @@ Extract the files then:
 
 Ex of rt file:
 sp 0,0,0 7 255,255,255 {texture:scenes/textures/earthmap1k.png bumpmap:scenes/bumpmaps/earth.ppm}
+
+CAREFUL - 4k ppm file can often not be uploaded on github as they go over the 100.00MB limit

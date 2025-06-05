@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 14:58:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:58:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ void	free_split(char **str)
 void	parse_error(t_scene *scene, char *message)
 {
 	cleanup_scene(scene);
-	write_string_to_file_descriptor("Error\n", STDERR_FILENO);
-	write_string_to_file_descriptor(message, STDERR_FILENO);
-	write_string_to_file_descriptor("\n", STDERR_FILENO);
+	ft_putendl_fd("Error", STDERR_FILENO);
+	ft_putendl_fd(message, STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 

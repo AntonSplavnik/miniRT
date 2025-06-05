@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 16:52:25 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:21:17 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int		parse_scene_file(char *filename, t_scene *scene);
 // Line processing functions
 int		parse_line(t_scene *scene, char *line);
 int		parse_parameters(t_scene *scene, char *line);
-int		copy_to_line(t_scene *scene, char *buffer, int *pos, char *line);
-
 
 //material
 /* Function declarations for material parser */

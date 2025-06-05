@@ -6,26 +6,15 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 14:35:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:18:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 #include <fcntl.h>
 
-//Find the end of the current line in the buffer if it exists otherwise return the end of the buffer
-static int	process_buffer_segment(char *buffer, int *i, int bytes_read)
-{
-	int	line_end;
-
-	line_end = *i;
-	while (line_end < bytes_read && buffer[line_end] != '\n')
-		line_end++;
-	return (line_end);
-}
-
 //Check if the filename ends with ".rt"
-int is_valid_filename(char *filename)
+int	is_valid_filename(char *filename)
 {
 	if (!filename)
 		return (0);
@@ -54,57 +43,36 @@ int	open_scene_file(t_scene *scene, char *filename)
 
 int	read_scene_file(int fd, t_scene *scene)
 {
-	int			bytes_read;
-	static char	line[MAX_LINE_LEN + 1];
-	char		buffer[MAX_LINE_LEN + 1];
-	int			pos[3];
+	char	*line;
 
-	pos[2] = 0;
-	while ((bytes_read = read(fd, buffer, MAX_LINE_LEN)) > 0)
+	line = get_next_line(fd);
+	while (line)
 	{
-		buffer[bytes_read] = '\0';
-		pos[0] = 0;
-		while (pos[0] < bytes_read)
+		if (!parse_line(scene, line))
 		{
-			pos[1] = process_buffer_segment(buffer, &pos[0], bytes_read);
-			copy_to_line(scene, buffer, pos, line);
-			if (pos[1] < bytes_read && buffer[pos[1]] == '\n')
-			{
-				if (!parse_line(scene, line))
-					return (0);
-				pos[2] = 0;
-			}
-			pos[0] = pos[1] + 1;
+			free(line);
+			get_next_line(-1);
+			return (0);
 		}
+		free(line);
+		line = get_next_line(fd);
 	}
-	return (bytes_read);
+	get_next_line(-1);
+	return (1);
 }
 
 int	parse_scene_file(char *filename, t_scene *scene)
 {
-	int			fd;
-	int			bytes_read;
-	static char	line[MAX_LINE_LEN + 1];
-	int			line_pos;
+	int	fd;
+	int	success;
 
 	fd = open_scene_file(scene, filename);
 	if (fd < 0)
 		return (0);
-	bytes_read = read_scene_file(fd, scene);
-	line_pos = 0;
-	while (line[line_pos])
-		line_pos++;
-	if (line_pos > 0 && !parse_line(scene, line))
-	{
-		close(fd);
-		return (0);
-	}
-	if (bytes_read < 0)
-	{
-		close(fd);
-		return (0);
-	}
+	success = read_scene_file(fd, scene);
 	close(fd);
+	if (!success)
+		return (0);
 	if (!scene->camera.has_camera)
 		parse_error(scene, "Camera not found");
 	if (!scene->ambient.has_ambient)
