@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 11:58:15 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:31:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	check_parts_count(t_scene *scene, char **parts, int expected_count, char *e
 		free_split(parts);
 		if (ft_strcmp(element_name, "camera") == 0)
 			parse_error(scene, "Invalid format for camera. Expected: C x,y,z nx,ny,nz fov");
-		else if (ft_strcmp(element_name, "ambient") == 0)
-			parse_error(scene, "Invalid format for ambient lighting. Expected: A ratio r,g,b");
 		else if (ft_strcmp(element_name, "light") == 0)
 			parse_error(scene, "Invalid format for light. Expected: L x,y,z ratio r,g,b");
 		else if (ft_strcmp(element_name, "sphere") == 0)

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:35:12 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/05 14:46:05 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ double		ft_atof(const char *str);
 void		*ft_calloc(size_t nmemb, size_t size);
 void		ft_bzero(void *s, size_t n);
 void		*ft_memset(void *s, int c, size_t n);
-size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char		*ft_strchr(const char *s, int c);
 
 // menger sponge
