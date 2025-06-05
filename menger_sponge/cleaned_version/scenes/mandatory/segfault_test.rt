@@ -2,7 +2,7 @@ C 0,0,-10 0,0,0 70 # Camera setup
 A 0.2 255,255,255 # Ambient light
 L 5,5,-5 0.9 255,255,255# Light source
 
-sp 0,0,0 6 255,0,255 {bumpmap:scenes/bumpmaps/test_bump.ppm} # Sphere with checkerboard pattern
+sp 0,0,0 6 255,0,255 {bumpmap:scenes/bumpmaps/test_bump.png} # Sphere with checkerboard pattern
 
 # pl 0,-5,0 0,1,0 0,255,0
 
