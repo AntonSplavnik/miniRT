@@ -1,4 +1,4 @@
- A   0.2 255,255,255 # Ambient light
+ A   0.2 255,255,258 # Ambient light
     C 0,0,-10 0,0,1 70
     #Light source
 L -40,50,0 0.7 255,255,255

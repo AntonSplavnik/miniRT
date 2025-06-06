@@ -6,12 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:13:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:22:10 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
 
 int	read_ambient_ratio(t_scene *scene, char **str, double *ratio)
 {
@@ -44,13 +43,15 @@ int	parse_ambient(t_scene *scene, char *line)
 	if (parts_count != 3)
 	{
 		free_split(parts);
-		parse_error(scene, "Invalid format for ambient lighting. Expected: A ratio r,g,b");
+		parse_error(scene, "Invalid format for ambient lighting. \
+Expected: A ratio r,g,b");
 	}
 	read_ambient_ratio(scene, parts, &scene->ambient.ratio);
 	parse_color = read_color(parts[2], &scene->ambient.color);
 	free_split(parts);
 	if (!parse_color)
-		parse_error(scene, "Invalid color format for ambient lighting. Expected: r,g,b");
+		parse_error(scene, "Invalid color format for ambient lighting. \
+Expected: r,g,b");
 	scene->ambient.has_ambient = 1;
 	return (1);
 }
