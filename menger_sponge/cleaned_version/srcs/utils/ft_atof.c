@@ -6,16 +6,14 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 09:52:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/13 13:34:55 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:11:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-
-
 // Convert string to float - handle integer part
-static void ft_atof_integer_part(const char *str, int *i, double *result)
+static void	ft_atof_integer_part(const char *str, int *i, double *result)
 {
 	while (str[*i] >= '0' && str[*i] <= '9')
 	{
@@ -23,11 +21,12 @@ static void ft_atof_integer_part(const char *str, int *i, double *result)
 		(*i)++;
 	}
 }
+
 // Convert string to float - handle decimal part
-static void ft_atof_decimal_part(const char *str, int *i, double *result)
+static void	ft_atof_decimal_part(const char *str, int *i, double *result)
 {
-	double decimal;
-	double factor;
+	double	decimal;
+	double	factor;
 
 	if (str[*i] == '.')
 	{
@@ -45,11 +44,11 @@ static void ft_atof_decimal_part(const char *str, int *i, double *result)
 }
 
 // Convert string to float
-double ft_atof(const char *str)
+double	ft_atof(const char *str)
 {
-	int i;
-	int sign;
-	double result;
+	int		i;
+	int		sign;
+	double	result;
 
 	i = 0;
 	while (ft_isspace(str[i]))

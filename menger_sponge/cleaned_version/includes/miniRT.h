@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 09:56:15 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:07:35 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void		write_string_to_file_descriptor(char *str, int file_descriptor);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_strtrim_whitespace(char *s);
 char		**ft_split_line(char *s, char c);
-int			is_whitespace(char c);
 int			is_separator(char c, char delimiter);
 int			ft_atoi(const char *nptr);
 int			ft_isspace(char c);
