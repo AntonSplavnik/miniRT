@@ -72,7 +72,7 @@ SRC_FILES = main.c \
 	parser/parser_plane.c \
 	parser/parser_sphere.c \
 	parser/parser_triangle.c \
-	parser/parser_types.c \
+	parser/parser_data.c \
 	parser/parser_utils.c \
 	parser/parser_utils_2.c \
 	parser/parser_bumpmap.c \
@@ -92,11 +92,7 @@ SRC_FILES = main.c \
 	ui/status_messages.c \
 	ui/user_interface.c \
 	utils/ft_atof.c \
-	utils/ft_atoi.c \
-	utils/ft_bzero.c \
-	utils/ft_calloc.c \
 	utils/ft_isspace.c \
-	utils/ft_memset.c \
 	utils/ft_split_line.c \
 	utils/ft_split_line_utils.c \
 	utils/ft_strtrim_whitespace.c \

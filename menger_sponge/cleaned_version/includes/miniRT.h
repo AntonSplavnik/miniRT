@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 10:07:35 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:18:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,8 @@ int			ft_strcmp(char *s1, char *s2);
 char		*ft_strtrim_whitespace(char *s);
 char		**ft_split_line(char *s, char c);
 int			is_separator(char c, char delimiter);
-int			ft_atoi(const char *nptr);
 int			ft_isspace(char c);
 double		ft_atof(const char *str);
-void		*ft_calloc(size_t nmemb, size_t size);
-void		ft_bzero(void *s, size_t n);
-void		*ft_memset(void *s, int c, size_t n);
 char		*ft_strchr(const char *s, int c);
 
 // menger sponge
