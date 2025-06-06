@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 14:31:26 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:34:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	count_parts(char **parts)
 	return (count);
 }
 
-void	check_parts_count(t_scene *scene, char **parts, int expected_count, char *element_name)
+void	check_parts_count(t_scene *scene, char **parts,
+				int expected_count, char *element_name)
 {
 	int	parts_count;
 
@@ -56,23 +57,22 @@ void	check_parts_count(t_scene *scene, char **parts, int expected_count, char *e
 	{
 		free_split(parts);
 		if (ft_strcmp(element_name, "camera") == 0)
-			parse_error(scene, "Invalid format for camera. Expected: C x,y,z nx,ny,nz fov");
+			parse_error(scene, "Expected for Camera: C x,y,z nx,ny,nz fov");
 		else if (ft_strcmp(element_name, "light") == 0)
-			parse_error(scene, "Invalid format for light. Expected: L x,y,z ratio r,g,b");
+			parse_error(scene, "Expected for light: L x,y,z ratio r,g,b");
 		else if (ft_strcmp(element_name, "sphere") == 0)
-			parse_error(scene, "Invalid format for sphere. Expected: sp x,y,z d r,g,b");
+			parse_error(scene, "Expected for sphere: sp x,y,z d r,g,b");
 		else if (ft_strcmp(element_name, "plane") == 0)
-			parse_error(scene, "Invalid format for plane. Expected: pl x,y,z nx,ny,nz r,g,b");
+			parse_error(scene, "Expected for plane: pl x,y,z nx,ny,nz r,g,b");
 		else if (ft_strcmp(element_name, "cylinder") == 0)
-			parse_error(scene, "Invalid format for cylinder. Expected: cy x,y,z nx,ny,nz d h r,g,b");
+			parse_error(scene, "Expected for cy: cy x,y,z nx,ny,nz d h r,g,b");
 		else if (ft_strcmp(element_name, "cone") == 0)
-			parse_error(scene, "Invalid format for cone. Expected: co x,y,z nx,ny,nz radius height r,g,b");
+			parse_error(scene, "Expected for co: co x,y,z nx,ny,nz r h r,g,b");
 		else if (ft_strcmp(element_name, "triangle") == 0)
-			parse_error(scene, "Invalid format for triangle. Expected: tr x1,y1,z1 x2,y2,z2 x3,y3,z3 r,g,b");
+			parse_error(scene, "Triangle: tr x1,y1,z1 x2,y2,z2 x3,y3,z3 r,g,b");
 		else if (ft_strcmp(element_name, "cube") == 0)
-			parse_error(scene, "Invalid format for cube. Expected: cu x,y,z side_length r,g,b");
+			parse_error(scene, "Expected for cube: cu x,y,z side_length r,g,b");
 		else if (ft_strcmp(element_name, "mesh") == 0)
-			parse_error(scene, "Invalid format for mesh. Expected: me filename x,y,z nx,ny,nz s r,g,b");
+			parse_error(scene, "Mesh: me file x,y,z nx,ny,nz s r,g,b");
 	}
 }
-
