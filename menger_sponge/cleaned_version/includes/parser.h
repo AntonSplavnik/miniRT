@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:35:15 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:55:18 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		parse_parameters(t_scene *scene, char *line);
 char    *extract_material_block(char *line);
 void    trim_material_block(char *line);
 double  get_property_value(const char *material_block, const char *property);
-void    parse_material_properties(t_scene *scene, const char *material_block, t_material *material);
+void    parse_material_properties(t_scene *scene, char *material_block, t_material *material);
 double  ft_clamp(double value, double min, double max);
 
 //texture

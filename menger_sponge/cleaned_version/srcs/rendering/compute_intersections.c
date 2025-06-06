@@ -188,7 +188,8 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	}
 	hit_record->normal = hit_record->original_normal; //Set the normal to the original normal initially
 
-	hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object); // Calculate UV coordinates for texture mapping
+	if (hit_record->material.has_texture || hit_record->material.has_checker)
+		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object); // Calculate UV coordinates for texture mapping
 	if (hit_record->material.has_bump_map)
 	{
 		// If the material has a bump map, adjust the normal based on the bump map

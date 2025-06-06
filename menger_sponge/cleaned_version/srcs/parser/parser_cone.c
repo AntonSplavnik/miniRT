@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 16:05:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:00:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,7 @@ int	parse_cone(t_scene *scene, char *line)
 		parse_error(scene, "Failed to create cone");
 	cone->material.color = color;
 	if(material_block)
-	{
 		parse_material_properties(scene, material_block, &cone->material);
-		free(material_block);
-	}
 	add_object(scene, cone);
 	return (1);
 }

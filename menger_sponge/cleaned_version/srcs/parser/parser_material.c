@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 16:52:06 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:55:03 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ void	*get_property_filename(const char *material_block, const char *property, ch
  * @param material_block The material block string
  * @param material Pointer to the material to update
  */
-void parse_material_properties(t_scene *scene, const char *material_block, t_material *material)
+void parse_material_properties(t_scene *scene, char *material_block, t_material *material)
 {
 	double	value;
 	t_color	checker_color;
@@ -260,6 +260,7 @@ void parse_material_properties(t_scene *scene, const char *material_block, t_mat
 		material->bump_map = create_bump_map(scene, bump_map_filename);
 		free(bump_map_filename); // Free the bump map filename after use
 	}
+	free(material_block); // Free the material block after parsing
 }
 
 /**

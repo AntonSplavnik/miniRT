@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/04 16:05:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:00:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,10 +139,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	mesh_obj->next = NULL;
 
 	if(material_block)
-	{
 		parse_material_properties(scene, material_block, &mesh_obj->material);
-		free(material_block);
-	}
 	// Add to scene
 	add_object(scene, mesh_obj);
 
