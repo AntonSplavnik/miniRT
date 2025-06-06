@@ -98,6 +98,7 @@ SRC_FILES = main.c \
 	utils/ft_isspace.c \
 	utils/ft_memset.c \
 	utils/ft_split_line.c \
+	utils/ft_split_line_utils.c \
 	utils/ft_strtrim_whitespace.c \
 	vector_utils/vec3_basic_op.c \
 	vector_utils/vec3_length.c \

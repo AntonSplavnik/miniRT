@@ -6,21 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 16:34:59 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 14:43:16 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/06 10:01:30 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
-int	is_whitespace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
-}
-
-static int	is_separator(char c, char delimiter)
-{
-	return (c == delimiter || is_whitespace(c));
-}
 
 static int	count_words(char *str, char delimiter)
 {
@@ -72,7 +62,7 @@ static int	fill_words(char **result, char *str, char delimiter)
 		while (str[i] && is_separator(str[i], delimiter))
 			i++;
 		if (!str[i])
-			break;
+			break ;
 		start = i;
 		while (str[i] && !is_separator(str[i], delimiter))
 			i++;
