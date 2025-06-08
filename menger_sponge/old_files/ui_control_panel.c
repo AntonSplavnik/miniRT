@@ -1,0 +1,381 @@
+#include "../../includes/miniRT.h"
+
+#define BUTTON_SIZE    30
+
+#define PANEL_WIDTH     250
+#define PANEL_HEIGHT    400
+#define PANEL_X         0
+#define PANEL_Y         50
+#define MAX_PANEL_TEXTS 16
+
+static void clear_panel_image(t_scene *scene)
+{
+    if (!scene->ui.panel.panel_img)
+        return;
+    for (uint32_t y = 0; y < scene->ui.panel.panel_img->height; ++y)
+        for (uint32_t x = 0; x < scene->ui.panel.panel_img->width; ++x)
+            mlx_put_pixel(scene->ui.panel.panel_img, x, y, 0x00000000);
+}
+
+static void draw_toggle_button(t_scene *scene)
+{
+    int s = scene->ui.toggle_button.toggle_button_size;
+    uint32_t btn = 0x333333FF;
+    uint32_t border = 0xFFFFFFFF;
+    uint32_t icon = 0xFFFFFFFF;
+
+    // Draw button background
+    for (int i = 0; i < s; ++i)
+        for (int j = 0; j < s; ++j)
+            mlx_put_pixel(scene->ui.toggle_button.toggle_img, i, j, btn);
+
+    // Draw button border
+    for (int i = 0; i < s; ++i) {
+        mlx_put_pixel(scene->ui.toggle_button.toggle_img, i, 0, border);
+        mlx_put_pixel(scene->ui.toggle_button.toggle_img, i, s-1, border);
+        mlx_put_pixel(scene->ui.toggle_button.toggle_img, 0, i, border);
+        mlx_put_pixel(scene->ui.toggle_button.toggle_img, s-1, i, border);
+    }
+
+    // Draw settings icon (three horizontal lines)
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < s-10; ++j)
+            mlx_put_pixel(scene->ui.toggle_button.toggle_img, 5+j, 8+(i*6), icon);
+}
+
+static void draw_checkbox(mlx_image_t *img, int x, int y, bool checked, t_scene *scene)
+{
+    int size = scene->ui.panel.checkbox_size;
+    uint32_t bg = 0x222222FF;
+    uint32_t border = 0xFFFFFFFF;
+    uint32_t check = 0x00FF00FF;
+
+    for (int i = 1; i < size-1; ++i)
+        for (int j = 1; j < size-1; ++j)
+            mlx_put_pixel(img, x+i, y+j, bg);
+
+    for (int i = 0; i < size; ++i)
+    {
+        mlx_put_pixel(img, x+i, y, border);
+        mlx_put_pixel(img, x+i, y+size-1, border);
+        mlx_put_pixel(img, x, y+i, border);
+        mlx_put_pixel(img, x+size-1, y+i, border);
+    }
+    if (checked)
+        for (int j = 0; j < size-4; ++j)
+        {
+            mlx_put_pixel(img, x+2+j, y+2+j, check);
+            mlx_put_pixel(img, x+size-3-j, y+2+j, check);
+        }
+}
+
+static void draw_panel_background(t_scene *scene)
+{
+    if (scene->ui.panel.current_width <= 0)
+        return;
+
+    uint32_t bg     = 0x33333388; // <-- 50% transparent panel
+    uint32_t header = 0x222222CC; // <-- 80% opaque header
+    uint32_t border = 0xFFFFFFFF; // Opaque white borders
+
+    for (int x = 0; x < scene->ui.panel.current_width; ++x)
+        for (int y = scene->ui.panel.y; y < scene->ui.panel.y + scene->ui.panel.height; ++y)
+            mlx_put_pixel(scene->ui.panel.panel_img, x, y, bg);
+
+    for (int x = 0; x < scene->ui.panel.current_width; ++x)
+        for (int y = scene->ui.panel.y; y < scene->ui.panel.y + 40; ++y)
+            mlx_put_pixel(scene->ui.panel.panel_img, x, y, header);
+
+    for (int x = 0; x < scene->ui.panel.current_width; ++x)
+    {
+        mlx_put_pixel(scene->ui.panel.panel_img, x, scene->ui.panel.y, border);
+        mlx_put_pixel(scene->ui.panel.panel_img, x, scene->ui.panel.y + scene->ui.panel.height - 1, border);
+    }
+
+    for (int y = scene->ui.panel.y; y < scene->ui.panel.y + scene->ui.panel.height; ++y)
+    {
+        if (scene->ui.panel.current_width > 0)
+            mlx_put_pixel(scene->ui.panel.panel_img, 0, y, border);
+        if (scene->ui.panel.current_width > 1)
+            mlx_put_pixel(scene->ui.panel.panel_img, scene->ui.panel.current_width - 1, y, border);
+    }
+}
+
+
+static void delete_panel_text(t_scene *scene, mlx_t *mlx)
+{
+    for (int i = 0; i < scene->ui.panel.text_count; ++i)
+        if (scene->ui.panel.panel_text[i])
+        {
+            mlx_delete_image(mlx, scene->ui.panel.panel_text[i]);
+            scene->ui.panel.panel_text[i] = NULL;
+        }
+    scene->ui.panel.text_count = 0;
+}
+static void hide_panel_text(t_scene *scene)
+{
+    for (int i = 0; i < scene->ui.panel.text_count; ++i)
+        if (scene->ui.panel.panel_text[i])
+            scene->ui.panel.panel_text[i]->enabled = false;
+}
+static void show_panel_text(t_scene *scene)
+{
+    for (int i = 0; i < scene->ui.panel.text_count; ++i)
+        if (scene->ui.panel.panel_text[i])
+            scene->ui.panel.panel_text[i]->enabled = true;
+}
+
+// Only called if fully open and text not created
+static void draw_panel_text(t_scene *scene)
+{
+    delete_panel_text(scene->app.mlx, scene);
+
+    int idx = 0;
+    int title_x = (scene->ui.panel.target_width - (int)strlen("Settings") * 8) / 2;
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Settings", title_x, scene->ui.panel.y + 15);
+
+    int label_x = scene->ui.panel.padding + scene->ui.panel.checkbox_size + 20;
+    int base_y = scene->ui.panel.y + 48;
+    int spacing = 35;
+    int text_y_offset = (scene->ui.panel.checkbox_size - 16) / 2;
+
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Shadows", label_x, base_y + text_y_offset);
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Reflections", label_x, base_y + spacing + text_y_offset);
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Specular", label_x, base_y + spacing * 2 + text_y_offset);
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Refraction", label_x, base_y + spacing * 3 + text_y_offset);
+    scene->ui.panel.panel_text[idx++] = mlx_put_string(scene->app.mlx, "Status Message", label_x, base_y + spacing * 4 + text_y_offset);
+
+    scene->ui.panel.text_count = idx;
+    show_panel_text(scene);
+}
+
+static void draw_panel_content(t_scene *scene)
+{
+    int checkbox_x = scene->ui.panel.padding, base_y = scene->ui.panel.y + 50, spacing = 35;
+    if (scene->ui.panel.current_width < scene->ui.panel.target_width / 2) return;
+    draw_checkbox(scene->ui.panel.panel_img, checkbox_x, base_y, scene->graphic_settings.enable_hard_shadows, scene);
+    draw_checkbox(scene->ui.panel.panel_img, checkbox_x, base_y + spacing, scene->graphic_settings.enable_reflections, scene);
+    draw_checkbox(scene->ui.panel.panel_img, checkbox_x, base_y + spacing*2, scene->graphic_settings.enable_specular, scene);
+    draw_checkbox(scene->ui.panel.panel_img, checkbox_x, base_y + spacing*3, scene->graphic_settings.enable_refraction, scene);
+    draw_checkbox(scene->ui.panel.panel_img, checkbox_x, base_y + spacing*4, scene->graphic_settings.enable_status_message, scene);
+}
+
+static bool update_panel_animation(t_scene *scene)
+{
+    if (scene->ui.panel.visible)
+    {
+        if (scene->ui.panel.current_width < scene->ui.panel.target_width)
+        {
+            scene->ui.panel.current_width += scene->ui.panel.animation_speed;
+            if (scene->ui.panel.current_width > scene->ui.panel.target_width)
+                scene->ui.panel.current_width = scene->ui.panel.target_width;
+            return true;
+        }
+    }
+    else
+    {
+        if (scene->ui.panel.current_width > 0)
+        {
+            scene->ui.panel.current_width -= scene->ui.panel.animation_speed;
+            if (scene->ui.panel.current_width < 0)
+                scene->ui.panel.current_width = 0;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool draw_ui_panel(t_scene *scene)
+{
+    bool animating = update_panel_animation(scene);
+    clear_panel_image(scene);
+
+    if (scene->ui.panel.current_width > 0)
+    {
+        draw_panel_background(scene);
+        draw_panel_content(scene);
+    }
+
+    if (scene->ui.panel.current_width == scene->ui.panel.target_width)
+    {
+        if (scene->ui.panel.text_count == 0)
+            draw_panel_text(scene);
+        else
+            show_panel_text(scene);
+    }
+    else
+    {
+        hide_panel_text(scene);
+        if (scene->ui.panel.current_width == 0 && scene->ui.panel.text_count > 0)
+            delete_panel_text(scene->app.mlx, scene);
+    }
+    return animating;
+}
+
+static bool is_point_in_toggle_button(int x, int y, t_scene *scene)
+{
+    return (x >= 10 && x <= 10 + scene->ui.toggle_button.toggle_button_size &&
+            y >= 10 && y <= 10 + scene->ui.toggle_button.toggle_button_size);
+}
+static bool is_point_in_checkbox(int x, int y, int checkbox_x, int checkbox_y, t_scene *scene)
+{
+    return (x >= checkbox_x + 10 && x <= checkbox_x + 10 + scene->ui.panel.checkbox_size &&
+            y >= checkbox_y && y <= checkbox_y + scene->ui.panel.checkbox_size);
+}
+
+bool ui_panel_mouse_click(t_scene *scene, int x, int y)
+{
+    int checkbox_x = scene->ui.panel.padding, base_y = scene->ui.panel.y + 50, spacing = 35;
+    if (is_point_in_toggle_button(x, y, scene))
+    {
+        scene->ui.panel.visible = !scene->ui.panel.visible;
+        return true;
+    }
+    if (scene->ui.panel.current_width < scene->ui.panel.target_width / 2)
+        return false;
+
+    if (x <= scene->ui.panel.current_width && y >= scene->ui.panel.y && y <= scene->ui.panel.y + scene->ui.panel.height)
+    {
+        if (is_point_in_checkbox(x, y, checkbox_x, base_y, scene))
+            scene->graphic_settings.enable_hard_shadows = !scene->graphic_settings.enable_hard_shadows;
+        else if (is_point_in_checkbox(x, y, checkbox_x, base_y + spacing, scene))
+            scene->graphic_settings.enable_reflections = !scene->graphic_settings.enable_reflections;
+        else if (is_point_in_checkbox(x, y, checkbox_x, base_y + spacing*2, scene))
+            scene->graphic_settings.enable_specular = !scene->graphic_settings.enable_specular;
+        else if (is_point_in_checkbox(x, y, checkbox_x, base_y + spacing*3, scene))
+            scene->graphic_settings.enable_refraction = !scene->graphic_settings.enable_refraction;
+        else if (is_point_in_checkbox(x, y, checkbox_x, base_y + spacing*4, scene))
+            scene->graphic_settings.enable_status_message = !scene->graphic_settings.enable_status_message;
+        else
+            return false;
+        return true;
+    }
+    return false;
+}
+
+void init_ui(t_scene *scene)
+{
+    scene->ui.panel.visible = false,
+    scene->ui.panel.current_width = 0,
+    scene->ui.panel.target_width = PANEL_WIDTH,
+    scene->ui.panel.height = PANEL_HEIGHT,
+    scene->ui.panel.y = PANEL_Y,
+    scene->ui.panel.x = PANEL_X,
+    scene->ui.panel.animation_speed = 10,
+    scene->ui.panel.padding = 15,
+    scene->ui.panel.checkbox_size = 15,
+    scene->ui.panel.panel_img = NULL;
+    scene->ui.panel.text_count = 0;
+    scene->ui.panel.status_text_img = NULL;
+    scene->ui.toggle_button.toggle_img = NULL;
+    scene->ui.toggle_button.toggle_button_size = BUTTON_SIZE;
+}
+
+void    init_toggle_button(t_scene *scene)
+{
+
+    scene->ui.toggle_button.toggle_img = mlx_new_image(scene->app.mlx,
+    scene->ui.toggle_button.toggle_button_size,
+    scene->ui.toggle_button.toggle_button_size);
+    if (!scene->ui.toggle_button.toggle_img)
+    {
+        fprintf(stderr, "Error: Failed to create toggle button image\n");
+        exit(1);
+    }
+    mlx_image_to_window(scene->app.mlx, scene->ui.toggle_button.toggle_img, 10, 10);
+    scene->ui.toggle_button.toggle_img->enabled = true;
+    // mlx_delete_image(scene->app.mlx, g_panel.toggle_img);
+}
+
+void init_ui_panel(t_scene *scene)
+{
+    init_ui(scene);
+    scene->ui.panel.panel_img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
+    if (!scene->ui.panel.panel_img)
+    {
+        fprintf(stderr, "Error: Failed to create UI panel image\n");
+        exit(1);
+    }
+    mlx_image_to_window(scene->app.mlx, scene->ui.panel.panel_img, 10, 0);
+    scene->ui.panel.panel_img->enabled = true;
+    clear_panel_image(scene);
+}
+
+void cleanup_ui_panel(t_scene *scene)
+{
+    if(scene->ui.toggle_button.toggle_img)
+    {
+        mlx_delete_image(scene->app.mlx, scene->ui.toggle_button.toggle_img);
+        scene->ui.toggle_button.toggle_img = NULL;
+    }
+    if (scene->ui.panel.panel_img)
+    {
+        mlx_delete_image(scene->app.mlx, scene->ui.panel.panel_img);
+        scene->ui.panel.panel_img = NULL;
+    }
+    delete_panel_text(scene->app.mlx, scene);
+    if (scene->ui.panel.status_text_img)
+    {
+        mlx_delete_image(scene->app.mlx, scene->ui.panel.status_text_img);
+        scene->ui.panel.status_text_img = NULL;
+    }
+    scene->ui.panel.visible = false;
+    scene->ui.panel.current_width = 0;
+}
+
+
+/**
+ * UI animation loop function - updates the UI panel animation
+ * This is registered as a loop hook with MLX
+ */
+void ui_animation_loop(void *param)
+{
+	t_scene *scene = (t_scene *)param;
+
+	static double last_update_time = 0;
+	double current_time;
+
+	// Get current time
+	current_time = mlx_get_time();
+
+	// Limit UI updates to 60 FPS for smooth animation
+	if (current_time - last_update_time > 0.016)  // ~60 FPS
+	{
+		// Update and redraw the UI panel if animation is active
+		if (draw_ui_panel(scene))
+		{
+			// Animation is still active, no need to re-render the entire scene
+		}
+		last_update_time = current_time;
+	}
+}
+
+
+// --- STATUS MESSAGE AT TOP ---
+void draw_status_message(t_scene *scene)
+{
+    // Remove previous status image if any
+    if (scene->ui.panel.status_text_img)
+    {
+        mlx_delete_image(scene->app.mlx, scene->ui.panel.status_text_img);
+        scene->ui.panel.status_text_img = NULL;
+    }
+    if (scene->graphic_settings.enable_status_message)
+    {
+        // Center at top
+        const char *msg = "Hello, this is a status!";
+        int msg_x = (WIDTH - (int)strlen(msg) * 8) / 2;
+        int msg_y = 8;
+        scene->ui.panel.status_text_img = mlx_put_string(scene->app.mlx, msg, msg_x, msg_y);
+        if (scene->ui.panel.status_text_img)
+            scene->ui.panel.status_text_img->enabled = true;
+    }
+}
+
+// Call this in your main rendering/UI loop, **after** draw_ui_panel(scene)
+void draw_ui(t_scene *scene)
+{
+    draw_toggle_button(scene);
+    draw_ui_panel(scene);           // Draws the panel, with all its controls and panel text
+    display_status(scene);          // Shows status at top if enabled
+}

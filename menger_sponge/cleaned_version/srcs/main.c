@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/29 23:13:55 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/07 21:31:43 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	start_raytracer(t_scene *scene, char *filename)
 	scene->name = filename;
 
 	scene_init(scene);
-
+	
 	if (!parse_scene_file(filename, scene))
 	{
 		cleanup_scene(scene);
@@ -55,3 +55,4 @@ int	main(int ac, char **av)
 		print_usage_and_exit();
 	return (0);
 }
+

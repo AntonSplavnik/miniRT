@@ -1,5 +1,8 @@
-#include "../../includes/miniRT.h"
 
+
+/*
+// #include "../../includes/miniRT.h"
+// 
 //
 // ----------- CONFIGURABLE MACROS ------------
 #define PANEL_X             10
@@ -352,3 +355,5 @@ void draw_ui(t_scene *scene)
     display_status(scene);
     // draw_status_message(scene);
 }
+ */
+

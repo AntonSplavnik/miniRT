@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/29 20:10:39 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/08 21:27:55 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,52 @@
 # include <stdbool.h>
 # include <pthread.h>
 # include "../MLX42/include/MLX42/MLX42.h"
+
+#  define WIDTH 1920
+# define HEIGHT 1080
+
+# define NUM_THREADS 8 // Number of threads for multithreaded rendering
+
+// UI constants
+#define PANEL_X             10
+#define PANEL_Y             50
+#define PANEL_WIDTH         260
+#define PANEL_HEIGHT        400
+#define PANEL_HEADER_HEIGHT 40
+#define PANEL_PADDING       16
+#define CHECKBOX_SIZE       16
+#define CHECKBOX_SPACING    38
+#define MAX_PANEL_TEXTS     16
+#define NUM_CHECKBOXES      5
+
+#define TOGGLE_BTN_OFFSET_X 10
+#define TOGGLE_BTN_OFFSET_Y 10
+#define TOGGLE_BTN_SIZE     30
+
+// 3D rendering constants
+# define FOV			60.0
+# define NEAR_PLANE		0.1
+# define FAR_PLANE		100.0
+# define MAX_RAY_DEPTH	5
+# define MAX_BVH_DEPTH	8
+# define MAX_BVH_NODES	1000
+
+
+# define BLACK      			0x000000  // RGB(0, 0, 0)
+# define WHITE       			0xFFFFFF  // RGB(255, 255, 255)
+# define RED         			0xFF0000  // RGB(255, 0, 0)
+# define GREEN       			0x00FF00  // RGB(0, 255, 0)
+# define BLUE        			0x0000FF  // RGB(0, 0, 255)
+
+# define MAGENTA_BURST   		0xFF00FF
+# define LIME_SHOCK     		0xCCFF00
+# define NEON_ORANGE     		0xFF6600
+# define PSYCHEDELIC_PURPLE		0x660066
+# define AQUA_DREAM      		0x33CCCC
+# define HOT_PINK        		0xFF66B2
+# define ELECTRIC_BLUE   		0x0066FF
+# define LAVA_RED        		0xFF3300
+
 
 typedef struct s_vec2
 {
@@ -247,14 +293,13 @@ typedef struct s_mouse_state
 
 } t_mouse_state;
 
-//graphical settings
 typedef struct graphic_settings
 {
     bool    	enable_hard_shadows;
 	bool		enable_reflections;
     bool    	enable_specular;
 	bool		enable_refraction;
-	bool		enable_status_message; // For controlling render resolution
+	bool		enable_status_message;
 
 	int			resolution_factor;
 } t_graphic_settings;
@@ -266,14 +311,49 @@ typedef struct s_app
 
 } t_app;
 
+typedef struct s_panel
+{
+    bool visible;
+    int current_width;
+    int target_width;
+    int height;
+    int x;
+	int	y;
+	int drag_offset_x;
+	int drag_offset_y;
+    int animation_speed;
+    int padding;
+    int header_height;
+    int checkbox_size;
+    int checkbox_spacing;
+	int text_offset_x[MAX_PANEL_TEXTS];
+    int text_offset_y[MAX_PANEL_TEXTS];
+    mlx_image_t *panel_img;
+    mlx_image_t *panel_text[MAX_PANEL_TEXTS];
+    int text_count;
+    mlx_image_t *status_text_img;
+} t_panel;
+
+typedef struct s_toggle_button {
+    int offset_x, offset_y;
+    int size;
+    mlx_image_t *toggle_img;
+} t_toggle_button;
+
+typedef struct s_ui {
+    t_panel panel;
+    t_toggle_button toggle;
+} t_ui;
+
 typedef struct s_scene
 {
 	t_app				app;
 	t_graphic_settings	graphic_settings;
 	t_mouse_state		mouse_state;
 
-	char				*name; //input file name
+	t_ui				ui; //UI panel and toggle button
 
+	char				*name; //input file name
 
 	int					width; // Window width
 	int					height; //Window height

@@ -33,10 +33,23 @@ void display_status(t_scene *scene)
 		// Display the status with a new image
 		if (scene->app.mlx)
 		{
+			status_img = mlx_put_string(scene->app.mlx, status, 50, 15);
 			// Create a new text image with the status message
-			status_img = mlx_put_string(scene->app.mlx, status, 10, 20);
 			if(status_img)
 				status_img->enabled = true;
+				// Set your tint color here
+			uint8_t r = 255, g = 160, b = 30;
+			for (uint32_t i = 0; i < status_img->width * status_img->height; ++i) {
+				uint8_t *pixel = &status_img->pixels[i * 4];
+				if (pixel[3] > 0) {
+					// Simple blend: scale your color by the alpha (keeps antialiasing)
+					float alpha = pixel[3] / 255.0f;
+					pixel[0] = (uint8_t)(r * alpha + pixel[0] * (1 - alpha));
+					pixel[1] = (uint8_t)(g * alpha + pixel[1] * (1 - alpha));
+					pixel[2] = (uint8_t)(b * alpha + pixel[2] * (1 - alpha));
+					// pixel[3] stays as is
+				}
+			}
 		}
 
 	}

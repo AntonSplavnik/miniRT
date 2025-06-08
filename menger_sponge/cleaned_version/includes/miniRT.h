@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/29 14:21:42 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/08 19:15:39 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,6 @@
 #include "types.h"
 #include "parser.h"
 
-#  define WIDTH 1920
-# define HEIGHT 1080
-
-# define NUM_THREADS 8 // Number of threads for multithreaded rendering
-
-// 3D rendering constants
-# define FOV			60.0
-# define NEAR_PLANE		0.1
-# define FAR_PLANE		100.0
-# define MAX_RAY_DEPTH	5
-# define MAX_BVH_DEPTH	8
-# define MAX_BVH_NODES	1000
-
-# define BLACK       0x000000  // RGB(0, 0, 0)
-# define WHITE       0xFFFFFF  // RGB(255, 255, 255)
-# define RED         0xFF0000  // RGB(255, 0, 0)
-# define GREEN       0x00FF00  // RGB(0, 255, 0)
-# define BLUE        0x0000FF  // RGB(0, 0, 255)
-
-# define MAGENTA_BURST   		0xFF00FF
-# define LIME_SHOCK     		0xCCFF00
-# define NEON_ORANGE     		0xFF6600
-# define PSYCHEDELIC_PURPLE		0x660066
-# define AQUA_DREAM      		0x33CCCC
-# define HOT_PINK        		0xFF66B2
-# define ELECTRIC_BLUE   		0x0066FF
-# define LAVA_RED        		0xFF3300
 
 // events
 int			close_handler(t_scene *scene);
