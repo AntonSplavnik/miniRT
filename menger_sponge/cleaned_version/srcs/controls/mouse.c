@@ -1,69 +1,61 @@
 #include "../../includes/miniRT.h"
 
-// Handle mouse events in the control window
-// int control_mouse_handler(int button, int x, int y, t_scene *scene)
-// {
-//     // Only process left clicks
-//     if (button == 1) {
-//         // Check shadow checkbox
-//         if (x >= 30 && x <= 45 && y >= 50 && y <= 65) {
-//             scene->app.enable_hard_shadows = !scene->app.enable_hard_shadows;
-//             draw_control_panel(scene);
-//             // Re-render with new settings when checkbox is toggled
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check reflections checkbox
-//         if (x >= 30 && x <= 45 && y >= 80 && y <= 95) {
-//             scene->app.enable_reflections = !scene->app.enable_reflections;
-//             draw_control_panel(scene);
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check specular checkbox
-//         if (x >= 30 && x <= 45 && y >= 110 && y <= 125) {
-//             scene->app.enable_specular = !scene->app.enable_specular;
-//             draw_control_panel(scene);
-//             render_scene(scene);
-//             return (0);
-//         }
-
-//         // Check if render button was clicked
-// /*         if (x >= 70 && x <= 170 && y >= 200 && y <= 230) {
-//             // Re-render with new settings
-//             render_scene(scene);
-//             return (0);
-//         } */
-//     }
-//     return (0);
-// }
-
+#ifdef __APPLE__
+#define RETINA_SCALE 2.0
+#else
+#define RETINA_SCALE 1.0
+#endif
 
 void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
 {
 	t_scene *scene;
-	// int	x;
-	// int y;
 
 	(void)mods;
 	scene  = (t_scene *)param;
-	
+
 
 	// Update button state
-    if (button == MLX_MOUSE_BUTTON_LEFT) {
-        scene->mouse_state.left_button_down = (action == MLX_PRESS);
-    } else if (button == MLX_MOUSE_BUTTON_RIGHT) {
-        scene->mouse_state.right_button_down = (action == MLX_PRESS);
-    } else if (button == MLX_MOUSE_BUTTON_MIDDLE) {
-        scene->mouse_state.middle_button_down = (action == MLX_PRESS);
-    }
+	if (button == MLX_MOUSE_BUTTON_LEFT)
+		scene->mouse_state.left_button_down = (action == MLX_PRESS);
+	else if (button == MLX_MOUSE_BUTTON_RIGHT)
+		scene->mouse_state.right_button_down = (action == MLX_PRESS);
+	else if (button == MLX_MOUSE_BUTTON_MIDDLE)
+		scene->mouse_state.middle_button_down = (action == MLX_PRESS);
 
-	
+	// Handle UI panel clicks first when left mouse button is pressed
+
 
 	if (action == MLX_PRESS)
 	{
+		if (button == MLX_MOUSE_BUTTON_LEFT)
+		{
+			scene->mouse_state.left_button_down = true;
+			mlx_get_mouse_pos(scene->app.mlx, &scene->mouse_state.x, &scene->mouse_state.y);
+
+			// If UI handled the click, return early
+			if (ui_panel_mouse_click(scene, scene->mouse_state.x, scene->mouse_state.y))
+			{
+				// Re-render the scene if settings changed
+				render_scene(scene);
+				return;
+			}
+
+			// Only allow drag if click is in the panel header
+			if(scene->mouse_state.x >= scene->ui.panel.x && scene->mouse_state.x <= scene->ui.panel.x + scene->ui.panel.current_width &&
+				scene->mouse_state.y >= scene->ui.panel.y && scene->mouse_state.y <= scene->ui.panel.y + scene->ui.panel.header_height)
+			{
+				scene->mouse_state.is_dragging = true;
+
+				// If the right click is within the panel area, start dragging
+				scene->ui.panel.drag_offset_x = scene->mouse_state.x - scene->ui.panel.x;
+				scene->ui.panel.drag_offset_y = scene->mouse_state.y - scene->ui.panel.y;
+			}
+			else
+			{
+				scene->mouse_state.is_dragging = false;
+			}
+		}
+
 		if (button == MLX_MOUSE_BUTTON_RIGHT)
 		{
 			scene->mouse_state.is_dragging = true;
@@ -76,19 +68,36 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 		}
 	}
 	else if (action == MLX_RELEASE)
-    	{
-			if (button == MLX_MOUSE_BUTTON_RIGHT)
-			{
-				scene->mouse_state.is_dragging = false;
-				scene->mouse_state.right_button_down = false;
-				scene->graphic_settings.resolution_factor = 1;
-				
-				render_scene(scene);
-				display_status(scene);
-			}
+	{
+		if (button == MLX_MOUSE_BUTTON_LEFT)
+		{
+			scene->mouse_state.is_dragging = false;
+			scene->mouse_state.left_button_down = false;
+
+			render_scene(scene);
+			display_status(scene);
+		}
+
+		if (button == MLX_MOUSE_BUTTON_RIGHT)
+		{
+			scene->mouse_state.is_dragging = false;
+			scene->mouse_state.right_button_down = false;
+			scene->graphic_settings.resolution_factor = 1;
+
+			render_scene(scene);
+			display_status(scene);
 		}
 	}
+}
 
+static int clamp(int val, int min, int max)
+{
+	if (val < min)
+		return min;
+	if (val > max)
+		return max;
+	return val;
+}
 
 void	cursor_position_callback(double xpos, double ypos, void* param)
 {
@@ -98,35 +107,58 @@ void	cursor_position_callback(double xpos, double ypos, void* param)
 
 	scene = (t_scene *)param;
 
+	t_panel *p = &scene->ui.panel;
+
 	// Track mouse position
 	scene->mouse_state.x = (int32_t)xpos;
 	scene->mouse_state.y = (int32_t)ypos;
+
+	if (scene->mouse_state.left_button_down && scene->mouse_state.is_dragging)
+	{
+
+		p->x = clamp((int)xpos - p->drag_offset_x, 0, WIDTH - p->panel_img->width);
+		p->y = clamp((int)ypos - p->drag_offset_y, 0, HEIGHT - p->panel_img->height);
+
+		// p->x = (int)xpos - p->drag_offset_x;
+		// p->y = (int)ypos - p->drag_offset_y;
+		p->panel_img->instances[0].x = p->x;
+		p->panel_img->instances[0].y = p->y;
+
+		for (int i = 0; i < p->text_count; ++i)
+		{
+			if (p->panel_text[i])
+			{
+				p->panel_text[i]->instances[0].x = p->x + p->text_offset_x[i];
+				p->panel_text[i]->instances[0].y = p->y + p->text_offset_y[i];
+			}
+		}
+	}
 
 	if(scene->mouse_state.right_button_down && scene->mouse_state.is_dragging)
 	{
 		// Calculate movement deltas with floating point precision
 		double dx = (double)scene->mouse_state.x - scene->mouse_state.prev_mouse_x;
 		double dy = (double)scene->mouse_state.y - scene->mouse_state.prev_mouse_y;
-		
+
 		// Apply movement if there's any change
 		if (dx != 0.0 || dy != 0.0)
 		{
 			// Apply smoother movement with adjusted sensitivity
 			scene->camera.rotation.y += dx * 0.005;  // Reduced sensitivity
 			scene->camera.rotation.x += dy * 0.005;  // Reduced sensitivity
-			
+
 			// Store new positions with floating point precision
 			scene->mouse_state.prev_mouse_x = scene->mouse_state.x;
 			scene->mouse_state.prev_mouse_y = scene->mouse_state.y;
-			
+
 			// Set low resolution for dragging
 			scene->graphic_settings.resolution_factor = 4;
-			
+
 			// Get current time
 			current_time = mlx_get_time();
-			
+
 			// Limit rendering to 30 frames per second during dragging
-			if (current_time - last_render_time > 0.066) { // ~30 FPS
+			if (current_time - last_render_time > 0.033) { // ~30 FPS
 				render_scene(scene);
 				last_render_time = current_time;
 			}

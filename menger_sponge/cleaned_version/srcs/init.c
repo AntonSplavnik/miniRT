@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/27 11:49:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:21:35 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,8 @@ void scene_init(t_scene *scene)
 
     // Set up event hooks
     setup_hooks(scene);
+
+	init_toggle_button(scene);
+	init_ui_panel(scene);
+
 }

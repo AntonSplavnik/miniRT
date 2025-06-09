@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 10:18:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:19:00 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,6 @@
 #include "parser.h"
 #include "libft.h"
 
-#  define WIDTH 1920
-# define HEIGHT 1080
-
-# define NUM_THREADS 8 // Number of threads for multithreaded rendering
-
-// 3D rendering constants
-# define FOV			60.0
-# define NEAR_PLANE		0.1
-# define FAR_PLANE		100.0
-# define MAX_RAY_DEPTH	5
-# define MAX_BVH_DEPTH	8
-# define MAX_BVH_NODES	1000
-
-# define BLACK       0x000000  // RGB(0, 0, 0)
-# define WHITE       0xFFFFFF  // RGB(255, 255, 255)
-# define RED         0xFF0000  // RGB(255, 0, 0)
-# define GREEN       0x00FF00  // RGB(0, 255, 0)
-# define BLUE        0x0000FF  // RGB(0, 0, 255)
-
-# define MAGENTA_BURST   		0xFF00FF
-# define LIME_SHOCK     		0xCCFF00
-# define NEON_ORANGE     		0xFF6600
-# define PSYCHEDELIC_PURPLE		0x660066
-# define AQUA_DREAM      		0x33CCCC
-# define HOT_PINK        		0xFF66B2
-# define ELECTRIC_BLUE   		0x0066FF
-# define LAVA_RED        		0xFF3300
 
 // events
 int			close_handler(t_scene *scene);
@@ -171,11 +144,15 @@ void	set_up_scene_cylinder(t_scene *scene);
 void	set_up_scene_mesh(t_scene *scene);
 void	set_up_scene_cube(t_scene *scene);
 
-//user interface
-// void 	init_control_panel(t_scene *scene);
-// void	draw_control_panel(t_scene *scene);
-// void	destroy_control_panel(t_scene *scene);
 
+// UI Panel functions
+void	init_toggle_button(t_scene *scne);
+void	init_ui_panel(t_scene *scene);
+bool	draw_ui_panel(t_scene *scene);
+void	cleanup_ui_panel(t_scene *scene);
+bool	ui_panel_mouse_click(t_scene *scene, int x, int y);
+void	ui_animation_loop(void *param);
+void	draw_ui(t_scene *scene);
 
 // camera
 t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);

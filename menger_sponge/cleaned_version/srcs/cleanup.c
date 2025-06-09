@@ -12,7 +12,6 @@
 
 #include "../includes/miniRT.h"
 
-
 void cleanup_scene(t_scene *scene)
 {
 	t_object *obj;
@@ -22,6 +21,10 @@ void cleanup_scene(t_scene *scene)
 
 	if (!scene)
 		return;
+	
+	// Clean up UI panel resources
+	cleanup_ui_panel(scene);
+	
 	obj = scene->objects;
 	while (obj)
 	{

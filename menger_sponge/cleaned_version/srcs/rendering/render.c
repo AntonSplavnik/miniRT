@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 10:58:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:19:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	render_scene(t_scene *scene)
 	pthread_t	threads[NUM_THREADS];
 	t_thread_data	thread_data[NUM_THREADS];
 
-	display_progress(scene, "Rendering...");
+	// display_progress(scene, "Rendering...");
 	if (!scene)
 	{
 		printf("ERROR - Scene pointer is NULL\n");
@@ -102,6 +102,5 @@ void	render_scene(t_scene *scene)
         i++;
     }
 
-    // Display status (FPS, settings, etc.)
-    display_status(scene);
+    draw_ui(scene);
 }

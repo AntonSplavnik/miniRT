@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/miniRT.h"
+#include "../../includes/miniRT.h"
 
 // Sample texture at UV coordinates - works with MLX-loaded textures
 t_color sample_texture(t_texture *texture, double u, double v)

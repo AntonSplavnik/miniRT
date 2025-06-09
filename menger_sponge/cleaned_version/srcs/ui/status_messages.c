@@ -1,22 +1,56 @@
 #include "../../includes/miniRT.h"
 
+
 // Helper function to print status messages
 void display_status(t_scene *scene)
 {
 	char status[100];
+	static mlx_image_t *status_img = NULL;
 
-	if (scene->name)
+	if (!scene || !scene->app.mlx)
+		return;
+
+	// Delete previous status text image if it exists
+	if (status_img != NULL)
 	{
-		// Simple sphere status
-		snprintf(status, 100, "%s | Camera: (%.1f, %.1f, %.1f)", scene->name,
-				scene->camera.position.x, scene->camera.position.y, scene->camera.position.z);
+		mlx_delete_image(scene->app.mlx, status_img);
+		status_img = NULL;
 	}
-
-	// Clear the window and display the status with a new image
-	if (scene->app.mlx)
+	if (scene->graphic_settings.enable_status_message)
 	{
-		// Create a status bar at the top using a separate string display
-		// Draw a black rectangle at coordinates (0,0) with width WIDTH and height 30
-		mlx_put_string(scene->app.mlx, status, 10, 20);
+
+		if (scene->name)
+		{
+			snprintf(status,
+					100,
+					"%s | Camera: (%.1f, %.1f, %.1f)",
+					scene->name,
+					scene->camera.position.x,
+					scene->camera.position.y,
+					scene->camera.position.z);
+		}
+
+		// Display the status with a new image
+		if (scene->app.mlx)
+		{
+			status_img = mlx_put_string(scene->app.mlx, status, 50, 15);
+			// Create a new text image with the status message
+			if(status_img)
+				status_img->enabled = true;
+				// Set your tint color here
+			uint8_t r = 255, g = 160, b = 30;
+			for (uint32_t i = 0; i < status_img->width * status_img->height; ++i) {
+				uint8_t *pixel = &status_img->pixels[i * 4];
+				if (pixel[3] > 0) {
+					// Simple blend: scale your color by the alpha (keeps antialiasing)
+					float alpha = pixel[3] / 255.0f;
+					pixel[0] = (uint8_t)(r * alpha + pixel[0] * (1 - alpha));
+					pixel[1] = (uint8_t)(g * alpha + pixel[1] * (1 - alpha));
+					pixel[2] = (uint8_t)(b * alpha + pixel[2] * (1 - alpha));
+					// pixel[3] stays as is
+				}
+			}
+		}
+
 	}
 }

@@ -6,26 +6,34 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/05 11:58:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/09 14:19:22 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
 
+
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
+
 	scene_init(scene);
+
 	if (!parse_scene_file(filename, scene))
 	{
 		cleanup_scene(scene);
 		ft_putendl_fd("Error: Failed to parse scene file\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+
+	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene); 	// Register the UI animation loop
+
 	render_scene(scene);
-	display_status(scene);
+
 	mlx_loop(scene->app.mlx);
+
 	close_callback(scene);
+
 	exit(EXIT_SUCCESS);
 }
 
@@ -47,3 +55,4 @@ int	main(int ac, char **av)
 		print_usage_and_exit();
 	return (0);
 }
+

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   close_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/05/23 15:35:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:51:21 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
-#include <stdio.h>
-
 
 void    mlx_cleanup(t_scene *scene)
 {

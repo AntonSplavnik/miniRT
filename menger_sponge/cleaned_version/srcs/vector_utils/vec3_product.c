@@ -12,7 +12,6 @@
 
 #include "../../includes/miniRT.h"
 
-
 // Multiply a vector by a scalar
 t_vec3	vec3_scale(t_vec3 v, double t)
 {

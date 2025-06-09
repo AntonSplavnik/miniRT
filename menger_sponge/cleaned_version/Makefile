@@ -88,9 +88,9 @@ SRC_FILES = main.c \
 	rendering/trace_rays.c \
 	rendering/texture_uv_mapping.c \
 	rendering/bumpmap.c	\
-	ui/control_panel.c \
+	ui/ui_control_panel.c \
+	ui/display_progress.c \
 	ui/status_messages.c \
-	ui/user_interface.c \
 	utils/ft_atof.c \
 	utils/ft_isspace.c \
 	utils/ft_split_line.c \
@@ -169,6 +169,18 @@ mlx: mlx_check
 	@cd $(MLX42_BUILD) && cmake .. -DDEBUG=1
 	@$(MAKE) -C $(MLX42_BUILD)
 
+# Clean only MLX42 build artifacts
+mlx_clean:
+	@if [ -d "$(MLX42_BUILD)" ]; then \
+		$(MAKE) -C $(MLX42_BUILD) clean; \
+		echo "MLX42 build cleaned."; \
+	fi
+
+# Remove entire MLX42 folder (library and build)
+mlx_remove:
+	@echo "Removing MLX42 library and build directory..."
+	@rm -rf $(MLX42_PATH)
+
 # Clean build files
 clean:
 	@echo "Cleaning object files..."
@@ -183,6 +195,7 @@ ifeq ($(UNAME_S),Darwin)
 	@rm -f libmlx42.a
 endif
 	@$(MAKE) -C $(LIBFT_PATH) fclean
+	@echo "Clean complete."
 
 re: fclean all
 
