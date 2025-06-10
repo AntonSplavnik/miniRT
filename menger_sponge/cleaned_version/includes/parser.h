@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 14:55:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:27:23 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ int		parse_cone(t_scene *scene, char *line);
 int		parse_triangle(t_scene *scene, char *line);
 int		parse_cube(t_scene *scene, char *line);
 int		parse_mesh(t_scene *scene, char *line);
+
+// Mesh parsing functions
+void	parse_vertex_line(char *line, t_vec3 *vertex);
+void	count_obj_elements(int fd, int *vertex_count, int *face_count);
 
 // File handling functions
 int		is_valid_filename(char *filename);

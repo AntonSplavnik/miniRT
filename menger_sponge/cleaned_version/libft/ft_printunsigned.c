@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 13:42:20 by abillote          #+#    #+#             */
-/*   Updated: 2023/12/21 15:48:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:09:42 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 int	ft_count_digit_unsigned(unsigned int nb)
 {
 	int	count;
-	int	weight;
 
 	count = 0;
-	weight = 1;
 	while (nb > 9)
 	{
 		nb /= 10;
 		count += 1;
-		weight *= 10;
 	}
 	count += 1;
 	return (count);
