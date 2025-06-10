@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:30:19 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 12:25:44 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:48:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	process_line_count(char *line, int *vertex_count, int *face_count)
 {
 	if (line[0] == 'v' && line[1] == ' ')
 		(*vertex_count)++;
-	else if (line[0] == 'f' && line[1] == ' ')
+	if (line[0] == 'f' && line[1] == ' ')
 		(*face_count)++;
 }
 
@@ -33,7 +33,6 @@ void	count_obj_elements(int fd, int *vertex_count, int *face_count)
 		free(line);
 		line = get_next_line(fd);
 	}
-	get_next_line(-1);
 }
 
 static int	validate_vertex_parts(char **parts)
@@ -64,4 +63,10 @@ void	parse_vertex_line(char *line, t_vec3 *vertex)
 	vertex->y = ft_atof(parts[2]);
 	vertex->z = ft_atof(parts[3]);
 	free_split(parts);
+}
+
+void	init_mesh_counters(int *vertex_count, int *face_count)
+{
+	*vertex_count = 0;
+	*face_count = 0;
 }

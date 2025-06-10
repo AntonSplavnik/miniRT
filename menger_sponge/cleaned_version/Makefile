@@ -70,6 +70,7 @@ SRC_FILES = main.c \
 	parser/parser_material.c \
 	parser/parser_mesh.c \
 	parser/parser_mesh_utils.c \
+	parser/parser_mesh_loader.c \
 	parser/parser_plane.c \
 	parser/parser_sphere.c \
 	parser/parser_triangle.c \
