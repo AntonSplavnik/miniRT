@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 15:50:11 by abillote          #+#    #+#             */
-/*   Updated: 2024/01/25 15:05:38 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:11:14 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*store_file(int fd, char *stat_buffer)
 char	*get_next_line(int fd)
 {
 	char		*new_line;
-	static char	*stat_buffer[_SC_OPEN_MAX];
+	static char	*stat_buffer[1024];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
