@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 15:54:04 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:03:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,14 +131,22 @@ void	parse_mesh_vectors(t_scene *scene, char **parts, t_vec3 *position, t_vec3 *
 	}
 }
 
-static int	validate_mesh_scale_color(char **parts, double *scale, t_color *color)
+void	parse_mesh_scale_color(t_scene *scene, char **parts, t_vec3 *scale, t_color *color)
 {
-	*scale = ft_atof(parts[4]);
-	if (*scale <= 0)
-		return (0);
+	double scale_value;
+
+	scale_value = ft_atof(parts[4]);
+	if (scale_value <= 0)
+	{
+		free_split(parts);
+		parse_error(scene, "Expected format for mesh scale: positive number > 0");
+	}
+	*scale = (t_vec3){scale_value, scale_value, scale_value};
 	if (!read_color(parts[5], color))
-		return (0);
-	return (1);
+	{
+		free_split(parts);
+		parse_error(scene, "Invalid format for mesh color. Expected: r,g,b");
+	}
 }
 
 t_object	*create_mesh_object_from_data(t_mesh *mesh, t_color color)
@@ -155,20 +163,9 @@ t_object	*create_mesh_object_from_data(t_mesh *mesh, t_color color)
 	return (mesh_obj);
 }
 
-void	apply_mesh_transforms(t_mesh *mesh, t_vec3 position,
-	t_vec3 rotation, double scale)
-{
-	mesh->position = position;
-	mesh->rotation = rotation;
-	mesh->scale = (t_vec3){scale, scale, scale};
-}
-
 int	parse_mesh(t_scene *scene, char *line)
 {
 	char		**parts;
-	t_vec3		position;
-	t_vec3		rotation;
-	double		scale;
 	t_color		color;
 	t_mesh		*mesh;
 	t_object	*mesh_obj;
@@ -177,17 +174,14 @@ int	parse_mesh(t_scene *scene, char *line)
 	if (!parts)
 		return (0);
 	check_parts_count(scene, parts, 6, "mesh");
-	parse_mesh_vectors(scene, parts, &position, &rotation);
-	if (!validate_mesh_scale_color(parts, &scale, &color))
+	mesh = load_obj_file(parts[1]);
+	if (!mesh)
 	{
 		free_split(parts);
-		parse_error(scene, "Invalid mesh scale/color");
-		return (0);
+		parse_error(scene, "Failed to load OBJ file");
 	}
-	mesh = load_obj_file(parts[1]);
-	if (!check_mesh_error(mesh, parts, scene))
-		return (0);
-	apply_mesh_transforms(mesh, position, rotation, scale);
+	parse_mesh_vectors(scene, parts, &mesh->position, &mesh->rotation);
+	parse_mesh_scale_color(scene, parts, &mesh->scale, &color);
 	mesh_obj = create_mesh_object_from_data(mesh, color);
 	add_object(scene, mesh_obj);
 	free_split(parts);
