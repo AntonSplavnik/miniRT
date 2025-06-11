@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 17:32:18 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:59:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ int			check_range(double value, double min, double max);
 int			count_parts(char **parts);
 
 // Error checking (parser_error.c)
-void		check_parts_count(t_scene *scene, char **parts, int expected, char *element);
+void		check_parts_count(t_scene *scene, char **parts, \
+				int expected, char *element);
 
 // Identifier functions (parser_identifiers.c)
 int			is_ambient(char *line);
@@ -65,11 +66,14 @@ t_object	*create_mesh_object(t_mesh *mesh, t_color color);
 t_mesh		*create_mesh(t_triangle *triangles, int triangle_count);
 
 // Mesh processing (parser_mesh_process.c)
-void		parse_obj_content(int fd, t_vec3 *vertices, t_triangle *triangles, int *triangle_count);
+void		parse_obj_content(int fd, t_vec3 *vertices, \
+					t_triangle *triangles, int *triangle_count);
 void		calculate_triangle_normal(t_triangle *triangle);
-void		parse_face_line(char *line, t_vec3 *vertices, t_triangle *triangles, int *triangle_index);
+void		parse_face_line(char *line, t_vec3 *vertices, \
+					t_triangle *triangles, int *triangle_index);
 void		process_vertex_line(char *line, t_vec3 *vertices, int *v_idx);
-void		process_face_line(char *line, t_triangle *triangles, t_vec3 *vertices, int *t_idx);
+void		process_face_line(char *line, t_triangle *triangles, \
+					t_vec3 *vertices, int *t_idx);
 
 // File handling functions (parser_file.c)
 int			is_valid_filename(char *filename);
@@ -84,10 +88,13 @@ int			parse_parameters(t_scene *scene, char *line);
 // Material parsing (parser_material.c)
 char		*extract_material_block(char *line);
 void		trim_material_block(char *line);
-double		get_property_value(const char *material_block, const char *property);
-void		parse_material_properties(t_scene *scene, char *material_block, t_material *material);
+double		get_property_value(const char *material_block, \
+				const char *property);
+void		parse_material_properties(t_scene *scene, char *material_block, \
+					t_material *material);
 double		ft_clamp(double value, double min, double max);
-void		parse_checker_color(t_scene *scene, t_color *color, const char *color_pos, int length);
+void		parse_checker_color(t_scene *scene, t_color *color, \
+				const char *color_pos, int length);
 
 // Texture handling (parser_texture.c)
 t_texture	*create_texture(t_scene *scene, const char *filename);
@@ -95,14 +102,17 @@ void		free_texture_mlx(t_texture *texture);
 
 // Bump map handling (parser_bumpmap.c)
 t_bump_map	*create_bump_map(t_scene *scene, const char *filename);
-void		load_bump_map_file(t_scene *scene, t_bump_map **bump_map, const char *filename);
+void		load_bump_map_file(t_scene *scene, t_bump_map **bump_map, \
+					const char *filename);
 void		allocate_elevation(t_scene *scene, t_bump_map **bump_map, int fd);
 void		free_bump_map(t_bump_map *bump_map);
 
 // Bump map PPM header parsing (parser_bumpmap_ppm_header.c)
 void		parse_ppm_header(t_scene *scene, t_bump_map **bump_map, int fd);
-void		read_width_and_height(t_scene *scene, char *line, t_bump_map **bump_map, int fd);
-void		validate_max_color_value(t_scene *scene, char *line, t_bump_map **bump_map, int fd);
+void		read_width_and_height(t_scene *scene, char *line, \
+					t_bump_map **bump_map, int fd);
+void		validate_max_color_value(t_scene *scene, char *line, \
+									t_bump_map **bump_map, int fd);
 int			allocate_elevation_memory(t_bump_map *bump_map, \
 										int fd, int total_pixels);
 
@@ -111,6 +121,7 @@ char		*read_remaining_file(int fd, size_t *size);
 
 // Bump map RGB processing (parser_bumpmap_rgb_process.c)
 float		calculate_rgb_normalized_value(char **current_pos);
-int			process_rgb_data(t_bump_map **bump_map, char *data_buffer, size_t buffer_size, int total_pixels);
+int			process_rgb_data(t_bump_map **bump_map, char *data_buffer, \
+						size_t buffer_size, int total_pixels);
 
 #endif

@@ -6,13 +6,14 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:02:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:58:01 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height)
+t_object	*create_cylinder(t_vec3 center, t_vec3 axis, \
+								double diameter, double height)
 {
 	t_object	*object;
 	t_cylinder	*cylinder;
@@ -99,7 +100,7 @@ int	parse_cylinder(t_scene *scene, char *line)
 	parse_cylinder_data(scene, parts, &cylinder_data, &color);
 	free_split(parts);
 	cylinder = create_cylinder(cylinder_data.center, cylinder_data.axis, \
-										cylinder_data.diameter, cylinder_data.height);
+								cylinder_data.diameter, cylinder_data.height);
 	if (!cylinder)
 		parse_error(scene, "Failed to create cylinder");
 	cylinder->material.color = color;

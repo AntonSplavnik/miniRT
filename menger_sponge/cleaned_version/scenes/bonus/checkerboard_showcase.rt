@@ -1,6 +1,6 @@
 # Specialized Checkerboard Patterns for Different Objects
 A 0.2 255,255,255
-C 0,0,-15 0,-0.3,1 70
+C 0,0,-15 0,0,1 70
 L 8,10,-5 0.7 255,255,255
 # L -8,8,-10 0.6 255,240,220
 
@@ -31,7 +31,7 @@ sp 9,0,0 2 200,100,100 {checker_color:100,200,100 checker_size:4}
 cy -9,-2,4 0,1,0 1.5 4 255,200,200 {checker_color:200,255,200 checker_size:10}
 
 # Diagonal pattern cylinder (angled axis)
-cy -1,-2,4 0.7,0.7,0 1.5 4 200,255,255 {checker_color:255,200,200 checker_size:9}
+cy -1,-2,4 0,0,1 1.5 4 200,255,255 {checker_color:255,200,200 checker_size:9}
 
 # Cube with checkerboard pattern
 cu 6,-2,4 2 0,255,0 {checker_color:100,100,255 checker_size:5}

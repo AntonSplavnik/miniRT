@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 11:14:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:58:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ void	calculate_triangle_normal(t_triangle *triangle)
 }
 
 // Creates a triangle object with the given vertices and color
-// Precomputes the normal vector of the triangle for more efficient intersection calculations
+// Precomputes the normal vector of the triangle
+// for more efficient intersection calculations
 t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color)
 {
 	t_object	*object;

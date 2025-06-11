@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 17:27:52 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 17:28:56 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:36:21 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,17 @@ char	*read_remaining_file(int fd, size_t *size)
 		*size = total_size;
 	}
 	return (result);
+}
+
+// Free bump map memory
+void	free_bump_map(t_bump_map *bump_map)
+{
+	if (bump_map)
+	{
+		if (bump_map->elevation)
+			free(bump_map->elevation);
+		if (bump_map->filename)
+			free(bump_map->filename);
+		free(bump_map);
+	}
 }

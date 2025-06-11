@@ -3,7 +3,7 @@
 A 0.2 255,255,255
 
 # Camera position
-C 0,3,8 0,-0.3,-1 65
+C 0,3,8 0,-0.287,-0.958 65
 
 # Three primary colored lights in triangular arrangement
 L -4,5,2 1.0 255,0,0

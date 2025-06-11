@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 13:45:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:36:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ direction.x + direction.z * direction.z));
 	if (!check_range(scene->camera.fov, 0.0, 180.0))
 		parse_error(scene, "Camera FOV must be between 0.0 and 180.0");
 }
-
 
 int	parse_camera(t_scene *scene, char *line)
 {
