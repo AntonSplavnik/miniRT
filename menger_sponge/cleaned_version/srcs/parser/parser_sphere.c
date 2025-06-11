@@ -6,11 +6,35 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 15:03:19 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:04:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+
+t_object	*create_sphere(t_vec3 center, double diameter, t_color color)
+{
+	t_object	*object;
+	t_sphere	*sphere;
+
+	object = malloc(sizeof(t_object));
+	if (!object)
+		return (NULL);
+	sphere = malloc(sizeof(t_sphere));
+	if (!sphere)
+	{
+		free(object);
+		return (NULL);
+	}
+	sphere->center = center;
+	sphere->diameter = diameter;
+	sphere->radius = diameter / 2.0;
+	object->type = SPHERE;
+	object->material = create_material(color);
+	object->data = sphere;
+	object->next = NULL;
+	return (object);
+}
 
 int	parse_sphere_data(t_scene *scene, char **parts, \
 						t_sphere *sphere, t_color *color)

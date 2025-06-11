@@ -36,26 +36,17 @@ SRC_FILES = main.c \
 	cleanup.c \
 	close_handler.c \
 	init.c \
-	material.c \
 	string_utils.c \
 	camera/camera.c \
 	controls/keys.c \
 	controls/mouse.c \
-	light/lights.c \
 	objects/add_object.c \
-	objects/cone/cone_creation.c \
 	objects/cone/cone_intersect.c \
-	objects/cube/cube_creation.c \
 	objects/cube/cube_intersect.c \
-	objects/cylinder/cylinder_creation.c \
 	objects/cylinder/cylinder_intersect.c \
-	objects/mesh/mesh_creation.c \
 	objects/mesh/mesh_intersect.c \
-	objects/plane/plane_creation.c \
 	objects/plane/plane_intersect.c \
-	objects/sphere/sphere_creation.c \
 	objects/sphere/sphere_intersect.c \
-	objects/triangle/triangle_creation.c \
 	objects/triangle/triangle_intersect.c \
 	parser/parser_ambient.c \
 	parser/parser_camera.c \

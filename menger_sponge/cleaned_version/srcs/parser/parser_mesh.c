@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 16:03:27 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:08:58 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	parse_file_content(FILE *file, t_vec3 *vertices,
 	}
 }
 
-static t_mesh	*create_mesh_object(t_triangle *triangles, int triangle_count)
+t_mesh	*create_mesh(t_triangle *triangles, int triangle_count)
 {
 	t_mesh	*mesh;
 
@@ -112,7 +112,7 @@ t_mesh	*load_obj_file(const char *filename)
 	rewind(file);
 	parse_file_content(file, vertices, triangles, &triangle_count);
 	fclose(file);
-	mesh = create_mesh_object(triangles, triangle_count);
+	mesh = create_mesh(triangles, triangle_count);
 	free(vertices);
 	return (mesh);
 }
@@ -149,7 +149,7 @@ void	parse_mesh_scale_color(t_scene *scene, char **parts, t_vec3 *scale, t_color
 	}
 }
 
-t_object	*create_mesh_object_from_data(t_mesh *mesh, t_color color)
+t_object	*create_mesh_object(t_mesh *mesh, t_color color)
 {
 	t_object	*mesh_obj;
 
@@ -182,7 +182,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	}
 	parse_mesh_vectors(scene, parts, &mesh->position, &mesh->rotation);
 	parse_mesh_scale_color(scene, parts, &mesh->scale, &color);
-	mesh_obj = create_mesh_object_from_data(mesh, color);
+	mesh_obj = create_mesh_object(mesh, color);
 	add_object(scene, mesh_obj);
 	free_split(parts);
 	return (1);

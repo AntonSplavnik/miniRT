@@ -6,11 +6,34 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 15:14:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:03:49 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+
+t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color)
+{
+	t_object	*object;
+	t_plane		*plane;
+
+	object = malloc(sizeof(t_object));
+	if (!object)
+		return (NULL);
+	plane = malloc(sizeof(t_plane));
+	if (!plane)
+	{
+		free(object);
+		return (NULL);
+	}
+	plane->normal = vec3_normalize(normal);
+	plane->point = point;
+	object->data = plane;
+	object->material = create_material(color);
+	object->type = PLANE;
+	object->next = NULL;
+	return (object);
+}
 
 void	parse_plane_data(t_scene *scene, char **parts, \
 							t_plane *plane, t_color *color)

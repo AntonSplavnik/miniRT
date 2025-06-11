@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/09 14:19:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:08:42 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,6 @@ t_material	create_material(t_color color);
 
 // object creation
 void		add_object(t_scene *scene, t_object *object);
-t_object	*create_sphere(t_vec3 center, double diameter, t_color color);
-t_object	*create_cylinder(t_vec3 center, t_vec3 axis, double diameter, double height);
-t_object	*create_plane(t_vec3 point, t_vec3 normal, t_color color);
-t_object	*create_cone(t_vec3 tip, t_vec3 axis, double radius, double height);
-t_object	*create_cube(t_vec3 center, double side_length, t_color color);
-t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color);
-t_object	*create_mesh(t_triangle *triangles, int triangle_count, t_color color);
-t_object	*create_cube_mesh(t_vec3 center, double size, t_color color);
 
 // object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);

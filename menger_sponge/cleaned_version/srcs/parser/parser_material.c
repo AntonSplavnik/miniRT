@@ -6,11 +6,30 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 14:55:03 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:06:11 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+
+
+t_material	create_material(t_color color)
+{
+	t_material	material;
+
+	material.color = color;
+	material.specular = 0.5;
+	material.shininess = 64;
+	material.reflectivity = 0.0;
+	material.has_checker = 0;
+	material.checker_size = 0;
+	material.checker_color = create_color(0, 0, 0);
+	material.has_texture = 0;
+	material.texture = NULL;
+	material.has_bump_map = 0;
+	material.bump_map = NULL;
+	return (material);
+}
 
 /**
  * Extracts the material block (if any) from a line in the RT file

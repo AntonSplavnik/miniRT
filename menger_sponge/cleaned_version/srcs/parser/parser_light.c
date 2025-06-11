@@ -6,11 +6,42 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 14:38:10 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:05:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+
+t_light	*create_light(t_vec3 position, double intensity, t_color color)
+{
+	t_light	*light;
+
+	light = malloc(sizeof(t_light));
+	if (!light)
+		return (NULL);
+	light->color = color;
+	light->intensity = intensity;
+	light->position = position;
+	light->next = NULL;
+	return (light);
+}
+
+void	add_light(t_scene *scene, t_light *light)
+{
+	t_light	*current;
+
+	if (!scene || !light)
+		return ;
+	if (!scene->lights)
+	{
+		scene->lights = light;
+		return ;
+	}
+	current = scene->lights;
+	while (current->next)
+		current = current->next;
+	current->next = light;
+}
 
 t_light	*parse_light_properties(t_scene *scene, char **parts)
 {

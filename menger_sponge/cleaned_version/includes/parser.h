@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 15:50:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:08:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	count_obj_elements(int fd, int *vertex_count, int *face_count);
 t_mesh	*load_obj_file(const char *filename);
 void	apply_mesh_transforms(t_mesh *mesh, t_vec3 position,
 	t_vec3 rotation, double scale);
-t_object	*create_mesh_object_from_data(t_mesh *mesh, t_color color);
-t_mesh	*create_mesh_from_data(t_triangle *triangles, int triangle_count);
+t_object	*create_mesh_object(t_mesh *mesh, t_color color);
+t_mesh	*create_mesh(t_triangle *triangles, int triangle_count);
 void	parse_obj_content(int fd, t_vec3 *vertices, t_triangle *triangles, int *triangle_count);
 void	calculate_triangle_normal(t_triangle *triangle);
 void	parse_face_line(char *line, t_vec3 *vertices, t_triangle *triangles, int *triangle_index);
