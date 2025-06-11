@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:18:39 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 10:28:27 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int	parse_scene_file(char *filename, t_scene *scene)
 	int	success;
 
 	fd = open_scene_file(scene, filename);
-	if (fd < 0)
-		return (0);
 	success = read_scene_file(fd, scene);
 	close(fd);
 	if (!success)

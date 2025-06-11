@@ -6,12 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:34:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:44:26 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
 
 /**
  * Find the substring in a string (like standard strstr)

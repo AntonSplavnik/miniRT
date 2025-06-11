@@ -6,12 +6,24 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:04:43 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:14:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
+void	calculate_triangle_normal(t_triangle *triangle)
+{
+	t_vec3	edge1;
+	t_vec3	edge2;
+
+	edge1 = vec3_subtract(triangle->v1, triangle->v0);
+	edge2 = vec3_subtract(triangle->v2, triangle->v0);
+	triangle->normal = vec3_normalize(vec3_cross(edge1, edge2));
+}
+
+// Creates a triangle object with the given vertices and color
+// Precomputes the normal vector of the triangle for more efficient intersection calculations
 t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color)
 {
 	t_object	*object;
@@ -29,11 +41,7 @@ t_object	*create_triangle(t_vec3 v0, t_vec3 v1, t_vec3 v2, t_color color)
 	triangle->v0 = v0;
 	triangle->v1 = v1;
 	triangle->v2 = v2;
-
-	// Precompute normal for efficiency
-	t_vec3 edge1 = vec3_subtract(v1, v0);
-	t_vec3 edge2 = vec3_subtract(v2, v0);
-	triangle->normal = vec3_normalize(vec3_cross(edge1, edge2));
+	calculate_triangle_normal(triangle);
 	object->data = triangle;
 	object->material = create_material(color);
 	object->type = TRIANGLE;

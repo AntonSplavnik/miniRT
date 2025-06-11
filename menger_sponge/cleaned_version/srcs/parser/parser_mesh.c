@@ -6,77 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:08:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:45:33 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
-static FILE	*open_obj_file(const char *filename)
-{
-	FILE	*file;
-
-	file = fopen(filename, "r");
-	return (file);
-}
-
-static t_vec3	*allocate_vertices(int vertex_count)
-{
-	t_vec3	*vertices;
-
-	vertices = malloc(sizeof(t_vec3) * vertex_count);
-	return (vertices);
-}
-
-static t_triangle	*allocate_triangles(int face_count)
-{
-	t_triangle	*triangles;
-
-	triangles = malloc(sizeof(t_triangle) * face_count * 2);
-	return (triangles);
-}
-
-static void	count_file_elements(FILE *file, int *vertex_count, int *face_count)
-{
-	char	line[256];
-
-	*vertex_count = 0;
-	*face_count = 0;
-	while (fgets(line, sizeof(line), file))
-	{
-		if (line[0] == 'v' && line[1] == ' ')
-			(*vertex_count)++;
-		if (line[0] == 'f' && line[1] == ' ')
-			(*face_count)++;
-	}
-}
-
-void	calculate_triangle_normal(t_triangle *triangle)
-{
-	t_vec3	edge1;
-	t_vec3	edge2;
-
-	edge1 = vec3_subtract(triangle->v1, triangle->v0);
-	edge2 = vec3_subtract(triangle->v2, triangle->v0);
-	triangle->normal = vec3_normalize(vec3_cross(edge1, edge2));
-}
-
-static void	parse_file_content(FILE *file, t_vec3 *vertices,
-	t_triangle *triangles, int *t_idx)
-{
-	char	line[256];
-	int		v_idx;
-
-	v_idx = 0;
-	*t_idx = 0;
-	while (fgets(line, sizeof(line), file))
-	{
-		if (line[0] == 'v' && line[1] == ' ')
-			process_vertex_line(line, vertices, &v_idx);
-		else if (line[0] == 'f' && line[1] == ' ')
-			process_face_line(line, triangles, vertices, t_idx);
-	}
-}
 
 t_mesh	*create_mesh(t_triangle *triangles, int triangle_count)
 {
@@ -93,31 +27,22 @@ t_mesh	*create_mesh(t_triangle *triangles, int triangle_count)
 	return (mesh);
 }
 
-t_mesh	*load_obj_file(const char *filename)
+t_object	*create_mesh_object(t_mesh *mesh, t_color color)
 {
-	FILE		*file;
-	int			vertex_count;
-	int			face_count;
-	t_vec3		*vertices;
-	t_triangle	*triangles;
-	int			triangle_count;
-	t_mesh		*mesh;
+	t_object	*mesh_obj;
 
-	file = open_obj_file(filename);
-	if (!file)
+	mesh_obj = malloc(sizeof(t_object));
+	if (!mesh_obj)
 		return (NULL);
-	count_file_elements(file, &vertex_count, &face_count);
-	vertices = allocate_vertices(vertex_count);
-	triangles = allocate_triangles(face_count);
-	rewind(file);
-	parse_file_content(file, vertices, triangles, &triangle_count);
-	fclose(file);
-	mesh = create_mesh(triangles, triangle_count);
-	free(vertices);
-	return (mesh);
+	mesh_obj->type = MESH;
+	mesh_obj->data = mesh;
+	mesh_obj->material = create_material(color);
+	mesh_obj->next = NULL;
+	return (mesh_obj);
 }
 
-void	parse_mesh_vectors(t_scene *scene, char **parts, t_vec3 *position, t_vec3 *rotation)
+void	parse_mesh_vectors(t_scene *scene, char **parts, \
+							t_vec3 *position, t_vec3 *rotation)
 {
 	if (!read_vector(parts[2], position))
 	{
@@ -131,15 +56,16 @@ void	parse_mesh_vectors(t_scene *scene, char **parts, t_vec3 *position, t_vec3 *
 	}
 }
 
-void	parse_mesh_scale_color(t_scene *scene, char **parts, t_vec3 *scale, t_color *color)
+void	parse_mesh_scale_color(t_scene *scene, char **parts, \
+								t_vec3 *scale, t_color *color)
 {
-	double scale_value;
+	double	scale_value;
 
 	scale_value = ft_atof(parts[4]);
 	if (scale_value <= 0)
 	{
 		free_split(parts);
-		parse_error(scene, "Expected format for mesh scale: positive number > 0");
+		parse_error(scene, "Expected format for mesh scale: positive number");
 	}
 	*scale = (t_vec3){scale_value, scale_value, scale_value};
 	if (!read_color(parts[5], color))
@@ -147,20 +73,6 @@ void	parse_mesh_scale_color(t_scene *scene, char **parts, t_vec3 *scale, t_color
 		free_split(parts);
 		parse_error(scene, "Invalid format for mesh color. Expected: r,g,b");
 	}
-}
-
-t_object	*create_mesh_object(t_mesh *mesh, t_color color)
-{
-	t_object	*mesh_obj;
-
-	mesh_obj = malloc(sizeof(t_object));
-	if (!mesh_obj)
-		return (NULL);
-	mesh_obj->type = MESH;
-	mesh_obj->data = mesh;
-	mesh_obj->material = create_material(color);
-	mesh_obj->next = NULL;
-	return (mesh_obj);
 }
 
 int	parse_mesh(t_scene *scene, char *line)

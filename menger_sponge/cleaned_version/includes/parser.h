@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:08:14 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 11:36:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ int		parse_mesh(t_scene *scene, char *line);
 void	parse_vertex_line(char *line, t_vec3 *vertex);
 void	count_obj_elements(int fd, int *vertex_count, int *face_count);
 t_mesh	*load_obj_file(const char *filename);
-void	apply_mesh_transforms(t_mesh *mesh, t_vec3 position,
-	t_vec3 rotation, double scale);
 t_object	*create_mesh_object(t_mesh *mesh, t_color color);
 t_mesh	*create_mesh(t_triangle *triangles, int triangle_count);
 void	parse_obj_content(int fd, t_vec3 *vertices, t_triangle *triangles, int *triangle_count);
@@ -68,7 +66,6 @@ void	calculate_triangle_normal(t_triangle *triangle);
 void	parse_face_line(char *line, t_vec3 *vertices, t_triangle *triangles, int *triangle_index);
 void	process_vertex_line(char *line, t_vec3 *vertices, int *v_idx);
 void	process_face_line(char *line, t_triangle *triangles, t_vec3 *vertices, int *t_idx);
-int		check_mesh_error(t_mesh *mesh, char **parts, t_scene *scene);
 
 
 // File handling functions

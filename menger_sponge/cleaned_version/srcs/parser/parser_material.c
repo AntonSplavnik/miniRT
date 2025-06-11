@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:06:11 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:00:50 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,31 @@ t_material	create_material(t_color color)
 
 /**
  * Extracts the material block (if any) from a line in the RT file
- * The material block is expected to be in the format: {property1:value1,property2:value2,...}
+ * The material block is expected to be in the format:
+ * {property1:value1 property2:value2 ...}
  *
  * @param line The full line from the RT file
- * @return A newly allocated string containing just the material block, or NULL if none found
+ * @return A newly allocated string containing just the material block,
+ * or NULL if none found
  */
-char *extract_material_block(char *line)
+char	*extract_material_block(char *line)
 {
-	char *start;
-	char *end;
-	char *material_block;
-	int length;
+	char	*start;
+	char	*end;
+	char	*material_block;
+	int		length;
 
-	// Find opening brace
 	start = ft_strchr(line, '{');
 	if (!start)
 		return (NULL);
-
-	// Find closing brace
 	end = ft_strchr(start, '}');
 	if (!end)
 		return (NULL);
-
-	// Calculate length of material block (including braces)
 	length = end - start + 1;
-
-	// Allocate and copy the material block
 	material_block = (char *)malloc(length + 1);
 	if (!material_block)
 		return (NULL);
-
 	ft_strlcpy(material_block, start, length + 1);
-
 	return (material_block);
 }
 
@@ -216,9 +209,28 @@ void	*get_property_filename(const char *material_block, const char *property, ch
 	return (*filename);
 }
 
+void	get_texture_bump_map(t_scene *scene, char *material_block, t_material *material)
+{
+	char	*texture_filename;
+	char	*bump_map_filename;
+
+	if (get_property_filename(material_block, "texture", &texture_filename))
+	{
+		material->has_texture = 1;
+		material->texture = create_texture(scene, texture_filename);
+		free(texture_filename);
+	}
+	if (get_property_filename(material_block, "bumpmap", &bump_map_filename))
+	{
+		material->has_bump_map = 1;
+		material->bump_map = create_bump_map(scene, bump_map_filename);
+		free(bump_map_filename);
+	}
+}
+
 /**
  * Parses material properties from a material block and applies them to a material
- *
+ * Expected material block format: {property1:value1 property2:value2 ...}
  * @param material_block The material block string
  * @param material Pointer to the material to update
  */
@@ -226,60 +238,26 @@ void parse_material_properties(t_scene *scene, char *material_block, t_material 
 {
 	double	value;
 	t_color	checker_color;
-	char *texture_filename;
-	char *bump_map_filename;
 
-	// Parse reflectivity
 	value = get_property_value(material_block, "reflectivity");
 	if (value >= 0.0)
 		material->reflectivity = ft_clamp(value, 0.0, 1.0);
-
-	// Parse transparency
-	value = get_property_value(material_block, "transparency");
-	if (value >= 0.0)
-		material->transparency = ft_clamp(value, 0.0, 1.0);
-
-	// Parse refractive index
-	value = get_property_value(material_block, "refractive_index");
-	if (value >= 0.0)
-		material->refractive_index = value > 1.0 ? value : 1.0;
-
-	// Parse specular
 	value = get_property_value(material_block, "specular");
 	if (value >= 0.0)
 		material->specular = ft_clamp(value, 0.0, 1.0);
-
-	// Parse shininess
 	value = get_property_value(material_block, "shininess");
 	if (value >= 0.0)
 		material->shininess = value;
-
-	// Parse checker size
 	value = get_property_value(material_block, "checker_size");
 	if (value > 0)
 		material->checker_size = value;
-
-	// Parse checker color
 	if(get_property_color(scene, material_block, "checker_color", &checker_color))
 	{
 		material->checker_color = checker_color;
 		material->has_checker = 1;
 	}
-
-	if (get_property_filename(material_block, "texture", &texture_filename))
-	{
-		material->has_texture = 1;
-		material->texture = create_texture(scene, texture_filename);
-		free(texture_filename); // Free the texture filename after use
-	}
-
-	if (get_property_filename(material_block, "bumpmap", &bump_map_filename))
-	{
-		material->has_bump_map = 1;
-		material->bump_map = create_bump_map(scene, bump_map_filename);
-		free(bump_map_filename); // Free the bump map filename after use
-	}
-	free(material_block); // Free the material block after parsing
+	get_texture_bump_map(scene, material_block, material);
+	free(material_block);
 }
 
 /**
