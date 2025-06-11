@@ -59,6 +59,7 @@ SRC_FILES = main.c \
 	parser/parser_light.c \
 	parser/parser_line.c \
 	parser/parser_material.c \
+	parser/parser_material_properties.c \
 	parser/parser_mesh.c \
 	parser/parser_mesh_faces.c \
 	parser/parser_mesh_loader.c \
