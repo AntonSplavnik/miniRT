@@ -6,19 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:30:19 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 11:47:51 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:36:24 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
-static int	open_obj_file(const char *filename)
-{
-	int	fd;
-
-	fd = open(filename, O_RDONLY);
-	return (fd);
-}
 
 int	count_and_allocate_file_elements(int fd, t_vec3 **vertices, \
 										t_triangle **triangles)
@@ -76,12 +68,12 @@ t_mesh	*load_obj_file(const char *filename)
 	int			triangle_count;
 	t_mesh		*mesh;
 
-	fd = open_obj_file(filename);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1 || !count_and_allocate_file_elements(fd, \
 						&vertices, &triangles))
 		return (NULL);
 	close(fd);
-	fd = open_obj_file(filename);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
 		free(vertices);

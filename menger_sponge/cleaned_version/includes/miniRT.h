@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:08:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:26:07 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int			is_separator(char c, char delimiter);
 int			ft_isspace(char c);
 double		ft_atof(const char *str);
 char		*ft_strchr(const char *s, int c);
+char		*ft_strstr(const char *haystack, const char *needle);
 
 // menger sponge
 // void		render_menger_sponge(t_scene *scene);

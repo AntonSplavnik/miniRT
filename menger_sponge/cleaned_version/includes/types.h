@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:13:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:30:36 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ typedef struct s_bump_map
 	char	*filename;
 	int		width;
 	int		height;
-	float	*height_data; // height values (between 0.0 and 1.0)
+	float	*elevation; // height values (between 0.0 and 1.0)
 }	t_bump_map;
 
 typedef struct	s_material

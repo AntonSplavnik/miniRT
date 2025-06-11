@@ -70,6 +70,8 @@ SRC_FILES = main.c \
 	parser/parser_utils.c \
 	parser/parser_utils_2.c \
 	parser/parser_bumpmap.c \
+	parser/parser_bumpmap_ppm_file.c \
+	parser/parser_bumpmap_ppm_header.c \
 	parser/parser_texture.c \
 	rendering/checker.c \
 	rendering/colors.c \
@@ -86,6 +88,7 @@ SRC_FILES = main.c \
 	ui/display_progress.c \
 	ui/status_messages.c \
 	utils/ft_atof.c \
+	utils/ft_strstr.c \
 	utils/ft_isspace.c \
 	utils/ft_split_line.c \
 	utils/ft_split_line_utils.c \

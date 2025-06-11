@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:09:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 10:41:45 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:30:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Sample bump map height at UV coordinates
 float sample_bump_map(t_bump_map *bump_map, double u, double v)
 {
-	if (!bump_map || !bump_map->height_data)
+	if (!bump_map || !bump_map->elevation)
 		return 0.0f;
 
 	// Wrap UV coordinates
@@ -44,10 +44,10 @@ float sample_bump_map(t_bump_map *bump_map, double u, double v)
 	y1 = y1 < 0 ? 0 : (y1 >= bump_map->height ? bump_map->height - 1 : y1);
 
 	// Sample four neighboring heights
-	float h00 = bump_map->height_data[y0 * bump_map->width + x0];
-	float h10 = bump_map->height_data[y0 * bump_map->width + x1];
-	float h01 = bump_map->height_data[y1 * bump_map->width + x0];
-	float h11 = bump_map->height_data[y1 * bump_map->width + x1];
+	float h00 = bump_map->elevation[y0 * bump_map->width + x0];
+	float h10 = bump_map->elevation[y0 * bump_map->width + x1];
+	float h01 = bump_map->elevation[y1 * bump_map->width + x0];
+	float h11 = bump_map->elevation[y1 * bump_map->width + x1];
 
 	// Bilinear interpolation
 	float h_top = h00 * (1 - fx) + h10 * fx;
