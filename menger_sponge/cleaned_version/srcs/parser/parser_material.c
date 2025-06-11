@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 12:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 12:00:50 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:06:08 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,23 +150,13 @@ int get_property_color(t_scene *scene, const char *material_block, const char *p
  */
 double get_property_value(const char *material_block, const char *property)
 {
-	char *prop_pos;
-	char property_with_colon[50];
+	char	*property_pos;
 
-	// Create the property string with colon (e.g., "reflectivity:")
-	ft_strlcpy(property_with_colon, property, sizeof(property_with_colon));
-	ft_strlcat(property_with_colon, ":", sizeof(property_with_colon));
-
-	// Find the property in the material block
-	prop_pos = ft_strstr(material_block, property_with_colon);
-	if (!prop_pos)
+	property_pos = ft_strstr(material_block, property);
+	if (!property_pos)
 		return (-1.0);
-
-	// Move past the property name and colon
-	prop_pos += ft_strlen(property_with_colon);
-
-	// Parse the value
-	return (ft_atof(prop_pos));
+	property_pos += ft_strlen(property);
+	return (ft_atof(property_pos));
 }
 
 void	*get_property_filename(const char *material_block, const char *property, char **filename)
@@ -239,16 +229,16 @@ void parse_material_properties(t_scene *scene, char *material_block, t_material 
 	double	value;
 	t_color	checker_color;
 
-	value = get_property_value(material_block, "reflectivity");
+	value = get_property_value(material_block, "reflectivity:");
 	if (value >= 0.0)
 		material->reflectivity = ft_clamp(value, 0.0, 1.0);
-	value = get_property_value(material_block, "specular");
+	value = get_property_value(material_block, "specular:");
 	if (value >= 0.0)
 		material->specular = ft_clamp(value, 0.0, 1.0);
-	value = get_property_value(material_block, "shininess");
+	value = get_property_value(material_block, "shininess:");
 	if (value >= 0.0)
 		material->shininess = value;
-	value = get_property_value(material_block, "checker_size");
+	value = get_property_value(material_block, "checker_size:");
 	if (value > 0)
 		material->checker_size = value;
 	if(get_property_color(scene, material_block, "checker_color", &checker_color))
@@ -260,19 +250,4 @@ void parse_material_properties(t_scene *scene, char *material_block, t_material 
 	free(material_block);
 }
 
-/**
- * Utility function to clamp a value between min and max
- *
- * @param value The value to clamp
- * @param min The minimum allowed value
- * @param max The maximum allowed value
- * @return The clamped value
- */
-double ft_clamp(double value, double min, double max)
-{
-	if (value < min)
-		return (min);
-	if (value > max)
-		return (max);
-	return (value);
-}
+
