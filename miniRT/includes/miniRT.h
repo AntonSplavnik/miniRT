@@ -85,6 +85,8 @@ int			valid_color_range(int c);
 t_color 	get_surface_color_with_texture(t_hit_record *hit_record);
 t_color		int_to_color(int color);
 int			color_to_int(t_color color);
+int			blend_colors(int base_color, int blend_color, double base_weight, double blend_weight);
+int			add_colors(int color1, int color2);
 
 // material
 t_material	create_material(t_color color);

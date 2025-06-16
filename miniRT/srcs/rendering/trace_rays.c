@@ -98,19 +98,8 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 				specular_intensity
 			);
 
-            // Extract RGB components
-            int r = (light_color >> 16) & 0xFF;
-            int g = (light_color >> 8) & 0xFF;
-            int b = light_color & 0xFF;
-
-            // Add to base color
-            int base_r = ((base_color >> 16) & 0xFF) + r;
-            int base_g = ((base_color >> 8) & 0xFF) + g;
-            int base_b = (base_color & 0xFF) + b;
-
-            base_color = (valid_color_range(base_r) << 16) |
-                         (valid_color_range(base_g) << 8) |
-                         valid_color_range(base_b);
+            // Add light contribution to base color
+            base_color = add_colors(base_color, light_color);
         }
 
         current_light = current_light->next;
@@ -136,33 +125,11 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
         // Blend base color, reflection and refraction based on material properties
         if (reflected_color)
         {
-            double reflection_contribution;
-
-            reflection_contribution = hit_record.object->material.reflectivity;
-
-            // Ensure the base material still contributes to opaque parts
+            double reflection_contribution = hit_record.object->material.reflectivity;
             double base_contribution = 1.0 - reflection_contribution;
 
-            // Extract RGB components
-            int base_r = (base_color >> 16) & 0xFF;
-            int base_g = (base_color >> 8) & 0xFF;
-            int base_b = base_color & 0xFF;
-
-            int reflect_r = reflected_color ? ((reflected_color >> 16) & 0xFF) : 0;
-            int reflect_g = reflected_color ? ((reflected_color >> 8) & 0xFF) : 0;
-            int reflect_b = reflected_color ? (reflected_color & 0xFF) : 0;
-
-            // Blend the colors
-            int final_r = (base_r * base_contribution) +
-                          (reflect_r * reflection_contribution);
-            int final_g = (base_g * base_contribution) +
-                          (reflect_g * reflection_contribution);
-            int final_b = (base_b * base_contribution) +
-                          (reflect_b * reflection_contribution);
-
-            return (valid_color_range(final_r) << 16) |
-                   (valid_color_range(final_g) << 8) |
-                   valid_color_range(final_b);
+            // Blend base color with reflection using the new utility function
+            return blend_colors(base_color, reflected_color, base_contribution, reflection_contribution);
         }
     }
 

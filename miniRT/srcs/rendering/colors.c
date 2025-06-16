@@ -340,3 +340,64 @@ int get_pixel_color(t_hit_record *hit_record, double light_intensity,
     // Convert to integer
     return (r << 16) | (g << 8) | b;
 }
+
+/**
+ * Blend two colors with specified weights
+ * 
+ * @param base_color The base color (integer RGB format)
+ * @param blend_color The color to blend with (integer RGB format)
+ * @param base_weight Weight for the base color (0.0 to 1.0)
+ * @param blend_weight Weight for the blend color (0.0 to 1.0)
+ * @return Blended color in integer RGB format
+ */
+int blend_colors(int base_color, int blend_color, double base_weight, double blend_weight)
+{
+    // Extract RGB components from base color
+    int base_r = (base_color >> 16) & 0xFF;
+    int base_g = (base_color >> 8) & 0xFF;
+    int base_b = base_color & 0xFF;
+
+    // Extract RGB components from blend color
+    int blend_r = (blend_color >> 16) & 0xFF;
+    int blend_g = (blend_color >> 8) & 0xFF;
+    int blend_b = blend_color & 0xFF;
+
+    // Blend the colors
+    int final_r = (int)(base_r * base_weight + blend_r * blend_weight);
+    int final_g = (int)(base_g * base_weight + blend_g * blend_weight);
+    int final_b = (int)(base_b * base_weight + blend_b * blend_weight);
+
+    // Clamp to valid range and return
+    return (valid_color_range(final_r) << 16) |
+           (valid_color_range(final_g) << 8) |
+           valid_color_range(final_b);
+}
+
+/**
+ * Add two colors together (useful for accumulating light contributions)
+ * 
+ * @param color1 First color (integer RGB format)
+ * @param color2 Second color (integer RGB format)
+ * @return Sum of the colors in integer RGB format
+ */
+int add_colors(int color1, int color2)
+{
+    // Extract RGB components
+    int r1 = (color1 >> 16) & 0xFF;
+    int g1 = (color1 >> 8) & 0xFF;
+    int b1 = color1 & 0xFF;
+
+    int r2 = (color2 >> 16) & 0xFF;
+    int g2 = (color2 >> 8) & 0xFF;
+    int b2 = color2 & 0xFF;
+
+    // Add components
+    int final_r = r1 + r2;
+    int final_g = g1 + g2;
+    int final_b = b1 + b2;
+
+    // Clamp to valid range and return
+    return (valid_color_range(final_r) << 16) |
+           (valid_color_range(final_g) << 8) |
+           valid_color_range(final_b);
+}
