@@ -1,0 +1,16 @@
+# Camera and lighting setup
+A 0.2 255,255,255
+C 0,0,15 0,0,-1 70
+
+# Lighting to enhance the wooden texture
+L 5,5,-20 1.0 255,255,255
+L -5,5,-20 1.0 255,255,255
+L -5,5,20 1.0 255,255,255
+L 0,10,-10 0.7 255,220,180
+L 0,-5,-5 0.3 255,180,100
+
+# The wooden crate
+sp 0,0,0 7 255,255,255 {texture:scenes/textures/wooden_gate_diff_4k.png bumpmap:scenes/bumpmaps/wooden_gate_disp_4k.ppm}
+
+# Background elements
+pl 0,-7,0 0,1,0 80,80,80	 			# Ground plane with a gray color
