@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 16:30:36 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:55:49 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,6 +324,8 @@ typedef struct graphic_settings
     bool    	enable_specular;
 	bool		enable_refraction;
 	bool		enable_status_message;
+
+	int			ssaa_samples;
 
 	int			resolution_factor;
 } t_graphic_settings;

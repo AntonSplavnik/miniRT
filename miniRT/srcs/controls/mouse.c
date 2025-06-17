@@ -9,11 +9,11 @@
 void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
 {
 	t_scene *scene;
+	static int original_ssaa = 1; // Store original SSAA value
 
 	(void)mods;
 	scene  = (t_scene *)param;
-
-
+	
 	// Update button state
 	if (button == MLX_MOUSE_BUTTON_LEFT)
 		scene->mouse_state.left_button_down = (action == MLX_PRESS);
@@ -61,6 +61,8 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 			scene->mouse_state.is_dragging = true;
 			scene->mouse_state.right_button_down = true;
 			scene->graphic_settings.resolution_factor = 4;
+			original_ssaa = scene->graphic_settings.ssaa_samples;
+			scene->graphic_settings.ssaa_samples = 1;
 
 			mlx_get_mouse_pos(scene->app.mlx, &scene->mouse_state.x, &scene->mouse_state.y);
 			scene->mouse_state.prev_mouse_x = scene->mouse_state.x;
@@ -83,6 +85,7 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 			scene->mouse_state.is_dragging = false;
 			scene->mouse_state.right_button_down = false;
 			scene->graphic_settings.resolution_factor = 1;
+			scene->graphic_settings.ssaa_samples = original_ssaa; // Restore original SSAA value
 
 			render_scene(scene);
 			display_status(scene);
@@ -152,13 +155,16 @@ void	cursor_position_callback(double xpos, double ypos, void* param)
 			scene->mouse_state.prev_mouse_y = scene->mouse_state.y;
 
 			// Set low resolution for dragging
-			scene->graphic_settings.resolution_factor = 4;
+			// scene->graphic_settings.resolution_factor = 4;
+			// scene->graphic_settings.ssaa_samples = 1;
+
 
 			// Get current time
 			current_time = mlx_get_time();
 
 			// Limit rendering to 30 frames per second during dragging
-			if (current_time - last_render_time > 0.033) { // ~30 FPS
+			if (current_time - last_render_time > 0.033)  // ~30 FPS
+			{
 				render_scene(scene);
 				last_render_time = current_time;
 			}

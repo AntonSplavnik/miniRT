@@ -16,8 +16,8 @@
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
-
-	scene_init(scene);
+	
+    init_data(scene);
 
 	if (!parse_scene_file(filename, scene))
 	{
@@ -26,7 +26,13 @@ void	start_raytracer(t_scene *scene, char *filename)
 		exit(EXIT_FAILURE);
 	}
 
-	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene); 	// Register the UI animation loop
+	init_mlx(scene);
+	setup_hooks(scene);
+	init_ui(scene);
+
+	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);		// Register the UI animation loop
+
+	// mlx_loop_hook(scene->app.mlx, render_scene, scene);		// Real time rendering
 
 	render_scene(scene);
 

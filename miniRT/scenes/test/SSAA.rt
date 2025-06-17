@@ -1,0 +1,45 @@
+# A scene designed to showcase anti-aliasing effects
+
+# Camera: position, direction vector, FOV
+C  0,2,10  0,0,-1  60
+
+# Ambient light: intensity, RGB color
+A  0.1  255,255,255
+
+# Light source: position, intensity, RGB color
+L  5,8,5  0.8  255,255,255
+L  -5,3,4  0.6  255,220,200
+
+# === Thin cylinder grid ===
+# Several thin cylinders arranged in a grid pattern
+cy  -5,0,0  0,1,0  0.05  10  255,0,0
+cy  -3,0,0  0,1,0  0.05  10  255,0,0
+cy  -1,0,0  0,1,0  0.05  10  255,0,0
+cy  1,0,0   0,1,0  0.05  10  255,0,0
+cy  3,0,0   0,1,0  0.05  10  255,0,0
+cy  5,0,0   0,1,0  0.05  10  255,0,0
+
+cy  0,0,-5  1,0,0  0.05  10  0,0,255
+cy  0,0,-3  1,0,0  0.05  10  0,0,255
+cy  0,0,-1  1,0,0  0.05  10  0,0,255
+cy  0,0,1   1,0,0  0.05  10  0,0,255
+cy  0,0,3   1,0,0  0.05  10  0,0,255
+cy  0,0,5   1,0,0  0.05  10  0,0,255
+
+# === Fine checkerboard floor ===
+pl  0,-1,0  0,1,0  200,200,200  {checker_color:0,0,255 checker_size:16.0}
+
+# === Distant small spheres ===
+sp  -8,2,-15  0.3  255,255,0
+sp  -7,2,-15  0.3  255,128,0
+sp  -6,2,-15  0.3  255,0,0
+sp  -5,2,-15  0.3  128,0,255
+sp  -4,2,-15  0.3  0,0,255
+
+# === Thin diagonal lines (cylinders) ===
+cy  -8,0,-8  1,1,1  0.08  15  255,255,255
+cy  8,0,-8   -1,1,1  0.08  15  255,255,255
+
+# === Small object with high contrast ===
+sp  0,0.5,0  0.5  0,0,0
+cy  0,0.5,0  0,0,1  0.15  3  255,255,255

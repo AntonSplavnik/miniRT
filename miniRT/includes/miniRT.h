@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 14:26:07 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 13:01:10 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void		display_status(t_scene *scene);
 void		display_progress(t_scene *scene, const char *status_text);
 
 // init
-void		scene_init(t_scene *scene);
+void		init_ui(t_scene *scene);
+void		setup_hooks(t_scene *scene);
+void		init_data(t_scene *scene);
+void		init_mlx(t_scene *scene);
 void		cleanup_scene(t_scene *scene);
 
 // render
@@ -76,11 +79,15 @@ t_vec3		vec3_normalize(t_vec3 v);
 
 // colors
 t_color		create_color(int r, int g, int b);
-int get_pixel_color(t_hit_record *hit_record, double light_intensity,
+int			get_pixel_color(t_hit_record *hit_record, double light_intensity,
                                t_color light_color,
                                double specular_intensity);
 int			valid_color_range(int c);
 t_color 	get_surface_color_with_texture(t_hit_record *hit_record);
+t_color		int_to_color(int color);
+int			color_to_int(t_color color);
+int			blend_colors(int base_color, int blend_color, double base_weight, double blend_weight);
+int			add_colors(int color1, int color2);
 
 // material
 t_material	create_material(t_color color);
@@ -111,8 +118,9 @@ void		add_light(t_scene *scene, t_light *light);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 // rendering
-void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y);
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
 void		render_scene(t_scene *scene);
+// void	render_scene(void *param);
 int			trace_ray(t_scene *scene, t_ray ray, int depth);
 void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);

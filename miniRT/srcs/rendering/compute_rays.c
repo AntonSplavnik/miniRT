@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   compute_rays.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:17:22 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 10:56:30 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:35:15 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
 
-void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, int x, int y)
+void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y)
 {
 	double	u;
 	double	v;
