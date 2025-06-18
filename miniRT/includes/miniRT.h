@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 13:01:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/18 16:36:48 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,8 @@ t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
 int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
 t_vec3		triangle_normal(t_triangle triangle);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
-int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
-								double radius, double *t);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
 t_vec3		cone_normal_at_point(t_vec3 point, t_cone cone);
-int			is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius);
 
 // lights
 void		add_light(t_scene *scene, t_light *light);
