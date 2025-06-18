@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../libft/libft.h"
 #include <fcntl.h>
 
 //Check if the filename ends with ".rt"
@@ -70,10 +71,10 @@ int	parse_scene_file(char *filename, t_scene *scene)
 	success = read_scene_file(fd, scene);
 	close(fd);
 	if (!success)
-		return (0);
+		return (1);
 	if (!scene->camera.has_camera)
 		parse_error(scene, "Camera not found");
 	if (!scene->ambient.has_ambient)
 		parse_error(scene, "Ambient light not found");
-	return (1);
+	return (0);
 }

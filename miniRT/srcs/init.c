@@ -20,78 +20,44 @@ static void	malloc_error(void)
 
 void	init_data(t_scene *scene)
 {
-	
-	//app
-	scene->app.mlx = NULL;
-	scene->app.img = NULL;
-
-	// window
 	scene->width = WIDTH;
 	scene->height = HEIGHT;
+	scene->background_color = BLACK;
 
-	// Mouse controls
+	//Init objects
+	scene->objects = NULL;
+	scene->lights = NULL;
+
+	scene->ambient.has_ambient = 0;
+	scene->camera.has_camera = 0;
+
+	//Init camera
+	scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
+	scene->camera.fov = FOV;
+	scene->camera.near = NEAR_PLANE;
+	scene->camera.far = FAR_PLANE;
+	scene->camera.movement_speed = 0.1;
+	scene->camera.rotation_speed = 0.05;
+
+	//Init graphic settings
+	scene->graphic_settings.enable_hard_shadows = true;
+	scene->graphic_settings.enable_reflections = true;
+	scene->graphic_settings.enable_specular = true;
+	scene->graphic_settings.enable_refraction = false;
+	scene->graphic_settings.enable_status_message = true;
+	scene->graphic_settings.ssaa_samples = 1;  // No SSAA by default
+	scene->graphic_settings.resolution_factor = 1;
+
+	//Init mouse
+	scene->mouse_state.is_dragging = false;
 	scene->mouse_state.left_button_down = false;
 	scene->mouse_state.right_button_down = false;
 	scene->mouse_state.middle_button_down = false;
-	scene->mouse_state.is_dragging = false;
-	scene->mouse_state.x = 0;
-	scene->mouse_state.y = 0;
-	scene->mouse_state.prev_mouse_x = 0;
-	scene->mouse_state.prev_mouse_y = 0;
 
-	// Ambient light
-	scene->ambient.ratio = 0.1; //default
-	scene->ambient.color = create_color(255,255 ,255); //white by default
-	scene->ambient.has_ambient = 0;
-
-	// Background color
-	scene->background_color = (0 << 16 | 0 << 8 | 0); // black
-
-	// Lights
-	scene->lights = NULL;
-	scene->objects = NULL;
-
-
-	// Graphic settings
-    scene->graphic_settings.enable_hard_shadows = true;
-    scene->graphic_settings.enable_reflections = true;
-    scene->graphic_settings.enable_specular = true;
-	scene->graphic_settings.enable_refraction = true;
-	scene->graphic_settings.resolution_factor = 1;
-	scene->graphic_settings.ssaa_samples = 1;
-
-
-	// Bonus
 	scene->sample = 1;
 	scene->max_depth = 3;
 
-	//camera
-	scene->camera.movement_speed = 0.5;
-
-	//---to do : sort things from here---
-	// scene->escape_value = 4;
-	// scene->iterations_defintion = 100;
-	// scene->shift_x = 0.0;
-	// scene->shift_y = 0.0;
-	// scene->zoom = 1.0;
-
-	// // Initialize camera defaults for 3D scenes
-	// scene->camera.has_camera = 0;
-	// scene->camera.fov = 60.0;
-	// scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
-	// scene->camera.near = 0.1;
-	// scene->camera.far = 100.0;
-	// scene->camera.position = (t_vec3){0.0, 0.0, 0.0};
-	// scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
-    // scene->camera.rotation_speed = 0.05;
-
-
-	// // Initialize Menger sponge defaults
-	// scene->menger.iterations = 0;
-	// scene->menger.size = 1.0;
-	// scene->menger.position = (t_vec3){0.0, 0.0, 0.0};
-	// scene->menger.rotation = (t_vec3){0.0, 0.0, 0.0};
-	// scene->menger.bvh_root = NULL;
+	scene->scene_bvh = NULL; // Initialize BVH pointer to NULL
 }
 
 // Set up event hooks
@@ -131,5 +97,25 @@ void	init_mlx(t_scene *scene)
         mlx_delete_image(scene->app.mlx, scene->app.img);
         mlx_terminate(scene->app.mlx);
         malloc_error();
+    }
+}
+
+// Add this function to initialize the scene BVH
+void init_scene_bvh(t_scene *scene)
+{
+    // Build BVH for the entire scene
+    if (scene->objects)
+    {
+        scene->scene_bvh = build_scene_bvh(scene);
+        
+        if (scene->scene_bvh)
+            printf("Scene BVH initialized successfully\n");
+        else
+            printf("Failed to build scene BVH\n");
+    }
+    else
+    {
+        scene->scene_bvh = NULL;
+        printf("No objects in scene, BVH not built\n");
     }
 }

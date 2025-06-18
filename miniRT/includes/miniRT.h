@@ -63,6 +63,18 @@ int			ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin,
 int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
 									t_vec3 dir, double *out_tmin, double *out_tmax);
 
+// Scene BVH functions
+t_aabb		calculate_object_aabb(t_object *object);
+t_bvh_node	*build_scene_bvh(t_scene *scene);
+t_bvh_node	*build_scene_bvh_recursive(t_object **objects, t_aabb *bounds, 
+                                   int start, int end, int depth);
+int			scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, 
+                                 t_object **hit_object, t_hit_record *hit_record);
+int          scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record);
+t_bvh_node *build_scene_bvh(t_scene *scene);
+t_aabb calculate_object_aabb(t_object *object);
+
+
 // Vector utilities
 t_vec3		vec3_create(double x, double y, double z);
 t_vec3		vec3_negate(t_vec3 v);

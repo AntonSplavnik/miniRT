@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../libft/libft.h"
 
 /**
  * Find the substring in a string (like standard strstr)
@@ -29,8 +30,7 @@ char	*ft_strstr(const char *haystack, const char *needle)
 	i = 0;
 	while (haystack[i])
 	{
-		j =
-		0;
+		j = 0;
 		while (haystack[i + j] && needle[j] \
 					&& haystack[i + j] == needle[j])
 			j++;

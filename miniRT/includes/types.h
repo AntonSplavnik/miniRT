@@ -161,6 +161,7 @@ typedef struct s_bvh_node
 	struct s_bvh_node	*right;
 	int					is_leaf;
 	int					iteration;
+	void				*object_ref;  // Added for scene BVH to reference objects
 }				t_bvh_node;
 
 typedef struct s_camera
@@ -376,6 +377,7 @@ typedef struct s_scene
 	t_app				app;
 	t_graphic_settings	graphic_settings;
 	t_mouse_state		mouse_state;
+	t_bvh_node			*scene_bvh; // Root of scene-wide BVH
 
 	t_ui				ui; //UI panel and toggle button
 
@@ -400,8 +402,6 @@ typedef struct s_scene
 	double				shift_x;
 	double				shift_y;
 	double				zoom;
-
-
 
 	t_menger			menger;
 }				t_scene;

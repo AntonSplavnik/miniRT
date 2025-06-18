@@ -76,11 +76,13 @@ SRC_FILES = main.c \
 	rendering/checker.c \
 	rendering/colors.c \
 	rendering/compute_intersections.c \
+	rendering/compute_bvh_intersections.c \
 	rendering/compute_light.c \
 	rendering/compute_rays.c \
 	rendering/reflection.c \
 	rendering/render.c \
 	rendering/render_utils.c \
+	rendering/scene_setup.c \
 	rendering/trace_rays.c \
 	rendering/texture_uv_mapping.c \
 	rendering/bumpmap.c	\

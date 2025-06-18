@@ -11,36 +11,51 @@
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
+#include "../libft/libft.h"
 
+// Add the function prototype
+void init_scene_bvh(t_scene *scene);
 
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
 	
-    init_data(scene);
-
-	if (!parse_scene_file(filename, scene))
-	{
-		cleanup_scene(scene);
-		ft_putendl_fd("Error: Failed to parse scene file\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
-	}
-
+	// Initialize miniRT
+	init_data(scene);
 	init_mlx(scene);
-	setup_hooks(scene);
+	
+	// Parse scene file
+	if (filename)
+	{
+		if (parse_scene_file(filename, scene) != 0)
+		{
+			write_string_to_file_descriptor("Error\nParsing scene file failed.\n", 2);
+			exit(1);
+		}
+	}
+	else
+	{
+		// For testing without a scene file, load a default scene
+		set_up_scene_plane(scene);
+	}
+	
+	// Initialize BVH after all objects are loaded
+	init_scene_bvh(scene);
+	
+	// Set up UI and hooks
 	init_ui(scene);
+	setup_hooks(scene);
 
-	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);		// Register the UI animation loop
-
-	// mlx_loop_hook(scene->app.mlx, render_scene, scene);		// Real time rendering
+	// Initialize the mouse hook for camera control
+	// mlx_loop_hook(scene->app.mlx, &render_scene, scene);
 
 	render_scene(scene);
-
+	
+	// Start main loop
 	mlx_loop(scene->app.mlx);
-
-	close_callback(scene);
-
-	exit(EXIT_SUCCESS);
+	
+	// Clean up
+	cleanup_scene(scene);
 }
 
 void	print_usage_and_exit(void)

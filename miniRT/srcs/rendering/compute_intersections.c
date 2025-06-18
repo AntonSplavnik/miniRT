@@ -30,6 +30,11 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double ligh
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record)
 {
+	// If we have a scene BVH, use it for faster intersection testing
+	if (scene->scene_bvh)
+		return scene_ray_intersect_bvh(scene, ray, t, hit_object, hit_record);
+		
+	// Otherwise, fall back to the original linear search approach
 	t_object	*current;
 	double		t_closest;
 	double		t_temp;
