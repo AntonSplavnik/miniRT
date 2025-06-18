@@ -114,8 +114,26 @@ pl 0,-1,0 0,1,0 0,255,0
 * **sp**: Sphere (position, radius, RGB color)
 * **pl**: Plane (position, normal vector, RGB color)
 
-Additional examples are available in the `scenes/` directory.
+#### Bonus example
 
+```c
+A 0.2 255,255,255
+C 0,0,20 0,0,-1 70
+L 10,10,10 0.8 255,255,255
+sp -6,1,-3 3 255,50,50 {reflectivity:0.9 specular:1.0 shininess:128}
+pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30 checker_size:4 reflectivity:0.2}
+sp 0,0,0 7 255,255,255 {texture:scenes/textures/earthmap1k.png bumpmap:scenes/bumpmaps/earthmap1k.ppm}
+```
+
+* **A**: Ambient light (intensity, RGB color)
+* **C**: Camera (position, orientation, field of view)
+* **L**: Light source (position, intensity, RGB color)
+* **sp**: Sphere (position, radius, RGB color) {material properties}
+* **pl**: Plane (position, normal vector, RGB color) {material properties}
+  
+ Additional examples are available in the `scenes/` directory.
+
+  
 ---
 
 ## 🚧 Project Status
