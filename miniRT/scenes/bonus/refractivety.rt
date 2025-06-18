@@ -1,0 +1,37 @@
+# Specialized Checkerboard Patterns for Different Objects
+A 0.03 255,255,255
+C 0,-1,-14.9 0,0,1 70
+L 8,8,-5 0.2 255,240,220
+L -8,8,-5 0.2 255,240,220
+
+# Checkered floor (large pattern)
+pl 0,-5,0 0,1,0 255,255,255 
+
+# Checkered ceiling (large pattern)
+pl 0,10,0 0,-1,0 135,206,235 
+
+# Checkered back wall (large pattern)
+pl 0,0,12 0,0,-1 135,206,235
+
+# Checkered front wall (large pattern)
+pl 0,0,-15 0,0,1  135,206,235
+
+# Checkered left wall (large pattern)
+pl -15,0,0 1,0,0 135,206,235
+
+# Checkered right wall (large pattern)
+pl 15,0,0 -1,0,0 135,206,235
+
+
+# Row of spheres with different reflectivity
+
+sp -8,0,0 3 220,220,220 {reflectivity:0.6}
+
+sp -4,0,0 3 220,220,220 {reflectivity:0.9}
+
+sp 0,0,0 3 220,220,220 {refractive_index:1.52 transparency:1.0 reflectivity:0.1}
+
+sp 4,0,0 3 220,220,220  {refractive_index:1.8 transparency:1.0 reflectivity:0.15}
+
+sp 8,0,0 3 220,220,220 {refractive_index:2.42 transparency:1.0 reflectivity:0.2}
+
