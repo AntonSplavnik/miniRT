@@ -15,7 +15,7 @@
 
 #include "types.h"
 #include "parser.h"
-#include "libft.h"
+#include "../libft/libft.h"
 
 
 // events
@@ -124,6 +124,7 @@ void		render_scene(t_scene *scene);
 int			trace_ray(t_scene *scene, t_ray ray, int depth);
 void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
+t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection);
 t_vec2 		calculate_uv_coordinates(t_vec3 point, t_object *object);
 t_vec3 		calculate_bump_normal(t_hit_record *hit_record);
 

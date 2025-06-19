@@ -123,16 +123,14 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 	return (hit_something);
 }
 
-void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record)
+void compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record)
 {
-	//calculate where the ray hit the object
 	hit_record->point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
 	hit_record->t = t;
 	hit_record->object = hit_object;
 	hit_record->material = hit_object->material;
-	hit_record->inside = 0;  // Initialize to false, can be set later if needed
 
-	//calculate the normal at the hit point
+	// 1. Calculate geometric normal based on object type
 	if (hit_object->type == SPHERE)
 	{
 		t_sphere *sphere = (t_sphere *)(hit_object->data);
@@ -147,9 +145,6 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	{
 		t_plane *plane = (t_plane *)(hit_object->data);
 		hit_record->original_normal = plane->normal;
-		//double sided plane
-		if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
-			hit_record->original_normal = vec3_negate(hit_record->original_normal);
 	}
 	else if (hit_object->type == CUBE)
 	{
@@ -160,9 +155,6 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	{
 		t_triangle *triangle = (t_triangle *)(hit_object->data);
 		hit_record->original_normal = triangle->normal;
-		// Handle double-sided triangles by flipping normal if needed
-		if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
-			hit_record->original_normal = vec3_negate(hit_record->original_normal);
 	}
 	else if (hit_object->type == CONE)
 	{
@@ -172,27 +164,30 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	else if (hit_object->type == MESH)
 	{
 		t_mesh *mesh = (t_mesh *)(hit_object->data);
-		int triangle_idx = (int)hit_record->triangle_idx;
-		if (triangle_idx >= 0 && triangle_idx < mesh->triangle_count)
-		{
-			hit_record->original_normal = mesh->triangles[triangle_idx].normal;
-			// Handle double-sided triangles by flipping normal if needed
-			if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
-				hit_record->original_normal = vec3_negate(hit_record->original_normal);
-		}
+		int idx = hit_record->triangle_idx;
+		if (idx >= 0 && idx < mesh->triangle_count)
+			hit_record->original_normal = mesh->triangles[idx].normal;
 		else
-		{
-			// Fallback normal if index is out of bounds
-			hit_record->original_normal = vec3_create(0, 1, 0);
-		}
+			hit_record->original_normal = vec3_create(0, 1, 0); // fallback normal
 	}
-	hit_record->normal = hit_record->original_normal; //Set the normal to the original normal initially
 
-	if (hit_record->material.has_texture || hit_record->material.has_checker)
-		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object); // Calculate UV coordinates for texture mapping
-	if (hit_record->material.has_bump_map)
+	// 2. Determine if the ray is hitting the front face or inside
+	if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
 	{
-		// If the material has a bump map, adjust the normal based on the bump map
-		hit_record->normal = calculate_bump_normal(hit_record);
+		hit_record->inside = true;
+		hit_record->normal = vec3_negate(hit_record->original_normal);
 	}
+	else
+	{
+		hit_record->inside = false;
+		hit_record->normal = hit_record->original_normal;
+	}
+
+	// 3. Optional: UV mapping for textures or checker
+	if (hit_record->material.has_texture || hit_record->material.has_checker)
+		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object);
+
+	// 4. Optional: bump mapping adjustment
+	if (hit_record->material.has_bump_map)
+		hit_record->normal = calculate_bump_normal(hit_record);
 }

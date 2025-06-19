@@ -79,6 +79,7 @@ SRC_FILES = main.c \
 	rendering/compute_light.c \
 	rendering/compute_rays.c \
 	rendering/reflection.c \
+	rendering/refraction.c \
 	rendering/render.c \
 	rendering/render_utils.c \
 	rendering/trace_rays.c \

@@ -20,6 +20,9 @@ t_material	create_material(t_color color)
 	material.specular = 0.5;
 	material.shininess = 64;
 	material.reflectivity = 0.0;
+	material.transparency = 0.0;
+	material.refractive_index = 1.0;
+	material.has_refraction = false;
 	material.has_checker = 0;
 	material.checker_size = 0;
 	material.checker_color = create_color(0, 0, 0);

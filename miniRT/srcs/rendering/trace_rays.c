@@ -56,82 +56,196 @@
  *       millions of times per rendered frame. Performance optimizations include
  *       early termination conditions and efficient intersection algorithms.
  */
+// First, you need to add refraction properties to your material structure
+// Add these fields to your t_material structure:
+/*
+typedef struct s_material {
+    // ... existing fields ...
+    double transparency;     // 0.0 = opaque, 1.0 = fully transparent
+    double refractive_index; // e.g., 1.0 = air, 1.33 = water, 1.5 = glass
+    bool has_refraction;     // enable/disable refraction for this material
+} t_material;
+*/
+// Fresnel equations to calculate reflection/transmission coefficients
+double fresnel_reflectance(double cos_theta_i, double eta_i, double eta_t)
+{
+    // Ensure cos_theta_i is positive (absolute value)
+    cos_theta_i = fabs(cos_theta_i);
+    
+    // Calculate sine squared of transmission angle using Snell's law
+    double sin_theta_t_sq = (eta_i / eta_t) * (eta_i / eta_t) * (1.0 - cos_theta_i * cos_theta_i);
+    
+    // Total internal reflection
+    if (sin_theta_t_sq >= 1.0)
+        return 1.0;
+    
+    double cos_theta_t = sqrt(1.0 - sin_theta_t_sq);
+    
+    // Fresnel equations for s and p polarized light
+    double rs = (eta_i * cos_theta_i - eta_t * cos_theta_t) / (eta_i * cos_theta_i + eta_t * cos_theta_t);
+    double rp = (eta_t * cos_theta_i - eta_i * cos_theta_t) / (eta_t * cos_theta_i + eta_i * cos_theta_t);
+    
+    // Average of s and p polarized reflectance
+    return 0.5 * (rs * rs + rp * rp);
+}
+
+
+
+// Main trace_ray function with refraction support
 int trace_ray(t_scene *scene, t_ray ray, int depth)
 {
-	double t;
-	t_hit_record hit_record;
-	t_light *current_light;
-	t_light_result light_info;
-	int in_shadow;
-	int base_color;
-	int reflected_color = 0;
-
-	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object, &hit_record))
-		return scene->background_color;
-	compute_ray_intersection(ray, hit_record.object, t, &hit_record);
-
-	// Start with ambient light
-	base_color = get_pixel_color(&hit_record, scene->ambient.ratio, scene->ambient.color, 0.0);
-
-	// Add contribution from all lights
-	current_light = scene->lights;
-	while (current_light)
-	{
-		light_info = compute_light(scene, hit_record, current_light);
-
-		// Check if the hit point is in shadow for this light
-		if (scene->graphic_settings.enable_hard_shadows)
-			in_shadow = is_in_shadow(scene, hit_record.point, light_info.light_dir, light_info.light_distance, hit_record);
-		else
-			in_shadow = 0;
-		if (!in_shadow)
-		{
-			// Calculate light intensity
-			double diffuse_intensity = current_light->intensity * light_info.diffuse;
-			double specular_intensity = current_light->intensity * light_info.specular_intensity;
-
-			// Get color with both diffuse and specular components
-			int light_color = get_pixel_color(
-				&hit_record,
-				diffuse_intensity, // Diffuse + ambient
-				current_light->color,
-				specular_intensity
-			);
-
-            // Add light contribution to base color
-            base_color = add_colors(base_color, light_color);
-        }
-
-        current_light = current_light->next;
-    }
-
-    // Handle reflections if enabled and not at max depth
-    if (depth < MAX_RAY_DEPTH)
+    // Prevent infinite recursion
+    if (depth > scene->max_depth)
+        return scene->background_color;
+    
+    t_hit_record hit_record;
+    t_object *hit_object;
+    double t;
+    
+    // Check for intersection
+    if (!find_closest_intersection(scene, ray, &t, &hit_object, &hit_record))
+        return scene->background_color;
+    
+    // Compute intersection details
+    compute_ray_intersection(ray, hit_object, t, &hit_record);
+    
+    // Initialize color accumulation
+    int final_color = 0;
+    double total_contribution = 0.0;
+    
+    // Calculate direct lighting (diffuse + specular)
+    if (!scene->graphic_settings.enable_reflections && 
+        (!scene->graphic_settings.enable_refraction || !hit_record.material.has_refraction))
     {
-        // Calculate reflection if object is reflective
-        if (scene->graphic_settings.enable_reflections && hit_record.object->material.reflectivity > 0.0)
+        // Simple lighting calculation for non-reflective/non-refractive materials
+        t_light *current_light = scene->lights;
+        while (current_light)
+        {
+            if (!is_in_shadow(scene, hit_record.point, 
+                vec3_normalize(vec3_subtract(current_light->position, hit_record.point)),
+                vec3_length(vec3_subtract(current_light->position, hit_record.point)), hit_record))
+            {
+                t_light_result light_result = compute_light(scene, hit_record, current_light);
+                double light_intensity = light_result.diffuse * current_light->intensity;
+                
+                int light_color = get_pixel_color(&hit_record, light_intensity, 
+                    current_light->color, light_result.specular_intensity);
+                final_color = add_colors(final_color, light_color);
+            }
+            current_light = current_light->next;
+        }
+        return final_color;
+    }
+    
+    // Handle materials with refraction
+    if (scene->graphic_settings.enable_refraction && 
+        hit_record.material.has_refraction && 
+        hit_record.material.transparency > 0.0)
+    {
+        // Determine refractive indices
+        double eta_i = 1.0; // air
+        double eta_t = hit_record.material.refractive_index;
+        
+        // If we're inside the object, swap the indices
+        if (hit_record.inside)
+        {
+            eta_i = hit_record.material.refractive_index;
+            eta_t = 1.0;
+        }
+        
+        double eta_ratio = eta_i / eta_t;
+        
+        // Calculate Fresnel reflectance
+        double cos_theta_i = fabs(vec3_dot(ray.direction, hit_record.normal));
+        double fresnel = fresnel_reflectance(cos_theta_i, eta_i, eta_t);
+        
+        // Calculate reflection contribution
+        if (scene->graphic_settings.enable_reflections && fresnel > 0.001)
         {
             t_vec3 reflect_dir = reflect_ray(ray.direction, hit_record.normal);
             t_ray reflect_ray;
-
-            // Create a reflection ray slightly offset from the hit point
             reflect_ray.origin = vec3_add(hit_record.point, vec3_scale(hit_record.normal, 0.001));
             reflect_ray.direction = reflect_dir;
-
-            // Trace the reflection ray
-            reflected_color = trace_ray(scene, reflect_ray, depth + 1);
+            
+            int reflect_color = trace_ray(scene, reflect_ray, depth + 1);
+            final_color = blend_colors(final_color, reflect_color, 
+                total_contribution, fresnel * hit_record.material.reflectivity);
+            total_contribution += fresnel * hit_record.material.reflectivity;
         }
-
-        // Blend base color, reflection and refraction based on material properties
-        if (reflected_color)
+        
+        // Calculate refraction contribution
+        double transmission = 1.0 - fresnel;
+        if (transmission > 0.001 && hit_record.material.transparency > 0.001)
         {
-            double reflection_contribution = hit_record.object->material.reflectivity;
-            double base_contribution = 1.0 - reflection_contribution;
-
-            // Blend base color with reflection using the new utility function
-            return blend_colors(base_color, reflected_color, base_contribution, reflection_contribution);
+            bool total_internal_reflection = false;
+            t_vec3 refract_dir = refract_ray(ray.direction, hit_record.normal, eta_ratio, &total_internal_reflection);
+            
+            if (!total_internal_reflection)
+            {
+                t_ray refract_ray;
+                // Offset ray origin slightly in the direction of refraction to avoid self-intersection
+                refract_ray.origin = vec3_add(hit_record.point, vec3_scale(refract_dir, 0.001));
+                refract_ray.direction = refract_dir;
+                
+                int refract_color = trace_ray(scene, refract_ray, depth + 1);
+                final_color = blend_colors(final_color, refract_color, 
+                    total_contribution, transmission * hit_record.material.transparency);
+                total_contribution += transmission * hit_record.material.transparency;
+            }
+            else
+            {
+                // Total internal reflection - use perfect reflection
+                t_vec3 reflect_dir = reflect_ray(ray.direction, hit_record.normal);
+                t_ray reflect_ray;
+                reflect_ray.origin = vec3_add(hit_record.point, vec3_scale(hit_record.normal, 0.001));
+                reflect_ray.direction = reflect_dir;
+                
+                int reflect_color = trace_ray(scene, reflect_ray, depth + 1);
+                final_color = blend_colors(final_color, reflect_color, 
+                    total_contribution, transmission * hit_record.material.transparency);
+                total_contribution += transmission * hit_record.material.transparency;
+            }
         }
     }
-
-    return base_color;
+    // Handle purely reflective materials
+    else if (scene->graphic_settings.enable_reflections && 
+             hit_record.material.reflectivity > 0.001)
+    {
+        t_vec3 reflect_dir = reflect_ray(ray.direction, hit_record.normal);
+        t_ray reflect_ray;
+        reflect_ray.origin = vec3_add(hit_record.point, vec3_scale(hit_record.normal, 0.001));
+        reflect_ray.direction = reflect_dir;
+        
+        int reflect_color = trace_ray(scene, reflect_ray, depth + 1);
+        final_color = blend_colors(final_color, reflect_color, 
+            total_contribution, hit_record.material.reflectivity);
+        total_contribution += hit_record.material.reflectivity;
+    }
+    
+    // Add direct lighting contribution for remaining light
+    double direct_contribution = 1.0 - total_contribution;
+    if (direct_contribution > 0.001)
+    {
+        int direct_color = 0;
+        t_light *current_light = scene->lights;
+        while (current_light)
+        {
+            if (!is_in_shadow(scene, hit_record.point, 
+                vec3_normalize(vec3_subtract(current_light->position, hit_record.point)),
+                vec3_length(vec3_subtract(current_light->position, hit_record.point)), hit_record))
+            {
+                t_light_result light_result = compute_light(scene, hit_record, current_light);
+                double light_intensity = light_result.diffuse * current_light->intensity;
+                
+                int light_color = get_pixel_color(&hit_record, light_intensity, 
+                    current_light->color, light_result.specular_intensity);
+                direct_color = add_colors(direct_color, light_color);
+            }
+            current_light = current_light->next;
+        }
+        
+        final_color = blend_colors(final_color, direct_color, total_contribution, direct_contribution);
+    }
+    
+    return final_color;
 }

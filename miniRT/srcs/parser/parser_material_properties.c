@@ -126,6 +126,15 @@ void	parse_material_properties(t_scene *scene, char *material_block, \
 	value = get_property_value(material_block, "reflectivity:");
 	if (value >= 0.0)
 		material->reflectivity = ft_clamp(value, 0.0, 1.0);
+	value = get_property_value(material_block, "transparency:");
+	if (value >= 0.0)
+		material->transparency = ft_clamp(value, 0.0, 1.0);
+	value = get_property_value(material_block, "refractive_index:");
+	if (value >= 0.0)
+		material->refractive_index = value;
+	// Set has_refraction if either transparency or refractive_index is specified
+	if (material->transparency > 0.0 && material->refractive_index > 0.0)
+		material->has_refraction = true;
 	value = get_property_value(material_block, "specular:");
 	if (value >= 0.0)
 		material->specular = ft_clamp(value, 0.0, 1.0);

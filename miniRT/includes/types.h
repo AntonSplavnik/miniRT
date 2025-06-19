@@ -124,12 +124,13 @@ typedef struct	s_material
 	double	reflectivity;
 	double	transparency; // 0.0 = opaque 1.0 = fully transparent
 	double	refractive_index; //Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
-	int		has_checker;
-	double	checker_size;
-	t_color	checker_color;
-	int		has_texture;
+	bool		has_refraction;     
+	int			has_checker;
+	double		checker_size;
+	t_color		checker_color;
+	int			has_texture;
 	t_texture	*texture;
-	int		has_bump_map;
+	int			has_bump_map;
 	t_bump_map	*bump_map;
 }	t_material;
 
