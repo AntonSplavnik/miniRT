@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:18:42 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:26:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
 void		check_cylinder_caps_intersection(t_ray ray, \
 					t_cylinder cylinder, double *t_top, double *t_bottom);
+double		ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
+							double radius);
 int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
 int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
 double		min(double a, double b);
