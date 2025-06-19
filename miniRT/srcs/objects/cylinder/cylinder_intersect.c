@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/18 17:05:02 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:55:44 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,13 @@ static void	check_cylinder_caps_intersection(t_ray ray, t_cylinder cylinder, dou
 	*t_bottom = ray_disc_intersect(ray, bottom_center, vec3_negate(cylinder.axis), cylinder.radius);
 }
 
-double	calculate_cylinder_equation_discriminant(t_ray ray, t_cylinder cylinder, double a, double *b)
+double	calculate_cylinder_equation_discriminant(t_ray ray, t_cylinder cylinder, double *a, double *b)
 {
 	t_vec3	oc;
 	t_vec3	cross_dir_axis;
 	t_vec3	cross_oc_axis;
 	double	c;
 	double	discriminant;
-
 
 	oc = vec3_subtract(ray.origin, cylinder.center);
 	cross_dir_axis = vec3_cross(ray.direction, cylinder.axis);
@@ -67,45 +66,64 @@ double	calculate_cylinder_equation_discriminant(t_ray ray, t_cylinder cylinder, 
 	return (discriminant);
 }
 
+void	calculate_body_intersection_point(t_ray ray, t_cylinder cylinder, double t_candidate, double *t)
+{
+	t_vec3	point;
+	t_vec3	to_point;
+	double	projection;
+
+	if (t_candidate > 0.0001)
+	{
+		point = vec3_add(ray.origin, vec3_scale(ray.direction, t_candidate));
+		to_point = vec3_subtract(point, cylinder.center);
+		projection = vec3_dot(to_point, cylinder.axis);
+		if (projection >= -cylinder.height / 2.0 && projection <= cylinder.height / 2.0)
+		{
+			if (t_candidate < *t)
+				*t = t_candidate;
+		}
+	}
+}
+
 static void	check_cylinder_body_intersection(t_ray ray, t_cylinder cylinder, double *t, double *a)
 {
-	int		hit_body;
 	double	discriminant;
 	double	b;
+	double	t1;
+	double	t2;
 
-	hit_body = 0;
-	discriminant = calculate_cylinder_equation_discriminant(ray, cylinder, &a, &b);
+	discriminant = calculate_cylinder_equation_discriminant(ray, cylinder, *(&a), &b);
+	if (discriminant >= 0)
+	{
+		t1 = (-b - sqrt(discriminant)) / (2 * *a);
+		t2 = (-b + sqrt(discriminant)) / (2 * *a);
+		calculate_body_intersection_point(ray, cylinder, t1, *(&t));
+		calculate_body_intersection_point(ray, cylinder, t2, *(&t));
+	}
+}
 
-    if (discriminant >= 0)
-    {
-        double sqrt_discriminant = sqrt(discriminant);
-        double t1 = (-b - sqrt_discriminant) / (2 * *a);
-        double t2 = (-b + sqrt_discriminant) / (2 * *a);
+double	find_cylinder_closest_intersection(double t_top, double t_bottom, double t_body, double a)
+{
+	double	closest_t;
 
-        // Check both intersection points
-        for (int i = 0; i < 2; i++)
-        {
-            double t_candidate = (i == 0) ? t1 : t2;
-
-            if (t_candidate > 0.0001)
-            {
-                t_vec3 point = vec3_add(ray.origin, vec3_scale(ray.direction, t_candidate));
-                t_vec3 to_point = vec3_subtract(point, cylinder.center);
-                double projection = vec3_dot(to_point, cylinder.axis);
-
-                // Check if intersection is within cylinder height bounds
-                // Use EXACT height bounds - no tolerance
-                if (projection >= -cylinder.height / 2.0 && projection <= cylinder.height / 2.0)
-                {
-                    if (!hit_body || t_candidate < *t)
-                    {
-                        *t = t_candidate;
-                        hit_body = 1;
-                    }
-                }
-            }
-        }
-    }
+	closest_t = INFINITY;
+	if (a < 0.0001)
+	{
+	if (t_top > 0.0 && t_top < closest_t)
+		closest_t = t_top;
+	if (t_bottom > 0.0 && t_bottom < closest_t)
+		closest_t = t_bottom;
+	}
+	else
+	{
+		if (t_body > 0.0 && t_body < closest_t)
+			closest_t = t_body;
+		if (t_top > 0.0 && t_top < closest_t)
+			closest_t = t_top;
+		if (t_bottom > 0.0 && t_bottom < closest_t)
+			closest_t = t_bottom;
+	}
+	return (closest_t);
 }
 
 // Complete ray-cylinder intersection
@@ -115,48 +133,21 @@ int ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t)
 	double t_top;
 	double t_bottom;
 	double	a;
+	double	closest_t;
 
 	t_top = INFINITY;
 	t_bottom = INFINITY;
 	t_body = INFINITY;
+	closest_t = INFINITY;
 	check_cylinder_caps_intersection(ray, cylinder, &t_top, &t_bottom);
 	check_cylinder_body_intersection(ray, cylinder, &t_body, &a);
-
-    // Find the closest valid intersection among body and caps
-    double closest_t = INFINITY;
-
-	 // If ray is parallel to cylinder axis, only caps matter
-    if (a < 0.0001)
-    {
-        // Find the closest cap intersection
-        double closest_t = INFINITY;
-        if (t_top > 0.0 && t_top < closest_t)
-            closest_t = t_top;
-        if (t_bottom > 0.0 && t_bottom < closest_t)
-            closest_t = t_bottom;
-
-        if (closest_t < INFINITY)
-        {
-            *t = closest_t;
-            return 1;
-        }
-        return 0;
-    }
-
-    if (t_body > 0.0&& t_body < closest_t)
-        closest_t = t_body;
-    if (t_top > 0.0 && t_top < closest_t)
-        closest_t = t_top;
-    if (t_bottom > 0.0 && t_bottom < closest_t)
-        closest_t = t_bottom;
-
-    if (closest_t < INFINITY)
-    {
-        *t = closest_t;
-        return 1;
-    }
-
-    return 0;
+	closest_t = find_cylinder_closest_intersection(t_top, t_bottom, t_body, a);
+	if (closest_t < INFINITY)
+	{
+		*t = closest_t;
+		return 1;
+	}
+	return 0;
 }
 
 // Normal calculation with precise cap detection
