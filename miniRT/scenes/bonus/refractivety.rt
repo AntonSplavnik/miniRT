@@ -25,9 +25,9 @@ pl 15,0,0 -1,0,0 135,206,235
 
 # Row of spheres with different reflectivity
 
-sp -8,0,0 3 220,220,220 {reflectivity:0.6}
+sp -8,0,0 3 220,220,220 {reflectivity:0.8}
 
-sp -4,0,0 3 220,220,220 {reflectivity:0.9}
+sp -4,0,0 3 220,220,220 {reflectivity:0.99}
 
 sp 0,0,0 3 220,220,220 {refractive_index:1.52 transparency:1.0 reflectivity:0.1}
 

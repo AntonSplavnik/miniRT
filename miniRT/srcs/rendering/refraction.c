@@ -1,6 +1,6 @@
 #include "../../includes/miniRT.h"
 
-// Improved refract_ray function with better numerical stability
+// Debug version of refract_ray with additional safety checks
 t_vec3 refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection)
 {
     // Ensure vectors are normalized
@@ -8,19 +8,24 @@ t_vec3 refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total
     normal = vec3_normalize(normal);
     
     // Calculate cosine of angle between incident ray and normal
-    double cos_theta_i = vec3_dot(vec3_negate(incident), normal);
+    // Use the incident ray direction as-is, normal should already be oriented correctly
+    double cos_theta_i = -vec3_dot(incident, normal);
     
-    // Ensure we're working with the correct normal direction
+    // If cos_theta_i is negative, we need to flip the normal
     if (cos_theta_i < 0.0) {
         cos_theta_i = -cos_theta_i;
         normal = vec3_negate(normal);
     }
     
+    // Clamp to handle numerical precision errors
+    cos_theta_i = fmax(0.0, fmin(1.0, cos_theta_i));
+    
     // Calculate discriminant for Snell's law
-    double discriminant = 1.0 - eta_ratio * eta_ratio * (1.0 - cos_theta_i * cos_theta_i);
+    double sin_theta_i_sq = 1.0 - cos_theta_i * cos_theta_i;
+    double sin_theta_t_sq = eta_ratio * eta_ratio * sin_theta_i_sq;
     
     // Check for total internal reflection
-    if (discriminant < 0.0)
+    if (sin_theta_t_sq >= 1.0)
     {
         *total_internal_reflection = true;
         return vec3_create(0, 0, 0);
@@ -28,10 +33,9 @@ t_vec3 refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total
     
     *total_internal_reflection = false;
     
-    // Calculate refracted ray direction using Snell's law
-    double cos_theta_t = sqrt(discriminant);
+    double cos_theta_t = sqrt(1.0 - sin_theta_t_sq);
     
-    // Combine the parallel and perpendicular components to get the refracted direction
+    // Calculate refracted ray direction using vector form of Snell's law
     t_vec3 refracted = vec3_add(
         vec3_scale(incident, eta_ratio),
         vec3_scale(normal, eta_ratio * cos_theta_i - cos_theta_t)

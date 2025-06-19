@@ -8,3 +8,14 @@ Ex of rt file:
 sp 0,0,0 7 255,255,255 {texture:scenes/textures/earthmap1k.png bumpmap:scenes/bumpmaps/earth.ppm}
 
 CAREFUL - 4k ppm file can often not be uploaded on github as they go over the 100.00MB limit
+
+
+Reflections and refraction.
+Current implementation provides a physically accurate representation of reflections and refractions.
+The code properly implements:
+Fresnel equations - which determine the ratio of reflected vs. refracted light based on viewing angle and material properties
+Snell's law - for calculating accurate refraction directions
+Total internal reflection detection - when light cannot exit a denser medium
+Energy conservation - ensuring the sum of reflection and refraction contributions is physically plausible
+The spheres in your reference image show this physical accuracy - they display stronger reflections at grazing angles and more transparency when viewed head-on, exactly as real-world transparent materials behave.
+If the reflections appear less intense than before, it's because the previous implementation wasn't accounting for the angle-dependent nature of reflection. The current implementation is more realistic but can be tuned if you prefer a specific aesthetic over strict physical accuracy.

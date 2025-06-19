@@ -69,10 +69,6 @@ typedef struct s_material {
 // Fresnel equations to calculate reflection/transmission coefficients
 double fresnel_reflectance(double cos_theta_i, double eta_i, double eta_t)
 {
-    // Ensure cos_theta_i is positive (absolute value)
-    cos_theta_i = fabs(cos_theta_i);
-    
-    // Calculate sine squared of transmission angle using Snell's law
     double sin_theta_t_sq = (eta_i / eta_t) * (eta_i / eta_t) * (1.0 - cos_theta_i * cos_theta_i);
     
     // Total internal reflection
@@ -194,7 +190,7 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
             }
             else
             {
-                // Total internal reflection - use perfect reflection
+                // Total internal reflection - use perfect reflection (100% of transmission energy)
                 t_vec3 reflect_dir = reflect_ray(ray.direction, hit_record.normal);
                 t_ray reflect_ray;
                 reflect_ray.origin = vec3_add(hit_record.point, vec3_scale(hit_record.normal, 0.001));

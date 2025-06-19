@@ -19,6 +19,10 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double ligh
 	t_object	*hit_object;
 	double		t;
 
+	// If shadows are disabled, always return 0 (not in shadow)
+	if (!scene->graphic_settings.enable_hard_shadows)
+		return (0);
+
 	//Create a shadow ray from the hit point towards the light
 	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001)); //offset to avoid self intersection
 	shadow_ray.direction = light_dir;
