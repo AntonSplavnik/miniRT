@@ -43,6 +43,8 @@ SRC_FILES = main.c \
 	objects/add_object.c \
 	objects/cone/cone_intersect.c \
 	objects/cube/cube_intersect.c \
+	objects/cube/cube_intersect_utils.c \
+	objects/cube/cube_normal.c \
 	objects/cylinder/cylinder_intersect.c \
 	objects/cylinder/cylinder_intersect_caps.c \
 	objects/cylinder/cylinder_normal.c \

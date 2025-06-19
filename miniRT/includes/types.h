@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 12:55:49 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/19 13:17:40 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,23 @@ typedef struct s_vec3
 	double	y;
 	double	z;
 }				t_vec3;
+
+//Used to check cube intersection
+typedef struct s_slab
+{
+	double	slab_x_dir;
+	double	slab_x_origin;
+	double	slab_x_min;
+	double	slab_x_max;
+	double	slab_y_dir;
+	double	slab_y_origin;
+	double	slab_y_min;
+	double	slab_y_max;
+	double	slab_z_dir;
+	double	slab_z_origin;
+	double	slab_z_min;
+	double	slab_z_max;
+}	t_slab;
 
 typedef struct s_light_result {
 	double diffuse;

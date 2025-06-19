@@ -6,62 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 13:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:08:31 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:19:19 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
-
-typedef struct s_slab
-{
-	double	slab_x_dir;
-	double	slab_x_origin;
-	double	slab_x_min;
-	double	slab_x_max;
-	double	slab_y_dir;
-	double	slab_y_origin;
-	double	slab_y_min;
-	double	slab_y_max;
-	double	slab_z_dir;
-	double	slab_z_origin;
-	double	slab_z_min;
-	double	slab_z_max;
-}	t_slab;
-
-// Helper function to find the minimum of two values
-static double	min(double a, double b)
-{
-	if (a < b)
-		return (a);
-	return (b);
-}
-
-// Helper function to find the maximum of two values
-static double	max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
-
-t_slab	calculate_slab_data(t_ray ray, t_vec3 min_bound, t_vec3 max_bound)
-{
-	t_slab	slab;
-
-	slab.slab_x_dir = ray.direction.x;
-	slab.slab_x_origin = ray.origin.x;
-	slab.slab_x_max = max_bound.x;
-	slab.slab_x_min = min_bound.x;
-	slab.slab_y_dir = ray.direction.y;
-	slab.slab_y_origin = ray.origin.y;
-	slab.slab_y_max = max_bound.y;
-	slab.slab_y_min = min_bound.y;
-	slab.slab_z_dir = ray.direction.z;
-	slab.slab_z_origin = ray.origin.z;
-	slab.slab_z_max = max_bound.z;
-	slab.slab_z_min = min_bound.z;
-	return (slab);
-}
 
 int	calculate_slab_x_intersection(t_slab slabs, double *t_min, double *t_max)
 {
@@ -205,36 +154,4 @@ int	ray_cube_intersect(t_ray ray, t_cube cube, double *t)
 			*t = t_far;
 		return (1);
 	}
-}
-
-// Calculate normal at the intersection point
-t_vec3	cube_normal_at_point(t_vec3 point, t_cube cube)
-{
-	t_vec3	center_to_point;
-	t_vec3	abs_center_to_point;
-	double	max_component;
-	t_vec3	normal;
-
-	// Calculate vector from center to intersection point
-	center_to_point = vec3_subtract(point, cube.center);
-
-	// Find which face was hit (max component approach)
-	abs_center_to_point.x = fabs(center_to_point.x);
-	abs_center_to_point.y = fabs(center_to_point.y);
-	abs_center_to_point.z = fabs(center_to_point.z);
-
-	// Determine which component is largest to find which face was hit
-	max_component = max(abs_center_to_point.x, max(abs_center_to_point.y, abs_center_to_point.z));
-
-	// Set normal based on the face that was hit
-	normal = vec3_create(0, 0, 0);
-	if (max_component == abs_center_to_point.x)
-		normal.x = center_to_point.x > 0 ? 1 : -1;
-	else if (max_component == abs_center_to_point.y)
-		normal.y = center_to_point.y > 0 ? 1 : -1;
-	else
-		normal.z = center_to_point.z > 0 ? 1 : -1;
-
-	// Apply rotation (if the cube has rotation support in the future)
-	return (vec3_normalize(normal));
 }
