@@ -6,11 +6,27 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 13:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/10 13:10:00 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:08:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
+
+typedef struct s_slab
+{
+	double	slab_x_dir;
+	double	slab_x_origin;
+	double	slab_x_min;
+	double	slab_x_max;
+	double	slab_y_dir;
+	double	slab_y_origin;
+	double	slab_y_min;
+	double	slab_y_max;
+	double	slab_z_dir;
+	double	slab_z_origin;
+	double	slab_z_min;
+	double	slab_z_max;
+}	t_slab;
 
 // Helper function to find the minimum of two values
 static double	min(double a, double b)
@@ -26,6 +42,169 @@ static double	max(double a, double b)
 	if (a > b)
 		return (a);
 	return (b);
+}
+
+t_slab	calculate_slab_data(t_ray ray, t_vec3 min_bound, t_vec3 max_bound)
+{
+	t_slab	slab;
+
+	slab.slab_x_dir = ray.direction.x;
+	slab.slab_x_origin = ray.origin.x;
+	slab.slab_x_max = max_bound.x;
+	slab.slab_x_min = min_bound.x;
+	slab.slab_y_dir = ray.direction.y;
+	slab.slab_y_origin = ray.origin.y;
+	slab.slab_y_max = max_bound.y;
+	slab.slab_y_min = min_bound.y;
+	slab.slab_z_dir = ray.direction.z;
+	slab.slab_z_origin = ray.origin.z;
+	slab.slab_z_max = max_bound.z;
+	slab.slab_z_min = min_bound.z;
+	return (slab);
+}
+
+int	calculate_slab_x_intersection(t_slab slabs, double *t_min, double *t_max)
+{
+	double	temp;
+
+	if (fabs(slabs.slab_x_dir) < 0.0001)
+	{
+		if (slabs.slab_x_origin < slabs.slab_x_min - 0.00001 \
+			|| slabs.slab_x_origin > slabs.slab_x_max + 0.00001)
+			return (0);
+		*t_min = -INFINITY;
+		*t_max = INFINITY;
+	}
+	else
+	{
+		*t_min = (slabs.slab_x_min - slabs.slab_x_origin) \
+				/ slabs.slab_x_dir;
+		*t_max = (slabs.slab_x_max - slabs.slab_x_origin) \
+				/ slabs.slab_x_dir;
+		if (*t_min > *t_max)
+		{
+			temp = *t_min;
+			*t_min = *t_max;
+			*t_max = temp;
+		}
+		return (1);
+	}
+	return (1);
+}
+
+int	calculate_slab_y_intersection(t_slab slabs, double *t_min, double *t_max)
+{
+	double	temp;
+
+	if (fabs(slabs.slab_y_dir) < 0.0001)
+	{
+		if (slabs.slab_y_origin < slabs.slab_y_min - 0.00001 \
+				|| slabs.slab_y_origin > slabs.slab_y_max + 0.00001)
+			return (0);
+		*t_min = -INFINITY;
+		*t_max = INFINITY;
+	}
+	else
+	{
+		*t_min = (slabs.slab_y_min - slabs.slab_y_origin) \
+				/ slabs.slab_y_dir;
+		*t_max = (slabs.slab_y_max - slabs.slab_y_origin) \
+				/ slabs.slab_y_dir;
+		if (*t_min > *t_max)
+		{
+			temp = *t_min;
+			*t_min = *t_max;
+			*t_max = temp;
+		}
+		return (1);
+	}
+	return (1);
+}
+
+int	calculate_slab_z_intersection(t_slab slabs, double *t_min, double *t_max)
+{
+	double	temp;
+
+	if (fabs(slabs.slab_z_dir) < 0.0001)
+	{
+		if (slabs.slab_z_origin < slabs.slab_z_min - 0.00001 \
+				|| slabs.slab_z_origin > slabs.slab_z_max + 0.00001)
+			return (0);
+		*t_min = -INFINITY;
+		*t_max = INFINITY;
+	}
+	else
+	{
+		*t_min = (slabs.slab_z_min - slabs.slab_z_origin) \
+				/ slabs.slab_z_dir;
+		*t_max = (slabs.slab_z_max - slabs.slab_z_origin) \
+				/ slabs.slab_z_dir;
+		if (*t_min > *t_max)
+		{
+			temp = *t_min;
+			*t_min = *t_max;
+			*t_max = temp;
+		}
+		return (1);
+	}
+	return (1);
+}
+
+int	calculate_slab_intersection_point(t_slab slabs, \
+			double *t_near, double *t_far)
+{
+	double	t_min;
+	double	t_max;
+
+	t_min = 0;
+	t_max = 0;
+	if (!calculate_slab_x_intersection(slabs, &t_min, &t_max))
+		return (0);
+	*t_near = max(*t_near, t_min);
+	*t_far = min(*t_far, t_max);
+	if (*t_near > *t_far || *t_far < 0.001)
+		return (0);
+	if (!calculate_slab_y_intersection(slabs, &t_min, &t_max))
+		return (0);
+	*t_near = max(*t_near, t_min);
+	*t_far = min(*t_far, t_max);
+	if (*t_near > *t_far || *t_far < 0.001)
+		return (0);
+	if (!calculate_slab_z_intersection(slabs, &t_min, &t_max))
+		return (0);
+	*t_near = max(*t_near, t_min);
+	*t_far = min(*t_far, t_max);
+	if (*t_near > *t_far || *t_far < 0.001)
+		return (0);
+	return (1);
+}
+
+// Ray-cube intersection test using AABB approach
+int	ray_cube_intersect(t_ray ray, t_cube cube, double *t)
+{
+	t_vec3	min_bound;
+	t_vec3	max_bound;
+	t_slab	slabs;
+	double	t_near;
+	double	t_far;
+
+	min_bound = vec3_subtract(cube.center, vec3_scale(vec3_create(1, 1, 1), \
+				cube.side_length / 2.0));
+	max_bound = vec3_add(cube.center, vec3_scale(vec3_create(1, 1, 1), \
+				cube.side_length / 2.0));
+	t_near = -INFINITY;
+	t_far = INFINITY;
+	slabs = calculate_slab_data(ray, min_bound, max_bound);
+	if (!calculate_slab_intersection_point(slabs, &t_near, &t_far))
+		return (0);
+	else
+	{
+		if (t_near > 0.001)
+			*t = t_near;
+		else
+			*t = t_far;
+		return (1);
+	}
 }
 
 // Calculate normal at the intersection point
@@ -59,72 +238,3 @@ t_vec3	cube_normal_at_point(t_vec3 point, t_cube cube)
 	// Apply rotation (if the cube has rotation support in the future)
 	return (vec3_normalize(normal));
 }
-
-// Ray-cube intersection test using AABB approach
-int	ray_cube_intersect(t_ray ray, t_cube cube, double *t)
-{
-	t_vec3	half_size;
-	t_vec3	min_bound;
-	t_vec3	max_bound;
-	double	t_near;
-	double	t_far;
-	double	t_min[3];
-	double	t_max[3];
-	int		i;
-
-	// Calculate half size of the cube
-	half_size = vec3_scale(vec3_create(1, 1, 1), cube.side_length / 2.0);
-
-	// Calculate the AABB bounds
-	min_bound = vec3_subtract(cube.center, half_size);
-	max_bound = vec3_add(cube.center, half_size);
-
-	// Initialize t_near and t_far
-	t_near = -INFINITY;
-	t_far = INFINITY;
-
-	// Check intersection with all 3 axis-aligned slabs
-	i = 0;
-	while (i < 3)
-	{
-		double component_dir = i == 0 ? ray.direction.x : (i == 1 ? ray.direction.y : ray.direction.z);
-		double component_orig = i == 0 ? ray.origin.x : (i == 1 ? ray.origin.y : ray.origin.z);
-		double component_min = i == 0 ? min_bound.x : (i == 1 ? min_bound.y : min_bound.z);
-		double component_max = i == 0 ? max_bound.x : (i == 1 ? max_bound.y : max_bound.z);
-
-		// Handle case where ray is parallel to the slab
-		if (fabs(component_dir) < 0.0001)
-		{
-			// If origin is outside slab, no intersection
-			if (component_orig < component_min || component_orig > component_max)
-				return (0);
-		}
-		else
-		{
-			// Calculate intersection times with the slab
-			t_min[i] = (component_min - component_orig) / component_dir;
-			t_max[i] = (component_max - component_orig) / component_dir;
-
-			// Ensure t_min <= t_max
-			if (t_min[i] > t_max[i])
-			{
-				double temp = t_min[i];
-				t_min[i] = t_max[i];
-				t_max[i] = temp;
-			}
-
-			// Update t_near and t_far
-			t_near = max(t_near, t_min[i]);
-			t_far = min(t_far, t_max[i]);
-
-			// Check if there's no intersection
-			if (t_near > t_far || t_far < 0.001)
-				return (0);
-		}
-		i++;
-	}
-
-	// If we reach this point, there is an intersection
-	*t = t_near > 0.001 ? t_near : t_far;
-	return (1);
-} 
