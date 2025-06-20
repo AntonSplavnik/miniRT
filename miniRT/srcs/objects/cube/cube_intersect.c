@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 13:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:19:19 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:15:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,20 +109,20 @@ int	calculate_slab_intersection_point(t_slab slabs, \
 	t_max = 0;
 	if (!calculate_slab_x_intersection(slabs, &t_min, &t_max))
 		return (0);
-	*t_near = max(*t_near, t_min);
-	*t_far = min(*t_far, t_max);
+	*t_near = fmax(*t_near, t_min);
+	*t_far = fmin(*t_far, t_max);
 	if (*t_near > *t_far || *t_far < 0.001)
 		return (0);
 	if (!calculate_slab_y_intersection(slabs, &t_min, &t_max))
 		return (0);
-	*t_near = max(*t_near, t_min);
-	*t_far = min(*t_far, t_max);
+	*t_near = fmax(*t_near, t_min);
+	*t_far = fmin(*t_far, t_max);
 	if (*t_near > *t_far || *t_far < 0.001)
 		return (0);
 	if (!calculate_slab_z_intersection(slabs, &t_min, &t_max))
 		return (0);
-	*t_near = max(*t_near, t_min);
-	*t_far = min(*t_far, t_max);
+	*t_near = fmax(*t_near, t_min);
+	*t_far = fmin(*t_far, t_max);
 	if (*t_near > *t_far || *t_far < 0.001)
 		return (0);
 	return (1);

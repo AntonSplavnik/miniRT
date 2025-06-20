@@ -6,27 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 13:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:17:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:16:02 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
-
-// Helper function to find the minimum of two values
-double	min(double a, double b)
-{
-	if (a < b)
-		return (a);
-	return (b);
-}
-
-// Helper function to find the maximum of two values
-double	max(double a, double b)
-{
-	if (a > b)
-		return (a);
-	return (b);
-}
 
 t_slab	calculate_slab_data(t_ray ray, t_vec3 min_bound, t_vec3 max_bound)
 {

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 13:18:59 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:19:24 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:15:15 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ t_vec3	cube_normal_at_point(t_vec3 point, t_cube cube)
 	abs_center_to_point.x = fabs(center_to_point.x);
 	abs_center_to_point.y = fabs(center_to_point.y);
 	abs_center_to_point.z = fabs(center_to_point.z);
-	max_component = max(abs_center_to_point.x, \
-					max(abs_center_to_point.y, abs_center_to_point.z));
+	max_component = fmax(abs_center_to_point.x, \
+					fmax(abs_center_to_point.y, abs_center_to_point.z));
 	normal = create_cube_normal(abs_center_to_point, \
 					center_to_point, max_component);
 	return (vec3_normalize(normal));

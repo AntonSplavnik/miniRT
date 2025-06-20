@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:26:54 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 10:50:09 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
 t_vec3		triangle_normal(t_triangle triangle);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
+void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone,
+								t_vec3 apex_to_origin, double *coeffs);
+int			solve_cone_quadratic(t_ray ray, t_cone cone, double *coeffs, double *t_body);
 t_vec3		cone_normal_at_point(t_vec3 point, t_cone cone);
 
 // lights
