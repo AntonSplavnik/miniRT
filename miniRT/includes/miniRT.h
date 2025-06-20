@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 13:01:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/20 10:50:09 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,24 @@ int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object *
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
+void		check_cylinder_caps_intersection(t_ray ray, \
+					t_cylinder cylinder, double *t_top, double *t_bottom);
+double		ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
+							double radius);
 int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
 int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
+double		min(double a, double b);
+double		max(double a, double b);
+t_slab		calculate_slab_data(t_ray ray, t_vec3 min_bound, t_vec3 max_bound);
 t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
 int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
 t_vec3		triangle_normal(t_triangle triangle);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
-int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
-								double radius, double *t);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
+void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone,
+								t_vec3 apex_to_origin, double *coeffs);
+int			solve_cone_quadratic(t_ray ray, t_cone cone, double *coeffs, double *t_body);
 t_vec3		cone_normal_at_point(t_vec3 point, t_cone cone);
-int			is_point_in_disc(t_vec3 point, t_vec3 center, t_vec3 normal, double radius);
 
 // lights
 void		add_light(t_scene *scene, t_light *light);

@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 11:34:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:27:29 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,19 +127,19 @@
 //     t_color base_color = get_surface_color_with_texture(hit_record);
 
 //     // Convert from sRGB to linear space for physically accurate lighting
-//     float base_r_linear = base_color.r <= 10 ? base_color.r / 255.0f / 12.92f : 
+//     float base_r_linear = base_color.r <= 10 ? base_color.r / 255.0f / 12.92f :
 //                          powf((base_color.r / 255.0f + 0.055f) / 1.055f, 2.4f);
-//     float base_g_linear = base_color.g <= 10 ? base_color.g / 255.0f / 12.92f : 
+//     float base_g_linear = base_color.g <= 10 ? base_color.g / 255.0f / 12.92f :
 //                          powf((base_color.g / 255.0f + 0.055f) / 1.055f, 2.4f);
-//     float base_b_linear = base_color.b <= 10 ? base_color.b / 255.0f / 12.92f : 
+//     float base_b_linear = base_color.b <= 10 ? base_color.b / 255.0f / 12.92f :
 //                          powf((base_color.b / 255.0f + 0.055f) / 1.055f, 2.4f);
 
 //     // Convert light color to linear space
-//     float light_r_linear = light_color.r <= 10 ? light_color.r / 255.0f / 12.92f : 
+//     float light_r_linear = light_color.r <= 10 ? light_color.r / 255.0f / 12.92f :
 //                           powf((light_color.r / 255.0f + 0.055f) / 1.055f, 2.4f);
-//     float light_g_linear = light_color.g <= 10 ? light_color.g / 255.0f / 12.92f : 
+//     float light_g_linear = light_color.g <= 10 ? light_color.g / 255.0f / 12.92f :
 //                           powf((light_color.g / 255.0f + 0.055f) / 1.055f, 2.4f);
-//     float light_b_linear = light_color.b <= 10 ? light_color.b / 255.0f / 12.92f : 
+//     float light_b_linear = light_color.b <= 10 ? light_color.b / 255.0f / 12.92f :
 //                           powf((light_color.b / 255.0f + 0.055f) / 1.055f, 2.4f);
 
 //     // Calculate diffuse component (subtract specular from total light)
@@ -179,11 +179,11 @@
 //     b_linear = exposure * b_linear / (exposure * b_linear + 1.0f);
 
 //     // Convert back to sRGB space for output
-//     int r = (int)(r_linear <= 0.0031308f ? 12.92f * r_linear * 255.0f : 
+//     int r = (int)(r_linear <= 0.0031308f ? 12.92f * r_linear * 255.0f :
 //                   (1.055f * powf(r_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
-//     int g = (int)(g_linear <= 0.0031308f ? 12.92f * g_linear * 255.0f : 
+//     int g = (int)(g_linear <= 0.0031308f ? 12.92f * g_linear * 255.0f :
 //                   (1.055f * powf(g_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
-//     int b = (int)(b_linear <= 0.0031308f ? 12.92f * b_linear * 255.0f : 
+//     int b = (int)(b_linear <= 0.0031308f ? 12.92f * b_linear * 255.0f :
 //                   (1.055f * powf(b_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
 
 //     // Clamp final values
@@ -343,7 +343,7 @@ int get_pixel_color(t_hit_record *hit_record, double light_intensity,
 
 /**
  * Blend two colors with specified weights
- * 
+ *
  * @param base_color The base color (integer RGB format)
  * @param blend_color The color to blend with (integer RGB format)
  * @param base_weight Weight for the base color (0.0 to 1.0)
@@ -375,7 +375,7 @@ int blend_colors(int base_color, int blend_color, double base_weight, double ble
 
 /**
  * Add two colors together (useful for accumulating light contributions)
- * 
+ *
  * @param color1 First color (integer RGB format)
  * @param color2 Second color (integer RGB format)
  * @return Sum of the colors in integer RGB format

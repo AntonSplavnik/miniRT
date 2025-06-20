@@ -6,13 +6,11 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/23 17:08:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 13:03:53 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
-
-
 
 
 /**

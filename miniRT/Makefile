@@ -42,8 +42,14 @@ SRC_FILES = main.c \
 	controls/mouse.c \
 	objects/add_object.c \
 	objects/cone/cone_intersect.c \
+	objects/cone/cone_intersect_equation.c \
+	objects/cone/cone_normal.c \
 	objects/cube/cube_intersect.c \
+	objects/cube/cube_intersect_utils.c \
+	objects/cube/cube_normal.c \
 	objects/cylinder/cylinder_intersect.c \
+	objects/cylinder/cylinder_intersect_caps.c \
+	objects/cylinder/cylinder_normal.c \
 	objects/mesh/mesh_intersect.c \
 	objects/plane/plane_intersect.c \
 	objects/sphere/sphere_intersect.c \

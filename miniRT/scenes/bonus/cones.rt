@@ -11,7 +11,7 @@ L 10,15,-5 0.8 255,255,255
 L -5,8,-20 0.4 200,255,200
 L 3,12,-30 0.5 255,200,255
 
-# Cone forest - 15 cones with varying orientations and sizes
+# Cone forest - cones with varying orientations and sizes
 
 # Row 1 - Front cones
 co -3,0,2 0,1,0 0.8 4.0 255,100,100
@@ -41,6 +41,6 @@ co -4,0,-14 0.866,0.5,0 0.8 4.5 200,100,255
 # Ground plane
 pl 0,-1,0 0,1,0 80,60,40
 
-# Sky spheres for atmosphere
-sp -10,20,-10 3 200,220,255
-sp 15,25,-25 4 255,220,200
+# # Sky spheres for atmosphere
+# sp -10,20,-10 3 200,220,255
+# sp 15,25,-25 4 255,220,200
