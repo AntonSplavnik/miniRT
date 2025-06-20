@@ -1,5 +1,5 @@
 # Specialized Checkerboard Patterns for Different Objects
-A 0.2 255,255,255
+A 0.02 255,255,255
 C 0,-1,-14.9 0,0,1 70
 L 8,8,-5 0.5 255,240,220
 L -8,8,-5 0.5 255,240,220
@@ -14,7 +14,7 @@ pl 0,10,0 0,-1,0 255,255,255 {checker_color:30,30,30 checker_size:4.0}
 pl 0,0,12 0,0,-1 255,255,255 {checker_color:30,30,30 checker_size:4.0}
 
 # Checkered front wall (large pattern)
-pl 0,0,-15 0,0,1 255,255,255 {checker_color:30,30,30 checker_size:4.0}
+pl 0,0,-45 0,0,1 255,255,255 {checker_color:30,30,30 checker_size:4.0}
 
 # Checkered left wall (large pattern)
 pl -15,0,0 1,0,0 255,255,255 {checker_color:30,30,30 checker_size:4.0}

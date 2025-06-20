@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 12:55:49 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/20 12:07:03 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,20 @@ typedef struct s_vec3
 	double	z;
 }				t_vec3;
 
+// Add new floating-point color type
+typedef struct s_color_f
+{
+    double r, g, b;  // Linear RGB values, typically [0.0, 1.0] but can exceed for HDR
+} t_color_f;
+
+// Update light result to use floating-point
 typedef struct s_light_result {
-	double diffuse;
-	double specular_intensity;
-	double light_distance;
-	t_vec3 light_dir;
+    double diffuse;
+    double specular_intensity;
+    double light_distance;
+    t_vec3 light_dir;
 } t_light_result;
+
 
 typedef struct	s_color
 {
@@ -124,7 +132,7 @@ typedef struct	s_material
 	double	reflectivity;
 	double	transparency; // 0.0 = opaque 1.0 = fully transparent
 	double	refractive_index; //Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
-	bool		has_refraction;     
+	bool		has_refraction;
 	int			has_checker;
 	double		checker_size;
 	t_color		checker_color;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/11 13:27:03 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/20 12:22:46 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	malloc_error(void)
 
 void	init_data(t_scene *scene)
 {
-	
+
 	//app
 	scene->app.mlx = NULL;
 	scene->app.img = NULL;
@@ -63,7 +63,7 @@ void	init_data(t_scene *scene)
 
 	// Bonus
 	scene->sample = 1;
-	scene->max_depth = 3;
+	scene->max_depth = 4;
 
 	//camera
 	scene->camera.movement_speed = 0.5;

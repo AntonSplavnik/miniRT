@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 13:07:03 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/03 11:34:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 12:32:34 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,19 +127,19 @@ int get_pixel_color(t_hit_record *hit_record, double light_intensity,
     t_color base_color = get_surface_color_with_texture(hit_record);
 
     // Convert from sRGB to linear space for physically accurate lighting
-    float base_r_linear = base_color.r <= 10 ? base_color.r / 255.0f / 12.92f : 
+    float base_r_linear = base_color.r <= 10 ? base_color.r / 255.0f / 12.92f :
                          powf((base_color.r / 255.0f + 0.055f) / 1.055f, 2.4f);
-    float base_g_linear = base_color.g <= 10 ? base_color.g / 255.0f / 12.92f : 
+    float base_g_linear = base_color.g <= 10 ? base_color.g / 255.0f / 12.92f :
                          powf((base_color.g / 255.0f + 0.055f) / 1.055f, 2.4f);
-    float base_b_linear = base_color.b <= 10 ? base_color.b / 255.0f / 12.92f : 
+    float base_b_linear = base_color.b <= 10 ? base_color.b / 255.0f / 12.92f :
                          powf((base_color.b / 255.0f + 0.055f) / 1.055f, 2.4f);
 
     // Convert light color to linear space
-    float light_r_linear = light_color.r <= 10 ? light_color.r / 255.0f / 12.92f : 
+    float light_r_linear = light_color.r <= 10 ? light_color.r / 255.0f / 12.92f :
                           powf((light_color.r / 255.0f + 0.055f) / 1.055f, 2.4f);
-    float light_g_linear = light_color.g <= 10 ? light_color.g / 255.0f / 12.92f : 
+    float light_g_linear = light_color.g <= 10 ? light_color.g / 255.0f / 12.92f :
                           powf((light_color.g / 255.0f + 0.055f) / 1.055f, 2.4f);
-    float light_b_linear = light_color.b <= 10 ? light_color.b / 255.0f / 12.92f : 
+    float light_b_linear = light_color.b <= 10 ? light_color.b / 255.0f / 12.92f :
                           powf((light_color.b / 255.0f + 0.055f) / 1.055f, 2.4f);
 
     // Calculate diffuse component (subtract specular from total light)
@@ -179,11 +179,11 @@ int get_pixel_color(t_hit_record *hit_record, double light_intensity,
     b_linear = exposure * b_linear / (exposure * b_linear + 1.0f);
 
     // Convert back to sRGB space for output
-    int r = (int)(r_linear <= 0.0031308f ? 12.92f * r_linear * 255.0f : 
+    int r = (int)(r_linear <= 0.0031308f ? 12.92f * r_linear * 255.0f :
                   (1.055f * powf(r_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
-    int g = (int)(g_linear <= 0.0031308f ? 12.92f * g_linear * 255.0f : 
+    int g = (int)(g_linear <= 0.0031308f ? 12.92f * g_linear * 255.0f :
                   (1.055f * powf(g_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
-    int b = (int)(b_linear <= 0.0031308f ? 12.92f * b_linear * 255.0f : 
+    int b = (int)(b_linear <= 0.0031308f ? 12.92f * b_linear * 255.0f :
                   (1.055f * powf(b_linear, 1.0f/2.4f) - 0.055f) * 255.0f);
 
     // Clamp final values
@@ -343,7 +343,7 @@ int get_pixel_color(t_hit_record *hit_record, double light_intensity,
 
 /**
  * Blend two colors with specified weights
- * 
+ *
  * @param base_color The base color (integer RGB format)
  * @param blend_color The color to blend with (integer RGB format)
  * @param base_weight Weight for the base color (0.0 to 1.0)
@@ -375,7 +375,7 @@ int blend_colors(int base_color, int blend_color, double base_weight, double ble
 
 /**
  * Add two colors together (useful for accumulating light contributions)
- * 
+ *
  * @param color1 First color (integer RGB format)
  * @param color2 Second color (integer RGB format)
  * @return Sum of the colors in integer RGB format
@@ -401,3 +401,136 @@ int add_colors(int color1, int color2)
            (valid_color_range(final_g) << 8) |
            valid_color_range(final_b);
 }
+
+// Convert sRGB to linear
+double srgb_to_linear(double srgb)
+{
+    if (srgb <= 0.04045)
+        return srgb / 12.92;
+    return pow((srgb + 0.055) / 1.055, 2.4);
+}
+
+// Convert linear to sRGB
+double linear_to_srgb(double linear)
+{
+    if (linear <= 0.0031308)
+        return 12.92 * linear;
+    return 1.055 * pow(linear, 1.0/2.4) - 0.055;
+}
+
+// Create floating-point color
+t_color_f create_color_f(double r, double g, double b)
+{
+    t_color_f color;
+    color.r = r;
+    color.g = g;
+    color.b = b;
+    return color;
+}
+
+// Convert integer color to linear floating-point
+t_color_f color_to_linear(t_color color)
+{
+    t_color_f linear;
+    linear.r = srgb_to_linear(color.r / 255.0);
+    linear.g = srgb_to_linear(color.g / 255.0);
+    linear.b = srgb_to_linear(color.b / 255.0);
+    return linear;
+}
+
+// Convert floating-point color to display integer with tone mapping and gamma
+int color_f_to_display(t_color_f color)
+{
+    // Apply tone mapping (Reinhard)
+    double exposure = 1.2;
+    double r = exposure * color.r / (exposure * color.r + 1.0);
+    double g = exposure * color.g / (exposure * color.g + 1.0);
+    double b = exposure * color.b / (exposure * color.b + 1.0);
+
+    // Apply gamma correction
+    r = linear_to_srgb(r);
+    g = linear_to_srgb(g);
+    b = linear_to_srgb(b);
+
+    // Clamp and convert to integer
+    int ir = (int)(r * 255.0 + 0.5);
+    int ig = (int)(g * 255.0 + 0.5);
+    int ib = (int)(b * 255.0 + 0.5);
+
+    ir = ir > 255 ? 255 : (ir < 0 ? 0 : ir);
+    ig = ig > 255 ? 255 : (ig < 0 ? 0 : ig);
+    ib = ib > 255 ? 255 : (ib < 0 ? 0 : ib);
+
+    return (ir << 16) | (ig << 8) | ib;
+}
+
+// Utility conversions
+t_vec3 color_f_to_vec3(t_color_f color)
+{
+    return vec3_create(color.r, color.g, color.b);
+}
+
+t_color_f vec3_to_color_f(t_vec3 v)
+{
+    return create_color_f(v.x, v.y, v.z);
+}
+
+// Sample texture in linear space
+t_color_f sample_texture_linear(t_texture *texture, double u, double v)
+{
+    t_color srgb_color = sample_texture(texture, u, v);  // Your existing function
+    return color_to_linear(srgb_color);
+}
+
+// Get surface color in linear space
+t_color_f get_surface_color_linear(t_hit_record *hit_record)
+{
+    t_material *material = &hit_record->object->material;
+
+    // If the material has a texture, sample it
+    if (material->has_texture && material->texture)
+    {
+        return sample_texture_linear(material->texture, hit_record->uv.u, hit_record->uv.v);
+    }
+
+    // Fall back to existing color logic (checkerboard or solid color)
+    t_color srgb_color;
+    if (material->has_checker)
+    {
+        srgb_color = get_checker_color(*material, hit_record->object, hit_record->point);
+    }
+    else
+    {
+        srgb_color = material->color;
+    }
+
+    return color_to_linear(srgb_color);
+}
+
+// Updated pixel color calculation in linear space
+t_color_f get_pixel_color_linear(t_hit_record *hit_record, double light_intensity,
+                                 t_color_f light_color, double specular_intensity)
+{
+    // Get the base color in linear space
+    t_color_f base_color = get_surface_color_linear(hit_record);
+
+    // Calculate diffuse component
+    double diffuse_component = light_intensity - specular_intensity;
+    if (diffuse_component < 0)
+        diffuse_component = 0;
+
+    // Apply diffuse lighting in linear space
+    t_color_f result;
+    result.r = base_color.r * diffuse_component * light_color.r;
+    result.g = base_color.g * diffuse_component * light_color.g;
+    result.b = base_color.b * diffuse_component * light_color.b;
+
+    // Add specular component
+    result.r += specular_intensity * light_color.r;
+    result.g += specular_intensity * light_color.g;
+    result.b += specular_intensity * light_color.b;
+
+    return result;
+}
+
+

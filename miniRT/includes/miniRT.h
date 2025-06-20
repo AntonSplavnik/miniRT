@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 13:01:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/20 12:06:43 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,22 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
 void		render_scene(t_scene *scene);
 // void	render_scene(void *param);
-int			trace_ray(t_scene *scene, t_ray ray, int depth);
+// int			trace_ray(t_scene *scene, t_ray ray, int depth);// Update these function signatures
+t_vec3      trace_ray(t_scene *scene, t_ray ray, int depth);
+t_color_f   get_surface_color_linear(t_hit_record *hit_record);
+t_color_f   sample_texture_linear(t_texture *texture, double u, double v);
+t_color_f   get_pixel_color_linear(t_hit_record *hit_record, double light_intensity,
+                                   t_color_f light_color, double specular_intensity);
+int         color_f_to_display(t_color_f color);
+t_color_f   color_to_linear(t_color color);
+t_color_f   create_color_f(double r, double g, double b);
+t_vec3      color_f_to_vec3(t_color_f color);
+t_color_f   vec3_to_color_f(t_vec3 v);
+
+// Add utility functions
+double      srgb_to_linear(double srgb);
+double      linear_to_srgb(double linear);
+t_vec3      reinhard_tone_map(t_vec3 color, double exposure);
 void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
 t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection);
