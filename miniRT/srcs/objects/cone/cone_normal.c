@@ -6,28 +6,12 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 10:50:45 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/20 11:14:59 by abillote         ###   ########.fr       */
+/*   Updated: 2025/06/20 11:18:31 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
 
-/**
- * Calculate base center of the cone
- */
-static t_vec3	calc_base_center(t_cone cone)
-{
-	return (vec3_add(cone.apex, vec3_scale(cone.axis, cone.height)));
-}
-
-/**
- * Calculate initial projection values for normal determination
- */
-static double	calc_projection(t_vec3 point, t_cone cone, t_vec3 *to_point)
-{
-	*to_point = vec3_subtract(point, cone.apex);
-	return (vec3_dot(*to_point, cone.axis));
-}
 
 /**
  * Check if point is on the cone base
@@ -43,6 +27,7 @@ static int	is_on_cone_base(t_vec3 point, t_cone cone, t_vec3 base_center)
 	dist_to_base_center = vec3_length(point_to_base);
 	if (dist_to_base_plane < 0.01 && dist_to_base_center <= cone.radius * 1.01)
 		return (1);
+	point_to_base = vec3_subtract(point, cone.apex);
 	if (calc_projection(point, cone, &point_to_base) >= cone.height - 0.005)
 		return (1);
 	return (0);
@@ -119,8 +104,9 @@ t_vec3	cone_normal_at_point(t_vec3 point, t_cone cone)
 	t_vec3	to_point;
 	double	projection;
 
-	base_center = calc_base_center(cone);
-	projection = calc_projection(point, cone, &to_point);
+	base_center = vec3_add(cone.apex, vec3_scale(cone.axis, cone.height));
+	to_point = vec3_subtract(point, cone.apex);
+	projection = vec3_dot(to_point, cone.axis);
 	if (is_on_cone_base(point, cone, base_center))
 		return (vec3_normalize(cone.axis));
 	return (calc_surface_normal(point, cone, projection));
