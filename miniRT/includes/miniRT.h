@@ -6,16 +6,17 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 13:01:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/23 00:55:21 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-#include "types.h"
-#include "parser.h"
-#include "libft.h"
+# include "types.h"
+# include "parser.h"
+# include "libft.h"
+# include "bvh.h"
 
 
 // events
@@ -66,11 +67,9 @@ int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
 // Scene BVH functions
 t_aabb		calculate_object_aabb(t_object *object);
 t_bvh_node	*build_scene_bvh(t_scene *scene);
-t_bvh_node	*build_scene_bvh_recursive(t_object **objects, t_aabb *bounds, 
-                                   int start, int end, int depth);
-int			scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, 
+t_bvh_node	*build_scene_bvh_recursive(t_bvh_params params);
+int			scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t,
                                  t_object **hit_object, t_hit_record *hit_record);
-int          scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record);
 t_bvh_node *build_scene_bvh(t_scene *scene);
 t_aabb calculate_object_aabb(t_object *object);
 

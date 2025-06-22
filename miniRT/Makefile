@@ -76,7 +76,21 @@ SRC_FILES = main.c \
 	rendering/checker.c \
 	rendering/colors.c \
 	rendering/compute_intersections.c \
-	rendering/compute_bvh_intersections.c \
+	rendering/BVH/calculate_object_aabb.c \
+	rendering/BVH/calculate_object_aabb_2.c \
+	rendering/BVH/calculate_object_aabb_3.c \
+	rendering/BVH/calculate_object_aabb_4.c \
+	rendering/BVH/build_scene_bvh.c \
+	rendering/BVH/build_scene_bvh_2.c \
+	rendering/BVH/build_scene_bvh_3.c \
+	rendering/BVH/build_scene_bvh_helpers.c \
+	rendering/BVH/build_scene_bvh_utils.c \
+	rendering/BVH/scene_ray_intersect_bvh.c \
+	rendering/BVH/scene_ray_intersect_bvh_2.c \
+	rendering/BVH/scene_ray_intersect_bvh_3.c \
+	rendering/BVH/ray_intersect_aabb.c \
+	rendering/BVH/ray_intersect_aabb_2.c \
+	rendering/BVH/ray_intersect_aabb_3.c \
 	rendering/compute_light.c \
 	rendering/compute_rays.c \
 	rendering/reflection.c \

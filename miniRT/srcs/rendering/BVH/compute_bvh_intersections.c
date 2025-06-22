@@ -4,7 +4,7 @@
 t_aabb calculate_object_aabb(t_object *object)
 {
     t_aabb bounds = {{0, 0, 0}, {0, 0, 0}}; // Initialize bounds to avoid uninitialized warning
-    
+
     if (object->type == SPHERE)
     {
         t_sphere *sphere = (t_sphere *)object->data;
@@ -29,12 +29,12 @@ t_aabb calculate_object_aabb(t_object *object)
         t_vec3 axis_scaled = vec3_scale(cylinder->axis, half_height);
         t_vec3 top = vec3_add(cylinder->center, axis_scaled);
         t_vec3 bottom = vec3_subtract(cylinder->center, axis_scaled);
-        
+
         // Create bounds that encompass both caps and the cylinder body
         bounds.min.x = fmin(top.x - radius, bottom.x - radius);
         bounds.min.y = fmin(top.y - radius, bottom.y - radius);
         bounds.min.z = fmin(top.z - radius, bottom.z - radius);
-        
+
         bounds.max.x = fmax(top.x + radius, bottom.x + radius);
         bounds.max.y = fmax(top.y + radius, bottom.y + radius);
         bounds.max.z = fmax(top.z + radius, bottom.z + radius);
@@ -51,34 +51,34 @@ t_aabb calculate_object_aabb(t_object *object)
         t_cone *cone = (t_cone *)object->data;
         double radius = cone->radius;
         double height = cone->height;
-        
+
         // For a cone, we need to consider the base circle and the apex
         t_vec3 apex = cone->apex;
         t_vec3 axis_scaled = vec3_scale(cone->axis, height);
         t_vec3 base_center = vec3_subtract(apex, axis_scaled);
-        
+
         // Create bounds that encompass both the base and the apex
         bounds.min.x = fmin(apex.x, base_center.x - radius);
         bounds.min.y = fmin(apex.y, base_center.y - radius);
         bounds.min.z = fmin(apex.z, base_center.z - radius);
-        
+
         bounds.max.x = fmax(apex.x, base_center.x + radius);
         bounds.max.y = fmax(apex.y, base_center.y + radius);
         bounds.max.z = fmax(apex.z, base_center.z + radius);
-    } 
+    }
     else if (object->type == TRIANGLE)
     {
         t_triangle *triangle = (t_triangle *)object->data;
-        
+
         // Find min and max coordinates across all vertices
         bounds.min.x = fmin(fmin(triangle->v0.x, triangle->v1.x), triangle->v2.x);
         bounds.min.y = fmin(fmin(triangle->v0.y, triangle->v1.y), triangle->v2.y);
         bounds.min.z = fmin(fmin(triangle->v0.z, triangle->v1.z), triangle->v2.z);
-        
+
         bounds.max.x = fmax(fmax(triangle->v0.x, triangle->v1.x), triangle->v2.x);
         bounds.max.y = fmax(fmax(triangle->v0.y, triangle->v1.y), triangle->v2.y);
         bounds.max.z = fmax(fmax(triangle->v0.z, triangle->v1.z), triangle->v2.z);
-        
+
         // Add a small epsilon to avoid zero-volume boxes for flat triangles
         double epsilon = 0.0001;
         if (bounds.max.x - bounds.min.x < epsilon)
@@ -100,42 +100,42 @@ t_aabb calculate_object_aabb(t_object *object)
     else if (object->type == MESH)
     {
         t_mesh *mesh = (t_mesh *)object->data;
-        
+
         // Initialize with extreme values
         bounds.min = vec3_create(INFINITY, INFINITY, INFINITY);
         bounds.max = vec3_create(-INFINITY, -INFINITY, -INFINITY);
-        
+
         // Iterate through all triangles to find the bounding box
         for (int i = 0; i < mesh->triangle_count; i++)
         {
             t_triangle *tri = &mesh->triangles[i];
-            
+
             // Update min bounds
             bounds.min.x = fmin(bounds.min.x, fmin(fmin(tri->v0.x, tri->v1.x), tri->v2.x));
             bounds.min.y = fmin(bounds.min.y, fmin(fmin(tri->v0.y, tri->v1.y), tri->v2.y));
             bounds.min.z = fmin(bounds.min.z, fmin(fmin(tri->v0.z, tri->v1.z), tri->v2.z));
-            
+
             // Update max bounds
             bounds.max.x = fmax(bounds.max.x, fmax(fmax(tri->v0.x, tri->v1.x), tri->v2.x));
             bounds.max.y = fmax(bounds.max.y, fmax(fmax(tri->v0.y, tri->v1.y), tri->v2.y));
             bounds.max.z = fmax(bounds.max.z, fmax(fmax(tri->v0.z, tri->v1.z), tri->v2.z));
         }
-        
+
         // Apply mesh transformation (position, rotation, scale)
         // Note: This is a simplified approach; for accurate transformed bounds,
         // you should transform all vertices first and then compute the AABB
         t_vec3 position = mesh->position;
         t_vec3 scale = mesh->scale;
-        
+
         // Adjust for position and scale
         bounds.min.x = position.x + bounds.min.x * scale.x;
         bounds.min.y = position.y + bounds.min.y * scale.y;
         bounds.min.z = position.z + bounds.min.z * scale.z;
-        
+
         bounds.max.x = position.x + bounds.max.x * scale.x;
         bounds.max.y = position.y + bounds.max.y * scale.y;
         bounds.max.z = position.z + bounds.max.z * scale.z;
-        
+
         // Ensure min is actually less than max after transformation
         if (scale.x < 0)
         {
@@ -156,12 +156,12 @@ t_aabb calculate_object_aabb(t_object *object)
             bounds.max.z = temp;
         }
     }
-   
+
     return bounds;
 }
 
 // Recursive function to build a BVH for scene objects
-t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds, 
+t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
                                     int start, int end, int depth)
 {
     if (start > end)
@@ -178,7 +178,7 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
     node->is_leaf = 0;
     node->iteration = 0; // Not used for scene BVH
     node->object_ref = NULL; // Initialize object reference to NULL
-    
+
     // If there's only one object, make it a leaf node
     if (start == end)
     {
@@ -197,25 +197,25 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
         total_bounds.min.x = fmin(total_bounds.min.x, bounds[i].min.x);
         total_bounds.min.y = fmin(total_bounds.min.y, bounds[i].min.y);
         total_bounds.min.z = fmin(total_bounds.min.z, bounds[i].min.z);
-        
+
         total_bounds.max.x = fmax(total_bounds.max.x, bounds[i].max.x);
         total_bounds.max.y = fmax(total_bounds.max.y, bounds[i].max.y);
         total_bounds.max.z = fmax(total_bounds.max.z, bounds[i].max.z);
     }
-    
+
     node->bounds = total_bounds;
-    
+
     // Find the axis with the largest extent
     double x_extent = total_bounds.max.x - total_bounds.min.x;
     double y_extent = total_bounds.max.y - total_bounds.min.y;
     double z_extent = total_bounds.max.z - total_bounds.min.z;
-    
+
     int axis = 0; // 0 = x, 1 = y, 2 = z
     if (y_extent > x_extent && y_extent > z_extent)
         axis = 1;
     else if (z_extent > x_extent && z_extent > y_extent)
         axis = 2;
-    
+
     // Sort objects along the chosen axis
     // Using a simple bubble sort for clarity - for production code, use a faster sort
     for (int i = start; i <= end; i++)
@@ -223,7 +223,7 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
         for (int j = i + 1; j <= end; j++)
         {
             double centroid_i, centroid_j;
-            
+
             // Calculate centroids along the chosen axis
             if (axis == 0)
             {
@@ -240,7 +240,7 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
                 centroid_i = (bounds[i].min.z + bounds[i].max.z) * 0.5;
                 centroid_j = (bounds[j].min.z + bounds[j].max.z) * 0.5;
             }
-            
+
             // Swap if needed
             if (centroid_i > centroid_j)
             {
@@ -248,7 +248,7 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
                 t_object *temp_obj = objects[i];
                 objects[i] = objects[j];
                 objects[j] = temp_obj;
-                
+
                 // Swap bounds
                 t_aabb temp_bounds = bounds[i];
                 bounds[i] = bounds[j];
@@ -256,14 +256,14 @@ t_bvh_node *build_scene_bvh_recursive(t_object **objects, t_aabb *bounds,
             }
         }
     }
-    
+
     // Find the middle index to split at
     int mid = start + (end - start) / 2;
-    
+
     // Recursively build left and right subtrees
     node->left = build_scene_bvh_recursive(objects, bounds, start, mid, depth + 1);
     node->right = build_scene_bvh_recursive(objects, bounds, mid + 1, end, depth + 1);
-    
+
     return node;
 }
 
@@ -272,21 +272,21 @@ t_bvh_node *build_scene_bvh(t_scene *scene)
 {
     int object_count = 0;
     t_object *current = scene->objects;
-    
+
     // Count objects
     while (current)
     {
         object_count++;
         current = current->next;
     }
-    
+
     if (object_count == 0)
         return NULL;
-    
+
     // Create array of objects and their AABBs
     t_object **objects = malloc(sizeof(t_object *) * object_count);
     t_aabb *bounds = malloc(sizeof(t_aabb) * object_count);
-    
+
     // Fill arrays
     current = scene->objects;
     for (int i = 0; i < object_count; i++)
@@ -295,14 +295,14 @@ t_bvh_node *build_scene_bvh(t_scene *scene)
         bounds[i] = calculate_object_aabb(current);
         current = current->next;
     }
-    
+
     // Build BVH (recursive function)
     t_bvh_node *root = build_scene_bvh_recursive(objects, bounds, 0, object_count - 1, 0);
-    
+
     // Clean up
     free(objects);
     free(bounds);
-    
+
     return root;
 }
 
@@ -310,34 +310,34 @@ int scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, t_object **hit
 {
     if (!scene->scene_bvh)
         return find_closest_intersection(scene, ray, t, hit_object, hit_record);
-    
+
     // Queue for traversal (avoiding recursion for better performance)
     t_bvh_node *stack[64];
     int stack_size = 0;
-    
+
     stack[stack_size++] = scene->scene_bvh;
-    
+
     double closest_t = INFINITY;
     int hit_something = 0;
-    
+
     while (stack_size > 0)
     {
         t_bvh_node *node = stack[--stack_size];
-        
+
         double node_tmin, node_tmax;
         if (!ray_intersect_aabb_scalar(node->bounds, ray.origin, ray.direction, &node_tmin, &node_tmax))
             continue;
-        
+
         if (node_tmin > closest_t)
             continue;
-        
+
         if (node->is_leaf && node->object_ref)
         {
             // Direct access to the object through object_ref
             t_object *obj = (t_object *)node->object_ref;
             double t_temp;
             int triangle_idx;
-            
+
             // Test intersection with actual object
             if (obj->type == SPHERE)
             {
@@ -413,10 +413,10 @@ int scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t, t_object **hit
                 stack[stack_size++] = node->left;
         }
     }
-    
+
     if (hit_something)
         *t = closest_t;
-    
+
     return hit_something;
 }
 
@@ -433,11 +433,14 @@ int ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 
     // Check each dimension (x, y, z)
     // X dimension check
-    if (fabs(ray_dir.x) < epsilon) {
+    if (fabs(ray_dir.x) < epsilon)
+    {
         // Ray is parallel to the slab, check if ray origin is within slab
         if (ray_origin.x < bounds.min.x || ray_origin.x > bounds.max.x)
             return 0;
-    } else {
+    }
+    else
+    {
         // Compute intersection distances
         double inv_dir = 1.0 / ray_dir.x;
         double t1 = (bounds.min.x - ray_origin.x) * inv_dir;
@@ -460,10 +463,13 @@ int ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
     }
 
     // Y dimension check
-    if (fabs(ray_dir.y) < epsilon) {
+    if (fabs(ray_dir.y) < epsilon)
+    {
         if (ray_origin.y < bounds.min.y || ray_origin.y > bounds.max.y)
             return 0;
-    } else {
+    }
+    else
+    {
         double inv_dir = 1.0 / ray_dir.y;
         double t1 = (bounds.min.y - ray_origin.y) * inv_dir;
         double t2 = (bounds.max.y - ray_origin.y) * inv_dir;
