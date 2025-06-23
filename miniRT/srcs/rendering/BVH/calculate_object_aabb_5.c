@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_intersect_aabb.c                               :+:      :+:    :+:   */
+/*   calculate_object_aabb_5.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,32 +11,41 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../includes/bvh.h"
 
-void	swap_values(double *a, double *b)
+void	pad_triangle_aabb_x(t_aabb *bounds, double epsilon)
 {
-	double	temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	if (bounds->max.x - bounds->min.x < epsilon)
+	{
+		bounds->min.x -= epsilon;
+		bounds->max.x += epsilon;
+	}
 }
 
-int	ray_intersect_aabb_scalar(t_ray_aabb_params params)
+void	pad_triangle_aabb_y(t_aabb *bounds, double epsilon)
 {
-	double	near_far[2];
+	if (bounds->max.y - bounds->min.y < epsilon)
+	{
+		bounds->min.y -= epsilon;
+		bounds->max.y += epsilon;
+	}
+}
 
-	near_far[0] = -INFINITY;
-	near_far[1] = INFINITY;
-	if (!check_x_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	if (!check_y_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	if (!check_z_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	*(params.t_min) = near_far[0];
-	*(params.t_max) = near_far[1];
-	return (1);
+void	pad_triangle_aabb_z(t_aabb *bounds, double epsilon)
+{
+	if (bounds->max.z - bounds->min.z < epsilon)
+	{
+		bounds->min.z -= epsilon;
+		bounds->max.z += epsilon;
+	}
+}
+
+void	pad_triangle_aabb(t_aabb *bounds)
+{
+	double	epsilon;
+
+	epsilon = 0.0001;
+	pad_triangle_aabb_x(bounds, epsilon);
+	pad_triangle_aabb_y(bounds, epsilon);
+	pad_triangle_aabb_z(bounds, epsilon);
 }

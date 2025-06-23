@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_intersect_aabb.c                               :+:      :+:    :+:   */
+/*   calculate_object_aabb_6.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,32 +11,17 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../includes/bvh.h"
 
-void	swap_values(double *a, double *b)
+t_aabb	calculate_cylinder_aabb_helper(t_vec3 top, t_vec3 bottom, double radius)
 {
-	double	temp;
+	t_aabb	bounds;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-int	ray_intersect_aabb_scalar(t_ray_aabb_params params)
-{
-	double	near_far[2];
-
-	near_far[0] = -INFINITY;
-	near_far[1] = INFINITY;
-	if (!check_x_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	if (!check_y_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	if (!check_z_dimension(params.bounds, params.ray_origin, params.ray_dir, \
-		near_far))
-		return (0);
-	*(params.t_min) = near_far[0];
-	*(params.t_max) = near_far[1];
-	return (1);
+	bounds.min.x = fmin(top.x - radius, bottom.x - radius);
+	bounds.min.y = fmin(top.y - radius, bottom.y - radius);
+	bounds.min.z = fmin(top.z - radius, bottom.z - radius);
+	bounds.max.x = fmax(top.x + radius, bottom.x + radius);
+	bounds.max.y = fmax(top.y + radius, bottom.y + radius);
+	bounds.max.z = fmax(top.z + radius, bottom.z + radius);
+	return (bounds);
 }

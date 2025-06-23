@@ -80,6 +80,8 @@ SRC_FILES = main.c \
 	rendering/BVH/calculate_object_aabb_2.c \
 	rendering/BVH/calculate_object_aabb_3.c \
 	rendering/BVH/calculate_object_aabb_4.c \
+	rendering/BVH/calculate_object_aabb_5.c \
+	rendering/BVH/calculate_object_aabb_6.c \
 	rendering/BVH/build_scene_bvh.c \
 	rendering/BVH/build_scene_bvh_2.c \
 	rendering/BVH/build_scene_bvh_3.c \

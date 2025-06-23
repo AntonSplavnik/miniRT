@@ -26,20 +26,11 @@ t_aabb	calculate_cube_aabb(t_cube *cube)
 	return (bounds);
 }
 
-t_aabb	calculate_cone_aabb(t_cone *cone)
+t_aabb	calculate_cone_aabb_helper(t_vec3 apex, t_vec3 base_center,
+				double radius)
 {
 	t_aabb	bounds;
-	double	radius;
-	double	height;
-	t_vec3	apex;
-	t_vec3	axis_scaled;
-	t_vec3	base_center;
 
-	radius = cone->radius;
-	height = cone->height;
-	apex = cone->apex;
-	axis_scaled = vec3_scale(cone->axis, height);
-	base_center = vec3_subtract(apex, axis_scaled);
 	bounds.min.x = fmin(apex.x, base_center.x - radius);
 	bounds.min.y = fmin(apex.y, base_center.y - radius);
 	bounds.min.z = fmin(apex.z, base_center.z - radius);
@@ -49,10 +40,19 @@ t_aabb	calculate_cone_aabb(t_cone *cone)
 	return (bounds);
 }
 
+t_aabb	calculate_cone_aabb(t_cone *cone)
+{
+	t_vec3	axis_scaled;
+	t_vec3	base_center;
+
+	axis_scaled = vec3_scale(cone->axis, cone->height);
+	base_center = vec3_subtract(cone->apex, axis_scaled);
+	return (calculate_cone_aabb_helper(cone->apex, base_center, cone->radius));
+}
+
 t_aabb	calculate_triangle_aabb(t_triangle *triangle)
 {
 	t_aabb	bounds;
-	double	epsilon;
 
 	bounds.min.x = fmin(fmin(triangle->v0.x, triangle->v1.x), triangle->v2.x);
 	bounds.min.y = fmin(fmin(triangle->v0.y, triangle->v1.y), triangle->v2.y);
@@ -60,21 +60,6 @@ t_aabb	calculate_triangle_aabb(t_triangle *triangle)
 	bounds.max.x = fmax(fmax(triangle->v0.x, triangle->v1.x), triangle->v2.x);
 	bounds.max.y = fmax(fmax(triangle->v0.y, triangle->v1.y), triangle->v2.y);
 	bounds.max.z = fmax(fmax(triangle->v0.z, triangle->v1.z), triangle->v2.z);
-	epsilon = 0.0001;
-	if (bounds.max.x - bounds.min.x < epsilon)
-	{
-		bounds.min.x -= epsilon;
-		bounds.max.x += epsilon;
-	}
-	if (bounds.max.y - bounds.min.y < epsilon)
-	{
-		bounds.min.y -= epsilon;
-		bounds.max.y += epsilon;
-	}
-	if (bounds.max.z - bounds.min.z < epsilon)
-	{
-		bounds.min.z -= epsilon;
-		bounds.max.z += epsilon;
-	}
+	pad_triangle_aabb(&bounds);
 	return (bounds);
 }

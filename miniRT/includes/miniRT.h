@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/23 00:55:21 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/23 02:02:56 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,7 @@ t_bvh_node	*build_menger_bvh(int max_iterations);
 void		free_bvh(t_bvh_node *node);
 int			ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin,
 							t_vec3 ray_dir, double *t_min, double *t_max);
-int			ray_intersect_aabb_scalar(t_aabb bounds, t_vec3 ray_origin,
-							t_vec3 ray_dir, double *t_min, double *t_max);
+int			ray_intersect_aabb_scalar(t_ray_aabb_params params);
 int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
 									t_vec3 dir, double *out_tmin, double *out_tmax);
 
@@ -68,8 +67,7 @@ int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
 t_aabb		calculate_object_aabb(t_object *object);
 t_bvh_node	*build_scene_bvh(t_scene *scene);
 t_bvh_node	*build_scene_bvh_recursive(t_bvh_params params);
-int			scene_ray_intersect_bvh(t_scene *scene, t_ray ray, double *t,
-                                 t_object **hit_object, t_hit_record *hit_record);
+int			scene_ray_intersect_bvh(t_scene_ray_params params);
 t_bvh_node *build_scene_bvh(t_scene *scene);
 t_aabb calculate_object_aabb(t_object *object);
 

@@ -43,9 +43,7 @@ int	intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
 	return (0);
 }
 
-int	test_leaf_node_intersection(t_object *obj, t_ray ray,
-								double *closest_t, t_object **hit_object,
-								t_hit_record *hit_record)
+int	test_leaf_node_intersection(t_leaf_intersection_params params)
 {
 	double	t_temp;
 	int		triangle_idx;
@@ -53,14 +51,14 @@ int	test_leaf_node_intersection(t_object *obj, t_ray ray,
 
 	hit = 0;
 	triangle_idx = -1;
-	if (intersect_primitive(obj, ray, &t_temp, &triangle_idx)
-		&& t_temp < *closest_t)
+	if (intersect_primitive(params.obj, params.ray, &t_temp, &triangle_idx)
+		&& t_temp < *(params.closest_t))
 	{
-		*closest_t = t_temp;
-		*hit_object = obj;
+		*(params.closest_t) = t_temp;
+		*(params.hit_object) = params.obj;
 		hit = 1;
 		if (triangle_idx != -1)
-			hit_record->triangle_idx = triangle_idx;
+			params.hit_record->triangle_idx = triangle_idx;
 	}
 	return (hit);
 }
