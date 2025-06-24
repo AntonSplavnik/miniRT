@@ -147,18 +147,12 @@ int			intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
 
 /* ray_intersect_aabb functions */
 int			ray_intersect_aabb_scalar(t_ray_aabb_params params);
-int			check_x_dimension(t_aabb bounds, t_vec3 ray_origin,
-				t_vec3 ray_dir, double *near_far);
 int			calculate_x_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 				double *near_far);
 int			calculate_y_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 				double *near_far);
 int			calculate_z_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 				double *near_far);
-int			check_y_dimension(t_aabb bounds, t_vec3 ray_origin,
-				t_vec3 ray_dir, double *near_far);
-int			check_z_dimension(t_aabb bounds, t_vec3 ray_origin,
-				t_vec3 ray_dir, double *near_far);
 void		swap_values(double *a, double *b);
 
 #endif

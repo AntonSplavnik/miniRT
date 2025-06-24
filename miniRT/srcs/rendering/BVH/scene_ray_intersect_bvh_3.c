@@ -11,62 +11,93 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../includes/bvh.h"
+
+static void	process_node_aabb_test(t_bvh_node *node, t_ray ray,
+			t_ray_aabb_params *ray_params, double *t_vals)
+{
+	ray_params->bounds = node->bounds;
+	ray_params->ray_origin = ray.origin;
+	ray_params->ray_dir = ray.direction;
+	ray_params->t_min = &t_vals[0];
+	ray_params->t_max = &t_vals[1];
+}
 
 void	process_bvh_node(t_process_node_params params)
 {
-	double	node_tmin;
-	double	node_tmax;
+	double				t_vals[2];
+	t_bvh_node			*right;
+	t_bvh_node			*left;
+	int					*size_ptr;
+	t_ray_aabb_params	ray_params;
 
-	if (!ray_intersect_aabb_scalar((t_ray_aabb_params){params.node->bounds,
-			params.ray.origin, params.ray.direction, &node_tmin, &node_tmax}))
+	process_node_aabb_test(params.node, params.ray, &ray_params, t_vals);
+	if (!ray_intersect_aabb_scalar(ray_params))
 		return ;
-	if (node_tmin > params.closest_t)
+	if (t_vals[0] > params.closest_t)
 		return ;
-	if (params.node->right)
-		params.stack[(*(params.stack_size))++] = params.node->right;
-	if (params.node->left)
-		params.stack[(*(params.stack_size))++] = params.node->left;
+	right = params.node->right;
+	left = params.node->left;
+	size_ptr = params.stack_size;
+	if (left)
+		params.stack[(*size_ptr)++] = left;
+	if (right)
+		params.stack[(*size_ptr)++] = right;
 }
 
-int	traverse_bvh(t_bvh_traverse_params params)
+static void	init_traverse_params(t_bvh_traverse_params *params,
+				t_leaf_intersection_params *leaf_params,
+				t_process_node_params *node_params)
+{
+	t_ray	ray;
+	double	closest_t_value;
+
+	ray = params->ray_params.ray;
+	closest_t_value = *(params->closest_t);
+	leaf_params->ray = ray;
+	leaf_params->closest_t = params->closest_t;
+	leaf_params->hit_object = params->ray_params.hit_object;
+	leaf_params->hit_record = params->ray_params.hit_record;
+	node_params->ray = ray;
+	node_params->closest_t = closest_t_value;
+	node_params->stack = params->stack;
+	node_params->stack_size = params->stack_size;
+}
+
+static int	process_bvh_stack(t_bvh_traverse_params *params,
+				t_leaf_intersection_params *leaf_params,
+				t_process_node_params *node_params)
 {
 	int			hit_something;
 	t_bvh_node	*node;
 
 	hit_something = 0;
-	while (*(params.stack_size) > 0)
+	while (*(params->stack_size) > 0)
 	{
-		node = params.stack[--(*(params.stack_size))];
+		node = params->stack[--*(params->stack_size)];
 		if (node->is_leaf && node->object_ref)
-			hit_something |= \
-				test_leaf_node_intersection((t_leaf_intersection_params){
-					node->object_ref, params.ray_params.ray, params.closest_t,
-					params.ray_params.hit_object, \
-					params.ray_params.hit_record});
+		{
+			leaf_params->obj = node->object_ref;
+			if (test_leaf_node_intersection(*leaf_params))
+				hit_something = 1;
+			node_params->closest_t = *(params->closest_t);
+		}
 		else
-			process_bvh_node((t_process_node_params){
-				node, params.ray_params.ray,
-				*(params.closest_t), params.stack, params.stack_size});
+		{
+			node_params->node = node;
+			process_bvh_node(*node_params);
+		}
 	}
 	return (hit_something);
 }
 
-int	scene_ray_intersect_bvh(t_scene_ray_params params)
+int	traverse_bvh(t_bvh_traverse_params params)
 {
-	t_bvh_node	*stack[64];
-	int			stack_size;
-	double		closest_t;
-	int			hit_something;
+	t_leaf_intersection_params	leaf_params;
+	t_process_node_params		node_params;
+	int							hit_something;
 
-	if (!params.scene->scene_bvh)
-		return (find_closest_intersection(params.scene, params.ray, params.t,
-				params.hit_object, params.hit_record));
-	stack_size = 0;
-	stack[stack_size++] = params.scene->scene_bvh;
-	closest_t = INFINITY;
-	hit_something = traverse_bvh((t_bvh_traverse_params){
-			params, stack, &stack_size, &closest_t});
-	if (hit_something)
-		*(params.t) = closest_t;
+	init_traverse_params(&params, &leaf_params, &node_params);
+	hit_something = process_bvh_stack(&params, &leaf_params, &node_params);
 	return (hit_something);
 }

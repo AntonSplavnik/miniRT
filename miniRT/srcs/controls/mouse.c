@@ -13,7 +13,7 @@ void mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t m
 
 	(void)mods;
 	scene  = (t_scene *)param;
-	
+
 	// Update button state
 	if (button == MLX_MOUSE_BUTTON_LEFT)
 		scene->mouse_state.left_button_down = (action == MLX_PRESS);
@@ -163,7 +163,7 @@ void	cursor_position_callback(double xpos, double ypos, void* param)
 			current_time = mlx_get_time();
 
 			// Limit rendering to 30 frames per second during dragging
-			if (current_time - last_render_time > 0.033)  // ~30 FPS
+			if (current_time - last_render_time > 0.044)  // ~30 FPS
 			{
 				render_scene(scene);
 				last_render_time = current_time;

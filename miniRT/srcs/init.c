@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/11 13:27:03 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/24 12:28:58 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_data(t_scene *scene)
 	scene->camera.fov = FOV;
 	scene->camera.near = NEAR_PLANE;
 	scene->camera.far = FAR_PLANE;
-	scene->camera.movement_speed = 0.1;
+	scene->camera.movement_speed = 1.0;
 	scene->camera.rotation_speed = 0.05;
 
 	//Init graphic settings
@@ -107,7 +107,7 @@ void init_scene_bvh(t_scene *scene)
     if (scene->objects)
     {
         scene->scene_bvh = build_scene_bvh(scene);
-        
+
         if (scene->scene_bvh)
             printf("Scene BVH initialized successfully\n");
         else
