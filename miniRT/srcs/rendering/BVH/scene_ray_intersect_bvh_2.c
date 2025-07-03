@@ -12,6 +12,7 @@
 
 #include "../../includes/miniRT.h"
 
+
 int	intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx)
 {
 	return (ray_mesh_intersect(ray, *mesh, t_temp, triangle_idx));

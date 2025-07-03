@@ -16,6 +16,11 @@
 # include "types.h"
 # include "miniRT.h"
 
+# define MAX_STACK_SIZE 64
+# define LEAF_TRI_THRESHOLD 4
+# define MAX_BVH_DEPTH	8
+# define MAX_BVH_NODES	1000
+
 typedef struct s_sort_params
 {
 	t_object	**objects;
@@ -154,5 +159,12 @@ int			calculate_y_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 int			calculate_z_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 				double *near_far);
 void		swap_values(double *a, double *b);
+
+/* mesh_bvh functions */
+void		build_mesh_bvh(t_mesh *mesh);
+int			mesh_bvh_intersect(t_ray ray, t_mesh *mesh, double *t, int *tri_idx);
+void		free_mesh_bvh(t_mesh *mesh);
+t_aabb		calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx);
+double		calculate_aabb_surface_area(t_aabb box);
 
 #endif

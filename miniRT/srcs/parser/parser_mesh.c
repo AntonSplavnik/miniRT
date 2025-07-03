@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_mesh.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/06 15:00:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:15:13 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	parse_mesh(t_scene *scene, char *line)
 	}
 	parse_mesh_vectors(scene, parts, &mesh->position, &mesh->rotation);
 	parse_mesh_scale_color(scene, parts, &mesh->scale, &color);
+	precompute_transformed_triangles(mesh);
 	mesh_obj = create_mesh_object(mesh, color);
 	add_object(scene, mesh_obj);
 	free_split(parts);

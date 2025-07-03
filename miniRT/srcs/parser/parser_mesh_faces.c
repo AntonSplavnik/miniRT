@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_mesh_faces.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 11:40:10 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 11:46:17 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:15:22 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,11 @@ void	process_face_line(char *line, t_triangle *triangles,
 		indices[i] = ft_atoi(values[i]);
 		i++;
 	}
-	if (i >= 3)
+	if (i == 3)
 		parse_face_triangle(triangles, vertices, indices, t_idx);
-	if (i >= 4)
+	else if (i == 4)
 		parse_face_quad(triangles, vertices, indices, t_idx);
+	free_split(values);
 }
 
 //Split vertex line and store in the array of vertices at index v_idx

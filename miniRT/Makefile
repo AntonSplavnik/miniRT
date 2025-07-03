@@ -93,6 +93,8 @@ SRC_FILES = main.c \
 	rendering/BVH/scene_ray_intersect_bvh_4.c \
 	rendering/BVH/ray_intersect_aabb.c \
 	rendering/BVH/ray_intersect_aabb_2.c \
+	rendering/BVH/mesh_bvh.c \
+	rendering/BVH/mesh_bvh_intersect.c \
 	rendering/compute_light.c \
 	rendering/compute_rays.c \
 	rendering/reflection.c \

@@ -12,6 +12,7 @@
 
 #include "../../includes/miniRT.h"
 
+
 void	swap_values(double *a, double *b)
 {
 	double	temp;

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   mesh_intersect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/16 11:16:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:06:01 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
+#include "../../../includes/bvh.h"
 
 ///**
 // * Finds the closest intersection between a ray and a mesh
@@ -56,73 +57,92 @@
 //	return (0);
 //}
 
+
+
+
 //New version to rotate properly each triangle in the mesh according to the mesh's rotation
-int ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx)
+//
+
+void precompute_transformed_triangles(t_mesh *mesh)
 {
-	int	 i;
-	double  closest_t;
-	double  current_t;
-	int	 hit_something;
+    printf("Starting precompute_transformed_triangles for %d triangles...\n",
+           mesh ? mesh->triangle_count : -1);
 
-	closest_t = INFINITY;
-	hit_something = 0;
-	*triangle_idx = -1;
+    if (!mesh || !mesh->triangles || mesh->triangle_count <= 0)
+    {
+        printf("Invalid mesh data, returning early\n");
+        return;
+    }
 
-	// For each triangle in the mesh
-	for (i = 0; i < mesh.triangle_count; i++)
-	{
-		// Create a transformed triangle
-		t_triangle transformed_triangle;
+    // Allocate memory for transformed triangles
+    mesh->transformed_tris = malloc(mesh->triangle_count * sizeof(t_transformed_triangle));
+    if (!mesh->transformed_tris)
+        return; // Handle error
 
-		// Apply scale
-		t_vec3 scaled_v0 = {
-			mesh.triangles[i].v0.x * mesh.scale.x,
-			mesh.triangles[i].v0.y * mesh.scale.y,
-			mesh.triangles[i].v0.z * mesh.scale.z
-		};
-		t_vec3 scaled_v1 = {
-			mesh.triangles[i].v1.x * mesh.scale.x,
-			mesh.triangles[i].v1.y * mesh.scale.y,
-			mesh.triangles[i].v1.z * mesh.scale.z
-		};
-		t_vec3 scaled_v2 = {
-			mesh.triangles[i].v2.x * mesh.scale.x,
-			mesh.triangles[i].v2.y * mesh.scale.y,
-			mesh.triangles[i].v2.z * mesh.scale.z
-		};
+    for (int i = 0; i < mesh->triangle_count; i++) {
+        // Scale vertices
+        t_vec3 scaled_v0 = vec3_multiply(mesh->triangles[i].v0, mesh->scale);
+        t_vec3 scaled_v1 = vec3_multiply(mesh->triangles[i].v1, mesh->scale);
+        t_vec3 scaled_v2 = vec3_multiply(mesh->triangles[i].v2, mesh->scale);
 
-		// Apply rotation
-		t_vec3 rotated_v0 = rotate_point(scaled_v0, mesh.rotation);
-		t_vec3 rotated_v1 = rotate_point(scaled_v1, mesh.rotation);
-		t_vec3 rotated_v2 = rotate_point(scaled_v2, mesh.rotation);
+        // Rotate vertices
+        t_vec3 rotated_v0 = rotate_point(scaled_v0, mesh->rotation);
+        t_vec3 rotated_v1 = rotate_point(scaled_v1, mesh->rotation);
+        t_vec3 rotated_v2 = rotate_point(scaled_v2, mesh->rotation);
 
-		// Apply translation
-		transformed_triangle.v0 = vec3_add(rotated_v0, mesh.position);
-		transformed_triangle.v1 = vec3_add(rotated_v1, mesh.position);
-		transformed_triangle.v2 = vec3_add(rotated_v2, mesh.position);
+        // Translate vertices and store
+        mesh->transformed_tris[i].v0 = vec3_add(rotated_v0, mesh->position);
+        mesh->transformed_tris[i].v1 = vec3_add(rotated_v1, mesh->position);
+        mesh->transformed_tris[i].v2 = vec3_add(rotated_v2, mesh->position);
 
-		// Recalculate normal for the transformed triangle
-		t_vec3 edge1 = vec3_subtract(transformed_triangle.v1, transformed_triangle.v0);
-		t_vec3 edge2 = vec3_subtract(transformed_triangle.v2, transformed_triangle.v0);
-		transformed_triangle.normal = vec3_normalize(vec3_cross(edge1, edge2));
+        // Precompute normal (no need to recalculate per ray)
+        t_vec3 edge1 = vec3_subtract(mesh->transformed_tris[i].v1, mesh->transformed_tris[i].v0);
+        t_vec3 edge2 = vec3_subtract(mesh->transformed_tris[i].v2, mesh->transformed_tris[i].v0);
+        mesh->transformed_tris[i].normal = vec3_normalize(vec3_cross(edge1, edge2));
+    }
 
-		// Test ray against this transformed triangle
-		if (ray_triangle_intersect(ray, transformed_triangle, &current_t))
-		{
-			// Found a closer intersection?
-			if (current_t < closest_t)
-			{
-				closest_t = current_t;
-				*triangle_idx = i;
-				hit_something = 1;
-			}
-		}
-	}
-
-	if (hit_something)
-	{
-		*t = closest_t;
-		return (1);
-	}
-	return (0);
+    // Build BVH after all triangles are transformed
+    printf("About to build BVH...\n");
+    build_mesh_bvh(mesh);
+    printf("BVH build completed successfully!\n");
 }
+
+
+int ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx) {
+    if (mesh.bvh.nodes && mesh.bvh.node_count > 0)
+    {
+        return mesh_bvh_intersect(ray, (t_mesh *)&mesh, t, triangle_idx);
+    }
+    else
+    {
+        double closest_t = INFINITY;
+        int hit_something = 0;
+
+        for (int i = 0; i < mesh.triangle_count; i++) {
+            double current_t;
+            if (ray_triangle_intersect(ray,
+                (t_triangle){
+                    .v0 = mesh.transformed_tris[i].v0,
+                    .v1 = mesh.transformed_tris[i].v1,
+                    .v2 = mesh.transformed_tris[i].v2,
+                    .normal = mesh.transformed_tris[i].normal
+                },
+                &current_t))
+            {
+                if (current_t < closest_t) {
+                    closest_t = current_t;
+                    *triangle_idx = i;
+                    hit_something = 1;
+                }
+            }
+        }
+
+        if (hit_something) {
+            *t = closest_t;
+            return 1;
+        }
+        return 0;
+    }
+}
+
+

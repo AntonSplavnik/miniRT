@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/23 02:02:56 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/02 15:56:54 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
 t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
 int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
 t_vec3		triangle_normal(t_triangle triangle);
+void		precompute_transformed_triangles(t_mesh *mesh);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t);

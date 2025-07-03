@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 12:55:49 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/03 23:01:21 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <fcntl.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 
-#  define WIDTH 1920
+# define WIDTH 1920
 # define HEIGHT 1080
 
 # define NUM_THREADS 8 // Number of threads for multithreaded rendering
@@ -52,8 +52,6 @@
 # define NEAR_PLANE		0.1
 # define FAR_PLANE		100.0
 # define MAX_RAY_DEPTH	5
-# define MAX_BVH_DEPTH	8
-# define MAX_BVH_NODES	1000
 
 
 # define BLACK      			0x000000  // RGB(0, 0, 0)
@@ -85,7 +83,8 @@ typedef struct s_vec3
 	double	z;
 }				t_vec3;
 
-typedef struct s_light_result {
+typedef struct s_light_result
+{
 	double diffuse;
 	double specular_intensity;
 	double light_distance;
@@ -154,6 +153,7 @@ typedef struct s_aabb
 	t_vec3	max;
 }				t_aabb;
 
+/* BVH structures (needed here because they're embedded in other structs) */
 typedef struct s_bvh_node
 {
 	t_aabb				bounds;
@@ -163,6 +163,15 @@ typedef struct s_bvh_node
 	int					iteration;
 	void				*object_ref;  // Added for scene BVH to reference objects
 }				t_bvh_node;
+
+typedef struct s_mesh_bvh
+{
+	t_aabb		*nodes;
+	int			*tri_indices;
+	int			*node_children;
+	int			node_count;
+	int			max_nodes;
+}	t_mesh_bvh;
 
 typedef struct s_camera
 {
@@ -239,14 +248,23 @@ typedef struct s_triangle
 	t_vec3	normal;
 }	t_triangle;
 
+typedef struct s_transformed_triangle
+{
+	t_vec3 v0, v1, v2;		// Vertices (already transformed)
+	t_vec3 normal;			// Precomputed normal
+} t_transformed_triangle;
+
 typedef struct s_mesh
 {
-	t_triangle	*triangles;
-	int			triangle_count;
-	t_vec3		position;
-	t_vec3		rotation;
-	t_vec3		scale;
-	t_material	material;
+	t_triangle				*triangles;
+	t_transformed_triangle	*transformed_tris; // Precomputed triangles
+	t_mesh_bvh				bvh;  // Flat array BVH
+
+	int						triangle_count;
+	t_vec3					position;
+	t_vec3					rotation;
+	t_vec3					scale;
+	t_material				material;
 }	t_mesh;
 
 typedef struct s_cone
@@ -361,13 +379,15 @@ typedef struct s_panel
     mlx_image_t *status_text_img;
 } t_panel;
 
-typedef struct s_toggle_button {
+typedef struct s_toggle_button
+{
     int offset_x, offset_y;
     int size;
     mlx_image_t *toggle_img;
 } t_toggle_button;
 
-typedef struct s_ui {
+typedef struct s_ui
+{
     t_panel panel;
     t_toggle_button toggle;
 } t_ui;

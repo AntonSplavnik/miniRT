@@ -1,0 +1,9 @@
+	# Basic scene setup
+	A 0.2 255,255,255
+
+	C 320,150,20 0,0,1 70
+
+	L 320,150,20 0.7 255,255,255
+
+	# Try mesh with adjusted path
+	me scenes/3D_models/Volkswagen_Beetle_1963.obj 0,0,0 0,1,0 1 255,0,0
