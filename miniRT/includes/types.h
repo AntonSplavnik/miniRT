@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/20 12:07:03 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:27:22 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 # define NUM_THREADS 8 // Number of threads for multithreaded rendering
 
 // UI constants
+
+
+
 #define PANEL_X             10
 #define PANEL_Y             50
 #define PANEL_WIDTH         260
@@ -40,7 +43,7 @@
 #define PANEL_PADDING       16
 #define CHECKBOX_SIZE       16
 #define CHECKBOX_SPACING    38
-#define MAX_PANEL_TEXTS     16
+#define MAX_PANEL_TEXT      20
 #define NUM_CHECKBOXES      5
 
 #define TOGGLE_BTN_OFFSET_X 10
@@ -86,13 +89,34 @@ typedef struct s_vec3
 }				t_vec3;
 
 // Add new floating-point color type
+//Linear RGB values, typically [0.0, 1.0] but can exceed for HDR
 typedef struct s_color_f
 {
-    double r, g, b;  // Linear RGB values, typically [0.0, 1.0] but can exceed for HDR
+	double r;
+	double g;
+	double b;
 } t_color_f;
 
 // Update light result to use floating-point
-typedef struct s_light_result {
+//Used to check cube intersection
+typedef struct s_slab
+{
+	double	slab_x_dir;
+	double	slab_x_origin;
+	double	slab_x_min;
+	double	slab_x_max;
+	double	slab_y_dir;
+	double	slab_y_origin;
+	double	slab_y_min;
+	double	slab_y_max;
+	double	slab_z_dir;
+	double	slab_z_origin;
+	double	slab_z_min;
+	double	slab_z_max;
+}	t_slab;
+
+typedef struct s_light_result
+{
     double diffuse;
     double specular_intensity;
     double light_distance;
@@ -136,6 +160,34 @@ typedef struct s_texture
 	void	*mlx_texture; // Pointer to the MLX42 texture object
 }	t_texture;
 
+
+/* Structure to hold pixel coordinates for bump mapping */
+typedef struct s_pixel_coords
+{
+	double	px;
+	double	py;
+	int		x0;
+	int		y0;
+	int		x1;
+}	t_pixel_coords;
+
+/* Structure to hold bump map height samples */
+typedef struct s_bump_heights
+{
+	float	du;
+	float	dv;
+	float	center;
+	float	u;
+	float	v;
+}	t_bump_heights;
+
+/* Structure to hold calculated gradients for bump mapping */
+typedef struct s_bump_gradients
+{
+	float	gradient_u;
+	float	gradient_v;
+}	t_bump_gradients;
+
 typedef struct s_bump_map
 {
 	char	*filename;
@@ -147,12 +199,12 @@ typedef struct s_bump_map
 typedef struct	s_material
 {
 	t_color	color;
-	double		specular;			//
-	double		shininess;			//
+	double		specular;			// 0 - 1 intencity of specular highlight
+	double		shininess;			// 0 - 50 plastic ; 50 - 200+ metals; (more - smaller the area)
 	double		reflectivity;		// 0.0 - 1.0
 	double		transparency; 		// 0.0 = opaque 1.0 = fully transparent
 	double		refractive_index;	// Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
-	bool		has_refraction; 
+	bool		has_refraction;
 	int			has_checker;
 	double		checker_size;
 	t_color		checker_color;
@@ -277,6 +329,7 @@ typedef struct s_mesh
 	t_material	material;
 }	t_mesh;
 
+
 typedef struct s_cone
 {
 	t_vec3	apex;
@@ -304,6 +357,15 @@ typedef struct	s_hit_record
 	int			triangle_idx;
 	t_vec2		uv; // For texture mapping
 }	t_hit_record;
+
+/**
+ * Structure to hold intersection parameters
+ */
+typedef struct s_intersection_params
+{
+	double	closest_t;
+	int		triangle_idx;
+}	t_intersection_params;
 
 typedef struct s_img
 {
@@ -334,15 +396,17 @@ typedef struct s_bounds
 typedef struct s_mouse_state
 {
 	bool	is_dragging;
-    bool	left_button_down;
-    bool	right_button_down;
-    bool	middle_button_down;
+	bool	left_button_down;
+	bool	right_button_down;
+	bool	middle_button_down;
 
 	int32_t	prev_mouse_x;
 	int32_t	prev_mouse_y;
 
 	int32_t	x;
-    int32_t	y;
+	int32_t	y;
+
+	int		original_ssaa;
 
 } t_mouse_state;
 
@@ -366,6 +430,13 @@ typedef struct s_app
 
 } t_app;
 
+typedef struct s_checkbox_pos
+{
+	int		x;
+	int		y;
+	bool	checked;
+}	t_checkbox_pos;
+
 typedef struct s_panel
 {
     bool visible;
@@ -381,23 +452,25 @@ typedef struct s_panel
     int header_height;
     int checkbox_size;
     int checkbox_spacing;
-	int text_offset_x[MAX_PANEL_TEXTS];
-    int text_offset_y[MAX_PANEL_TEXTS];
+	int text_offset_x[MAX_PANEL_TEXT];
+    int text_offset_y[MAX_PANEL_TEXT];
     mlx_image_t *panel_img;
-    mlx_image_t *panel_text[MAX_PANEL_TEXTS];
+    mlx_image_t *panel_text[MAX_PANEL_TEXT];
     int text_count;
     mlx_image_t *status_text_img;
 } t_panel;
 
-typedef struct s_toggle_button {
-    int offset_x, offset_y;
-    int size;
-    mlx_image_t *toggle_img;
+typedef struct s_toggle_button
+{
+	int offset_x, offset_y;
+	int size;
+	mlx_image_t *toggle_img;
 } t_toggle_button;
 
-typedef struct s_ui {
-    t_panel panel;
-    t_toggle_button toggle;
+typedef struct s_ui
+{
+	t_panel panel;
+	t_toggle_button toggle;
 } t_ui;
 
 typedef struct s_scene

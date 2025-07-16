@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/09 14:19:22 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/13 23:33:19 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
-	
-    init_data(scene);
+
+	init_data(scene);
 
 	if (!parse_scene_file(filename, scene))
 	{
@@ -29,17 +29,11 @@ void	start_raytracer(t_scene *scene, char *filename)
 	init_mlx(scene);
 	setup_hooks(scene);
 	init_ui(scene);
-
 	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);		// Register the UI animation loop
-
 	// mlx_loop_hook(scene->app.mlx, render_scene, scene);		// Real time rendering
-
 	render_scene(scene);
-
 	mlx_loop(scene->app.mlx);
-
 	close_callback(scene);
-
 	exit(EXIT_SUCCESS);
 }
 
