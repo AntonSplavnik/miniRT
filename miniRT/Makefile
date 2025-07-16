@@ -38,8 +38,12 @@ SRC_FILES = main.c \
 	init.c \
 	string_utils.c \
 	camera/camera.c \
+	camera/camera_vectors.c \
 	controls/keys.c \
+	controls/key_handlers.c \
 	controls/mouse.c \
+	controls/mouse_cursor.c \
+	controls/mouse_handlers.c \
 	objects/add_object.c \
 	objects/cone/cone_intersect.c \
 	objects/cone/cone_intersect_equation.c \
@@ -79,7 +83,9 @@ SRC_FILES = main.c \
 	parser/parser_bumpmap_ppm_file.c \
 	parser/parser_bumpmap_ppm_header.c \
 	parser/parser_texture.c \
-	rendering/checker.c \
+	rendering/checker/checker.c \
+	rendering/checker/checker_utils.c \
+	rendering/checker/cubic_map.c \
 	rendering/colors.c \
 	rendering/compute_intersections.c \
 	rendering/compute_light.c \
@@ -88,10 +94,25 @@ SRC_FILES = main.c \
 	rendering/render.c \
 	rendering/render_utils.c \
 	rendering/trace_rays.c \
-	rendering/texture_uv_mapping.c \
-	rendering/bumpmap.c	\
+	rendering/texture_uv_mapping/cube_uv.c \
+	rendering/texture_uv_mapping/cylinder_uv.c \
+	rendering/texture_uv_mapping/plane_uv.c \
+	rendering/texture_uv_mapping/sphere_uv.c \
+	rendering/texture_uv_mapping/texture_uv_main.c \
+	rendering/bumpmap/bumpmap.c \
+	rendering/bumpmap/bump_normal.c \
+	rendering/bumpmap/cylinder_cube_tangents.c \
+	rendering/bumpmap/tangent_vectors.c \
 	ui/ui_control_panel.c \
-	ui/display_progress.c \
+	ui/ui_panel_utils.c \
+	ui/ui_drawing.c \
+	ui/ui_checkbox_drawing.c \
+	ui/ui_panel_drawing.c \
+	ui/ui_text_management.c \
+	ui/ui_text_drawing.c \
+	ui/ui_interaction.c \
+	ui/ui_panel_helpers.c\
+	ui/ui_main.c \
 	ui/status_messages.c \
 	utils/ft_atof.c \
 	utils/ft_strstr.c \

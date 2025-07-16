@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/11 13:27:03 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/16 14:16:42 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void	malloc_error(void)
 
 void	init_data(t_scene *scene)
 {
-	
 	//app
 	scene->app.mlx = NULL;
 	scene->app.img = NULL;
@@ -51,47 +50,20 @@ void	init_data(t_scene *scene)
 	scene->lights = NULL;
 	scene->objects = NULL;
 
-
 	// Graphic settings
-    scene->graphic_settings.enable_hard_shadows = true;
-    scene->graphic_settings.enable_reflections = true;
-    scene->graphic_settings.enable_specular = true;
+	scene->graphic_settings.enable_hard_shadows = true;
+	scene->graphic_settings.enable_reflections = true;
+	scene->graphic_settings.enable_specular = true;
 	scene->graphic_settings.enable_refraction = true;
 	scene->graphic_settings.resolution_factor = 1;
 	scene->graphic_settings.ssaa_samples = 1;
 
-
 	// Bonus
 	scene->sample = 1;
 	scene->max_depth = 3;
-
+	
 	//camera
 	scene->camera.movement_speed = 0.5;
-
-	//---to do : sort things from here---
-	// scene->escape_value = 4;
-	// scene->iterations_defintion = 100;
-	// scene->shift_x = 0.0;
-	// scene->shift_y = 0.0;
-	// scene->zoom = 1.0;
-
-	// // Initialize camera defaults for 3D scenes
-	// scene->camera.has_camera = 0;
-	// scene->camera.fov = 60.0;
-	// scene->camera.aspect_ratio = (double)WIDTH / HEIGHT;
-	// scene->camera.near = 0.1;
-	// scene->camera.far = 100.0;
-	// scene->camera.position = (t_vec3){0.0, 0.0, 0.0};
-	// scene->camera.rotation = (t_vec3){0.0, 0.0, 0.0};
-    // scene->camera.rotation_speed = 0.05;
-
-
-	// // Initialize Menger sponge defaults
-	// scene->menger.iterations = 0;
-	// scene->menger.size = 1.0;
-	// scene->menger.position = (t_vec3){0.0, 0.0, 0.0};
-	// scene->menger.rotation = (t_vec3){0.0, 0.0, 0.0};
-	// scene->menger.bvh_root = NULL;
 }
 
 // Set up event hooks
@@ -111,25 +83,24 @@ void	init_ui(t_scene *scene)
 
 void	init_mlx(t_scene *scene)
 {
+	// Initialize MLX42
+	scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
+	if (!scene->app.mlx)
+		malloc_error();
 
-    // Initialize MLX42
-    scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
-    if (!scene->app.mlx)
-        malloc_error();
+	// Create main image
+	scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
+	if (!scene->app.img)
+	{
+		mlx_terminate(scene->app.mlx);
+		malloc_error();
+	}
 
-    // Create main image
-    scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
-    if (!scene->app.img)
-    {
-        mlx_terminate(scene->app.mlx);
-        malloc_error();
-    }
-
-    // Display the image in the window
-    if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
-    {
-        mlx_delete_image(scene->app.mlx, scene->app.img);
-        mlx_terminate(scene->app.mlx);
-        malloc_error();
-    }
+	// Display the image in the window
+	if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
+	{
+		mlx_delete_image(scene->app.mlx, scene->app.img);
+		mlx_terminate(scene->app.mlx);
+		malloc_error();
+	}
 }

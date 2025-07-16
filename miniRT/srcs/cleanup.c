@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/04 16:50:05 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/13 23:35:36 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void cleanup_scene(t_scene *scene)
 
 	if (!scene)
 		return;
-	
+
 	// Clean up UI panel resources
 	cleanup_ui_panel(scene);
-	
+
 	obj = scene->objects;
 	while (obj)
 	{
@@ -46,4 +46,3 @@ void cleanup_scene(t_scene *scene)
 		light = next_light;
 	}
 }
-

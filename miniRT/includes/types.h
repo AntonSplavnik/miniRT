@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/19 13:17:40 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/14 02:01:35 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 # define NUM_THREADS 8 // Number of threads for multithreaded rendering
 
 // UI constants
+
+
+
 #define PANEL_X             10
 #define PANEL_Y             50
 #define PANEL_WIDTH         260
@@ -40,7 +43,7 @@
 #define PANEL_PADDING       16
 #define CHECKBOX_SIZE       16
 #define CHECKBOX_SPACING    38
-#define MAX_PANEL_TEXTS     16
+#define MAX_PANEL_TEXT      20
 #define NUM_CHECKBOXES      5
 
 #define TOGGLE_BTN_OFFSET_X 10
@@ -102,7 +105,8 @@ typedef struct s_slab
 	double	slab_z_max;
 }	t_slab;
 
-typedef struct s_light_result {
+typedef struct s_light_result
+{
 	double diffuse;
 	double specular_intensity;
 	double light_distance;
@@ -124,6 +128,34 @@ typedef struct s_texture
 	unsigned char	*data; // Raw pixel data (RGB or RGBA)
 	void	*mlx_texture; // Pointer to the MLX42 texture object
 }	t_texture;
+
+
+/* Structure to hold pixel coordinates for bump mapping */
+typedef struct s_pixel_coords
+{
+	double	px;
+	double	py;
+	int		x0;
+	int		y0;
+	int		x1;
+}	t_pixel_coords;
+
+/* Structure to hold bump map height samples */
+typedef struct s_bump_heights
+{
+	float	du;
+	float	dv;
+	float	center;
+	float	u;
+	float	v;
+}	t_bump_heights;
+
+/* Structure to hold calculated gradients for bump mapping */
+typedef struct s_bump_gradients
+{
+	float	gradient_u;
+	float	gradient_v;
+}	t_bump_gradients;
 
 typedef struct s_bump_map
 {
@@ -265,6 +297,7 @@ typedef struct s_mesh
 	t_material	material;
 }	t_mesh;
 
+
 typedef struct s_cone
 {
 	t_vec3	apex;
@@ -292,6 +325,15 @@ typedef struct	s_hit_record
 	int			triangle_idx;
 	t_vec2		uv; // For texture mapping
 }	t_hit_record;
+
+/**
+ * Structure to hold intersection parameters
+ */
+typedef struct s_intersection_params
+{
+	double	closest_t;
+	int		triangle_idx;
+}	t_intersection_params;
 
 typedef struct s_img
 {
@@ -322,15 +364,17 @@ typedef struct s_bounds
 typedef struct s_mouse_state
 {
 	bool	is_dragging;
-    bool	left_button_down;
-    bool	right_button_down;
-    bool	middle_button_down;
+	bool	left_button_down;
+	bool	right_button_down;
+	bool	middle_button_down;
 
 	int32_t	prev_mouse_x;
 	int32_t	prev_mouse_y;
 
 	int32_t	x;
-    int32_t	y;
+	int32_t	y;
+
+	int		original_ssaa;
 
 } t_mouse_state;
 
@@ -354,6 +398,13 @@ typedef struct s_app
 
 } t_app;
 
+typedef struct s_checkbox_pos
+{
+	int		x;
+	int		y;
+	bool	checked;
+}	t_checkbox_pos;
+
 typedef struct s_panel
 {
     bool visible;
@@ -369,10 +420,10 @@ typedef struct s_panel
     int header_height;
     int checkbox_size;
     int checkbox_spacing;
-	int text_offset_x[MAX_PANEL_TEXTS];
-    int text_offset_y[MAX_PANEL_TEXTS];
+	int text_offset_x[MAX_PANEL_TEXT];
+    int text_offset_y[MAX_PANEL_TEXT];
     mlx_image_t *panel_img;
-    mlx_image_t *panel_text[MAX_PANEL_TEXTS];
+    mlx_image_t *panel_text[MAX_PANEL_TEXT];
     int text_count;
     mlx_image_t *status_text_img;
 } t_panel;

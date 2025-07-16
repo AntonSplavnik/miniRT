@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/20 10:50:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/14 02:38:37 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,28 @@ void		render_scene(t_scene *scene);
 int			trace_ray(t_scene *scene, t_ray ray, int depth);
 void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
-t_vec2 		calculate_uv_coordinates(t_vec3 point, t_object *object);
-t_vec3 		calculate_bump_normal(t_hit_record *hit_record);
 
+/* bumpmap.c */
+float	sample_bump_map(t_bump_map *bump_map, double u, double v);
+
+/* tangent_vectors.c */
+void	calculate_tangent_vectors(t_vec3 normal, t_vec3 *tangent, t_vec3 *bitangent);
+void	calculate_sphere_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void	calculate_plane_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+
+/* cylinder_cube_tangents.c */
+void	calculate_cylinder_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void	calculate_cube_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+
+/* bump_normal.c */
+t_vec3	calculate_bump_normal(t_hit_record *hit_record);
+
+// uv_mapping
+t_vec2	sphere_uv_mapping(t_vec3 point, t_sphere sphere);
+t_vec2	plane_uv_mapping(t_vec3 point, t_plane plane);
+t_vec2	cylinder_uv_mapping(t_vec3 point, t_cylinder cylinder);
+t_vec2	cube_uv_mapping(t_vec3 point, t_cube cube);
+t_vec2	calculate_uv_coordinates(t_vec3 point, t_object *object);
 
 // compute light
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
@@ -153,14 +172,51 @@ void	set_up_scene_mesh(t_scene *scene);
 void	set_up_scene_cube(t_scene *scene);
 
 
-// UI Panel functions
-void	init_toggle_button(t_scene *scne);
-void	init_ui_panel(t_scene *scene);
-bool	draw_ui_panel(t_scene *scene);
-void	cleanup_ui_panel(t_scene *scene);
-bool	ui_panel_mouse_click(t_scene *scene, int x, int y);
-void	ui_animation_loop(void *param);
-void	draw_ui(t_scene *scene);
+// UI Control Panel Functions
+bool    *get_checkbox_state(t_scene *scene, int idx);
+void    clear_panel_image(t_panel *panel);
+void    init_toggle_button(t_scene *scene);
+void    init_ui_panel(t_scene *scene);
+void    init_panel_image(t_scene *scene, t_panel *p);
+void    cleanup_ui_panel(t_scene *scene);
+void    cleanup_panel_images(t_scene *scene, t_panel *p);
+void    cleanup_status_text(t_scene *scene, t_panel *p);
+
+// Drawing Functions
+void    draw_toggle_button(t_scene *scene);
+void    draw_button_background(t_toggle_button *tog);
+void    draw_button_border(t_toggle_button *tog);
+void	draw_checkbox(t_panel *p, mlx_image_t *img, t_checkbox_pos *pos);
+void    draw_checkbox_background(t_panel *p, mlx_image_t *img, int x, int y);
+void    draw_checkbox_border(t_panel *p, mlx_image_t *img, int x, int y);
+void    draw_checkbox_check(t_panel *p, mlx_image_t *img, int x, int y);
+void	draw_single_checkbox(t_scene *scene, int x_cb, int y_base, int idx);
+void    draw_panel_background(t_panel *p);
+void    draw_panel_main_bg(t_panel *p);
+void    draw_panel_header(t_panel *p);
+void    draw_panel_borders(t_panel *p);
+void    draw_panel_content(t_scene *scene);
+bool    update_panel_animation(t_panel *p);
+bool    update_panel_closing(t_panel *p);
+
+// Text Management
+void    delete_panel_text(t_scene *scene);
+void    hide_panel_text(t_panel *p);
+void    show_panel_text(t_panel *p);
+void    draw_panel_text(t_scene *scene);
+void    draw_panel_title(t_scene *scene, t_panel *p);
+void    draw_checkbox_labels(t_scene *scene, t_panel *p);
+char    *get_checkbox_label(int idx);
+bool    draw_ui_panel(t_scene *scene);
+void    handle_panel_text_display(t_scene *scene, t_panel *p);
+
+// Interaction
+bool    is_point_in_toggle_button(t_toggle_button *tog, int x, int y);
+bool    is_point_in_checkbox(t_panel *p, int x, int y, int idx);
+bool    ui_panel_mouse_click(t_scene *scene, int x, int y);
+bool    handle_checkbox_clicks(t_scene *scene, t_panel *p, int x, int y);
+void    ui_animation_loop(void *param);
+void    draw_ui(t_scene *scene);
 
 // camera
 t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
@@ -171,9 +227,18 @@ t_vec3		get_up_vector(t_vec3 rotation);
 // mouse controls
 void		mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t mods, void* param);
 void		cursor_position_callback(double xpos, double ypos, void* param);
+void		handle_left_press(t_scene *scene);
+void		handle_right_press(t_scene *scene);
+void		handle_panel_drag(t_scene *scene, double xpos, double ypos);
+void		handle_camera_rotation(t_scene *scene);
+int			clamp(int val, int min, int max);
 void		setup_mouse_hook(t_scene *scene);
 
 // key controls
+void		handle_movement_keys(mlx_key_data_t keydata, t_scene *scene);
+void		handle_strafe_keys(mlx_key_data_t keydata, t_scene *scene);
+void		handle_vertical_keys(mlx_key_data_t keydata, t_scene *scene);
+void		handle_sampling_keys(mlx_key_data_t keydata, t_scene *scene);
 void		setup_key_hooks(t_scene	*scene);
 
 // close handler
@@ -184,15 +249,23 @@ void		cleanup_scene(t_scene *scene);
 void		close_callback(void *param);
 
 
-// Checkerboard
-int				is_checker_point(t_vec3 point, double checker_size);
-int				is_checker_point_plane(t_plane plane, t_vec3 point, double checker_size);
-t_color			get_checker_color(t_material material, t_object *object, t_vec3 point);
-t_vec2			spherical_map(t_vec3 point);
-t_vec2			cylindrical_map(t_vec3 point, double radius, t_vec3 axis);
-int				is_on_cylinder_cap(t_vec3 point, t_cylinder *cylinder);
-t_vec2			circular_map(t_vec3 point, t_cylinder *cylinder);
-t_vec2			cubic_map(t_cube *cube, t_vec3 point);
-t_vec2			planar_map(t_plane *plane, t_vec3 point);
-int				is_checker_point_2d(double u, double v, double checker_size);
+/* checker.c function declarations */
+t_vec2	spherical_map(t_vec3 point);
+int		is_checker_point_2d(double u, double v, double checker_size);
+t_vec2	get_plane_checker_uv(t_object *object, t_vec3 point);
+t_vec2	get_sphere_checker_uv(t_object *object, t_vec3 point);
+t_color	get_checker_color(t_material material, t_object *object, t_vec3 point);
+
+/* checker_utils.c function declarations */
+t_vec2	project_to_plane_uv(t_plane *plane, t_vec3 point, t_vec3 u_axis);
+t_vec2	get_cylinder_checker_uv(t_object *object, t_vec3 point);
+t_vec2	get_cube_checker_uv(t_object *object, t_vec3 point);
+t_vec2	cylindrical_map(t_vec3 point, double radius, t_vec3 axis);
+t_vec2	calculate_cylinder_checker_uv(t_vec3 point, double radius, t_vec3 axis);
+
+/* cubic_map.c function declarations */
+t_vec2	cubic_map(t_cube *cube, t_vec3 local_point);
+t_vec2	map_x_face(t_cube *cube, t_vec3 local_point);
+t_vec2	map_y_face(t_cube *cube, t_vec3 local_point);
+t_vec2	map_z_face(t_cube *cube, t_vec3 local_point);
 #endif

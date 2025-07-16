@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mesh_intersect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/20 15:55:46 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:44:06 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/miniRT.h"
-
-/**
- * Structure to hold intersection parameters
- */
-typedef struct s_intersection_params
-{
-	double	closest_t;
-	int		triangle_idx;
-}	t_intersection_params;
 
 /**
  * Creates a scaled vertex based on mesh scale factors

@@ -1,16 +1,97 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   status_messages.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 22:20:00 by antonsplavn      #+#    #+#             */
+/*   Updated: 2025/07/13 22:20:00 by antonsplavn      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/miniRT.h"
 
-
-// Helper function to print status messages
-void display_status(t_scene *scene)
+/*
+** Applies color tinting to the status text image
+*/
+static void	apply_text_color(mlx_image_t *img)
 {
-	char status[100];
-	static mlx_image_t *status_img = NULL;
+	uint32_t	i;
+	uint8_t		*pixel;
+	float		alpha;
+
+	i = 0;
+	while (i < img->width * img->height)
+	{
+		pixel = &img->pixels[i * 4];
+		if (pixel[3] > 0)
+		{
+			alpha = pixel[3] / 255.0f;
+			pixel[0] = (uint8_t)(255 * alpha + pixel[0] * (1 - alpha));
+			pixel[1] = (uint8_t)(160 * alpha + pixel[1] * (1 - alpha));
+			pixel[2] = (uint8_t)(30 * alpha + pixel[2] * (1 - alpha));
+		}
+		i++;
+	}
+}
+
+/*
+** Creates and formats the status string with scene name
+*/
+static void	format_status_string(t_scene *scene, char *status)
+{
+	char	*pos;
+	int		i;
+
+	pos = status;
+	i = 0;
+	if (scene->name)
+	{
+		while (scene->name[i] && i < 50)
+		{
+			*pos++ = scene->name[i++];
+		}
+		*pos++ = ' ';
+		*pos++ = '|';
+		*pos++ = ' ';
+	}
+	i = 0;
+	while ("Camera Position"[i])
+	{
+		*pos++ = "Camera Position"[i++];
+	}
+	*pos = '\0';
+}
+
+/*
+** Creates and displays status text image with formatting
+*/
+static mlx_image_t	*create_status_image(t_scene *scene, char *status)
+{
+	mlx_image_t	*img;
+
+	if (!scene->app.mlx)
+		return (NULL);
+	img = mlx_put_string(scene->app.mlx, status, 50, 15);
+	if (img)
+	{
+		img->enabled = true;
+		apply_text_color(img);
+	}
+	return (img);
+}
+
+/*
+** Helper function to print status messages
+*/
+void	display_status(t_scene *scene)
+{
+	char				status[100];
+	static mlx_image_t	*status_img = NULL;
 
 	if (!scene || !scene->app.mlx)
-		return;
-
-	// Delete previous status text image if it exists
+		return ;
 	if (status_img != NULL)
 	{
 		mlx_delete_image(scene->app.mlx, status_img);
@@ -18,39 +99,7 @@ void display_status(t_scene *scene)
 	}
 	if (scene->graphic_settings.enable_status_message)
 	{
-
-		if (scene->name)
-		{
-			snprintf(status,
-					100,
-					"%s | Camera: (%.1f, %.1f, %.1f)",
-					scene->name,
-					scene->camera.position.x,
-					scene->camera.position.y,
-					scene->camera.position.z);
-		}
-
-		// Display the status with a new image
-		if (scene->app.mlx)
-		{
-			status_img = mlx_put_string(scene->app.mlx, status, 50, 15);
-			// Create a new text image with the status message
-			if(status_img)
-				status_img->enabled = true;
-				// Set your tint color here
-			uint8_t r = 255, g = 160, b = 30;
-			for (uint32_t i = 0; i < status_img->width * status_img->height; ++i) {
-				uint8_t *pixel = &status_img->pixels[i * 4];
-				if (pixel[3] > 0) {
-					// Simple blend: scale your color by the alpha (keeps antialiasing)
-					float alpha = pixel[3] / 255.0f;
-					pixel[0] = (uint8_t)(r * alpha + pixel[0] * (1 - alpha));
-					pixel[1] = (uint8_t)(g * alpha + pixel[1] * (1 - alpha));
-					pixel[2] = (uint8_t)(b * alpha + pixel[2] * (1 - alpha));
-					// pixel[3] stays as is
-				}
-			}
-		}
-
+		format_status_string(scene, status);
+		status_img = create_status_image(scene, status);
 	}
 }

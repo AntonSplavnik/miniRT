@@ -3,75 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:14:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/26 11:02:13 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/13 23:08:49 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
+/*
+** Rotates a point around the X axis using given rotation values
+*/
+static t_vec3	rotate_x_axis(t_vec3 point, double cos_x, double sin_x)
 {
 	t_vec3	result;
-	t_vec3  temp;
-	double	cos_x;
-	double	sin_x;
-	double	cos_y;
-	double	sin_y;
-	double	cos_z;
-	double	sin_z;
 
-	cos_x = cos(rotation.x);
-	sin_x = sin(rotation.x);
-	cos_y = cos(rotation.y);
-	sin_y = sin(rotation.y);
-	cos_z = cos(rotation.z);
-	sin_z = sin(rotation.z);
-
-	// Rotate around X axis
-	temp.x = point.x;
-	temp.y = point.y * cos_x - point.z * sin_x;
-	temp.z = point.y * sin_x + point.z * cos_x;
-
-	// Rotate around Y axis
-	result.x = temp.x * cos_y + temp.z * sin_y;
-	result.y = temp.y;
-	result.z = -temp.x * sin_y + temp.z * cos_y;
-
-	// Rotate around Z axis (using result as input)
-	temp = result;
-	result.x = temp.x * cos_z - temp.y * sin_z;
-	result.y = temp.x * sin_z + temp.y * cos_z;
-	result.z = temp.z;
-
+	result.x = point.x;
+	result.y = point.y * cos_x - point.z * sin_x;
+	result.z = point.y * sin_x + point.z * cos_x;
 	return (result);
 }
 
-// Function to calculate forward/backward movement vector based on camera rotation
-t_vec3 get_forward_vector(t_vec3 rotation)
+/*
+** Rotates a point around the Y axis using given rotation values
+*/
+static t_vec3	rotate_y_axis(t_vec3 point, double cos_y, double sin_y)
 {
-	// Create a forward vector (0, 0, 1) and rotate it according to camera rotation
-	t_vec3 forward = {0, 0, 1};
-	forward = rotate_point(forward, rotation);
-	return vec3_normalize(forward);
+	t_vec3	result;
+
+	result.x = point.x * cos_y + point.z * sin_y;
+	result.y = point.y;
+	result.z = -point.x * sin_y + point.z * cos_y;
+	return (result);
 }
 
-// Function to calculate right/left movement vector based on camera rotation
-t_vec3 get_right_vector(t_vec3 rotation)
+/*
+** Rotates a point around the Z axis using given rotation values
+*/
+static t_vec3	rotate_z_axis(t_vec3 point, double cos_z, double sin_z)
 {
-	// Create a right vector (1, 0, 0) and rotate it according to camera rotation
-	t_vec3 right = {1, 0, 0};
-	right = rotate_point(right, rotation);
-	return vec3_normalize(right);
+	t_vec3	result;
+
+	result.x = point.x * cos_z - point.y * sin_z;
+	result.y = point.x * sin_z + point.y * cos_z;
+	result.z = point.z;
+	return (result);
 }
 
-// Function to calculate up/down movement vector based on camera rotation
-t_vec3 get_up_vector(t_vec3 rotation)
+/*
+** Applies 3D rotation to a point using Euler angles (X, Y, Z order)
+*/
+t_vec3	rotate_point(t_vec3 point, t_vec3 rotation)
 {
-	// Create an up vector (0, 1, 0) and rotate it according to camera rotation
-	t_vec3 up = {0, 1, 0};
-	up = rotate_point(up, rotation);
-	return vec3_normalize(up);
+	t_vec3	temp;
+	double	trig_vals[6];
+
+	trig_vals[0] = cos(rotation.x);
+	trig_vals[1] = sin(rotation.x);
+	trig_vals[2] = cos(rotation.y);
+	trig_vals[3] = sin(rotation.y);
+	trig_vals[4] = cos(rotation.z);
+	trig_vals[5] = sin(rotation.z);
+	temp = rotate_x_axis(point, trig_vals[0], trig_vals[1]);
+	temp = rotate_y_axis(temp, trig_vals[2], trig_vals[3]);
+	temp = rotate_z_axis(temp, trig_vals[4], trig_vals[5]);
+	return (temp);
 }
