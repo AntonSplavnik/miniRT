@@ -56,6 +56,7 @@
  *       millions of times per rendered frame. Performance optimizations include
  *       early termination conditions and efficient intersection algorithms.
  */
+
 // First, you need to add refraction properties to your material structure
 // Add these fields to your t_material structure:
 /*
@@ -66,24 +67,7 @@ typedef struct s_material {
     bool has_refraction;     // enable/disable refraction for this material
 } t_material;
 */
-// Fresnel equations to calculate reflection/transmission coefficients
-// double fresnel_reflectance(double cos_theta_i, double eta_i, double eta_t)
-// {
-//     double sin_theta_t_sq = (eta_i / eta_t) * (eta_i / eta_t) * (1.0 - cos_theta_i * cos_theta_i);
 
-//     // Total internal reflection
-//     if (sin_theta_t_sq >= 1.0)
-//         return 1.0;
-
-//     double cos_theta_t = sqrt(1.0 - sin_theta_t_sq);
-
-//     // Fresnel equations for s and p polarized light
-//     double rs = (eta_i * cos_theta_i - eta_t * cos_theta_t) / (eta_i * cos_theta_i + eta_t * cos_theta_t);
-//     double rp = (eta_t * cos_theta_i - eta_i * cos_theta_t) / (eta_t * cos_theta_i + eta_i * cos_theta_t);
-
-//     // Average of s and p polarized reflectance
-//     return 0.5 * (rs * rs + rp * rp);
-// }
 
 // Add these to colors.c or create a new fresnel.c file
 double fresnel_reflectance(double cos_theta_i, double eta_i, double eta_t)

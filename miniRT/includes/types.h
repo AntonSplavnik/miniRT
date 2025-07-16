@@ -99,6 +99,26 @@ typedef struct s_light_result {
     t_vec3 light_dir;
 } t_light_result;
 
+typedef struct s_fresnel_params
+{
+	double	cos_i;
+	double	eta_i;
+	double	eta_t;
+}	t_fresnel_params;
+
+typedef struct s_material_contrib
+{
+	double	total_contrib;
+	double	fresnel;
+	double	transmission;
+}	t_material_contrib;
+
+typedef struct s_refraction_params
+{
+	t_vec3	refract_dir;
+	bool	total_internal_reflection;
+}	t_refraction_params;
+
 
 typedef struct	s_color
 {
@@ -127,12 +147,12 @@ typedef struct s_bump_map
 typedef struct	s_material
 {
 	t_color	color;
-	double	specular;
-	double	shininess;
-	double	reflectivity;
-	double	transparency; // 0.0 = opaque 1.0 = fully transparent
-	double	refractive_index; //Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
-	bool		has_refraction;
+	double		specular;			//
+	double		shininess;			//
+	double		reflectivity;		// 0.0 - 1.0
+	double		transparency; 		// 0.0 = opaque 1.0 = fully transparent
+	double		refractive_index;	// Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
+	bool		has_refraction; 
 	int			has_checker;
 	double		checker_size;
 	t_color		checker_color;
@@ -414,6 +434,14 @@ typedef struct s_scene
 
 	t_menger			menger;
 }				t_scene;
+
+typedef struct s_ray_context
+{
+	t_scene			*scene;
+	t_ray			ray;
+	t_hit_record	hit_record;
+	int				depth;
+}	t_ray_context;
 
 typedef struct s_thread_data
 {

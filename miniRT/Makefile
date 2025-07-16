@@ -74,15 +74,26 @@ SRC_FILES = main.c \
 	parser/parser_bumpmap_ppm_header.c \
 	parser/parser_texture.c \
 	rendering/checker.c \
-	rendering/colors.c \
+	rendering/color/color_conversion.c \
+	rendering/color/tone_mapping.c \
+	rendering/color/hdr_processing.c \
+	rendering/color/lighting.c \
+	rendering/color/color_calculations.c \
+	rendering/color/texture_sampling.c \
+	rendering/color/surface_colors.c \
 	rendering/compute_intersections.c \
-	rendering/compute_light.c \
-	rendering/compute_rays.c \
-	rendering/reflection.c \
-	rendering/refraction.c \
+	rendering/lighting/compute_light.c \
+	rendering/rays/compute_rays.c \
+	rendering/reflection/reflection.c \
+	rendering/refraction/refraction.c \
 	rendering/render.c \
 	rendering/render_utils.c \
-	rendering/trace_rays.c \
+	rendering/trace_ray/trace_rays.c \
+	rendering/trace_ray/background_utils.c \
+	rendering/fresnel/fresnel_calculations.c \
+	rendering/reflection/reflection_operations.c \
+	rendering/refraction/refraction_operations.c \
+	rendering/materials/material_processors.c \
 	rendering/texture_uv_mapping.c \
 	rendering/bumpmap.c	\
 	ui/ui_control_panel.c \
@@ -144,6 +155,14 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/mesh
 	@mkdir -p $(OBJ_DIR)/objects/cone
 	@mkdir -p $(OBJ_DIR)/rendering
+	@mkdir -p $(OBJ_DIR)/rendering/color
+	@mkdir -p $(OBJ_DIR)/rendering/trace_ray
+	@mkdir -p $(OBJ_DIR)/rendering/fresnel
+	@mkdir -p $(OBJ_DIR)/rendering/reflection
+	@mkdir -p $(OBJ_DIR)/rendering/refraction
+	@mkdir -p $(OBJ_DIR)/rendering/materials
+	@mkdir -p $(OBJ_DIR)/rendering/lighting
+	@mkdir -p $(OBJ_DIR)/rendering/rays
 	@mkdir -p $(OBJ_DIR)/ui
 	@mkdir -p $(OBJ_DIR)/controls
 	@mkdir -p $(OBJ_DIR)/camera

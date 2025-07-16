@@ -16,36 +16,36 @@ void	key_callback(mlx_key_data_t keydata, void* param)
     }
     else if (keydata.key == MLX_KEY_W)
     {
-        scene->camera.position = vec3_add(scene->camera.position, 
+        scene->camera.position = vec3_add(scene->camera.position,
             vec3_scale(get_forward_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
     else if (keydata.key == MLX_KEY_S)
     {
-        scene->camera.position = vec3_subtract(scene->camera.position, 
+        scene->camera.position = vec3_subtract(scene->camera.position,
             vec3_scale(get_forward_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
     else if (keydata.key == MLX_KEY_A)
     {
-        scene->camera.position = vec3_subtract(scene->camera.position, 
+        scene->camera.position = vec3_subtract(scene->camera.position,
             vec3_scale(get_right_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
     else if (keydata.key == MLX_KEY_D)
     {
-        scene->camera.position = vec3_add(scene->camera.position, 
+        scene->camera.position = vec3_add(scene->camera.position,
             vec3_scale(get_right_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
     else if (keydata.key == MLX_KEY_Q)
-    {        scene->camera.position = vec3_subtract(scene->camera.position, 
+    {        scene->camera.position = vec3_subtract(scene->camera.position,
             vec3_scale(get_up_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
     else if (keydata.key == MLX_KEY_E)
     {
-        scene->camera.position = vec3_add(scene->camera.position, 
+        scene->camera.position = vec3_add(scene->camera.position,
             vec3_scale(get_up_vector(scene->camera.rotation), scene->camera.movement_speed));
         render_scene(scene);
     }
