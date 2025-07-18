@@ -5,7 +5,7 @@ L 8,10,-5 0.7 255,255,255
 # L -8,8,-10 0.6 255,240,220
 
 # Classic checkered floor (large pattern)
-pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30 checker_size:4 reflectivity:0.2}
+pl 0,-2,0 0,1,0 255,255,255 {checker_color:30,30,30 checker_size:4 reflectivity:0.02}
 
 # Row of spheres with different checkerboard patterns
 # Standard 3D checkerboard sphere

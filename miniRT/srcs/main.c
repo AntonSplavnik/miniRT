@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/06/24 19:17:16 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 13:32:03 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,7 @@ void	start_raytracer(t_scene *scene, char *filename)
 {
 	scene->name = filename;
 
-	// Initialize miniRT
-	init_data(scene);
-	init_mlx(scene);
-
-	// Parse scene file
+    init_data(scene);
 
 	if (parse_scene_file(filename, scene) != 0)
 	{
@@ -35,20 +31,16 @@ void	start_raytracer(t_scene *scene, char *filename)
 	// Initialize BVH after all objects are loaded
 	init_scene_bvh(scene);
 
+	// Initialize MLX before setting up hooks
+	init_mlx(scene);
+	setup_hooks(scene);
 	// Set up UI and hooks
 	init_ui(scene);
-	setup_hooks(scene);
-
-	// Initialize the mouse hook for camera control
-	// mlx_loop_hook(scene->app.mlx, &render_scene, scene);
-
+	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);		// Register the UI animation loop
 	render_scene(scene);
-
-	// Start main loop
 	mlx_loop(scene->app.mlx);
-
-	// Clean up
-	cleanup_scene(scene);
+	close_callback(scene);
+	exit(EXIT_SUCCESS);
 }
 
 void	print_usage_and_exit(void)

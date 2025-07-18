@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 13:08:43 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/02 15:59:40 by antonsplavn      ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/07/18 12:37:10 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/miniRT.h"
 
@@ -56,4 +57,3 @@ void cleanup_scene(t_scene *scene)
 		light = next_light;
 	}
 }
-

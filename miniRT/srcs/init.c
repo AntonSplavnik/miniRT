@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/17 23:05:18 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 12:57:23 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ static void	malloc_error(void)
 
 void	init_data(t_scene *scene)
 {
+
+	//app
+	scene->app.mlx = NULL;
+	scene->app.img = NULL;
+
+	// window
 	scene->width = WIDTH;
 	scene->height = HEIGHT;
 	scene->background_color = BLACK;
@@ -53,9 +59,34 @@ void	init_data(t_scene *scene)
 	scene->mouse_state.left_button_down = false;
 	scene->mouse_state.right_button_down = false;
 	scene->mouse_state.middle_button_down = false;
+	scene->mouse_state.is_dragging = false;
+	scene->mouse_state.x = 0;
+	scene->mouse_state.y = 0;
+	scene->mouse_state.prev_mouse_x = 0;
+	scene->mouse_state.prev_mouse_y = 0;
 
+	// Ambient light
+	scene->ambient.ratio = 0.05; //default
+	scene->ambient.color = create_color(255,255 ,255); //white by default
+	scene->ambient.has_ambient = 0;
+
+	// Background color
+	scene->background_color = (0 << 16 | 0 << 8 | 0); // black
+
+	// Lights
+	scene->lights = NULL;
+	scene->objects = NULL;
+
+	// Graphic settings
+	scene->graphic_settings.enable_hard_shadows = true;
+	scene->graphic_settings.enable_reflections = true;
+	scene->graphic_settings.enable_specular = true;
+	scene->graphic_settings.enable_refraction = true;
+	scene->graphic_settings.resolution_factor = 1;
+	scene->graphic_settings.ssaa_samples = 1;
+
+	// Bonus
 	scene->sample = 1;
-	
 	scene->scene_bvh = NULL; // Initialize BVH pointer to NULL
 }
 
@@ -77,26 +108,26 @@ void	init_ui(t_scene *scene)
 void	init_mlx(t_scene *scene)
 {
 
-    // Initialize MLX42
-    scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
-    if (!scene->app.mlx)
-        malloc_error();
+	// Initialize MLX42
+	scene->app.mlx = mlx_init(WIDTH, HEIGHT, scene->name, true);
+	if (!scene->app.mlx)
+		malloc_error();
 
-    // Create main image
-    scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
-    if (!scene->app.img)
-    {
-        mlx_terminate(scene->app.mlx);
-        malloc_error();
-    }
+	// Create main image
+	scene->app.img = mlx_new_image(scene->app.mlx, WIDTH, HEIGHT);
+	if (!scene->app.img)
+	{
+		mlx_terminate(scene->app.mlx);
+		malloc_error();
+	}
 
-    // Display the image in the window
-    if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
-    {
-        mlx_delete_image(scene->app.mlx, scene->app.img);
-        mlx_terminate(scene->app.mlx);
-        malloc_error();
-    }
+	// Display the image in the window
+	if (mlx_image_to_window(scene->app.mlx, scene->app.img, 0, 0) < 0)
+	{
+		mlx_delete_image(scene->app.mlx, scene->app.img);
+		mlx_terminate(scene->app.mlx);
+		malloc_error();
+	}
 }
 
 // Add this function to initialize the scene BVH

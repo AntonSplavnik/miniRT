@@ -12,14 +12,13 @@
 
 #include "../../includes/miniRT.h"
 
-
 int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
 {
 	t_ray		shadow_ray;
 	t_object	*hit_object;
 	double		t;
 
-	//Create a shadow ray from the hit point towards the light  
+	//Create a shadow ray from the hit point towards the light
 	// Use surface normal for more robust offset to avoid self-intersection
 	t_vec3 offset = vec3_scale(hit_record.normal, 0.001);
 	shadow_ray.origin = vec3_add(hit_point, offset);
@@ -130,16 +129,14 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 	return (hit_something);
 }
 
-void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record)
+void compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record)
 {
-	//calculate where the ray hit the object
 	hit_record->point = vec3_add(ray.origin, vec3_scale(ray.direction, t));
 	hit_record->t = t;
 	hit_record->object = hit_object;
 	hit_record->material = hit_object->material;
-	hit_record->inside = 0;  // Initialize to false, can be set later if needed
 
-	//calculate the normal at the hit point
+	// 1. Calculate geometric normal based on object type
 	if (hit_object->type == SPHERE)
 	{
 		t_sphere *sphere = (t_sphere *)(hit_object->data);
@@ -154,9 +151,6 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	{
 		t_plane *plane = (t_plane *)(hit_object->data);
 		hit_record->original_normal = plane->normal;
-		//double sided plane
-		if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
-			hit_record->original_normal = vec3_negate(hit_record->original_normal);
 	}
 	else if (hit_object->type == CUBE)
 	{
@@ -167,20 +161,20 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	{
 		t_triangle *triangle = (t_triangle *)(hit_object->data);
 		hit_record->original_normal = triangle->normal;
-		
+
 		// Use smooth shading if vertex normals are available
 		if (triangle->has_vertex_normals)
 		{
 			// Validate barycentric coordinates before interpolation
 			double bary_sum = hit_record->barycentric.x + hit_record->barycentric.y + hit_record->barycentric.z;
-			if (fabs(bary_sum - 1.0) < 0.001 && 
+			if (fabs(bary_sum - 1.0) < 0.001 &&
 				hit_record->barycentric.x >= 0.0 && hit_record->barycentric.x <= 1.0 &&
 				hit_record->barycentric.y >= 0.0 && hit_record->barycentric.y <= 1.0 &&
 				hit_record->barycentric.z >= 0.0 && hit_record->barycentric.z <= 1.0)
 			{
 				t_vec3 interpolated = interpolate_vertex_normal(
 					hit_record->barycentric, triangle->n0, triangle->n1, triangle->n2);
-				
+
 				// Ensure interpolated normal is valid
 				double norm_len = vec3_length(interpolated);
 				if (norm_len > 0.1 && norm_len < 10.0)
@@ -189,7 +183,7 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 				}
 			}
 		}
-		
+
 		// For triangles with vertex normals, don't flip the interpolated normal
 		// The vertex normals from the OBJ file are already correctly oriented
 		if (!triangle->has_vertex_normals)
@@ -208,25 +202,25 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 	{
 		t_mesh *mesh = (t_mesh *)(hit_object->data);
 		int triangle_idx = (int)hit_record->triangle_idx;
-		
+
 		if (triangle_idx >= 0 && triangle_idx < mesh->triangle_count)
 		{
 			t_transformed_triangle *tri = &mesh->transformed_tris[triangle_idx];
 			hit_record->original_normal = tri->normal;
-			
+
 			// Use smooth shading if vertex normals are available
 			if (tri->has_vertex_normals)
 			{
 				// Validate barycentric coordinates before interpolation
 				double bary_sum = hit_record->barycentric.x + hit_record->barycentric.y + hit_record->barycentric.z;
-				if (fabs(bary_sum - 1.0) < 0.001 && 
+				if (fabs(bary_sum - 1.0) < 0.001 &&
 					hit_record->barycentric.x >= 0.0 && hit_record->barycentric.x <= 1.0 &&
 					hit_record->barycentric.y >= 0.0 && hit_record->barycentric.y <= 1.0 &&
 					hit_record->barycentric.z >= 0.0 && hit_record->barycentric.z <= 1.0)
 				{
 					t_vec3 interpolated = interpolate_vertex_normal(
 						hit_record->barycentric, tri->n0, tri->n1, tri->n2);
-					
+
 					// Ensure interpolated normal is valid
 					double norm_len = vec3_length(interpolated);
 					if (norm_len > 0.1 && norm_len < 10.0)
@@ -235,7 +229,7 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 					}
 				}
 			}
-			
+
 			// For meshes with vertex normals, don't flip the interpolated normal
 			// The vertex normals from the OBJ file are already correctly oriented
 			if (!tri->has_vertex_normals)
@@ -252,13 +246,15 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 			hit_record->original_normal = vec3_create(0, 1, 0);
 		}
 	}
-	hit_record->normal = hit_record->original_normal; //Set the normal to the original normal initially
 
+	// 3. Optional: UV mapping for textures or checker
 	if (hit_record->material.has_texture || hit_record->material.has_checker)
-		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object); // Calculate UV coordinates for texture mapping
+		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object);
+
+	// 4. Set the normal for lighting calculations
+	hit_record->normal = hit_record->original_normal;
+	
+	// 5. Optional: bump mapping adjustment
 	if (hit_record->material.has_bump_map)
-	{
-		// If the material has a bump map, adjust the normal based on the bump map
 		hit_record->normal = calculate_bump_normal(hit_record);
-	}
 }

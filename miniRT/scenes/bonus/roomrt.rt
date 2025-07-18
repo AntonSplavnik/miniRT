@@ -1,0 +1,32 @@
+
+A 0.03                                                        21,125,82
+
+C   0,1,-10.0      		0.0,0.0,1.0         60
+
+L   4.0,1.0,-5.0                            0.05                 0,153,51
+L   -4.0,1.0,-5.0                           0.05                 204,153,255
+L   4.0,1.0,2.0                             0.05                 204,153,255
+L   -4.0,1.0,2.0                            0.05                 0,153,51
+L   0.0,2.0,-1.0                            0.05                 255,255,255
+
+pl  0.0,-1.0,0.0        0.0,1.0,0.0                             255,255,255		{specular:0.0 shininess:20  reflectivity:0.0 refractive_index:0 transparency: 0 checker_color:0,0,0 checker_size:8.0 }
+pl  0.0,3.0,0.0         0.0,-1.0,0.0                            0,0,0			{specular:0.0 shininess:20  reflectivity:0.3 refractive_index:0 transparency: 0}
+pl  0.0,0.0,5.0         0.0,0.0,-1.0                            0,0,255			{specular:0.5 shininess:20  reflectivity:0.8 refractive_index:0 transparency: 0}
+
+cy  2.0,-1.0,-4.0       0.0,1.0,0.0         0.5  23.0           255,255,255     {specular:0.0 shininess:20  reflectivity:0.6 refractive_index:1.3 transparency: 0}
+cy  -2.0,-1.0,-4.0      0.0,1.0,0.0         0.5  23.0           255,255,255     {specular:0.0 shininess:20  reflectivity:0.6 refractive_index:1.3 transparency: 0}
+cy  2.0,-1.0,3.0        0.0,1.0,0.0         0.5  23.0           255,255,255     {specular:0.0 shininess:20  reflectivity:0.6 refractive_index:0 transparency: 0}
+cy  -2.0,-1.0,3.0       0.0,1.0,0.0         0.5  23.0           255,255,255     {specular:0.0 shininess:20  reflectivity:0.6 refractive_index:0 transparency: 0}
+
+sp  2.0,-1.0,-4.0                           0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  -2.0,-1.0,-4.0                          0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  2.0,-1.0,3.0                            0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  -2.0,-1.0,3.0                           0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+
+sp  2.0,3.0,-4.0                            0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  -2.0,3.0,-4.0                           0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  2.0,3.0,3.0                             0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+sp  -2.0,3.0,3.0                            0.8                 255,255,255     {specular:0.0 shininess:40  reflectivity:0.1}
+
+sp  0.0,-0.25,-1.0                          1.5                 255,120,130     {specular:0.0 shininess:20  reflectivity:1.0 refractive_index:0 transparency: 0}
+sp  1,-0.25,-4.0                            1.5                 255,120,130     {specular:0.0 shininess:20  reflectivity:0.6 refractive_index:1.3 transparency: 0}

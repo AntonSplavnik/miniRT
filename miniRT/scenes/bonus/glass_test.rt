@@ -1,0 +1,41 @@
+# Scene to test glass refraction with various glass objects
+# Ambient light (low to help see refraction better)
+A 0.03 255,255,255
+
+# Camera positioned to see through multiple glass objects
+C 0,3,-15 0,0,1 60
+
+# Main light from top-right (key light)
+L 10,10,-5 0.7 255,255,255
+# Fill light from left
+L -8,5,-5 0.3 255,255,255
+
+# Floor with checkerboard pattern
+pl 0,-3,0 0,1,0 240,240,240 {reflectivity:0.1}
+
+# Colorful back wall
+pl 0,0,20 0,0,-1 180,200,255
+
+# Glass objects with different refractive indices
+# Clear glass sphere (refractive index = 1.52)
+sp 0,0,0 2 255,255,255 {refractive_index:1.52 transparency:1.0 reflectivity:0.1}
+
+# Crystal sphere (refractive index = 1.8)
+sp -4,0,3 1.5 255,255,255 {refractive_index:1.8 transparency:1.0 reflectivity:0.15}
+
+# Diamond sphere (refractive index = 2.42)
+sp 4,0,3 1.5 255,255,255 {refractive_index:2.42 transparency:1.0 reflectivity:0.2}
+
+# Background objects to show refraction
+# Red sphere
+sp -2,0,8 1.2 255,50,50 {reflectivity:0.2}
+
+# Green sphere
+sp 2,0,8 1.2 50,255,50 {reflectivity:0.2}
+
+# Blue sphere
+sp 0,0,12 1.2 50,50,255 {reflectivity:0.2}
+
+# Some cylinders as glass rods
+cy -3,-2,4 0,1,0 0.3 4 255,255,255 {refractive_index:1.52 transparency:1.0 reflectivity:0.1}
+cy 3,-2,4 0,1,0 0.3 4 255,255,255 {refractive_index:1.52 transparency:1.0 reflectivity:0.1} 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 13:29:15 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/06/20 12:05:37 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,72 +21,58 @@
  */
 void *render_thread(void *arg)
 {
-	t_thread_data *data;
-	t_scene *scene;
-	double fov_scale;
-	// t_ray ray;
-	// int color;
-	int y;
-	int x;
-	int by;
-	int bx;
+    t_thread_data *data = (t_thread_data *)arg;
+    t_scene *scene = data->scene;
+    double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+    int y = data->start_row;
 
-	data = (t_thread_data *)arg;
-	scene = data->scene;
-	y = data->start_row;
-	fov_scale = tan(scene->camera.fov * M_PI / 360.0);
+    int samples = scene->graphic_settings.ssaa_samples;
+    if (samples < 1) samples = 1;
 
-	int samples = scene->graphic_settings.ssaa_samples; // 1 = off, 2 = 2x2 SSAA, etc.
-	if (samples < 1) samples = 1;
-	float f_samples = (float)samples;
-	float step = 1.0f / f_samples;
+    while (y < data->end_row)
+    {
+        int x = 0;
+        while (x < scene->width)
+        {
+            t_vec3 final_color = vec3_create(0, 0, 0);
 
+            // SSAA sampling
+            for (int sy = 0; sy < samples; sy++)
+            {
+                for (int sx = 0; sx < samples; sx++)
+                {
+                    double px = x + (sx + 0.5) / (double)samples;
+                    double py = y + (sy + 0.5) / (double)samples;
 
-	while (y < data->end_row)
-	{
-		x = 0;
-		while (x < scene->width)
-		{
-			t_color final_color = {0, 0, 0};
+                    t_ray sample_ray;
+                    compute_ray_direction(scene, &sample_ray, fov_scale, px, py);
 
-			for (int sy = 0; sy < samples; sy++)
-			{
-				for (int sx = 0; sx < samples; sx++)
-				{
-					float px = x + (sx + 0.5f) * step;
-					float py = y + (sy + 0.5f) * step;
-					t_ray sample_ray;
+                    t_vec3 sample_color = trace_ray(scene, sample_ray, 0);
+                    final_color = vec3_add(final_color, sample_color);
+                }
+            }
 
-					compute_ray_direction(scene, &sample_ray, fov_scale, px, py);
-					int sample_color = trace_ray(scene, sample_ray, 0);
-					t_color c = int_to_color(sample_color);
-					final_color.r += c.r;
-					final_color.g += c.g;
-					final_color.b += c.b;
-				}
-			}
-			int total = samples * samples;
-			final_color.r /= total;
-			final_color.g /= total;
-			final_color.b /= total;
+            // Average samples in linear space
+            final_color = vec3_scale(final_color, 1.0 / (samples * samples));
 
-			int avg_color = color_to_int(final_color);
-			by = 0;
-			while (by < scene->graphic_settings.resolution_factor && y + by < HEIGHT)
-			{
-				bx = 0;
-				while (bx < scene->graphic_settings.resolution_factor && x + bx < WIDTH)
-				{
-					pixel_put(x + bx, y + by, scene->app.img, avg_color);
-					bx++;
-				}
-				by++;
-			}
-			x += scene->graphic_settings.resolution_factor;
-		}
-		y += scene->graphic_settings.resolution_factor;
-	}
-	return NULL;
+            // Convert to display color with tone mapping and gamma correction
+            t_color_f final_color_f = vec3_to_color_f(final_color);
+            int display_color = color_f_to_display(final_color_f);
+
+            // Fill pixel block
+            for (int by = 0; by < scene->graphic_settings.resolution_factor && y + by < HEIGHT; by++)
+            {
+                for (int bx = 0; bx < scene->graphic_settings.resolution_factor && x + bx < WIDTH; bx++)
+                {
+                    pixel_put(x + bx, y + by, scene->app.img, display_color);
+                }
+            }
+
+            x += scene->graphic_settings.resolution_factor;
+        }
+        y += scene->graphic_settings.resolution_factor;
+    }
+    return NULL;
 }
 
 // void	render_scene(void *param)

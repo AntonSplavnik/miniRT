@@ -38,12 +38,22 @@ SRC_FILES = main.c \
 	init.c \
 	string_utils.c \
 	camera/camera.c \
+	camera/camera_vectors.c \
 	controls/keys.c \
+	controls/key_handlers.c \
 	controls/mouse.c \
+	controls/mouse_cursor.c \
+	controls/mouse_handlers.c \
 	objects/add_object.c \
 	objects/cone/cone_intersect.c \
+	objects/cone/cone_intersect_equation.c \
+	objects/cone/cone_normal.c \
 	objects/cube/cube_intersect.c \
+	objects/cube/cube_intersect_utils.c \
+	objects/cube/cube_normal.c \
 	objects/cylinder/cylinder_intersect.c \
+	objects/cylinder/cylinder_intersect_caps.c \
+	objects/cylinder/cylinder_normal.c \
 	objects/mesh/mesh_intersect.c \
 	objects/plane/plane_intersect.c \
 	objects/sphere/sphere_intersect.c \
@@ -73,8 +83,16 @@ SRC_FILES = main.c \
 	parser/parser_bumpmap_ppm_file.c \
 	parser/parser_bumpmap_ppm_header.c \
 	parser/parser_texture.c \
-	rendering/checker.c \
-	rendering/colors.c \
+	rendering/checker/checker.c \
+	rendering/checker/checker_utils.c \
+	rendering/checker/cubic_map.c \
+	rendering/color/color_conversion.c \
+	rendering/color/tone_mapping.c \
+	rendering/color/hdr_processing.c \
+	rendering/color/lighting.c \
+	rendering/color/color_calculations.c \
+	rendering/color/texture_sampling.c \
+	rendering/color/surface_colors.c \
 	rendering/compute_intersections.c \
 	rendering/BVH/calculate_object_aabb.c \
 	rendering/BVH/calculate_object_aabb_2.c \
@@ -95,17 +113,38 @@ SRC_FILES = main.c \
 	rendering/BVH/ray_intersect_aabb_2.c \
 	rendering/BVH/mesh_bvh.c \
 	rendering/BVH/mesh_bvh_intersect.c \
-	rendering/compute_light.c \
-	rendering/compute_rays.c \
-	rendering/reflection.c \
+	rendering/lighting/compute_light.c \
+	rendering/rays/compute_rays.c \
+	rendering/reflection/reflection.c \
+	rendering/refraction/refraction.c \
 	rendering/render.c \
 	rendering/render_utils.c \
 	rendering/scene_setup.c \
-	rendering/trace_rays.c \
-	rendering/texture_uv_mapping.c \
-	rendering/bumpmap.c	\
+	rendering/trace_ray/trace_rays.c \
+	rendering/trace_ray/background_utils.c \
+	rendering/fresnel/fresnel_calculations.c \
+	rendering/reflection/reflection_operations.c \
+	rendering/refraction/refraction_operations.c \
+	rendering/materials/material_processors.c \
+	rendering/texture_uv_mapping/cube_uv.c \
+	rendering/texture_uv_mapping/cylinder_uv.c \
+	rendering/texture_uv_mapping/plane_uv.c \
+	rendering/texture_uv_mapping/sphere_uv.c \
+	rendering/texture_uv_mapping/texture_uv_main.c \
+	rendering/bumpmap/bumpmap.c \
+	rendering/bumpmap/bump_normal.c \
+	rendering/bumpmap/cylinder_cube_tangents.c \
+	rendering/bumpmap/tangent_vectors.c \
 	ui/ui_control_panel.c \
-	ui/display_progress.c \
+	ui/ui_panel_utils.c \
+	ui/ui_drawing.c \
+	ui/ui_checkbox_drawing.c \
+	ui/ui_panel_drawing.c \
+	ui/ui_text_management.c \
+	ui/ui_text_drawing.c \
+	ui/ui_interaction.c \
+	ui/ui_panel_helpers.c\
+	ui/ui_main.c \
 	ui/status_messages.c \
 	utils/ft_atof.c \
 	utils/ft_strstr.c \
@@ -164,6 +203,14 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/objects/mesh
 	@mkdir -p $(OBJ_DIR)/objects/cone
 	@mkdir -p $(OBJ_DIR)/rendering
+	@mkdir -p $(OBJ_DIR)/rendering/color
+	@mkdir -p $(OBJ_DIR)/rendering/trace_ray
+	@mkdir -p $(OBJ_DIR)/rendering/fresnel
+	@mkdir -p $(OBJ_DIR)/rendering/reflection
+	@mkdir -p $(OBJ_DIR)/rendering/refraction
+	@mkdir -p $(OBJ_DIR)/rendering/materials
+	@mkdir -p $(OBJ_DIR)/rendering/lighting
+	@mkdir -p $(OBJ_DIR)/rendering/rays
 	@mkdir -p $(OBJ_DIR)/ui
 	@mkdir -p $(OBJ_DIR)/controls
 	@mkdir -p $(OBJ_DIR)/camera

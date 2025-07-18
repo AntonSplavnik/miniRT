@@ -1,0 +1,38 @@
+# Scene to test water refraction with underwater objects
+# Ambient light (low to help see refraction better)
+A 0.1 255,255,255
+
+# Camera positioned above looking down at an angle into the water
+C 0,8,-12 0,0,1 60
+
+# Main light from above (sun)
+L 10,15,-5 0.8 255,255,255
+
+# Pool floor (light blue)
+pl 0,-3,0 0,1,0 102,178,255 {reflectivity:0.1}
+
+# Back wall of pool (darker blue)
+pl 0,0,15 0,0,-1 51,133,255 {reflectivity:0.1}
+
+# Water surface (large transparent plane)
+pl 0,0,0 0,1,0 220,220,255 {refractive_index:1.33 transparency:0.8 reflectivity:0.2}
+
+# Colorful objects under the water to show refraction
+# Red ball
+sp -3,-2,4 1 255,50,50 {reflectivity:0.2}
+
+# Green ball
+sp 0,-2,6 1 50,255,50 {reflectivity:0.2}
+
+# Blue ball
+sp 3,-2,4 1 50,50,255 {reflectivity:0.2}
+
+# Yellow ball floating near surface
+sp -2,-0.5,2 0.7 255,255,0 {reflectivity:0.1}
+
+# White ball floating near surface
+sp 2,-0.5,3 0.7 255,255,255 {reflectivity:0.1}
+
+# Some cylinders as pool toys
+cy -4,-2,8 0,1,0 0.3 2 255,128,0 {reflectivity:0.1}  # Orange noodle
+cy 4,-2,8 0,1,0 0.3 2 255,0,255 {reflectivity:0.1}   # Purple noodle 

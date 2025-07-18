@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/10 16:20:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/03 16:06:01 by antonsplavn      ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/07/18 12:55:42 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../../includes/miniRT.h"
 #include "../../../includes/bvh.h"
@@ -99,7 +100,7 @@ void precompute_transformed_triangles(t_mesh *mesh)
         t_vec3 edge1 = vec3_subtract(mesh->transformed_tris[i].v1, mesh->transformed_tris[i].v0);
         t_vec3 edge2 = vec3_subtract(mesh->transformed_tris[i].v2, mesh->transformed_tris[i].v0);
         mesh->transformed_tris[i].normal = vec3_normalize(vec3_cross(edge1, edge2));
-        
+
         // Copy vertex normals and transform them
         mesh->transformed_tris[i].has_vertex_normals = mesh->triangles[i].has_vertex_normals;
         if (mesh->triangles[i].has_vertex_normals)
@@ -107,7 +108,7 @@ void precompute_transformed_triangles(t_mesh *mesh)
             mesh->transformed_tris[i].n0 = vec3_normalize(rotate_point(mesh->triangles[i].n0, mesh->rotation));
             mesh->transformed_tris[i].n1 = vec3_normalize(rotate_point(mesh->triangles[i].n1, mesh->rotation));
             mesh->transformed_tris[i].n2 = vec3_normalize(rotate_point(mesh->triangles[i].n2, mesh->rotation));
-            
+
         }
     }
 
