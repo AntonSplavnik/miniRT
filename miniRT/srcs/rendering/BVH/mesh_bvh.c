@@ -280,6 +280,9 @@ static void copy_indices_from_centroids(t_mesh *mesh,
 {
     int i;
 
+    if (!mesh || !centroids || !tri_indices)
+        return;
+    
     i = 0;
     while (i < mesh->triangle_count)
     {
