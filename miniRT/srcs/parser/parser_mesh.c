@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_mesh.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:19:44 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/03 17:15:13 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 14:36:54 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

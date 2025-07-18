@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/03 17:15:14 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 15:35:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,40 @@ void		parse_face_line(char *line, t_vec3 *vertices, \
 					t_triangle *triangles, int *triangle_index);
 void		process_vertex_line(char *line, t_vec3 *vertices, int *v_idx);
 void		process_normal_line(char *line, t_vec3 *normals, int *n_idx);
-void		process_face_line(char *line, t_triangle *triangles, \
-					t_vec3 *vertices, int *t_idx, t_vec3 *normals);
+void		process_face_line(char *line, t_process_data *process_data);
+
+// Face processing functions (parser_mesh_face_processing.c)
+void		parse_face_quad(t_triangle *triangles, t_vec3 *vertices, \
+					t_face_data *face_data);
+void		set_triangle_normals(t_triangle *triangle, t_vec3 *normals, \
+					int *normal_indices);
+void		parse_face_triangle(t_triangle *triangles, t_vec3 *vertices, \
+					t_face_data *face_data);
+void		parse_vertex_normal_indices(char *values[], int *normal_indices, int i);
+void		parse_face_indices(char **values, int *indices, int *normal_indices);
+
+// Triangle helper functions (parser_mesh_triangle_helpers.c)
+void		set_triangle_vertices_quad_1(t_triangle *triangle, t_vec3 *vertices, \
+					int *indices);
+void		set_triangle_normals_quad_1(t_triangle *triangle, t_vec3 *normals, \
+					int *normal_indices);
+void		set_triangle_vertices_quad_2(t_triangle *triangle, t_vec3 *vertices, \
+					int *indices);
+void		set_triangle_normals_quad_2(t_triangle *triangle, t_vec3 *normals, \
+					int *normal_indices);
+void		set_triangle_vertices(t_triangle *triangle, t_vec3 *vertices, \
+					int *indices);
+
+// Mesh loader helper functions (parser_mesh_loader_helpers.c)
+void		count_elements(int fd, int *vertex_count, int *face_count, \
+					int *normal_count);
+int			allocate_memory(t_vec3 **vertices, t_triangle **triangles, \
+					t_vec3 **normals, t_counts *counts);
+void		parse_file_content(int fd, t_mesh_data *mesh_data);
+void		cleanup_memory(t_vec3 *vertices, t_triangle *triangles, \
+					t_vec3 *normals);
+int			open_file_for_parsing(const char *filename, t_vec3 *vertices, \
+					t_triangle *triangles, t_vec3 *normals);
 
 // File handling functions (parser_file.c)
 int			is_valid_filename(char *filename);
@@ -96,6 +128,13 @@ void		parse_material_properties(t_scene *scene, char *material_block, \
 double		ft_clamp(double value, double min, double max);
 void		parse_checker_color(t_scene *scene, t_color *color, \
 				const char *color_pos, int length);
+
+// Material helper functions (parser_material_helpers.c)
+double		get_property_value(const char *material_block, const char *property);
+void		*get_property_filename(t_scene *scene, const char *material_block, \
+					const char *property, char **filename);
+void		get_texture_bump_map(t_scene *scene, char *material_block, \
+					t_material *material);
 
 // Texture handling (parser_texture.c)
 t_texture	*create_texture(t_scene *scene, const char *filename);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 12:36:40 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 15:35:57 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,14 @@ typedef struct s_vec3
 	double	y;
 	double	z;
 }				t_vec3;
+
+
+typedef struct s_counts
+{
+	int	vertex_count;
+	int	face_count;
+	int	normal_count;
+}	t_counts;
 
 // Add new floating-point color type
 //Linear RGB values, typically [0.0, 1.0] but can exceed for HDR
@@ -333,6 +341,30 @@ typedef struct s_triangle
 	t_vec3	n2;
 	int		has_vertex_normals;
 }	t_triangle;
+
+typedef struct s_process_data
+{
+	t_triangle	*triangles;
+	t_vec3		*vertices;
+	int			*t_idx;
+	t_vec3		*normals;
+}	t_process_data;
+
+typedef struct s_mesh_data
+{
+	t_vec3		*vertices;
+	t_triangle	*triangles;
+	t_vec3		*normals;
+	int			*t_idx;
+}	t_mesh_data;
+
+typedef struct s_face_data
+{
+	int		*indices;
+	int		*t_idx;
+	t_vec3	*normals;
+	int		*normal_indices;
+}	t_face_data;
 
 typedef struct s_transformed_triangle
 {

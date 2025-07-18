@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_panel_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 23:38:46 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/13 23:38:48 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 14:55:41 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	init_panel_image(t_scene *scene, t_panel *p)
 	p->panel_img = mlx_new_image(scene->app.mlx, p->target_width, p->height);
 	if (!p->panel_img)
 	{
-		write(2, "Error: panel img\n", 17);
+		if (write(2, "Error: panel img\n", 17))
+			exit(1);
 		exit(1);
 	}
 	mlx_image_to_window(scene->app.mlx, p->panel_img, p->x, p->y);

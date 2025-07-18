@@ -70,9 +70,13 @@ SRC_FILES = main.c \
 	parser/parser_line.c \
 	parser/parser_material.c \
 	parser/parser_material_properties.c \
+	parser/parser_material_helpers.c \
 	parser/parser_mesh.c \
 	parser/parser_mesh_faces.c \
+	parser/parser_mesh_face_processing.c \
 	parser/parser_mesh_loader.c \
+	parser/parser_mesh_loader_helpers.c \
+	parser/parser_mesh_triangle_helpers.c \
 	parser/parser_plane.c \
 	parser/parser_sphere.c \
 	parser/parser_triangle.c \

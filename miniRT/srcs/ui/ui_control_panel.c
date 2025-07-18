@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ui_control_panel.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:50:00 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 00:50:01 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 14:55:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	init_toggle_button(t_scene *scene)
 	tog->toggle_img = mlx_new_image(scene->app.mlx, tog->size, tog->size);
 	if (!tog->toggle_img)
 	{
-		write(2, "Error: toggle btn img\n", 22);
+		if (write(2, "Error: toggle btn img\n", 22))
+			exit(1);
 		exit(1);
 	}
 	mlx_image_to_window(scene->app.mlx, tog->toggle_img,
