@@ -53,3 +53,13 @@ t_vec3	get_up_vector(t_vec3 rotation)
 	up = rotate_point(up, rotation);
 	return (vec3_normalize(up));
 }
+
+/*
+** Updates all camera vectors based on current rotation
+*/
+void	update_camera_vectors(t_scene *scene)
+{
+	scene->camera.forwards = get_forward_vector(scene->camera.rotation);
+	scene->camera.right = get_right_vector(scene->camera.rotation);
+	scene->camera.up = get_up_vector(scene->camera.rotation);
+}

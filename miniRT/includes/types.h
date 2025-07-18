@@ -342,6 +342,19 @@ typedef struct s_triangle
 	int		has_vertex_normals;
 }	t_triangle;
 
+typedef struct s_triangle_data
+{
+	t_vec3	edge1;
+	t_vec3	edge2;
+	t_vec3	h;
+	t_vec3	q;
+	double	a;
+	double	f;
+	double	u;
+	double	v;
+}	t_triangle_data;
+
+
 typedef struct s_process_data
 {
 	t_triangle	*triangles;
@@ -402,6 +415,39 @@ typedef struct	s_ray
 	t_vec3	origin;
 	t_vec3	direction;
 }	t_ray;
+
+typedef struct s_mesh_intersect_data
+{
+	t_ray	ray;
+	double	closest_t;
+	int		hit_something;
+	int		*triangle_idx;
+}	t_mesh_intersect_data;
+
+typedef struct s_mesh_bary_data
+{
+	t_ray	ray;
+	double	closest_t;
+	int		hit_something;
+	int		*triangle_idx;
+	t_vec3	closest_bary;
+}	t_mesh_bary_data;
+
+typedef struct s_mesh_bary_params
+{
+	double	*t;
+	int		*triangle_idx;
+	t_vec3	*bary;
+}	t_mesh_bary_params;
+
+typedef struct s_mesh_intersect_params
+{
+	t_ray	ray;
+	t_mesh	mesh;
+	double	*t;
+	int		*triangle_idx;
+	t_vec3	*bary;
+}	t_mesh_intersect_params;
 
 typedef struct	s_hit_record
 {

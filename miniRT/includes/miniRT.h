@@ -26,7 +26,11 @@ int 		control_mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_handler(int button, int x, int y, t_scene *scene);
 int			mouse_release(int button, int x, int y, t_scene *scene);
 void		display_status(t_scene *scene);
-void		display_progress(t_scene *scene, const char *status_text);
+void		format_float_string(double value, char *str);
+int			int_to_string(int num, char *str);
+void		append_coordinate_values(char *pos, char *x_str, char *y_str, char *z_str);
+mlx_image_t	*create_status_image(t_scene *scene, char *status);
+void		apply_text_color(mlx_image_t *img);
 
 // init
 void		init_ui(t_scene *scene);
@@ -179,7 +183,9 @@ int			ray_triangle_intersect_bary(t_ray ray, t_triangle triangle, double *t, t_v
 t_vec3		triangle_normal(t_triangle triangle);
 void		precompute_transformed_triangles(t_mesh *mesh);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
-int			ray_mesh_intersect_bary(t_ray ray, t_mesh mesh, double *t, int *triangle_idx, t_vec3 *bary);
+int			ray_mesh_intersect_bary(t_mesh_intersect_params params);
+int			mesh_linear_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
+int			mesh_linear_intersect_bary(t_ray ray, t_mesh mesh, t_mesh_bary_params params);
 int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_vec3 *bary);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
 void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone,
@@ -291,6 +297,7 @@ t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
 t_vec3		get_forward_vector(t_vec3 rotation);
 t_vec3		get_right_vector(t_vec3 rotation);
 t_vec3		get_up_vector(t_vec3 rotation);
+void		update_camera_vectors(t_scene *scene);
 
 // mouse controls
 void		mouse_button_callback(mouse_key_t button, action_t action, modifier_key_t mods, void* param);

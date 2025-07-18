@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_mesh_loader_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 15:45:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 15:35:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/18 15:46:41 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,13 @@ void	count_elements(int fd, int *vertex_count, int *face_count, \
 					int *normal_count)
 {
 	char	*line;
-	int		line_count;
 
 	*vertex_count = 0;
 	*face_count = 0;
 	*normal_count = 0;
-	line_count = 0;
 	line = get_next_line(fd);
 	while (line)
 	{
-		line_count++;
 		if (line[0] == 'v' && line[1] == ' ')
 			(*vertex_count)++;
 		else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')

@@ -42,6 +42,7 @@ Expected: nx,ny,nz");
 	scene->camera.rotation.x = -atan2(direction.y, sqrt(direction.x * \
 direction.x + direction.z * direction.z));
 	scene->camera.rotation.z = 0.0;
+	update_camera_vectors(scene);
 	scene->camera.fov = ft_atof(parts[3]);
 	if (!check_range(scene->camera.fov, 0.0, 180.0))
 		parse_error(scene, "Camera FOV must be between 0.0 and 180.0");

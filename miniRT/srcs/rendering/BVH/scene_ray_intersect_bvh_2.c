@@ -20,7 +20,8 @@ int	intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx)
 
 int	intersect_mesh_bary(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx, t_vec3 *bary)
 {
-	return (ray_mesh_intersect_bary(ray, *mesh, t_temp, triangle_idx, bary));
+	t_mesh_intersect_params params = {ray, *mesh, t_temp, triangle_idx, bary};
+	return (ray_mesh_intersect_bary(params));
 }
 
 int	intersect_cone(t_ray ray, t_cone *cone, double *t_temp)

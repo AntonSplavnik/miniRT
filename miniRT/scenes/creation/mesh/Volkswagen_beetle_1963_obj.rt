@@ -1,12 +1,14 @@
 	# Basic scene setup
 	A 0.2 255,255,255
 
-	C 0,150,200 0,0,-1 70
+	# Camera positioned for full car view
+	C 146.50,111.20,311.88 -0.34,-0.13,-0.93 70
 
-	L 0,200,200 0.7 255,255,255
+	# Main lighting from above and slightly behind
+	L -200,200,200 0.8 255,255,255
+
+	# Fill light from the front
+	L 200,150,300 0.4 255,255,255
 
 	# Try mesh with adjusted path
-	me scenes/3D_models/Volkswagen_Beetle_1963.obj 0,0,0 0,1,0 1 255,0,0
-
-#	C 320,150,20 0,0,1 70
-#	L 320,150,20 0.7 255,255,255
+	me scenes/3D_models/Volkswagen_Beetle_1963.obj 0,0,0 0,1,0 1 0,0,0 

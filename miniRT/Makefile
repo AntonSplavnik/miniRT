@@ -55,8 +55,12 @@ SRC_FILES = main.c \
 	objects/cylinder/cylinder_intersect_caps.c \
 	objects/cylinder/cylinder_normal.c \
 	objects/mesh/mesh_intersect.c \
+	objects/mesh/mesh_transform.c \
+	objects/mesh/mesh_linear_intersect.c \
+	objects/mesh/mesh_bary_intersect.c \
 	objects/plane/plane_intersect.c \
 	objects/sphere/sphere_intersect.c \
+	objects/triangle/triangle_intersect_bary.c \
 	objects/triangle/triangle_intersect.c \
 	parser/parser_ambient.c \
 	parser/parser_camera.c \
@@ -149,6 +153,7 @@ SRC_FILES = main.c \
 	ui/ui_panel_helpers.c\
 	ui/ui_main.c \
 	ui/status_messages.c \
+	ui/status_formatting.c \
 	utils/ft_atof.c \
 	utils/ft_strstr.c \
 	utils/ft_isspace.c \

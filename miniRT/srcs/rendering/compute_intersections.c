@@ -101,7 +101,8 @@ int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **h
 		else if (current->type == MESH)
 		{
 			t_mesh *mesh = (t_mesh *)(current->data);
-			if (ray_mesh_intersect_bary(ray, *mesh, &t_temp, &triangle_idx, &hit_record->barycentric) && t_temp < t_closest)
+			t_mesh_intersect_params params = {ray, *mesh, &t_temp, &triangle_idx, &hit_record->barycentric};
+			if (ray_mesh_intersect_bary(params) && t_temp < t_closest)
 			{
 				t_closest = t_temp;
 				hit_something = 1;

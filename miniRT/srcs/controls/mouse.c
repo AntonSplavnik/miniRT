@@ -24,7 +24,6 @@
 static void	update_button_state(t_scene *scene, mouse_key_t button,
 	action_t action)
 {
-	// Update button state
 	if (button == MLX_MOUSE_BUTTON_LEFT)
 		scene->mouse_state.left_button_down = (action == MLX_PRESS);
 	else if (button == MLX_MOUSE_BUTTON_RIGHT)

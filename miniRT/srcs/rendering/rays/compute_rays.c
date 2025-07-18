@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:17:22 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/10 14:35:15 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 16:58:58 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,4 @@ void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double 
 
 	//setting ray origin
 	ray->origin = scene->camera.position;
-
 }

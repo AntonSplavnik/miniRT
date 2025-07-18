@@ -67,12 +67,14 @@ void	handle_camera_rotation(t_scene *scene)
 	{
 		scene->camera.rotation.y += dx * 0.005;
 		scene->camera.rotation.x += dy * 0.005;
+		update_camera_vectors(scene);
 		scene->mouse_state.prev_mouse_x = scene->mouse_state.x;
 		scene->mouse_state.prev_mouse_y = scene->mouse_state.y;
 		current_time = mlx_get_time();
 		if (current_time - last_render_time > 0.033)
 		{
 			render_scene(scene);
+			display_status(scene);
 			last_render_time = current_time;
 		}
 	}
