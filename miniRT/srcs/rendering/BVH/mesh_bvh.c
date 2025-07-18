@@ -55,8 +55,8 @@ t_aabb calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx)
     box.max.x = fmax(fmax(v0.x, v1.x), v2.x);
     box.max.y = fmax(fmax(v0.y, v1.y), v2.y);
     box.max.z = fmax(fmax(v0.z, v1.z), v2.z);
-    
-    
+
+
     return box;
 }
 
@@ -243,7 +243,7 @@ static int process_build_node_fast(t_mesh *mesh,
 
     node_bounds = compute_bounds_from_centroids(mesh, centroids, start, end);
     mesh->bvh.nodes[node_index] = node_bounds;
-    
+
 
     if (tri_count <= LEAF_TRI_THRESHOLD)
     {
@@ -282,7 +282,7 @@ static void copy_indices_from_centroids(t_mesh *mesh,
 
     if (!mesh || !centroids || !tri_indices)
         return;
-    
+
     i = 0;
     while (i < mesh->triangle_count)
     {
@@ -302,6 +302,13 @@ void build_mesh_bvh(t_mesh *mesh)
 
     start_time = clock();
     printf("Building BVH for mesh with %d triangles...\n", mesh->triangle_count);
+
+    // Initialize BVH structure to prevent segfaults
+    mesh->bvh.nodes = NULL;
+    mesh->bvh.tri_indices = NULL;
+    mesh->bvh.node_children = NULL;
+    mesh->bvh.node_count = 0;
+    mesh->bvh.max_nodes = 0;
 
     centroids = malloc(mesh->triangle_count * sizeof(t_triangle_centroid));
     if (!centroids)
@@ -326,8 +333,12 @@ void build_mesh_bvh(t_mesh *mesh)
     {
         printf("Failed to allocate BVH arrays\n");
         free(centroids);
-        free(mesh->bvh.nodes);
-        free(mesh->bvh.tri_indices);
+        if (mesh->bvh.nodes)
+            free(mesh->bvh.nodes);
+        if (mesh->bvh.tri_indices)
+            free(mesh->bvh.tri_indices);
+        mesh->bvh.nodes = NULL;
+        mesh->bvh.tri_indices = NULL;
         return;
     }
     printf("BVH arrays allocated successfully\n");
@@ -342,8 +353,13 @@ void build_mesh_bvh(t_mesh *mesh)
         copy_indices_from_centroids(mesh, centroids, tri_indices);
         printf("Triangle indices copied successfully\n");
 
+        // Only free node_children if it was previously allocated
         if (mesh->bvh.node_children)
+        {
+            printf("Freeing previous BVH node_children\n");
             free(mesh->bvh.node_children);
+            printf("Previous BVH node_children freed\n");
+        }
         mesh->bvh.node_children = tri_indices;
         printf("BVH triangle mapping completed\n");
     }
