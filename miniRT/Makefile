@@ -36,7 +36,7 @@ SRC_FILES = main.c \
 	cleanup.c \
 	close_handler.c \
 	init.c \
-	string_utils.c \
+	init_hooks.c \
 	camera/camera.c \
 	camera/camera_vectors.c \
 	controls/keys.c \
@@ -156,6 +156,7 @@ SRC_FILES = main.c \
 	utils/ft_split_line.c \
 	utils/ft_split_line_utils.c \
 	utils/ft_strtrim_whitespace.c \
+	utils/ft_strcmp.c \
 	vector_utils/vec3_basic_op.c \
 	vector_utils/vec3_length.c \
 	vector_utils/vec3_product.c \

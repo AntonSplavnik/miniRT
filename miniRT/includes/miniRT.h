@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 12:35:08 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 16:30:09 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,25 @@ void		setup_hooks(t_scene *scene);
 void		init_data(t_scene *scene);
 void		init_mlx(t_scene *scene);
 void		cleanup_scene(t_scene *scene);
+void		init_scene_bvh(t_scene *scene);
+void		init_app_and_window(t_scene *scene);
+void		init_camera_settings(t_scene *scene);
+void		init_graphics_and_mouse(t_scene *scene);
+
+// cleanup functions
+void		free_mesh(t_mesh *mesh);
+void		cleanup_object(t_object *obj);
+void		cleanup_objects(t_scene *scene);
+void		cleanup_lights(t_scene *scene);
+
+// main functions
+void		init_and_parse_scene(t_scene *scene, char *filename);
+void		init_graphics_and_ui(t_scene *scene);
+void		start_raytracer(t_scene *scene, char *filename);
+void		init_and_parse_scene_bonus(t_scene *scene, char *filename);
+void		init_graphics_and_ui_bonus(t_scene *scene);
+void		start_raytracer_bonus(t_scene *scene, char *filename);
+void		print_usage_and_exit(void);
 
 // render
 void		pixel_put(int x, int y, mlx_image_t *img, int color);
@@ -41,7 +60,6 @@ void		draw_image_to_window(t_scene *scene);
 
 // string utils
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
-void		write_string_to_file_descriptor(char *str, int file_descriptor);
 int			ft_strcmp(char *s1, char *s2);
 char		*ft_strtrim_whitespace(char *s);
 char		**ft_split_line(char *s, char c);
@@ -52,6 +70,7 @@ char		*ft_strchr(const char *s, int c);
 char		*ft_strstr(const char *haystack, const char *needle);
 
 // BVH functions
+void		init_scene_bvh(t_scene *scene);
 t_bvh_node	*build_menger_bvh(int max_iterations);
 void		free_bvh(t_bvh_node *node);
 int			ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin,

@@ -3,53 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:16:31 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/18 13:32:03 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 16:25:14 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/miniRT.h"
-#include "../libft/libft.h"
 
-// Add the function prototype
-void init_scene_bvh(t_scene *scene);
-
-void	start_raytracer(t_scene *scene, char *filename)
+/* Initialize scene data and parse file */
+void	init_and_parse_scene(t_scene *scene, char *filename)
 {
 	scene->name = filename;
-
-    init_data(scene);
-
+	init_data(scene);
 	if (parse_scene_file(filename, scene) != 0)
 	{
-		write_string_to_file_descriptor("Error\nParsing scene file failed.\n", 2);
+		ft_putstr_fd("Error\nParsing scene file failed.\n", 2);
 		exit(1);
 	}
-
-	// Initialize BVH after all objects are loaded
 	init_scene_bvh(scene);
+}
 
-	// Initialize MLX before setting up hooks
+/* Initialize graphics and UI components */
+void	init_graphics_and_ui(t_scene *scene)
+{
 	init_mlx(scene);
 	setup_hooks(scene);
-	// Set up UI and hooks
 	init_ui(scene);
-	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);		// Register the UI animation loop
+	mlx_loop_hook(scene->app.mlx, ui_animation_loop, scene);
+}
+
+/* Start the raytracer with given scene and filename */
+void	start_raytracer(t_scene *scene, char *filename)
+{
+	init_and_parse_scene(scene, filename);
+	init_graphics_and_ui(scene);
 	render_scene(scene);
 	mlx_loop(scene->app.mlx);
 	close_callback(scene);
 	exit(EXIT_SUCCESS);
 }
 
+/* Print usage message and exit */
 void	print_usage_and_exit(void)
 {
 	ft_putendl_fd("Please enter a valid arg\n", STDERR_FILENO);
 	exit(EXIT_FAILURE);
 }
 
-
+/* Main function */
 int	main(int ac, char **av)
 {
 	t_scene	scene;
@@ -61,4 +64,3 @@ int	main(int ac, char **av)
 		print_usage_and_exit();
 	return (0);
 }
-
