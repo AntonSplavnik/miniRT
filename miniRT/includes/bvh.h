@@ -167,8 +167,80 @@ void		swap_values(double *a, double *b);
 /* mesh_bvh functions */
 void		build_mesh_bvh(t_mesh *mesh);
 int			mesh_bvh_intersect(t_ray ray, t_mesh *mesh, double *t, int *tri_idx);
+int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh,
+				t_bvh_bary_params *bary_params);
 void		free_mesh_bvh(t_mesh *mesh);
 t_aabb		calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx);
 double		calculate_aabb_surface_area(t_aabb box);
+
+/* bvh_utils functions */
+void		ft_swap_centroid(t_triangle_centroid *a, t_triangle_centroid *b);
+t_aabb		aabb_union(t_aabb a, t_aabb b);
+double		get_centroid_axis_value(t_triangle_centroid *centroid, int axis);
+
+/* bvh_centroids functions */
+void		precompute_triangle_centroids(t_mesh *mesh,
+				t_triangle_centroid *centroids);
+void		copy_indices_from_centroids(t_mesh *mesh,
+				t_triangle_centroid *centroids, int *tri_indices);
+t_aabb		compute_bounds_from_centroids(t_mesh *mesh,
+				t_triangle_centroid *centroids, int start, int end);
+int			find_best_split_axis_fast(t_triangle_centroid *centroids,
+				int start, int end);
+int			partition_by_threshold_fast(t_triangle_centroid *centroids,
+				t_partition_params *params);
+
+/* bvh_split functions */
+int			split_node_fast(t_split_node_params *split_params);
+int			process_build_node_fast(t_process_build_params *build_params);
+void		build_mesh_bvh_fast(t_mesh *mesh, t_triangle_centroid *centroids);
+
+/* bvh_allocation functions */
+int			validate_bvh_allocation(t_mesh *mesh);
+int			allocate_bvh_memory(t_mesh *mesh);
+void		process_leaf_node(t_mesh *mesh, t_split_params *params);
+int			setup_node_bounds(t_process_build_params *build_params,
+				t_split_params *params);
+int			handle_leaf_or_split(t_process_build_params *build_params,
+				t_split_params *params, int tri_count);
+int			get_triangle_original_index(t_mesh *mesh, int idx);
+int			is_valid_triangle_index(int original_idx, int triangle_count);
+
+/* bvh_intersect_utils functions */
+int			ray_intersect_aabb_optimized(t_ray ray, t_aabb bounds, double max_t);
+int			ray_triangle_intersect_fast(t_ray ray, t_transformed_triangle tri,
+				double *t);
+int			get_triangle_original_index(t_mesh *mesh, int idx);
+int			is_valid_triangle_index(int original_idx, int triangle_count);
+
+/* bvh_intersect_leaves functions */
+int			test_single_triangle(t_mesh *mesh, t_ray ray, int idx,
+				t_intersect_result *result);
+int			test_leaf_triangles_batch(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_params *leaf_params);
+int			test_single_triangle_bary(t_mesh *mesh, t_ray ray, int idx,
+				t_intersect_bary_result *result);
+int			test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_bary_params *leaf_params);
+
+/* bvh_traversal functions */
+int			process_bvh_bary_traversal(t_bvh_bary_traverse_context *ctx);
+int			initialize_bvh_traversal(t_mesh *mesh, t_ray ray,
+				t_bvh_traverse_context *ctx);
+int			process_bvh_traversal(t_bvh_traverse_context *ctx);
+int			initialize_bvh_bary_traversal(t_mesh *mesh, t_ray ray,
+				t_bvh_bary_traverse_context *ctx);
+int			process_bvh_node_optimized(t_bvh_process_params *proc_params);
+int			process_bvh_node_bary(t_bvh_process_bary_params *proc_params);
+int			handle_leaf_node(t_bvh_process_params *proc_params,
+				int left_index, int right_index);
+void		push_internal_nodes(t_bvh_process_params *proc_params,
+				int left_index, int right_index);
+int			process_leaf_batch(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_context *ctx);
+int			handle_leaf_node_bary(t_bvh_process_bary_params *proc_params,
+				int left_index, int right_index);
+void		push_internal_nodes_bary(t_bvh_process_bary_params *proc_params,
+				int left_index, int right_index);
 
 #endif

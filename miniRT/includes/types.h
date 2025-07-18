@@ -626,4 +626,185 @@ typedef struct s_thread_data
 	t_scene		*scene;
 }	t_thread_data;
 
+typedef struct s_build_node
+{
+	int	start;
+	int	end;
+	int	node_index;
+}	t_build_node;
+
+typedef struct s_triangle_centroid
+{
+	t_vec3	centroid;
+	int		original_index;
+}	t_triangle_centroid;
+
+typedef struct s_split_params
+{
+	int	start;
+	int	end;
+	int	node_index;
+	int	left_index;
+	int	right_index;
+	int	*node_count;
+}	t_split_params;
+
+typedef struct s_split_node_params
+{
+	t_mesh				*mesh;
+	t_triangle_centroid	*centroids;
+	t_build_node		*stack;
+	int					stack_ptr;
+	t_split_params		*params;
+}	t_split_node_params;
+
+typedef struct s_process_build_params
+{
+	t_mesh				*mesh;
+	t_triangle_centroid	*centroids;
+	t_build_node		*stack;
+	int					stack_ptr;
+	int					*node_count;
+}	t_process_build_params;
+
+typedef struct s_intersect_result
+{
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_intersect_result;
+
+typedef struct s_intersect_bary_result
+{
+	double	*closest_t;
+	int		*tri_idx;
+	t_vec3	*closest_bary;
+	int		hit_something;
+}	t_intersect_bary_result;
+
+typedef struct s_intersect_bary_full
+{
+	double	*closest_t;
+	int		*tri_idx;
+	t_vec3	*closest_bary;
+	int		hit_something;
+}	t_intersect_bary_full;
+
+typedef struct s_partition_params
+{
+	int		start;
+	int		end;
+	int		axis;
+	double	threshold;
+}	t_partition_params;
+
+typedef struct s_intersect_data
+{
+	double	a;
+	double	f;
+	double	u;
+	double	v;
+	double	temp_t;
+}	t_intersect_data;
+
+typedef struct s_batch_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_batch_params;
+
+typedef struct s_bvh_stack_params
+{
+	int		*stack;
+	int		*stack_ptr;
+}	t_bvh_stack_params;
+
+typedef struct s_bvh_process_params
+{
+	t_mesh				*mesh;
+	t_ray				ray;
+	t_bvh_stack_params	stack_info;
+	t_batch_params		*batch_params;
+}	t_bvh_process_params;
+
+typedef struct s_bvh_process_bary_params
+{
+	t_mesh					*mesh;
+	t_ray					ray;
+	t_bvh_stack_params		stack_info;
+	t_intersect_bary_full	*bary_params;
+}	t_bvh_process_bary_params;
+
+typedef struct s_batch_test_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_batch_test_params;
+
+typedef struct s_batch_test_bary_params
+{
+	int					start;
+	int					count;
+	t_intersect_bary_full	*bary_params;
+}				t_batch_test_bary_params;
+
+typedef struct s_leaf_batch_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}				t_leaf_batch_params;
+
+typedef struct s_leaf_batch_bary_params
+{
+	int					start;
+	int					count;
+	t_intersect_bary_full	*bary_params;
+}				t_leaf_batch_bary_params;
+
+typedef struct s_leaf_batch_context
+{
+	int				left_index;
+	int				right_index;
+	t_batch_params	*params;
+}				t_leaf_batch_context;
+
+typedef struct s_bvh_traverse_context
+{
+	int						stack[64];
+	int						stack_ptr;
+	double					closest_t;
+	t_batch_params			params;
+	t_bvh_stack_params		stack_info;
+	t_bvh_process_params	proc_params;
+	int						*tri_idx;
+}				t_bvh_traverse_context;
+
+typedef struct s_bvh_bary_traverse_context
+{
+	int							stack[64];
+	int							stack_ptr;
+	double						closest_t;
+	t_vec3						closest_bary;
+	t_intersect_bary_full		params;
+	t_bvh_stack_params			stack_info;
+	t_bvh_process_bary_params	proc_params;
+	int							*tri_idx;
+}				t_bvh_bary_traverse_context;
+
+typedef struct s_bvh_bary_params
+{
+	double	*t;
+	int		*tri_idx;
+	t_vec3	*bary;
+}				t_bvh_bary_params;
+
 #endif

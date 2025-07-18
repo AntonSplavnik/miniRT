@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 16:30:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/18 18:44:28 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,10 +183,11 @@ int			ray_triangle_intersect_bary(t_ray ray, t_triangle triangle, double *t, t_v
 t_vec3		triangle_normal(t_triangle triangle);
 void		precompute_transformed_triangles(t_mesh *mesh);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
-int			ray_mesh_intersect_bary(t_mesh_intersect_params params);
 int			mesh_linear_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
 int			mesh_linear_intersect_bary(t_ray ray, t_mesh mesh, t_mesh_bary_params params);
-int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_vec3 *bary);
+int 		ray_mesh_intersect_bary(t_mesh_intersect_params params);
+int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh,
+				t_bvh_bary_params *bary_params);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
 void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone,
 								t_vec3 apex_to_origin, double *coeffs);
