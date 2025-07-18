@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/11 10:05:41 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/18 15:55:47 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ int	parse_light(t_scene *scene, char *line)
 	char	**parts;
 	t_light	*new_light;
 
+	if (scene->lights)
+	{
+		parse_error(scene, "Multiple lights not allowed.");
+	}
 	parts = ft_split_line(line, ' ');
 	if (!parts)
 		parse_error(scene, "Failed to split line");

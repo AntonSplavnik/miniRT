@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*	                                                                        */
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -15,10 +15,10 @@
 
 void free_mesh(t_mesh *mesh)
 {
-    if (!mesh) return;
-    free(mesh->triangles);
-    free(mesh->transformed_tris); // Free precomputed data
-    free(mesh);
+	if (!mesh) return;
+	free(mesh->triangles);
+	free(mesh->transformed_tris);
+	free(mesh);
 }
 
 void cleanup_scene(t_scene *scene)
@@ -30,10 +30,7 @@ void cleanup_scene(t_scene *scene)
 
 	if (!scene)
 		return;
-
-	// Clean up UI panel resources
 	cleanup_ui_panel(scene);
-
 	obj = scene->objects;
 	while (obj)
 	{

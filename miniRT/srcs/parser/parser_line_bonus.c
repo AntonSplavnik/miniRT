@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_line.c                                      :+:      :+:    :+:   */
+/*   parser_line_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 18:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 15:49:47 by abillote         ###   ########.fr       */
+/*   Created: 2025/07/18 00:00:00 by abillote          #+#    #+#             */
+/*   Updated: 2025/07/18 15:55:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-int	parse_parameters(t_scene *scene, char *line)
+int	parse_parameters_bonus(t_scene *scene, char *line)
 {
 	if (is_ambient(line))
 		return (parse_ambient(scene, line));
 	else if (is_camera(line))
 		return (parse_camera(scene, line));
 	else if (is_light(line))
-		return (parse_light(scene, line));
+		return (parse_light_bonus(scene, line));
 	else if (is_sphere(line))
 		return (parse_sphere(scene, line));
 	else if (is_plane(line))
@@ -49,7 +49,7 @@ static char	*remove_inline_comments(char *line)
 	return (line);
 }
 
-int	parse_line(t_scene *scene, char *line)
+int	parse_line_bonus(t_scene *scene, char *line)
 {
 	char	*trimmed;
 	int		result;
@@ -63,7 +63,7 @@ int	parse_line(t_scene *scene, char *line)
 		free(trimmed);
 		return (1);
 	}
-	result = parse_parameters(scene, trimmed);
+	result = parse_parameters_bonus(scene, trimmed);
 	if (result == 0)
 	{
 		free(trimmed);

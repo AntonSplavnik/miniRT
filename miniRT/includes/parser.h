@@ -6,7 +6,7 @@
 /*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 16:09:12 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 15:35:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/18 15:55:39 by abillote         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,16 @@ int			parse_cone(t_scene *scene, char *line);
 int			parse_triangle(t_scene *scene, char *line);
 int			parse_cube(t_scene *scene, char *line);
 int			parse_mesh(t_scene *scene, char *line);
+
+// Light parsing helper functions
+t_light		*parse_light_properties(t_scene *scene, char **parts);
+t_light		*create_light(t_vec3 position, double intensity, t_color color);
+void		add_light(t_scene *scene, t_light *light);
+
+// Bonus parsing functions
+int			parse_light_bonus(t_scene *scene, char *line);
+int			parse_line_bonus(t_scene *scene, char *line);
+int			parse_scene_file_bonus(char *filename, t_scene *scene);
 
 // Mesh parsing functions (parser_mesh.c)
 void		parse_vertex_line(char *line, t_vec3 *vertex);

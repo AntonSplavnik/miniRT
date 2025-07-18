@@ -161,20 +161,33 @@ SRC_FILES = main.c \
 	vector_utils/vec3_product.c \
 	vector_utils/vec3_barycentric.c
 
+# Bonus-specific source files (replace main.c and add bonus files)
+BONUS_SRC_FILES = $(filter-out main.c, $(SRC_FILES)) \
+	main_bonus.c \
+	parser/parser_light_bonus.c \
+	parser/parser_line_bonus.c \
+	parser/parser_file_bonus.c
+
 # File generation
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+BONUS_SOURCES = $(addprefix $(SRC_DIR)/, $(BONUS_SRC_FILES))
 OBJECTS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+BONUS_OBJECTS = $(addprefix $(OBJ_DIR)/, $(BONUS_SRC_FILES:.c=.o))
 
 # Output
 NAME = minirt
+BONUS_NAME = minirt_bonus
 
 # Tell Make where to find .c files
 vpath %.c $(SRC_DIR)
 
-.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean libft print
+.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean libft print bonus
 
 # Default rule
 all: mlx libft obj_dir $(NAME)
+
+# Bonus rule
+bonus: mlx libft obj_dir $(BONUS_NAME)
 
 # Executable linking
 $(NAME): $(OBJECTS) $(LIBFT_LIB)
@@ -184,6 +197,15 @@ ifeq ($(UNAME_S),Darwin)
 	@cp $(MLX42_BUILD)/libmlx42.a ./
 endif
 	@echo "Build complete: $(NAME)"
+
+# Bonus executable linking
+$(BONUS_NAME): $(BONUS_OBJECTS) $(LIBFT_LIB)
+	@echo "Linking $(BONUS_NAME)..."
+	@$(CC) $(CFLAGS) $(BONUS_OBJECTS) $(LDFLAGS) -o $(BONUS_NAME)
+ifeq ($(UNAME_S),Darwin)
+	@cp $(MLX42_BUILD)/libmlx42.a ./
+endif
+	@echo "Build complete: $(BONUS_NAME)"
 
 # Build object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -259,7 +281,7 @@ clean:
 
 fclean: clean
 	@echo "Removing binary and static libs..."
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(BONUS_NAME)
 ifeq ($(UNAME_S),Darwin)
 	@rm -f libmlx42.a
 endif
@@ -272,3 +294,5 @@ re: fclean all
 print:
 	@echo "SOURCES: $(SOURCES)"
 	@echo "OBJECTS: $(OBJECTS)"
+	@echo "BONUS_SOURCES: $(BONUS_SOURCES)"
+	@echo "BONUS_OBJECTS: $(BONUS_OBJECTS)"
