@@ -123,7 +123,6 @@ SRC_FILES = main.c \
 	rendering/refraction/refraction.c \
 	rendering/render.c \
 	rendering/render_utils.c \
-	rendering/scene_setup.c \
 	rendering/trace_ray/trace_rays.c \
 	rendering/trace_ray/background_utils.c \
 	rendering/fresnel/fresnel_calculations.c \
