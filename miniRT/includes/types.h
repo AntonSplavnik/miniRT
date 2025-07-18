@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/03 23:01:21 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/17 23:06:05 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,15 @@
 
 #define TOGGLE_BTN_OFFSET_X 10
 #define TOGGLE_BTN_OFFSET_Y 10
-#define TOGGLE_BTN_SIZE     30
+#define TOGGLE_BTN_SIZE		30
 
 // 3D rendering constants
-# define FOV			60.0
-# define NEAR_PLANE		0.1
-# define FAR_PLANE		100.0
-# define MAX_RAY_DEPTH	5
+# define FOV					60.0
+# define CAMERA_MOVEMENT_SPEED	5.0
+# define CAMERA_ROTATION_SPEED	0.05
+# define NEAR_PLANE				0.1
+# define FAR_PLANE				100.0
+# define MAX_RAY_DEPTH			5
 
 
 # define BLACK      			0x000000  // RGB(0, 0, 0)
@@ -246,12 +248,18 @@ typedef struct s_triangle
 	t_vec3	v1;
 	t_vec3	v2;
 	t_vec3	normal;
+	t_vec3	n0;
+	t_vec3	n1;
+	t_vec3	n2;
+	int		has_vertex_normals;
 }	t_triangle;
 
 typedef struct s_transformed_triangle
 {
 	t_vec3 v0, v1, v2;		// Vertices (already transformed)
 	t_vec3 normal;			// Precomputed normal
+	t_vec3 n0, n1, n2;		// Vertex normals (already transformed)
+	int has_vertex_normals;
 } t_transformed_triangle;
 
 typedef struct s_mesh
@@ -292,6 +300,7 @@ typedef struct	s_hit_record
 	t_object	*object;
 	int			inside;
 	int			triangle_idx;
+	t_vec3		barycentric;
 	t_vec2		uv; // For texture mapping
 }	t_hit_record;
 
@@ -415,7 +424,6 @@ typedef struct s_scene
 
 	//for bonuses
 	int 				sample; //for anti-aliasing
-	int					max_depth; //Maximum recursion depth (for reflections)
 
 	double				escape_value;
 	int					iterations_defintion;

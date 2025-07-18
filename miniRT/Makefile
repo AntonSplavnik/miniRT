@@ -115,7 +115,8 @@ SRC_FILES = main.c \
 	utils/ft_strtrim_whitespace.c \
 	vector_utils/vec3_basic_op.c \
 	vector_utils/vec3_length.c \
-	vector_utils/vec3_product.c
+	vector_utils/vec3_product.c \
+	vector_utils/vec3_barycentric.c
 
 # File generation
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

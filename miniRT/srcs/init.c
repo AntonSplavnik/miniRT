@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/03 23:04:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/17 23:05:18 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ void	init_data(t_scene *scene)
 	scene->camera.fov = FOV;
 	scene->camera.near = NEAR_PLANE;
 	scene->camera.far = FAR_PLANE;
-	scene->camera.movement_speed = 1.0;
-	scene->camera.rotation_speed = 0.05;
+	scene->camera.movement_speed = CAMERA_MOVEMENT_SPEED;
+	scene->camera.rotation_speed = CAMERA_ROTATION_SPEED;
 
 	//Init graphic settings
 	scene->graphic_settings.enable_hard_shadows = true;
@@ -55,8 +55,7 @@ void	init_data(t_scene *scene)
 	scene->mouse_state.middle_button_down = false;
 
 	scene->sample = 1;
-	scene->max_depth = 3;
-
+	
 	scene->scene_bvh = NULL; // Initialize BVH pointer to NULL
 }
 

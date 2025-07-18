@@ -36,3 +36,8 @@ int	intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp)
 {
 	return (ray_triangle_intersect(ray, *triangle, t_temp));
 }
+
+int	intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary)
+{
+	return (ray_triangle_intersect_bary(ray, *triangle, t_temp, bary));
+}

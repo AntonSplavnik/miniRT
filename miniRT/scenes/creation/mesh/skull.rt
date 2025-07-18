@@ -1,0 +1,11 @@
+	# Basic scene setup
+	A 0.3 255,255,255
+
+	L 25,23,-54		0.7		255,255,255
+
+	C 25,23,-54	0,0,1		70
+
+
+
+	# Try mesh with adjusted path
+	me scenes/3D_models/skull_correct_positioning.obj 0,0,0 0,1,0 1 255,0,0

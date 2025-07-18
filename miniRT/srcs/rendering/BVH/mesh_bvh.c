@@ -13,6 +13,7 @@ typedef struct s_triangle_centroid {
     int original_index;
 } t_triangle_centroid;
 
+
 static void ft_swap_centroid(t_triangle_centroid *a, t_triangle_centroid *b)
 {
     t_triangle_centroid tmp = *a;
@@ -54,6 +55,8 @@ t_aabb calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx)
     box.max.x = fmax(fmax(v0.x, v1.x), v2.x);
     box.max.y = fmax(fmax(v0.y, v1.y), v2.y);
     box.max.z = fmax(fmax(v0.z, v1.z), v2.z);
+    
+    
     return box;
 }
 
@@ -83,6 +86,8 @@ static double get_centroid_axis_value(t_triangle_centroid *centroid, int axis)
         return centroid->centroid.y;
     return centroid->centroid.z;
 }
+
+
 
 static int partition_by_threshold_fast(t_triangle_centroid *centroids,
     int start, int end, int axis, double threshold)
@@ -117,6 +122,7 @@ static int partition_by_threshold_fast(t_triangle_centroid *centroids,
     }
     return right + 1;
 }
+
 
 static t_aabb compute_bounds_from_centroids(t_mesh *mesh,
     t_triangle_centroid *centroids, int start, int end)
@@ -237,6 +243,7 @@ static int process_build_node_fast(t_mesh *mesh,
 
     node_bounds = compute_bounds_from_centroids(mesh, centroids, start, end);
     mesh->bvh.nodes[node_index] = node_bounds;
+    
 
     if (tri_count <= LEAF_TRI_THRESHOLD)
     {

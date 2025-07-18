@@ -145,10 +145,14 @@ int			intersect_plane(t_ray ray, t_plane *plane, double *t_temp);
 int			intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t_temp);
 int			intersect_cube(t_ray ray, t_cube *cube, double *t_temp);
 int			intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp);
+int			intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary);
 int			intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx);
+int			intersect_mesh_bary(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx, t_vec3 *bary);
 int			intersect_cone(t_ray ray, t_cone *cone, double *t_temp);
 int			intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
 				int *triangle_idx);
+int			intersect_primitive_bary(t_object *obj, t_ray ray, double *t_temp,
+				int *triangle_idx, t_vec3 *bary);
 
 /* ray_intersect_aabb functions */
 int			ray_intersect_aabb_scalar(t_ray_aabb_params params);

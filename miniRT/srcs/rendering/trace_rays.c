@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 14:40:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/02 23:02:41 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/17 23:07:28 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,6 @@ int trace_ray(t_scene *scene, t_ray ray, int depth)
 	int in_shadow;
 	int base_color;
 	int reflected_color = 0;
-
-	// if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object, &hit_record))
-	// 	return scene->background_color;
-	// compute_ray_intersection(ray, hit_record.object, t, &hit_record);
 
 	if (depth > MAX_RAY_DEPTH || !find_closest_intersection(scene, ray, &t, &hit_record.object, &hit_record))
 		return scene->background_color;

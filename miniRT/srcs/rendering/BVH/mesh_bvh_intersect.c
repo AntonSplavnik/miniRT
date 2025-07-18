@@ -39,7 +39,7 @@ static int ray_triangle_intersect_fast(t_ray ray,
     h = vec3_cross(ray.direction, edge2);
     a = vec3_dot(edge1, h);
 
-    if (a > -1e-7 && a < 1e-7)
+    if (a > -0.001 && a < 0.001)
         return 0;
 
     f = 1.0 / a;
@@ -56,13 +56,14 @@ static int ray_triangle_intersect_fast(t_ray ray,
         return 0;
 
     temp_t = f * vec3_dot(edge2, q);
-    if (temp_t > 1e-7)
+    if (temp_t > 0.001)
     {
         *t = temp_t;
         return 1;
     }
     return 0;
 }
+
 
 static int test_leaf_triangles_batch(t_mesh *mesh, t_ray ray, int start,
     int count, double *closest_t, int *tri_idx, int hit_something)
@@ -99,6 +100,59 @@ static int test_leaf_triangles_batch(t_mesh *mesh, t_ray ray, int start,
         }
         i++;
     }
+    return hit_something;
+}
+
+static int test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray, int start,
+    int count, double *closest_t, int *tri_idx, int hit_something, t_vec3 *closest_bary)
+{
+    int i, idx, original_idx;
+    double current_t;
+    t_vec3 current_bary;
+    t_transformed_triangle *tri;
+    
+    if (count <= 0 || start < 0)
+        return hit_something;
+
+    i = 0;
+    while (i < count)
+    {
+        idx = start + i;
+        if (mesh->bvh.node_children && idx < mesh->triangle_count)
+            original_idx = mesh->bvh.node_children[idx];
+        else
+            original_idx = idx;
+
+        if (original_idx >= 0 && original_idx < mesh->triangle_count)
+        {
+            tri = &mesh->transformed_tris[original_idx];
+
+            // Convert t_transformed_triangle to t_triangle and use proven working function
+            t_triangle temp_tri = {
+                .v0 = tri->v0,
+                .v1 = tri->v1,
+                .v2 = tri->v2,
+                .normal = tri->normal,
+                .n0 = tri->n0,
+                .n1 = tri->n1,
+                .n2 = tri->n2,
+                .has_vertex_normals = tri->has_vertex_normals
+            };
+            
+            if (ray_triangle_intersect_bary(ray, temp_tri, &current_t, &current_bary))
+            {
+                if (current_t < *closest_t)
+                {
+                    *closest_t = current_t;
+                    *tri_idx = original_idx;
+                    *closest_bary = current_bary;
+                    hit_something = 1;
+                }
+            }
+        }
+        i++;
+    }
+    
     return hit_something;
 }
 
@@ -159,6 +213,59 @@ int mesh_bvh_intersect(t_ray ray, t_mesh *mesh, double *t, int *tri_idx)
     if (hit_something)
     {
         *t = closest_t;
+        return 1;
+    }
+    return 0;
+}
+
+int mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_vec3 *bary)
+{
+    int stack[MAX_STACK_SIZE];
+    int stack_ptr;
+    double closest_t;
+    int hit_something;
+    t_vec3 closest_bary;
+    
+    if (!mesh->bvh.nodes || mesh->bvh.node_count == 0)
+        return 0;
+
+    stack_ptr = 0;
+    closest_t = INFINITY;
+    hit_something = 0;
+    stack[stack_ptr++] = 0;
+
+    while (stack_ptr > 0)
+    {
+        int node_index = stack[--stack_ptr];
+        t_aabb node_bounds = mesh->bvh.nodes[node_index];
+
+        if (!ray_intersect_aabb_optimized(ray, node_bounds, closest_t))
+            continue;
+
+        int left_index = mesh->bvh.tri_indices[node_index * 2];
+        int right_index = mesh->bvh.tri_indices[node_index * 2 + 1];
+
+        if (left_index >= 0)
+        {
+            // This is a leaf node
+            hit_something = test_leaf_triangles_batch_bary(mesh, ray, left_index, right_index,
+                                                          &closest_t, tri_idx, hit_something, &closest_bary);
+        }
+        else
+        {
+            // Internal node - add children to stack
+            if (stack_ptr < MAX_STACK_SIZE - 2)
+            {
+                stack[stack_ptr++] = -right_index;
+                stack[stack_ptr++] = -left_index;
+            }
+        }
+    }
+
+    if (hit_something)
+    {
+        *t = closest_t;
+        *bary = closest_bary;
         return 1;
     }
     return 0;

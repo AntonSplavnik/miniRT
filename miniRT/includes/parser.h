@@ -72,8 +72,9 @@ void		calculate_triangle_normal(t_triangle *triangle);
 void		parse_face_line(char *line, t_vec3 *vertices, \
 					t_triangle *triangles, int *triangle_index);
 void		process_vertex_line(char *line, t_vec3 *vertices, int *v_idx);
+void		process_normal_line(char *line, t_vec3 *normals, int *n_idx);
 void		process_face_line(char *line, t_triangle *triangles, \
-					t_vec3 *vertices, int *t_idx);
+					t_vec3 *vertices, int *t_idx, t_vec3 *normals);
 
 // File handling functions (parser_file.c)
 int			is_valid_filename(char *filename);

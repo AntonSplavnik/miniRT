@@ -13,15 +13,17 @@
 #include "../../includes/miniRT.h"
 
 int	count_and_allocate_file_elements(int fd, t_vec3 **vertices, \
-										t_triangle **triangles)
+										t_triangle **triangles, t_vec3 **normals)
 {
 	char	*line;
 	int		vertex_count;
 	int		face_count;
+	int		normal_count;
 	int		line_count;
 
 	vertex_count = 0;
 	face_count = 0;
+	normal_count = 0;
 	line_count = 0;
 
 	printf("Starting to count file elements...\n");
@@ -30,21 +32,24 @@ int	count_and_allocate_file_elements(int fd, t_vec3 **vertices, \
 	{
 		line_count++;
 		if (line_count % 100000 == 0)
-			printf("Counted %d lines so far (vertices: %d, faces: %d)...\n",
-					line_count, vertex_count, face_count);
+			printf("Counted %d lines so far (vertices: %d, faces: %d, normals: %d)...\n",
+					line_count, vertex_count, face_count, normal_count);
 
 		if (line[0] == 'v' && line[1] == ' ')
 			vertex_count++;
+		else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
+			normal_count++;
 		if (line[0] == 'f' && line[1] == ' ')
 			face_count++;
 		free(line);
 		line = get_next_line(fd);
 	}
 	get_next_line(-1);
-	printf("Counted vertices: %d, faces: %d\n", vertex_count, face_count);
+	printf("Counted vertices: %d, faces: %d, normals: %d\n", vertex_count, face_count, normal_count);
 
 	*vertices = malloc(sizeof(t_vec3) * vertex_count);
 	*triangles = malloc(sizeof(t_triangle) * face_count * 2);
+	*normals = malloc(sizeof(t_vec3) * normal_count);
 
 	if (!*vertices)
 	{
@@ -57,20 +62,29 @@ int	count_and_allocate_file_elements(int fd, t_vec3 **vertices, \
 		free(*vertices);
 		return (0);
 	}
+	if (!*normals)
+	{
+		printf("Failed to allocate memory for normals\n");
+		free(*vertices);
+		free(*triangles);
+		return (0);
+	}
 
-	printf("Memory allocated successfully: vertices=%zu bytes, triangles=%zu bytes\n",
-			sizeof(t_vec3) * vertex_count, sizeof(t_triangle) * face_count * 2);
+	printf("Memory allocated successfully: vertices=%zu bytes, triangles=%zu bytes, normals=%zu bytes\n",
+			sizeof(t_vec3) * vertex_count, sizeof(t_triangle) * face_count * 2, sizeof(t_vec3) * normal_count);
 	return (1);
 }
 
 static void	parse_file_content(int fd, t_vec3 *vertices, \
-								t_triangle *triangles, int *t_idx)
+								t_triangle *triangles, t_vec3 *normals, int *t_idx)
 {
 	char	*line;
 	int		v_idx;
+	int		n_idx;
 	int		line_count;
 
 	v_idx = 0;
+	n_idx = 0;
 	*t_idx = 0;
 	line_count = 0;
 	line = get_next_line(fd);
@@ -82,8 +96,10 @@ static void	parse_file_content(int fd, t_vec3 *vertices, \
 
 		if (line[0] == 'v' && line[1] == ' ')
 			process_vertex_line(line, vertices, &v_idx);
+		else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
+			process_normal_line(line, normals, &n_idx);
 		else if (line[0] == 'f' && line[1] == ' ')
-			process_face_line(line, triangles, vertices, t_idx);
+			process_face_line(line, triangles, vertices, t_idx, normals);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -95,6 +111,7 @@ t_mesh	*load_obj_file(const char *filename)
 {
 	int			fd;
 	t_vec3		*vertices;
+	t_vec3		*normals;
 	t_triangle	*triangles;
 	int			triangle_count;
 	t_mesh		*mesh;
@@ -108,7 +125,7 @@ t_mesh	*load_obj_file(const char *filename)
 	}
 
 	printf("File opened successfully, starting to count elements...\n");
-	if (!count_and_allocate_file_elements(fd, &vertices, &triangles))
+	if (!count_and_allocate_file_elements(fd, &vertices, &triangles, &normals))
 	{
 		printf("Failed to count and allocate file elements\n");
 		close(fd);
@@ -125,11 +142,12 @@ t_mesh	*load_obj_file(const char *filename)
 		printf("Failed to reopen file\n");
 		free(vertices);
 		free(triangles);
+		free(normals);
 		return (NULL);
 	}
 
 	printf("Parsing file content...\n");
-	parse_file_content(fd, vertices, triangles, &triangle_count);
+	parse_file_content(fd, vertices, triangles, normals, &triangle_count);
 	printf("File parsing completed, triangle count: %d\n", triangle_count);
 	close(fd);
 
@@ -137,5 +155,6 @@ t_mesh	*load_obj_file(const char *filename)
 	mesh = create_mesh(triangles, triangle_count);
 	printf("Mesh created successfully\n");
 	free(vertices);
+	free(normals);
 	return (mesh);
 }

@@ -85,6 +85,8 @@ t_vec3		vec3_cross(t_vec3 u, t_vec3 v);
 double		vec3_length_squared(t_vec3 v);
 double		vec3_length(t_vec3 v);
 t_vec3		vec3_normalize(t_vec3 v);
+t_vec3		compute_barycentric(t_vec3 p, t_vec3 a, t_vec3 b, t_vec3 c);
+t_vec3		interpolate_vertex_normal(t_vec3 bary, t_vec3 n0, t_vec3 n1, t_vec3 n2);
 
 // colors
 t_color		create_color(int r, int g, int b);
@@ -114,9 +116,12 @@ int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
 int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
 t_vec3		cube_normal_at_point(t_vec3 point, t_cube cube);
 int			ray_triangle_intersect(t_ray ray, t_triangle triangle, double *t);
+int			ray_triangle_intersect_bary(t_ray ray, t_triangle triangle, double *t, t_vec3 *bary);
 t_vec3		triangle_normal(t_triangle triangle);
 void		precompute_transformed_triangles(t_mesh *mesh);
 int			ray_mesh_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx);
+int			ray_mesh_intersect_bary(t_ray ray, t_mesh mesh, double *t, int *triangle_idx, t_vec3 *bary);
+int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_vec3 *bary);
 int			ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
 								double radius, double *t);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
