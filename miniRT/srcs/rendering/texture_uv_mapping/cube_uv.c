@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 01:10:05 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 01:15:02 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 20:01:13 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,3 @@ t_vec2	cube_uv_mapping(t_vec3 point, t_cube cube)
 	else
 		return (cube_face_z(local_point, half_size));
 }
-
-
-

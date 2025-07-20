@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/20 12:05:37 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/20 23:20:21 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void *render_thread(void *arg)
     int y = data->start_row;
 
     int samples = scene->graphic_settings.ssaa_samples;
-    if (samples < 1) samples = 1;
+    if (samples < 1)
+        samples = 1;
 
     while (y < data->end_row)
     {
@@ -41,11 +42,12 @@ void *render_thread(void *arg)
             {
                 for (int sx = 0; sx < samples; sx++)
                 {
-                    double px = x + (sx + 0.5) / (double)samples;
-                    double py = y + (sy + 0.5) / (double)samples;
+                    t_vec2 coords;
+                    coords.u = x + (sx + 0.5) / (double)samples;
+                    coords.v = y + (sy + 0.5) / (double)samples;
 
                     t_ray sample_ray;
-                    compute_ray_direction(scene, &sample_ray, fov_scale, px, py);
+                    compute_ray_direction(scene, &sample_ray, fov_scale, coords);
 
                     t_vec3 sample_color = trace_ray(scene, sample_ray, 0);
                     final_color = vec3_add(final_color, sample_color);

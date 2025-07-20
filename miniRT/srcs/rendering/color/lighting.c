@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lighting.c                                          :+:      :+:    :+:   */
+/*   lighting.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 03:23:00 by antonsplavn      #+#    #+#             */
-/*   Updated: 2025/07/16 03:23:00 by antonsplavn      ###   ########.fr       */
+/*   Created: 2025/07/20 21:23:46 by antonsplavn       #+#    #+#             */
+/*   Updated: 2025/07/20 21:24:21 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	add_colors(int color1, int color2)
 	b1 = color1 & 0xFF;
 	r2 = (color2 >> 16) & 0xFF;
 	g2 = (color2 >> 8) & 0xFF;
-	return ((valid_color_range(r1 + r2) << 16)
-		| (valid_color_range(g1 + g2) << 8)
+	return ((valid_color_range(r1 + r2) << 16) \
+		| (valid_color_range(g1 + g2) << 8) \
 		| valid_color_range(b1 + (color2 & 0xFF)));
 }
 
@@ -54,10 +54,10 @@ int	blend_colors(int base_color, int blend_color,
 	base_b = base_color & 0xFF;
 	blend_r = (blend_color >> 16) & 0xFF;
 	blend_g = (blend_color >> 8) & 0xFF;
-	return ((valid_color_range((int)(base_r * base_weight
-					+ blend_r * blend_weight)) << 16)
-		| (valid_color_range((int)(base_g * base_weight
-					+ blend_g * blend_weight)) << 8)
-		| valid_color_range((int)(base_b * base_weight
+	return ((valid_color_range((int)(base_r * base_weight \
+					+ blend_r * blend_weight)) << 16) \
+		| (valid_color_range((int)(base_g * base_weight \
+					+ blend_g * blend_weight)) << 8) \
+		| valid_color_range((int)(base_b * base_weight \
 				+ (blend_color & 0xFF) * blend_weight)));
 }

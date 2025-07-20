@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 02:16:26 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 22:30:55 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ t_vec2	map_x_face(t_cube *cube, t_vec3 local_point)
 	t_vec2	uv;
 
 	half_size = cube->side_length / 2.0;
-	sign = (local_point.x > 0) ? 1 : -1;
+	if (local_point.x > 0)
+		sign = 1;
+	else
+		sign = -1;
 	u = (local_point.z * sign) / half_size * 0.5 + 0.5;
 	v = (local_point.y) / half_size * 0.5 + 0.5;
 	uv.u = u;
@@ -64,7 +67,10 @@ t_vec2	map_y_face(t_cube *cube, t_vec3 local_point)
 	t_vec2	uv;
 
 	half_size = cube->side_length / 2.0;
-	sign = (local_point.y > 0) ? 1 : -1;
+	if (local_point.y > 0)
+		sign = 1;
+	else
+		sign = -1;
 	u = (local_point.x) / half_size * 0.5 + 0.5;
 	v = (local_point.z * sign) / half_size * 0.5 + 0.5;
 	uv.u = u;
@@ -84,7 +90,10 @@ t_vec2	map_z_face(t_cube *cube, t_vec3 local_point)
 	t_vec2	uv;
 
 	half_size = cube->side_length / 2.0;
-	sign = (local_point.z > 0) ? 1 : -1;
+	if (local_point.z > 0)
+		sign = 1;
+	else
+		sign = -1;
 	u = (local_point.x * -sign) / half_size * 0.5 + 0.5;
 	v = (local_point.y) / half_size * 0.5 + 0.5;
 	uv.u = u;

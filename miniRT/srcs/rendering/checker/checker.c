@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:20:01 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 02:33:07 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 22:31:17 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ int	is_checker_point_2d(double u, double v, double checker_size)
 	cell_v = (int)floor(scaled_v);
 	return ((cell_u + cell_v) % 2);
 }
-
-
 
 /*
 ** Get UV coordinates for plane checker pattern

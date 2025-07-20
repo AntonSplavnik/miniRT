@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 01:59:12 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/16 15:48:15 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 22:41:52 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ static float	bilinear_interpolation(t_bump_map *bump_map,
 	h10 = bump_map->elevation[coords->y0 * bump_map->width + coords->x1];
 	h01 = bump_map->elevation[(coords->y0 + 1) * bump_map->width + coords->x0];
 	h11 = bump_map->elevation[(coords->y0 + 1) * bump_map->width + coords->x1];
-	return (h00 * (1 - fx) + h10 * fx) * (1 - (coords->py - coords->y0))
-		+ (h01 * (1 - fx) + h11 * fx) * (coords->py - coords->y0);
+	return ((h00 * (1 - fx) + h10 * fx) * (1 - (coords->py - coords->y0))
+		+ (h01 * (1 - fx) + h11 * fx) * (coords->py - coords->y0));
 }
 
 float	sample_bump_map(t_bump_map *bump_map, double u, double v)

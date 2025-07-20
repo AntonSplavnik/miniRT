@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 01:09:40 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 01:16:26 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 20:02:16 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ static t_vec3	cylinder_get_u_axis(t_cylinder cylinder)
 	t_vec3	u_axis;
 
 	if (fabs(cylinder.axis.z) > 0.1 || fabs(cylinder.axis.y) > 0.1)
-		u_axis = vec3_normalize(vec3_cross(cylinder.axis,
+		u_axis = vec3_normalize(vec3_cross(cylinder.axis, \
 			vec3_create(1, 0, 0)));
 	else
-		u_axis = vec3_normalize(vec3_cross(cylinder.axis,
+		u_axis = vec3_normalize(vec3_cross(cylinder.axis, \
 			vec3_create(0, 1, 0)));
 	return (u_axis);
 }

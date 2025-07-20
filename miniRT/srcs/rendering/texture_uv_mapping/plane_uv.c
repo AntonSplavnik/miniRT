@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 01:09:26 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 01:16:45 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 20:01:53 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_vec2	plane_uv_mapping(t_vec3 point, t_plane plane)
 
 	u_axis = plane_get_u_axis(plane);
 	v_axis = plane_get_v_axis(plane);
-	u_axis = vec3_normalize(vec3_subtract(u_axis,
+	u_axis = vec3_normalize(vec3_subtract(u_axis, \
 		vec3_scale(plane.normal, vec3_dot(u_axis, plane.normal))));
 	v_axis = vec3_normalize(vec3_cross(plane.normal, u_axis));
 	to_point = vec3_subtract(point, plane.point);

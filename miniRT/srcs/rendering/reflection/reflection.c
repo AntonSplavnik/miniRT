@@ -5,35 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 16:20:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/16 15:29:49 by antonsplavn      ###   ########.fr       */
+/*   Created: 2025/07/20 20:05:13 by antonsplavn       #+#    #+#             */
+/*   Updated: 2025/07/20 20:07:43 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-
 /**
  * Calculates the reflection of an incident ray around a normal vector
  *
  * @param incident The incoming ray direction (should be normalized)
- * @param normal The surface normal at the intersection point (should be normalized)
+ * @param normal The surface normal at the intersection point
+ * 														(should be normalized)
  * @return The direction of the reflected ray
  */
-t_vec3 reflect_ray(t_vec3 incident, t_vec3 normal)
+t_vec3	reflect_ray(t_vec3 incident, t_vec3 normal)
 {
-    // Formula: R = I - 2 * (I·N) * N
-    // Where I is the incident ray direction, N is the normal, and R is the reflected ray direction
+	double	dot;
+	t_vec3	reflection;
 
-    // Calculate dot product between incident and normal
-    double dot = vec3_dot(incident, normal);
-
-    // Calculate reflection vector
-    t_vec3 reflection;
-    reflection.x = incident.x - 2.0 * dot * normal.x;
-    reflection.y = incident.y - 2.0 * dot * normal.y;
-    reflection.z = incident.z - 2.0 * dot * normal.z;
-
-    // Normalize the reflection vector
-    return vec3_normalize(reflection);
+	dot = vec3_dot(incident, normal);
+	reflection.x = incident.x - 2.0 * dot * normal.x;
+	reflection.y = incident.y - 2.0 * dot * normal.y;
+	reflection.z = incident.z - 2.0 * dot * normal.z;
+	return (vec3_normalize(reflection));
 }

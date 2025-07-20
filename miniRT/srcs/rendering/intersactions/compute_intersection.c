@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 03:16:26 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 21:19:10 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,10 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir,
 	if (find_closest_intersection(scene, shadow_ray, &dummy_record, \
 		&hit_object) && dummy_record.t < light_distance)
 	{
-		// Check if the intersected object is transparent/refractive
-		if (hit_object->material.transparency > 0.001 || 
+		if (hit_object->material.transparency > 0.001 || \
 			hit_object->material.has_refraction)
-			return (0); // Light passes through transparent objects
-		return (1); // Cast shadow for opaque objects
+			return (0);
+		return (1);
 	}
 	return (0);
 }

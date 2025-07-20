@@ -52,17 +52,16 @@ void	render_pixel_samples(t_scene *scene, double fov_scale, t_vec3 *final_color,
 						int x, int y, int samples, int sy)
 {
 	int		sx;
-	double	px;
-	double	py;
+	t_vec2	coords;
 	t_ray	sample_ray;
 	t_vec3	sample_color;
 
 	sx = 0;
 	while (sx < samples)
 	{
-		px = x + (sx + 0.5) / (double)samples;
-		py = y + (sy + 0.5) / (double)samples;
-		compute_ray_direction(scene, &sample_ray, fov_scale, px, py);
+		coords.u = x + (sx + 0.5) / (double)samples;
+		coords.v = y + (sy + 0.5) / (double)samples;
+		compute_ray_direction(scene, &sample_ray, fov_scale, coords);
 		sample_color = trace_ray(scene, sample_ray, 0);
 		*final_color = vec3_add(*final_color, sample_color);
 		sx++;

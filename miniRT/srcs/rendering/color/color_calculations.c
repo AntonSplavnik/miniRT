@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   color_calculations.c                                :+:      :+:    :+:   */
+/*   color_calculations.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 03:24:00 by antonsplavn      #+#    #+#             */
-/*   Updated: 2025/07/16 03:24:00 by antonsplavn      ###   ########.fr       */
+/*   Created: 2025/07/20 21:20:31 by antonsplavn       #+#    #+#             */
+/*   Updated: 2025/07/20 21:20:59 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_color_f	add_color_components(t_color_f color1, t_color_f color2)
 
 /* Calculate pixel color in linear space */
 t_color_f	get_pixel_color_linear(t_hit_record *hit_record,
-								double light_intensity, t_color_f light_color,
+								double light_intensity, t_color_f light_color, \
 								double specular_intensity)
 {
 	t_color_f	base_color;

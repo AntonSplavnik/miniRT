@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 01:09:04 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 01:16:06 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 20:02:27 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,3 @@ t_vec2	sphere_uv_mapping(t_vec3 point, t_sphere sphere)
 	uv = sphere_uv_adjust(uv);
 	return (uv);
 }
-

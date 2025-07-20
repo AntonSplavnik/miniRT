@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 13:28:08 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 21:18:51 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	compute_complex_normals(t_hit_record *hit_record, t_ray ray)
 */
 void	compute_object_normal(t_hit_record *hit_record, t_ray ray)
 {
-
 	if (hit_record->object->type == SPHERE)
 		compute_sphere_normal(hit_record);
 	else if (hit_record->object->type == CYLINDER)

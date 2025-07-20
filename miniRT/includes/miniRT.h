@@ -189,7 +189,7 @@ void		add_light(t_scene *scene, t_light *light);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 // rendering
-void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2 coords);
 void		render_scene(t_scene *scene);
 void		*render_thread(void *arg);
 void		render_rows(t_scene *scene, double fov_scale, int samples, int start_row, int end_row);
@@ -372,7 +372,7 @@ t_vec3		process_reflection_refraction(t_ray_context context, t_material_contrib 
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
 // Ray generation
-void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2 coords);
 
 // Basic reflection/refraction mathematics
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);

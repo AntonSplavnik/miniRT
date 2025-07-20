@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:09:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 02:00:41 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 22:40:47 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static void	sample_bump_heights(t_material *material, t_hit_record *hit_record,
 {
 	heights->du = 1.0f / material->bump_map->width;
 	heights->dv = 1.0f / material->bump_map->height;
-	heights->center = sample_bump_map(material->bump_map,
+	heights->center = sample_bump_map(material->bump_map, \
 		hit_record->uv.u, hit_record->uv.v);
-	heights->u = sample_bump_map(material->bump_map,
+	heights->u = sample_bump_map(material->bump_map, \
 		hit_record->uv.u + heights->du, hit_record->uv.v);
-	heights->v = sample_bump_map(material->bump_map,
+	heights->v = sample_bump_map(material->bump_map, \
 		hit_record->uv.u, hit_record->uv.v + heights->dv);
 }
 
@@ -71,10 +71,10 @@ static t_vec3	apply_bump_offset(t_hit_record *hit_record,
 
 t_vec3	calculate_bump_normal(t_hit_record *hit_record)
 {
-	t_material		*material;
-	t_vec3			tangent;
-	t_vec3			bitangent;
-	t_bump_heights	heights;
+	t_material			*material;
+	t_vec3				tangent;
+	t_vec3				bitangent;
+	t_bump_heights		heights;
 	t_bump_gradients	gradients;
 
 	material = &hit_record->object->material;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylinder_tangents.c                                :+:      :+:    :+:   */
+/*   cylinder_cube_tangents.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:09:53 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 02:00:18 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/20 22:41:29 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	calculate_cylinder_tangent_vectors(t_hit_record *hit_record,
 	else
 	{
 		*tangent = cylinder->axis;
-		radial = vec3_subtract(local_point,
+		radial = vec3_subtract(local_point, \
 			vec3_scale(cylinder->axis, height_projection));
 		radial = vec3_normalize(radial);
 		*bitangent = vec3_normalize(vec3_cross(cylinder->axis, radial));
