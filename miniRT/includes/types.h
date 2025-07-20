@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 17:21:27 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 00:51:30 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@
 # define HOT_PINK				0xFF66B2
 # define ELECTRIC_BLUE			0x0066FF
 # define LAVA_RED				0xFF3300
-
 
 typedef struct s_vec2
 {
@@ -625,6 +624,16 @@ typedef struct s_light_params
 	double			shadow_attenuation;
 	t_vec3			direct_color;
 }	t_light_params;
+
+/* Structure to hold rendering parameters for performance optimization */
+typedef struct s_render_params
+{
+	t_scene		*scene;
+	double		fov_scale;
+	int			samples;
+	t_vec2		xy_coords;
+	t_vec3		final_color;
+}	t_render_params;
 
 typedef struct s_thread_data
 {

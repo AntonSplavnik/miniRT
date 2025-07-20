@@ -125,9 +125,9 @@ SRC_FILES = main.c \
 	rendering/rays/compute_rays.c \
 	rendering/reflection/reflection.c \
 	rendering/refraction/refraction.c \
-	rendering/render.c \
-	rendering/render_shared.c \
-	rendering/render_utils.c \
+	rendering/renderer/render_shared.c \
+	rendering/renderer/render_single.c \
+	rendering/renderer/render_utils.c \
 	rendering/trace_ray/trace_rays.c \
 	rendering/trace_ray/trace_ray_helpers.c \
 	rendering/trace_ray/background_utils.c \
@@ -168,12 +168,13 @@ SRC_FILES = main.c \
 	vector_utils/vec3_product.c \
 	vector_utils/vec3_barycentric.c
 
-# Bonus-specific source files (replace main.c with bonus files)
-BONUS_SRC_FILES = $(filter-out main.c, $(SRC_FILES)) \
+# Bonus-specific source files (replace main.c and single-threaded rendering with bonus files)
+BONUS_SRC_FILES = $(filter-out main.c rendering/renderer/render_single.c, $(SRC_FILES)) \
 	main_bonus.c \
 	parser/parser_light_bonus.c \
 	parser/parser_line_bonus.c \
-	parser/parser_file_bonus.c
+	parser/parser_file_bonus.c \
+	rendering/renderer/render_multithreaded.c
 
 # File generation
 SOURCES = $(addprefix $(SRC_DIR)/, $(SRC_FILES))

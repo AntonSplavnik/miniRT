@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 17:05:19 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 01:29:55 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,11 +190,11 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 
 // rendering
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2 coords);
-void		render_scene(t_scene *scene);
-void		*render_thread(void *arg);
-void		render_rows(t_scene *scene, double fov_scale, int samples, int start_row, int end_row);
-void		render_pixel_samples(t_scene *scene, double fov_scale, t_vec3 *final_color, int x, int y, int samples, int sy);
-void		process_final_color(t_scene *scene, t_vec3 final_color, int samples, int x, int y);
+// void		render_scene(t_scene *scene);
+// void		*render_thread(void *arg);
+// void		render_rows(t_scene *scene, double fov_scale, int samples, int start_row, int end_row);
+// void		render_pixel_samples(t_scene *scene, double fov_scale, t_vec3 *final_color, int x, int y, int samples, int sy);
+// void		process_final_color(t_scene *scene, t_vec3 final_color, int samples, int x, int y);
 t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
 t_vec3		reinhard_tone_map(t_vec3 color, double exposure);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
@@ -373,6 +373,19 @@ t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *l
 
 // Ray generation
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2 coords);
+
+// Shared rendering functions
+void		render_pixel(t_render_params *params);
+void		process_sample_ray(t_render_params *params, int sx, int sy);
+void		apply_final_color(t_render_params *params);
+void		render_rows(t_render_params *params, t_thread_data *data);
+void		setup_render_params(t_render_params *params, t_thread_data *data);
+
+// Main rendering function (single-threaded in regular build, multi-threaded in bonus)
+void		render_scene(t_scene *scene);
+void		create_all_threads(t_scene *scene, int rows_per_thread, pthread_t *threads, t_thread_data *thread_data);
+void		join_all_threads_norm(pthread_t *threads);
+void		*render_thread(void *arg);
 
 // Basic reflection/refraction mathematics
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
