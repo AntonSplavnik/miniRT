@@ -2,6 +2,7 @@
 
 # Scene setup
 A 0.2 255,255,255
+
 C 0,0,-20 0,0,1 70
 
 # Multiple colored lights for interesting reflections
@@ -42,7 +43,7 @@ sp 3.5,2,-5 1.5 50,200,255 {specular: 0.4, shininess: 16}
 
 # Small shiny cylinder
 # Orange cylinder with high specular
-cy -4,-2,0 0.3,0.7,0.3 1 2 255,160,0  {specular: 0.8, shininess: 64}
+cy -4,-2,0 0,1,0 1 2 255,160,0  {specular: 0.8, shininess: 64}
 
 # Small matte cone
 # Brown cone with low specular

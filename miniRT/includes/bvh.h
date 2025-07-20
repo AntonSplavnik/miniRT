@@ -129,7 +129,7 @@ t_bvh_node	*create_leaf_node(t_object **objects, t_aabb *bounds, int start);
 void		build_node_children(t_node_children_params params);
 
 /* build_scene_bvh_utils functions */
-int			count_scene_objects(t_scene *scene);
+void		count_scene_objects(t_scene *scene);
 void		fill_objects_and_bounds(t_scene *scene, t_object **objects,
 				t_aabb *bounds, int object_count);
 

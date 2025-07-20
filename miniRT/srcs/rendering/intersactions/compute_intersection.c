@@ -27,7 +27,13 @@ int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir,
 	shadow_ray.direction = light_dir;
 	if (find_closest_intersection(scene, shadow_ray, &dummy_record, \
 		&hit_object) && dummy_record.t < light_distance)
-		return (1);
+	{
+		// Check if the intersected object is transparent/refractive
+		if (hit_object->material.transparency > 0.001 || 
+			hit_object->material.has_refraction)
+			return (0); // Light passes through transparent objects
+		return (1); // Cast shadow for opaque objects
+	}
 	return (0);
 }
 

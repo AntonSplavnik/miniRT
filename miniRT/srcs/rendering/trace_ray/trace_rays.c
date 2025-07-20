@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 12:50:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 13:30:26 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/18 18:21:56 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,21 @@ t_vec3	add_direct_lighting(t_scene *scene, t_hit_record hit_record,
 t_vec3	process_lights(t_scene *scene, t_hit_record hit_record,
 	t_light *current_light, t_vec3 direct_color)
 {
-	t_light_result	light_result;
-	double			light_intensity;
-	t_color_f		light_color_linear;
-	t_color_f		lit_color;
+	double			shadow_attenuation;
+	t_light_params	params;
 
 	while (current_light)
 	{
-		if (!scene->graphic_settings.enable_hard_shadows || \
-			!is_in_shadow(scene, hit_record.point, \
-			vec3_normalize(vec3_subtract(current_light->position, \
-			hit_record.point)), vec3_length(vec3_subtract(\
-			current_light->position, hit_record.point)), hit_record))
+		shadow_attenuation = get_light_shadow_attenuation(scene, hit_record, \
+			current_light);
+		if (shadow_attenuation > 0.001)
 		{
-			light_result = compute_light(scene, hit_record, current_light);
-			light_intensity = light_result.diffuse * current_light->intensity;
-			light_color_linear = color_to_linear(current_light->color);
-			lit_color = get_pixel_color_linear(&hit_record, light_intensity, \
-				light_color_linear, light_result.specular_intensity);
-			direct_color.x += lit_color.r;
-			direct_color.y += lit_color.g;
-			direct_color.z += lit_color.b;
+			params.scene = scene;
+			params.hit_record = hit_record;
+			params.light = current_light;
+			params.shadow_attenuation = shadow_attenuation;
+			params.direct_color = direct_color;
+			direct_color = apply_light_contribution(params);
 		}
 		current_light = current_light->next;
 	}
@@ -84,7 +78,7 @@ t_vec3	process_material_interaction(t_ray_context context, double cos_theta)
 	else if (context.scene->graphic_settings.enable_reflections && \
 		context.hit_record.material.reflectivity > 0.001)
 	{
-		final_color = handle_reflective_material(context, cos_theta,
+		final_color = handle_reflective_material(context, cos_theta, \
 			&total_contribution);
 	}
 	final_color = add_direct_lighting(context.scene, context.hit_record, \

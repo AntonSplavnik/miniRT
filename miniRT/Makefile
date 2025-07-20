@@ -126,8 +126,10 @@ SRC_FILES = main.c \
 	rendering/reflection/reflection.c \
 	rendering/refraction/refraction.c \
 	rendering/render.c \
+	rendering/render_shared.c \
 	rendering/render_utils.c \
 	rendering/trace_ray/trace_rays.c \
+	rendering/trace_ray/trace_ray_helpers.c \
 	rendering/trace_ray/background_utils.c \
 	rendering/fresnel/fresnel_calculations.c \
 	rendering/reflection/reflection_operations.c \
@@ -166,7 +168,7 @@ SRC_FILES = main.c \
 	vector_utils/vec3_product.c \
 	vector_utils/vec3_barycentric.c
 
-# Bonus-specific source files (replace main.c and add bonus files)
+# Bonus-specific source files (replace main.c with bonus files)
 BONUS_SRC_FILES = $(filter-out main.c, $(SRC_FILES)) \
 	main_bonus.c \
 	parser/parser_light_bonus.c \
@@ -183,10 +185,14 @@ BONUS_OBJECTS = $(addprefix $(OBJ_DIR)/, $(BONUS_SRC_FILES:.c=.o))
 NAME = minirt
 BONUS_NAME = minirt_bonus
 
+# Build tracking files
+BUILD_MARKER = .build_marker
+BONUS_MARKER = .bonus_marker
+
 # Tell Make where to find .c files
 vpath %.c $(SRC_DIR)
 
-.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean libft print bonus
+.PHONY: all clean fclean re obj_dir mlx mlx_check mlx_clean libft print bonus bonus_re
 
 # Default rule
 all: mlx libft obj_dir $(NAME)
@@ -194,22 +200,31 @@ all: mlx libft obj_dir $(NAME)
 # Bonus rule
 bonus: mlx libft obj_dir $(BONUS_NAME)
 
-# Executable linking
+# Rebuild rules
+re: fclean all
+
+bonus_re: fclean bonus
+
+# Executable linking - regular
 $(NAME): $(OBJECTS) $(LIBFT_LIB)
 	@echo "Linking $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJECTS) $(LDFLAGS) -o $(NAME)
 ifeq ($(UNAME_S),Darwin)
 	@cp $(MLX42_BUILD)/libmlx42.a ./
 endif
+	@touch $(BUILD_MARKER)
+	@rm -f $(BONUS_MARKER)
 	@echo "Build complete: $(NAME)"
 
-# Bonus executable linking
+# Executable linking - bonus
 $(BONUS_NAME): $(BONUS_OBJECTS) $(LIBFT_LIB)
 	@echo "Linking $(BONUS_NAME)..."
 	@$(CC) $(CFLAGS) $(BONUS_OBJECTS) $(LDFLAGS) -o $(BONUS_NAME)
 ifeq ($(UNAME_S),Darwin)
 	@cp $(MLX42_BUILD)/libmlx42.a ./
 endif
+	@touch $(BONUS_MARKER)
+	@rm -f $(BUILD_MARKER)
 	@echo "Build complete: $(BONUS_NAME)"
 
 # Build object files
@@ -242,6 +257,10 @@ obj_dir:
 	@mkdir -p $(OBJ_DIR)/rendering/materials
 	@mkdir -p $(OBJ_DIR)/rendering/lighting
 	@mkdir -p $(OBJ_DIR)/rendering/rays
+	@mkdir -p $(OBJ_DIR)/rendering/BVH
+	@mkdir -p $(OBJ_DIR)/rendering/checker
+	@mkdir -p $(OBJ_DIR)/rendering/texture_uv_mapping
+	@mkdir -p $(OBJ_DIR)/rendering/bumpmap
 	@mkdir -p $(OBJ_DIR)/ui
 	@mkdir -p $(OBJ_DIR)/controls
 	@mkdir -p $(OBJ_DIR)/camera
@@ -277,23 +296,23 @@ mlx_remove:
 	@echo "Removing MLX42 library and build directory..."
 	@rm -rf $(MLX42_PATH)
 
-# Clean build files
+# Clean build files (works for both regular and bonus)
 clean:
 	@echo "Cleaning object files..."
 	@rm -rf $(OBJ_DIR)
 	@if [ -d "$(MLX42_BUILD)" ]; then rm -rf $(MLX42_BUILD); fi
 	@$(MAKE) -C $(LIBFT_PATH) clean
 
+# Full clean (works for both regular and bonus)
 fclean: clean
-	@echo "Removing binary and static libs..."
+	@echo "Removing binaries and static libs..."
 	@rm -f $(NAME) $(BONUS_NAME)
+	@rm -f $(BUILD_MARKER) $(BONUS_MARKER)
 ifeq ($(UNAME_S),Darwin)
 	@rm -f libmlx42.a
 endif
 	@$(MAKE) -C $(LIBFT_PATH) fclean
 	@echo "Clean complete."
-
-re: fclean all
 
 # Debug rule
 print:

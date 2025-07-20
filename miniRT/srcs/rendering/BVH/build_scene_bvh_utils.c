@@ -12,19 +12,17 @@
 
 #include "../../includes/miniRT.h"
 
-int	count_scene_objects(t_scene *scene)
+void	count_scene_objects(t_scene *scene)
 {
-	int			object_count;
 	t_object	*current;
 
-	object_count = 0;
+	scene->object_count = 0;
 	current = scene->objects;
 	while (current)
 	{
-		object_count++;
+		scene->object_count++;
 		current = current->next;
 	}
-	return (object_count);
 }
 
 void	fill_objects_and_bounds(t_scene *scene, t_object **objects,

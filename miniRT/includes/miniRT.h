@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 16:30:09 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/20 17:05:19 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "parser.h"
 # include "libft.h"
 # include "bvh.h"
+# include "ft_printf.h"
 
 
 // events
@@ -77,11 +78,9 @@ char		*ft_strstr(const char *haystack, const char *needle);
 void		init_scene_bvh(t_scene *scene);
 t_bvh_node	*build_menger_bvh(int max_iterations);
 void		free_bvh(t_bvh_node *node);
-int			ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin,
-							t_vec3 ray_dir, double *t_min, double *t_max);
+int			ray_intersect_bvh(t_bvh_node *node, t_vec3 ray_origin, t_vec3 ray_dir, double *t_min, double *t_max);
 int			ray_intersect_aabb_scalar(t_ray_aabb_params params);
-int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin,
-									t_vec3 dir, double *out_tmin, double *out_tmax);
+int			ray_intersect_aabb_simd(t_aabb bounds, t_vec3 origin, t_vec3 dir, double *out_tmin, double *out_tmax);
 
 // Scene BVH functions
 t_aabb		calculate_object_aabb(t_object *object);
@@ -89,7 +88,7 @@ t_bvh_node	*build_scene_bvh(t_scene *scene);
 t_bvh_node	*build_scene_bvh_recursive(t_bvh_params params);
 int			scene_ray_intersect_bvh(t_scene_ray_params params);
 t_bvh_node *build_scene_bvh(t_scene *scene);
-t_aabb calculate_object_aabb(t_object *object);
+t_aabb		calculate_object_aabb(t_object *object);
 
 
 // Vector utilities
@@ -133,18 +132,13 @@ int			color_f_to_display(t_color_f color);
 t_vec3		color_f_to_vec3(t_color_f color);
 t_color_f	vec3_to_color_f(t_vec3 v);
 int			add_colors(int color1, int color2);
-int			blend_colors(int base_color, int blend_color,
-				double base_weight, double blend_weight);
+int			blend_colors(int base_color, int blend_color, double base_weight, double blend_weight);
 
 // Color calculations (color_calculations.c)
-t_color_f	calculate_diffuse_lighting(t_color_f base_color,
-				double diffuse_component, t_color_f light_color);
-t_color_f	calculate_specular_lighting(double specular_intensity,
-				t_color_f light_color);
+t_color_f	calculate_diffuse_lighting(t_color_f base_color, double diffuse_component, t_color_f light_color);
+t_color_f	calculate_specular_lighting(double specular_intensity, t_color_f light_color);
 t_color_f	add_color_components(t_color_f color1, t_color_f color2);
-t_color_f	get_pixel_color_linear(t_hit_record *hit_record,
-				double light_intensity, t_color_f light_color,
-				double specular_intensity);
+t_color_f	get_pixel_color_linear(t_hit_record *hit_record, double light_intensity, t_color_f light_color, double specular_intensity);
 
 // Texture sampling functions (texture_sampling.c)
 // void		wrap_uv_coordinates(double *u, double *v);
@@ -168,10 +162,8 @@ int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object *
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
-void		check_cylinder_caps_intersection(t_ray ray, \
-					t_cylinder cylinder, double *t_top, double *t_bottom);
-double		ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal,
-							double radius);
+void		check_cylinder_caps_intersection(t_ray ray, t_cylinder cylinder, double *t_top, double *t_bottom);
+double		ray_disc_intersect(t_ray ray, t_vec3 center, t_vec3 normal, double radius);
 int			ray_plane_intersect(t_ray ray, t_plane plane, double *t);
 int			ray_cube_intersect(t_ray ray, t_cube cube, double *t);
 double		min(double a, double b);
@@ -188,8 +180,7 @@ int			mesh_linear_intersect(t_ray ray, t_mesh mesh, double *t, int *triangle_idx
 int			mesh_linear_intersect_bary(t_ray ray, t_mesh mesh, t_mesh_bary_params params);
 int			mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_vec3 *bary);
 int			ray_cone_intersect(t_ray ray, t_cone cone, double *t);
-void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone,
-								t_vec3 apex_to_origin, double *coeffs);
+void		calculate_cone_equation_coeffs(t_ray ray, t_cone cone, t_vec3 apex_to_origin, double *coeffs);
 int			solve_cone_quadratic(t_ray ray, t_cone cone, double *coeffs, double *t_body);
 t_vec3		cone_normal_at_point(t_vec3 point, t_cone cone);
 
@@ -200,97 +191,105 @@ t_light		*create_light(t_vec3 position, double intensity, t_color color);
 // rendering
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
 void		render_scene(t_scene *scene);
+void		*render_thread(void *arg);
+void		render_rows(t_scene *scene, double fov_scale, int samples, int start_row, int end_row);
+void		render_pixel_samples(t_scene *scene, double fov_scale, t_vec3 *final_color, int x, int y, int samples, int sy);
+void		process_final_color(t_scene *scene, t_vec3 final_color, int samples, int x, int y);
 t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
 t_vec3		reinhard_tone_map(t_vec3 color, double exposure);
-void		*render_thread(void *arg);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
 t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection);
 
 /* bumpmap.c */
-float	sample_bump_map(t_bump_map *bump_map, double u, double v);
+float		sample_bump_map(t_bump_map *bump_map, double u, double v);
 
 /* tangent_vectors.c */
-void	calculate_tangent_vectors(t_vec3 normal, t_vec3 *tangent, t_vec3 *bitangent);
-void	calculate_sphere_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
-void	calculate_plane_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void		calculate_tangent_vectors(t_vec3 normal, t_vec3 *tangent, t_vec3 *bitangent);
+void		calculate_sphere_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void		calculate_plane_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
 
 /* cylinder_cube_tangents.c */
-void	calculate_cylinder_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
-void	calculate_cube_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void		calculate_cylinder_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
+void		calculate_cube_tangent_vectors(t_hit_record *hit_record, t_vec3 *tangent, t_vec3 *bitangent);
 
 /* bump_normal.c */
-t_vec3	calculate_bump_normal(t_hit_record *hit_record);
+t_vec3		calculate_bump_normal(t_hit_record *hit_record);
 
 // uv_mapping
-t_vec2	sphere_uv_mapping(t_vec3 point, t_sphere sphere);
-t_vec2	plane_uv_mapping(t_vec3 point, t_plane plane);
-t_vec2	cylinder_uv_mapping(t_vec3 point, t_cylinder cylinder);
-t_vec2	cube_uv_mapping(t_vec3 point, t_cube cube);
-t_vec2	calculate_uv_coordinates(t_vec3 point, t_object *object);
+t_vec2		sphere_uv_mapping(t_vec3 point, t_sphere sphere);
+t_vec2		plane_uv_mapping(t_vec3 point, t_plane plane);
+t_vec2		cylinder_uv_mapping(t_vec3 point, t_cylinder cylinder);
+t_vec2		cube_uv_mapping(t_vec3 point, t_cube cube);
+t_vec2		calculate_uv_coordinates(t_vec3 point, t_object *object);
 
 // compute light
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
-void	compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record);
+void		compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record);
 
 
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
+double		calculate_shadow_attenuation(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
+
+// trace ray helpers
+double		get_light_shadow_attenuation(t_scene *scene, t_hit_record hit_record, t_light *light);
+t_vec3		apply_light_contribution(t_light_params params);
 
 // scenes
-void	set_up_scene_triangle(t_scene *scene);
-void	set_up_scene_plane(t_scene *scene);
-void	set_up_scene_two_sphere(t_scene *scene);
-void	set_up_scene_cylinder(t_scene *scene);
-void	set_up_scene_mesh(t_scene *scene);
-void	set_up_scene_cube(t_scene *scene);
+void		set_up_scene_triangle(t_scene *scene);
+void		set_up_scene_plane(t_scene *scene);
+void		set_up_scene_two_sphere(t_scene *scene);
+void		set_up_scene_cylinder(t_scene *scene);
+void		set_up_scene_mesh(t_scene *scene);
+void		set_up_scene_cube(t_scene *scene);
 
 
 // UI Control Panel Functions
-bool    *get_checkbox_state(t_scene *scene, int idx);
-void    clear_panel_image(t_panel *panel);
-void    init_toggle_button(t_scene *scene);
-void    init_ui_panel(t_scene *scene);
-void    init_panel_image(t_scene *scene, t_panel *p);
-void    cleanup_ui_panel(t_scene *scene);
-void    cleanup_panel_images(t_scene *scene, t_panel *p);
-void    cleanup_status_text(t_scene *scene, t_panel *p);
+bool		*get_checkbox_state(t_scene *scene, int idx);
+void		clear_panel_image(t_panel *panel);
+void		init_toggle_button(t_scene *scene);
+void		init_ui_panel(t_scene *scene);
+void		init_panel_image(t_scene *scene, t_panel *p);
+void		cleanup_ui_panel(t_scene *scene);
+void		cleanup_panel_images(t_scene *scene, t_panel *p);
+void		cleanup_status_text(t_scene *scene, t_panel *p);
 
 // Drawing Functions
-void    draw_toggle_button(t_scene *scene);
-void    draw_button_background(t_toggle_button *tog);
-void    draw_button_border(t_toggle_button *tog);
-void	draw_checkbox(t_panel *p, mlx_image_t *img, t_checkbox_pos *pos);
-void    draw_checkbox_background(t_panel *p, mlx_image_t *img, int x, int y);
-void    draw_checkbox_border(t_panel *p, mlx_image_t *img, int x, int y);
-void    draw_checkbox_check(t_panel *p, mlx_image_t *img, int x, int y);
-void	draw_single_checkbox(t_scene *scene, int x_cb, int y_base, int idx);
-void    draw_panel_background(t_panel *p);
-void    draw_panel_main_bg(t_panel *p);
-void    draw_panel_header(t_panel *p);
-void    draw_panel_borders(t_panel *p);
-void    draw_panel_content(t_scene *scene);
-bool    update_panel_animation(t_panel *p);
-bool    update_panel_closing(t_panel *p);
+void		draw_toggle_button(t_scene *scene);
+void		draw_button_background(t_toggle_button *tog);
+void		draw_button_border(t_toggle_button *tog);
+void		draw_checkbox(t_panel *p, mlx_image_t *img, t_checkbox_pos *pos);
+void		draw_checkbox_background(t_panel *p, mlx_image_t *img, int x, int y);
+void		draw_checkbox_border(t_panel *p, mlx_image_t *img, int x, int y);
+void		draw_checkbox_check(t_panel *p, mlx_image_t *img, int x, int y);
+void		draw_single_checkbox(t_scene *scene, int x_cb, int y_base, int idx);
+void		draw_panel_background(t_panel *p);
+void		draw_panel_main_bg(t_panel *p);
+void		draw_panel_header(t_panel *p);
+void		draw_panel_borders(t_panel *p);
+void		draw_panel_content(t_scene *scene);
+bool		update_panel_animation(t_panel *p);
+bool		update_panel_closing(t_panel *p);
 
 // Text Management
-void    delete_panel_text(t_scene *scene);
-void    hide_panel_text(t_panel *p);
-void    show_panel_text(t_panel *p);
-void    draw_panel_text(t_scene *scene);
-void    draw_panel_title(t_scene *scene, t_panel *p);
-void    draw_checkbox_labels(t_scene *scene, t_panel *p);
-char    *get_checkbox_label(int idx);
-bool    draw_ui_panel(t_scene *scene);
-void    handle_panel_text_display(t_scene *scene, t_panel *p);
+void		delete_panel_text(t_scene *scene);
+void		hide_panel_text(t_panel *p);
+void		show_panel_text(t_panel *p);
+void		draw_panel_text(t_scene *scene);
+void		draw_panel_title(t_scene *scene, t_panel *p);
+void		draw_checkbox_labels(t_scene *scene, t_panel *p);
+char		*get_checkbox_label(int idx);
+bool		draw_ui_panel(t_scene *scene);
+void		handle_panel_text_display(t_scene *scene, t_panel *p);
 
 // Interaction
-bool    is_point_in_toggle_button(t_toggle_button *tog, int x, int y);
-bool    is_point_in_checkbox(t_panel *p, int x, int y, int idx);
-bool    ui_panel_mouse_click(t_scene *scene, int x, int y);
-bool    handle_checkbox_clicks(t_scene *scene, t_panel *p, int x, int y);
-void    ui_animation_loop(void *param);
-void    draw_ui(t_scene *scene);
+bool		is_point_in_toggle_button(t_toggle_button *tog, int x, int y);
+bool		is_point_in_checkbox(t_panel *p, int x, int y, int idx);
+bool		ui_panel_mouse_click(t_scene *scene, int x, int y);
+bool		handle_checkbox_clicks(t_scene *scene, t_panel *p, int x, int y);
+void		ui_animation_loop(void *param);
+void		draw_ui(t_scene *scene);
 
 // camera
 t_vec3		rotate_point(t_vec3 point, t_vec3 rotation);
@@ -325,38 +324,32 @@ void		close_callback(void *param);
 
 
 /* checker.c function declarations */
-t_vec2	spherical_map(t_vec3 point);
-int		is_checker_point_2d(double u, double v, double checker_size);
-t_vec2	get_plane_checker_uv(t_object *object, t_vec3 point);
-t_vec2	get_sphere_checker_uv(t_object *object, t_vec3 point);
-t_color	get_checker_color(t_material material, t_object *object, t_vec3 point);
+t_vec2		spherical_map(t_vec3 point);
+int			is_checker_point_2d(double u, double v, double checker_size);
+t_vec2		get_plane_checker_uv(t_object *object, t_vec3 point);
+t_vec2		get_sphere_checker_uv(t_object *object, t_vec3 point);
+t_color		get_checker_color(t_material material, t_object *object, t_vec3 point);
 
 /* checker_utils.c function declarations */
-t_vec2	project_to_plane_uv(t_plane *plane, t_vec3 point, t_vec3 u_axis);
-t_vec2	get_cylinder_checker_uv(t_object *object, t_vec3 point);
-t_vec2	get_cube_checker_uv(t_object *object, t_vec3 point);
-t_vec2	cylindrical_map(t_vec3 point, double radius, t_vec3 axis);
-t_vec2	calculate_cylinder_checker_uv(t_vec3 point, double radius, t_vec3 axis);
+t_vec2		project_to_plane_uv(t_plane *plane, t_vec3 point, t_vec3 u_axis);
+t_vec2		get_cylinder_checker_uv(t_object *object, t_vec3 point);
+t_vec2		get_cube_checker_uv(t_object *object, t_vec3 point);
+t_vec2		cylindrical_map(t_vec3 point, double radius, t_vec3 axis);
+t_vec2		calculate_cylinder_checker_uv(t_vec3 point, double radius, t_vec3 axis);
 
 /* cubic_map.c function declarations */
-t_vec2	cubic_map(t_cube *cube, t_vec3 local_point);
-t_vec2	map_x_face(t_cube *cube, t_vec3 local_point);
-t_vec2	map_y_face(t_cube *cube, t_vec3 local_point);
-t_vec2	map_z_face(t_cube *cube, t_vec3 local_point);
-
-// Global exposure value for tone mapping
-extern float g_exposure;
+t_vec2		cubic_map(t_cube *cube, t_vec3 local_point);
+t_vec2		map_x_face(t_cube *cube, t_vec3 local_point);
+t_vec2		map_y_face(t_cube *cube, t_vec3 local_point);
+t_vec2		map_z_face(t_cube *cube, t_vec3 local_point);
 
 // Ray tracing helper functions
 t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
 t_vec3		get_background_color(t_scene *scene);
 t_vec3		handle_refractive_material(t_ray_context context, double cos_theta);
-t_vec3		handle_reflective_material(t_ray_context context, double cos_theta,
-		double *total_contrib);
-t_vec3		add_direct_lighting(t_scene *scene, t_hit_record hit_record,
-			double total_contribution, t_vec3 final_color);
-t_vec3		process_lights(t_scene *scene, t_hit_record hit_record,
-			t_light *current_light, t_vec3 direct_color);
+t_vec3		handle_reflective_material(t_ray_context context, double cos_theta, double *total_contrib);
+t_vec3		add_direct_lighting(t_scene *scene, t_hit_record hit_record, double total_contribution, t_vec3 final_color);
+t_vec3		process_lights(t_scene *scene, t_hit_record hit_record, t_light *current_light, t_vec3 direct_color);
 t_vec3		process_material_interaction(t_ray_context context, double cos_theta);
 
 // Fresnel calculations
@@ -364,33 +357,25 @@ double		calculate_fresnel_reflectance(t_fresnel_params params);
 double		calculate_fresnel_schlick(double cos_theta, double ior);
 
 // Reflection operations
-t_vec3		calculate_reflection(t_scene *scene, t_ray ray,
-		t_hit_record hit_record, int depth);
-t_vec3		add_reflection_contribution(t_ray_context context,
-		t_material_contrib *contrib);
+t_vec3		calculate_reflection(t_scene *scene, t_ray ray, t_hit_record hit_record, int depth);
+t_vec3		add_reflection_contribution(t_ray_context context, t_material_contrib *contrib);
 
 // Refraction operations
-t_vec3		handle_total_internal_reflection(t_ray_context context,
-		t_material_contrib *contrib);
-t_vec3		process_refraction(t_ray_context context,
-		t_material_contrib *contrib, t_vec3 refract_dir);
-t_vec3		add_refraction_contribution(t_ray_context context,
-		t_material_contrib *contrib, t_refraction_params refract_params);
+t_vec3		handle_total_internal_reflection(t_ray_context context, t_material_contrib *contrib);
+t_vec3		process_refraction(t_ray_context context, t_material_contrib *contrib, t_vec3 refract_dir);
+t_vec3		add_refraction_contribution(t_ray_context context, t_material_contrib *contrib, t_refraction_params refract_params);
 
 // Material processing
-t_vec3		process_reflection_refraction(t_ray_context context,
-		t_material_contrib *contrib, t_fresnel_params fresnel_params);
+t_vec3		process_reflection_refraction(t_ray_context context, t_material_contrib *contrib, t_fresnel_params fresnel_params);
 
 // Lighting calculations
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
 // Ray generation
-void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale,
-		double x, double y);
+void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, double x, double y);
 
 // Basic reflection/refraction mathematics
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
-t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio,
-		bool *total_internal_reflection);
+t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection);
 
 #endif

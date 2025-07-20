@@ -12,8 +12,8 @@
 
 #include "../../../includes/miniRT.h"
 
-t_vec3	calculate_reflection(t_scene *scene, t_ray ray,
-	t_hit_record hit_record, int depth)
+t_vec3	calculate_reflection(t_scene *scene, t_ray ray, \
+								t_hit_record hit_record, int depth)
 {
 	t_vec3	reflect_dir;
 	t_ray	reflect_ray_struct;
@@ -25,8 +25,8 @@ t_vec3	calculate_reflection(t_scene *scene, t_ray ray,
 	return (trace_ray(scene, reflect_ray_struct, depth + 1));
 }
 
-t_vec3	add_reflection_contribution(t_ray_context context,
-	t_material_contrib *contrib)
+t_vec3	add_reflection_contribution(t_ray_context context, \
+										t_material_contrib *contrib)
 {
 	t_vec3	reflect_color;
 	double	reflect_contrib;

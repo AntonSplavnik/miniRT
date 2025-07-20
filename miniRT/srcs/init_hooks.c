@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_hooks.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 00:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 16:20:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/20 18:29:42 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,24 @@ void	init_mlx(t_scene *scene)
 }
 
 /* Initialize scene BVH for optimization */
-void	init_scene_bvh(t_scene *scene)
+void init_scene_bvh(t_scene *scene)
 {
-	ssize_t	result;
-
-	if (scene->objects)
+	count_scene_objects(scene);
+	if (scene->objects && scene->object_count > 30)
 	{
 		scene->scene_bvh = build_scene_bvh(scene);
-		if (!scene->scene_bvh)
-		{
-			result = write(2, "Warning: Failed to build scene BVH\n", 36);
-			(void)result;
-		}
+
+		if (scene->scene_bvh)
+			ft_printf("Scene BVH initialized successfully (%d objects)\n", scene->object_count);
+		else
+			ft_printf("Failed to build scene BVH\n");
 	}
 	else
+	{
 		scene->scene_bvh = NULL;
+		if (scene->objects)
+			ft_printf("Scene has %d objects, using linear search\n", scene->object_count);
+		else
+			ft_printf("No objects in scene, BVH not built\n");
+	}
 }

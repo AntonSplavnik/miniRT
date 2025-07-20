@@ -15,6 +15,8 @@ sp -7,6,0 5 240,235,210
 # Third scoop (chocolate)
 sp -7,8.5,0 4 110,60,40
 
+
+
 # Cone 2 (waffle cone)
 co 6.7,-4.2,-1 0,1,0 3 7 219,178,119 {checker_color:181,143,86 checker_size:0.2}
 

@@ -11,22 +11,75 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+/*
+double	calculate_shadow_attenuation(t_scene *scene, t_vec3 hit_point,
+	t_vec3 light_dir, double light_distance, t_hit_record hit_record)
+{
+	t_ray		shadow_ray;
+	t_object	*hit_object;
+	t_object	*last_object;
+	double		t;
+	double		attenuation;
+	int			max_iterations;
 
-int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record)
+	t_vec3 offset = vec3_scale(hit_record.normal, 0.001);
+	shadow_ray.origin = vec3_add(hit_point, offset);
+	shadow_ray.direction = light_dir;
+	attenuation = 1.0;
+	max_iterations = 5;
+	last_object = NULL;
+	while (max_iterations > 0 && find_closest_intersection(scene, shadow_ray, \
+		&t, &hit_object, &hit_record) && t < light_distance)
+	{
+		if (hit_object->material.transparency > 0.001)
+		{
+			if (hit_object != last_object)
+			{
+				attenuation *= hit_object->material.transparency;
+				last_object = hit_object;
+			}
+			if (attenuation < 0.001)
+				return (0.0);
+			shadow_ray.origin = vec3_add(shadow_ray.origin, \
+				vec3_scale(light_dir, t + 0.001));
+			light_distance -= t;
+			max_iterations--;
+		}
+		else
+			return (0.0);
+	}
+	return (attenuation);
+} */
+
+double	calculate_shadow_attenuation(t_scene *scene, t_vec3 hit_point,
+			t_vec3 light_dir, double light_distance, t_hit_record hit_record)
 {
 	t_ray		shadow_ray;
 	t_object	*hit_object;
 	double		t;
 
-	//Create a shadow ray from the hit point towards the light
-	// Use surface normal for more robust offset to avoid self-intersection
 	t_vec3 offset = vec3_scale(hit_record.normal, 0.001);
 	shadow_ray.origin = vec3_add(hit_point, offset);
 	shadow_ray.direction = light_dir;
+	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object,
+		&hit_record) && t < light_distance)
+	{
+		if (hit_object->material.transparency > 0.001)
+			return (hit_object->material.transparency);
+		else
+			return (0.0);
+	}
+	return (1.0);
+}
 
-	if (find_closest_intersection(scene, shadow_ray, &t, &hit_object, &hit_record) && t < light_distance)
-		return (1);
-	return (0);
+int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, 
+					double light_distance, t_hit_record hit_record)
+{
+	double	shadow_factor;
+
+	shadow_factor  = calculate_shadow_attenuation(scene, hit_point, light_dir, \
+		 light_distance, hit_record);
+	return (shadow_factor < 0.999);
 }
 
 int	find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record)
@@ -247,15 +300,23 @@ void compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_r
 			hit_record->original_normal = vec3_create(0, 1, 0);
 		}
 	}
+		// 2. Determine if the ray is hitting the front face or inside
+	if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
+	{
+		hit_record->inside = true;
+		hit_record->normal = vec3_negate(hit_record->original_normal);
+	}
+	else
+	{
+		hit_record->inside = false;
+		hit_record->normal = hit_record->original_normal;
+	}
 
 	// 3. Optional: UV mapping for textures or checker
 	if (hit_record->material.has_texture || hit_record->material.has_checker)
 		hit_record->uv = calculate_uv_coordinates(hit_record->point, hit_object);
 
-	// 4. Set the normal for lighting calculations
-	hit_record->normal = hit_record->original_normal;
-	
-	// 5. Optional: bump mapping adjustment
+	// 4. Optional: bump mapping adjustment
 	if (hit_record->material.has_bump_map)
 		hit_record->normal = calculate_bump_normal(hit_record);
 }

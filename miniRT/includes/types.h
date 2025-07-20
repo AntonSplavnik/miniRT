@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   types.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 15:35:57 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/20 17:21:27 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,6 @@
 # define NUM_THREADS 8 // Number of threads for multithreaded rendering
 
 // UI constants
-
-
-
 #define PANEL_X             10
 #define PANEL_Y             50
 #define PANEL_WIDTH         260
@@ -52,27 +49,27 @@
 
 // 3D rendering constants
 # define FOV					60.0
-# define CAMERA_MOVEMENT_SPEED	5.0
+# define CAMERA_MOVEMENT_SPEED	0.5
 # define CAMERA_ROTATION_SPEED	0.05
 # define NEAR_PLANE				0.1
 # define FAR_PLANE				100.0
-# define MAX_RAY_DEPTH			5
+# define MAX_RAY_DEPTH			8
 
 
-# define BLACK      			0x000000  // RGB(0, 0, 0)
-# define WHITE       			0xFFFFFF  // RGB(255, 255, 255)
-# define RED         			0xFF0000  // RGB(255, 0, 0)
-# define GREEN       			0x00FF00  // RGB(0, 255, 0)
-# define BLUE        			0x0000FF  // RGB(0, 0, 255)
+# define BLACK					0x000000  // RGB(0, 0, 0)
+# define WHITE					0xFFFFFF  // RGB(255, 255, 255)
+# define RED					0xFF0000  // RGB(255, 0, 0)
+# define GREEN					0x00FF00  // RGB(0, 255, 0)
+# define BLUE					0x0000FF  // RGB(0, 0, 255)
 
-# define MAGENTA_BURST   		0xFF00FF
-# define LIME_SHOCK     		0xCCFF00
-# define NEON_ORANGE     		0xFF6600
+# define MAGENTA_BURST			0xFF00FF
+# define LIME_SHOCK				0xCCFF00
+# define NEON_ORANGE			0xFF6600
 # define PSYCHEDELIC_PURPLE		0x660066
-# define AQUA_DREAM      		0x33CCCC
-# define HOT_PINK        		0xFF66B2
-# define ELECTRIC_BLUE   		0x0066FF
-# define LAVA_RED        		0xFF3300
+# define AQUA_DREAM				0x33CCCC
+# define HOT_PINK				0xFF66B2
+# define ELECTRIC_BLUE			0x0066FF
+# define LAVA_RED				0xFF3300
 
 
 typedef struct s_vec2
@@ -584,6 +581,7 @@ typedef struct s_scene
 	t_graphic_settings	graphic_settings;
 	t_mouse_state		mouse_state;
 	t_bvh_node			*scene_bvh; // Root of scene-wide BVH
+	int					object_count;
 
 	t_ui				ui; //UI panel and toggle button
 
@@ -618,6 +616,15 @@ typedef struct s_ray_context
 	t_hit_record	hit_record;
 	int				depth;
 }	t_ray_context;
+
+typedef struct s_light_params
+{
+	t_scene			*scene;
+	t_hit_record	hit_record;
+	t_light			*light;
+	double			shadow_attenuation;
+	t_vec3			direct_color;
+}	t_light_params;
 
 typedef struct s_thread_data
 {

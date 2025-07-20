@@ -11,4 +11,4 @@
 	L 200,150,300 0.4 255,255,255
 
 	# Try mesh with adjusted path
-	me scenes/3D_models/Volkswagen_Beetle_1963.obj 0,0,0 0,1,0 1 0,0,0 
+	me scenes/3D_models/Volkswagen_Beetle_1963.obj 0,0,0 0,1,0 1 255,0,0
