@@ -22,8 +22,8 @@ int	scene_ray_intersect_bvh(t_scene_ray_params params)
 	t_bvh_traverse_params	traverse_params;
 
 	if (!params.scene->scene_bvh)
-		return (find_closest_intersection(params.scene, params.ray, params.t,
-				params.hit_object, params.hit_record));
+		return (find_closest_intersection(params.scene, params.ray,
+				params.hit_record, params.hit_object));
 	stack_size = 0;
 	stack[stack_size++] = params.scene->scene_bvh;
 	closest_t = INFINITY;

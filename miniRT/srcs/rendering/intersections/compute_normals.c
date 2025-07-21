@@ -43,6 +43,23 @@ void	compute_object_normal(t_hit_record *hit_record, t_ray ray)
 }
 
 /*
+** Determine if ray is hitting from inside or outside object
+*/
+void	compute_inside_outside(t_hit_record *hit_record, t_ray ray)
+{
+	if (vec3_dot(ray.direction, hit_record->original_normal) > 0)
+	{
+		hit_record->inside = 1;
+		hit_record->normal = vec3_negate(hit_record->original_normal);
+	}
+	else
+	{
+		hit_record->inside = 0;
+		hit_record->normal = hit_record->original_normal;
+	}
+}
+
+/*
 ** Compute complete ray intersection data including point, normal, and UV
 */
 void	compute_ray_intersection(t_ray ray, t_object *hit_object,
@@ -52,8 +69,8 @@ void	compute_ray_intersection(t_ray ray, t_object *hit_object,
 		vec3_scale(ray.direction, hit_record->t));
 	hit_record->object = hit_object;
 	hit_record->material = hit_object->material;
-	hit_record->inside = 0;
 	compute_object_normal(hit_record, ray);
+	compute_inside_outside(hit_record, ray);
 	if (hit_record->material.has_texture || hit_record->material.has_checker)
 		hit_record->uv = calculate_uv_coordinates(hit_record->point, \
 			hit_object);

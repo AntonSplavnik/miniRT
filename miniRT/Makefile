@@ -101,7 +101,11 @@ SRC_FILES = main.c \
 	rendering/color/color_calculations.c \
 	rendering/color/texture_sampling.c \
 	rendering/color/surface_colors.c \
-	rendering/compute_intersections.c \
+	rendering/intersections/compute_intersection.c \
+	rendering/intersections/compute_normals.c \
+	rendering/intersections/compute_ray_intersection.c \
+	rendering/intersections/compute_ray_intersection_2.c \
+	rendering/intersections/find_intersaction.c \
 	rendering/BVH/calculate_object_aabb.c \
 	rendering/BVH/calculate_object_aabb_2.c \
 	rendering/BVH/calculate_object_aabb_3.c \
@@ -144,6 +148,7 @@ SRC_FILES = main.c \
 	rendering/bumpmap/bump_normal.c \
 	rendering/bumpmap/cylinder_cube_tangents.c \
 	rendering/bumpmap/tangent_vectors.c \
+	rendering/shadows/shadows.c \
 	ui/ui_control_panel.c \
 	ui/ui_panel_utils.c \
 	ui/ui_drawing.c \

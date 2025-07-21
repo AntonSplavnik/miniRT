@@ -15,17 +15,17 @@
 double	get_light_shadow_attenuation(t_scene *scene, t_hit_record hit_record,
 	t_light *light)
 {
-	t_vec3	light_dir;
-	double	light_distance;
+	t_shadow_params	params;
 
 	if (!scene->graphic_settings.enable_hard_shadows)
 		return (1.0);
-	light_dir = vec3_normalize(vec3_subtract(light->position, \
+	params.hit_point = hit_record.point;
+	params.light_dir = vec3_normalize(vec3_subtract(light->position, \
 		hit_record.point));
-	light_distance = vec3_length(vec3_subtract(light->position, \
+	params.light_distance = vec3_length(vec3_subtract(light->position, \
 		hit_record.point));
-	return (calculate_shadow_attenuation(scene, hit_record.point, light_dir, \
-		light_distance, hit_record));
+	params.surface_normal = hit_record.normal;
+	return (calculate_shadow_attenuation(scene, params));
 }
 
 t_vec3	apply_light_contribution(t_light_params params)

@@ -50,7 +50,7 @@ static void	transform_triangle_vertices(t_mesh *mesh, int i)
 /*
 ** Computes and stores the normal for a transformed triangle
 */
-static void	compute_triangle_normal(t_mesh *mesh, int i)
+static void	compute_mesh_triangle_normal(t_mesh *mesh, int i)
 {
 	t_vec3	edge1;
 	t_vec3	edge2;
@@ -94,7 +94,7 @@ void	precompute_transformed_triangles(t_mesh *mesh)
 	while (i < mesh->triangle_count)
 	{
 		transform_triangle_vertices(mesh, i);
-		compute_triangle_normal(mesh, i);
+		compute_mesh_triangle_normal(mesh, i);
 		transform_vertex_normals(mesh, i);
 		i++;
 	}

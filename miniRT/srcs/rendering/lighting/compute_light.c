@@ -25,6 +25,7 @@ t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, \
 	result.light_distance = vec3_length(to_light);
 	result.light_dir = vec3_normalize(to_light);
 	result.diffuse = fmax(0.0, vec3_dot(hit_record.normal, result.light_dir));
+	result.specular_intensity = 0.0;
 	view_dir = vec3_normalize(vec3_subtract(scene->camera.position, \
 		hit_record.point));
 	reflect_dir = vec3_subtract(vec3_scale(hit_record.normal, 2.0 * \

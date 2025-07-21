@@ -90,15 +90,14 @@ t_vec3	trace_ray(t_scene *scene, t_ray ray, int depth)
 {
 	t_hit_record	hit_record;
 	t_object		*hit_object;
-	double			t;
 	double			cos_theta;
 	t_ray_context	context;
 
 	if (depth > MAX_RAY_DEPTH)
 		return (vec3_create(0, 0, 0));
-	if (!find_closest_intersection(scene, ray, &t, &hit_object, &hit_record))
+	if (!find_closest_intersection(scene, ray, &hit_record, &hit_object))
 		return (get_background_color(scene));
-	compute_ray_intersection(ray, hit_object, t, &hit_record);
+	compute_ray_intersection(ray, hit_object, &hit_record);
 	cos_theta = fabs(vec3_dot(ray.direction, hit_record.normal));
 	context.scene = scene;
 	context.ray = ray;

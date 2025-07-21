@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:00:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/14 03:14:45 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 02:19:40 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,18 @@ int	find_closest_intersection(t_scene *scene, t_ray ray,
 	double					t_temp;
 	t_intersection_data		data;
 
+	if (scene->scene_bvh)
+		return (scene_ray_intersect_bvh((t_scene_ray_params){scene, ray, \
+			&hit_record->t, hit_object, hit_record}));
 	current = scene->objects;
 	data.t_closest = INFINITY;
 	data.hit_something = 0;
 	data.hit_object = NULL;
 	while (current)
 	{
-		if (test_basic_intersections(current, ray, &t_temp)
-			|| test_cube_triangle(current, ray, &t_temp)
-			|| test_mesh_cone(current, ray, &t_temp, hit_record))
+		if (test_basic_shapes(current, ray, &t_temp)
+			|| test_cube_cone(current, ray, &t_temp)
+			|| test_triangle_mesh_bary(current, ray, &t_temp, hit_record))
 			update_closest_hit(t_temp, &data, current);
 		current = current->next;
 	}

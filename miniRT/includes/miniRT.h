@@ -158,7 +158,23 @@ void		add_object(t_scene *scene, t_object *object);
 
 // object intersection
 int			ray_sphere_intersect(t_ray ray, t_sphere sphere, double *t);
-int			find_closest_intersection(t_scene *scene, t_ray ray, double *t, t_object **hit_object, t_hit_record *hit_record);
+int			find_closest_intersection(t_scene *scene, t_ray ray, t_hit_record *hit_record, t_object **hit_object);
+int			test_basic_shapes(t_object *current, t_ray ray, double *t_temp);
+int			test_cube_cone(t_object *current, t_ray ray, double *t_temp);
+int			test_triangle_mesh_bary(t_object *current, t_ray ray, double *t_temp, t_hit_record *hit_record);
+void		update_closest_hit(double t_temp, t_intersection_data *data, t_object *current);
+void		interpolate_triangle_normal(t_hit_record *hit_record, t_triangle *triangle);
+void		interpolate_mesh_normal(t_hit_record *hit_record, t_transformed_triangle *tri);
+void		compute_inside_outside(t_hit_record *hit_record, t_ray ray);
+void		compute_sphere_normal(t_hit_record *hit_record);
+void		compute_cylinder_normal(t_hit_record *hit_record);
+void		compute_plane_normal(t_hit_record *hit_record, t_ray ray);
+void		compute_cube_normal(t_hit_record *hit_record);
+void		compute_cone_normal(t_hit_record *hit_record);
+void		compute_triangle_normal(t_hit_record *hit_record, t_ray ray);
+void		compute_mesh_normal(t_hit_record *hit_record, t_ray ray);
+void		compute_object_normal(t_hit_record *hit_record, t_ray ray);
+void		compute_complex_normals(t_hit_record *hit_record, t_ray ray);
 t_vec3		sphere_normal_at_point(t_vec3 point, t_sphere sphere);
 t_vec3		cylinder_normal_at_point(t_vec3 point, t_cylinder cylinder);
 int			ray_cylinder_intersect(t_ray ray, t_cylinder cylinder, double *t);
@@ -225,12 +241,12 @@ t_vec2		calculate_uv_coordinates(t_vec3 point, t_object *object);
 // compute light
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
-void		compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_record *hit_record);
+void		compute_ray_intersection(t_ray ray, t_object *hit_object, t_hit_record *hit_record);
 
 
 //shadows
-int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
-double		calculate_shadow_attenuation(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
+double		calculate_shadow_attenuation(t_scene *scene, t_shadow_params params);
+int			process_transparent_hit(t_shadow_data *data, t_object *hit_object, double t);
 
 // trace ray helpers
 double		get_light_shadow_attenuation(t_scene *scene, t_hit_record hit_record, t_light *light);

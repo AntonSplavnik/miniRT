@@ -6,40 +6,16 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:45:02 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 21:19:10 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 03:16:55 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
 /*
-** Check if a point is in shadow by testing for objects between
-** the hit point and the light source
-*/
-int	is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir,
-	double light_distance)
-{
-	t_ray			shadow_ray;
-	t_object		*hit_object;
-	t_hit_record	dummy_record;
-
-	shadow_ray.origin = vec3_add(hit_point, vec3_scale(light_dir, 0.001));
-	shadow_ray.direction = light_dir;
-	if (find_closest_intersection(scene, shadow_ray, &dummy_record, \
-		&hit_object) && dummy_record.t < light_distance)
-	{
-		if (hit_object->material.transparency > 0.001 || \
-			hit_object->material.has_refraction)
-			return (0);
-		return (1);
-	}
-	return (0);
-}
-
-/*
 ** Test intersection with basic object types (sphere, cylinder, plane)
 */
-int	test_basic_intersections(t_object *current, t_ray ray, double *t_temp)
+int	test_basic_shapes(t_object *current, t_ray ray, double *t_temp)
 {
 	t_sphere	*sphere;
 	t_cylinder	*cylinder;
@@ -64,49 +40,53 @@ int	test_basic_intersections(t_object *current, t_ray ray, double *t_temp)
 }
 
 /*
-** Test intersection with cube and triangle objects
+** Test intersection with cube and cone objects
 */
-int	test_cube_triangle(t_object *current, t_ray ray, double *t_temp)
+int	test_cube_cone(t_object *current, t_ray ray, double *t_temp)
 {
 	t_cube		*cube;
-	t_triangle	*triangle;
+	t_cone		*cone;
 
 	if (current->type == CUBE)
 	{
 		cube = (t_cube *)(current->data);
 		return (ray_cube_intersect(ray, *cube, t_temp));
 	}
-	if (current->type == TRIANGLE)
+	if (current->type == CONE)
 	{
-		triangle = (t_triangle *)(current->data);
-		return (ray_triangle_intersect(ray, *triangle, t_temp));
+		cone = (t_cone *)(current->data);
+		return (ray_cone_intersect(ray, *cone, t_temp));
 	}
 	return (0);
 }
 
 /*
-** Test intersection with mesh and cone objects
+** Test intersection with triangle and mesh objects using barycentric coords
 */
-int	test_mesh_cone(t_object *current, t_ray ray, double *t_temp,
+int	test_triangle_mesh_bary(t_object *current, t_ray ray, double *t_temp,
 	t_hit_record *hit_record)
 {
-	t_mesh	*mesh;
-	t_cone	*cone;
-	int		triangle_idx;
+	t_mesh					*mesh;
+	t_triangle				*triangle;
+	int						triangle_idx;
+	t_mesh_intersect_params	params;
 
+	if (current->type == TRIANGLE)
+	{
+		triangle = (t_triangle *)(current->data);
+		return (ray_triangle_intersect_bary(ray, *triangle, t_temp, \
+			&hit_record->barycentric));
+	}
 	if (current->type == MESH)
 	{
 		mesh = (t_mesh *)(current->data);
-		if (ray_mesh_intersect(ray, *mesh, t_temp, &triangle_idx))
+		params = (t_mesh_intersect_params){ray, *mesh, t_temp, \
+			&triangle_idx, &hit_record->barycentric};
+		if (ray_mesh_intersect_bary(params))
 		{
 			hit_record->triangle_idx = triangle_idx;
 			return (1);
 		}
-	}
-	if (current->type == CONE)
-	{
-		cone = (t_cone *)(current->data);
-		return (ray_cone_intersect(ray, *cone, t_temp));
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/21 00:51:30 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 03:19:15 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define CAMERA_ROTATION_SPEED	0.05
 # define NEAR_PLANE				0.1
 # define FAR_PLANE				100.0
-# define MAX_RAY_DEPTH			8
+# define MAX_RAY_DEPTH			3
 
 
 # define BLACK					0x000000  // RGB(0, 0, 0)
@@ -467,6 +467,30 @@ typedef struct s_intersection_params
 	double	closest_t;
 	int		triangle_idx;
 }	t_intersection_params;
+
+typedef struct s_intersection_data
+{
+	double		t_closest;
+	int			hit_something;
+	t_object	*hit_object;
+}	t_intersection_data;
+
+typedef struct s_shadow_params
+{
+	t_vec3	hit_point;
+	t_vec3	light_dir;
+	double	light_distance;
+	t_vec3	surface_normal;
+}	t_shadow_params;
+
+typedef struct s_shadow_data
+{
+	t_ray		shadow_ray;
+	double		attenuation;
+	double		light_distance;
+	int			max_iterations;
+	t_object	*last_object;
+}	t_shadow_data;
 
 typedef struct s_img
 {
