@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/21 11:19:28 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 12:10:26 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define CAMERA_ROTATION_SPEED	0.05
 # define NEAR_PLANE				0.1
 # define FAR_PLANE				100.0
-# define MAX_RAY_DEPTH			3
+# define MAX_RAY_DEPTH			8
 
 # define BLACK					0x000000  // RGB(0, 0, 0)
 # define WHITE					0xFFFFFF  // RGB(255, 255, 255)

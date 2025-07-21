@@ -4,7 +4,7 @@ C 0,0,-20 0,0,1 70
 L 0,10,-15 0.9 255,240,220
 
 # Cone 1 (waffle cone color)
-co -6.7,-4.5,-1 0,1,0 3 7 219,178,119 {checker_color:181,143,86 checker_size:0.2}
+co -6.7,-4.5,-1 0,1,0 10 30 219,178,119 {checker_color:181,143,86 checker_size:0.2}
 
 # First scoop (strawberry)
 sp -7,3.5,0 6 220,80,100

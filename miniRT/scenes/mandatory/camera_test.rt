@@ -1,5 +1,5 @@
 #See scene along the z axis with negative z (= looking from the front)
-#C 0,0,-10 0,0,1 60
+C 0,0,-10 0,0,1 60
 
 #See scene along the z axis with positive z (= looking from the back)
 #C 0,0,10 0,0,-1 60
@@ -8,13 +8,13 @@
 #C -10,0,0 1,0,0 60
 
 #See scene along the x axis with positive x (= looking to the left)
-#C 10,0,0 -1,0,0 60
+#C 30,0,0 -1,0,0 60
 
 #See scene along the y axis with negative y (= looking up from down)
 #C 0,-10,0 0,1,0 60
 
 #See scene along the y axis with positive y (= looking down from above)
-C 0,10,0 0,-1,0 60
+#C 0,10,0 0,-1,0 60
 
 #See scene from a random point
 #Calculation: Direction = Target (0,0,0) - Cam pos (5, 15 ,3) = -5, -15, -3
