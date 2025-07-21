@@ -121,9 +121,14 @@ SRC_FILES = main.c \
 	rendering/BVH/scene_ray_intersect_bvh_2.c \
 	rendering/BVH/scene_ray_intersect_bvh_3.c \
 	rendering/BVH/scene_ray_intersect_bvh_4.c \
+	rendering/BVH/scene_ray_intersect_bvh_5.c \
 	rendering/BVH/ray_intersect_aabb.c \
 	rendering/BVH/ray_intersect_aabb_2.c \
 	rendering/BVH/mesh_bvh.c \
+	rendering/BVH/mesh_bvh_utils.c \
+	rendering/BVH/mesh_partition_utils.c \
+	rendering/BVH/mesh_bvh_split.c \
+	rendering/BVH/mesh_bvh_helpers.c \
 	rendering/BVH/mesh_bvh_intersect.c \
 	rendering/lighting/compute_light.c \
 	rendering/rays/compute_rays.c \

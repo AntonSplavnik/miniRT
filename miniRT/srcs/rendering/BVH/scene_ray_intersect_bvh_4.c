@@ -13,26 +13,27 @@
 #include "../../includes/miniRT.h"
 #include "../../includes/bvh.h"
 
-int	scene_ray_intersect_bvh(t_scene_ray_params params)
+int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t_temp)
 {
-	t_bvh_node				*stack[64];
-	int						stack_size;
-	double					closest_t;
-	int						hit_something;
-	t_bvh_traverse_params	traverse_params;
+	return (ray_sphere_intersect(ray, *sphere, t_temp));
+}
 
-	if (!params.scene->scene_bvh)
-		return (find_closest_intersection(params.scene, params.ray,
-				params.hit_record, params.hit_object));
-	stack_size = 0;
-	stack[stack_size++] = params.scene->scene_bvh;
-	closest_t = INFINITY;
-	traverse_params.ray_params = params;
-	traverse_params.stack = stack;
-	traverse_params.stack_size = &stack_size;
-	traverse_params.closest_t = &closest_t;
-	hit_something = traverse_bvh(traverse_params);
-	if (hit_something)
-		*(params.t) = closest_t;
-	return (hit_something);
+int	intersect_plane(t_ray ray, t_plane *plane, double *t_temp)
+{
+	return (ray_plane_intersect(ray, *plane, t_temp));
+}
+
+int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t_temp)
+{
+	return (ray_cylinder_intersect(ray, *cylinder, t_temp));
+}
+
+int	intersect_cube(t_ray ray, t_cube *cube, double *t_temp)
+{
+	return (ray_cube_intersect(ray, *cube, t_temp));
+}
+
+int	intersect_cone(t_ray ray, t_cone *cone, double *t_temp)
+{
+	return (ray_cone_intersect(ray, *cone, t_temp));
 }

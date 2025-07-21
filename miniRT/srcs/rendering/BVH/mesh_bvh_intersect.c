@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mesh_bvh_intersect.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/21 04:52:02 by antonsplavn       #+#    #+#             */
+/*   Updated: 2025/07/21 04:52:36 by antonsplavn      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/miniRT.h"
 #include "bvh.h"
 
@@ -38,23 +50,17 @@ static int ray_triangle_intersect_fast(t_ray ray,
     edge2 = vec3_subtract(tri.v2, tri.v0);
     h = vec3_cross(ray.direction, edge2);
     a = vec3_dot(edge1, h);
-
     if (a > -0.001 && a < 0.001)
         return 0;
-
     f = 1.0 / a;
     s = vec3_subtract(ray.origin, tri.v0);
     u = f * vec3_dot(s, h);
-
     if (u < 0.0 || u > 1.0)
         return 0;
-
     q = vec3_cross(s, edge1);
     v = f * vec3_dot(ray.direction, q);
-
     if (v < 0.0 || u + v > 1.0)
         return 0;
-
     temp_t = f * vec3_dot(edge2, q);
     if (temp_t > 0.001)
     {
@@ -74,7 +80,6 @@ static int test_leaf_triangles_batch(t_mesh *mesh, t_ray ray, int start,
 
     if (count <= 0 || start < 0)
         return hit_something;
-
     i = 0;
     while (i < count)
     {
@@ -110,7 +115,7 @@ static int test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray, int start,
     double current_t;
     t_vec3 current_bary;
     t_transformed_triangle *tri;
-    
+
     if (count <= 0 || start < 0)
         return hit_something;
 
@@ -138,7 +143,7 @@ static int test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray, int start,
                 .n2 = tri->n2,
                 .has_vertex_normals = tri->has_vertex_normals
             };
-            
+
             if (ray_triangle_intersect_bary(ray, temp_tri, &current_t, &current_bary))
             {
                 if (current_t < *closest_t)
@@ -152,7 +157,7 @@ static int test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray, int start,
         }
         i++;
     }
-    
+
     return hit_something;
 }
 
@@ -225,7 +230,7 @@ int mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx, t_
     double closest_t;
     int hit_something;
     t_vec3 closest_bary;
-    
+
     if (!mesh->bvh.nodes || mesh->bvh.node_count == 0)
         return 0;
 

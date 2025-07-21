@@ -11,33 +11,28 @@
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
+#include "../../includes/bvh.h"
 
-int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t_temp)
+int	scene_ray_intersect_bvh(t_scene_ray_params params)
 {
-	return (ray_sphere_intersect(ray, *sphere, t_temp));
-}
+	t_bvh_node				*stack[64];
+	int						stack_size;
+	double					closest_t;
+	int						hit_something;
+	t_bvh_traverse_params	traverse_params;
 
-int	intersect_plane(t_ray ray, t_plane *plane, double *t_temp)
-{
-	return (ray_plane_intersect(ray, *plane, t_temp));
-}
-
-int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t_temp)
-{
-	return (ray_cylinder_intersect(ray, *cylinder, t_temp));
-}
-
-int	intersect_cube(t_ray ray, t_cube *cube, double *t_temp)
-{
-	return (ray_cube_intersect(ray, *cube, t_temp));
-}
-
-int	intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp)
-{
-	return (ray_triangle_intersect(ray, *triangle, t_temp));
-}
-
-int	intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary)
-{
-	return (ray_triangle_intersect_bary(ray, *triangle, t_temp, bary));
+	if (!params.scene->scene_bvh)
+		return (find_closest_intersection(params.scene, params.ray,
+				params.hit_record, params.hit_object));
+	stack_size = 0;
+	stack[stack_size++] = params.scene->scene_bvh;
+	closest_t = INFINITY;
+	traverse_params.ray_params = params;
+	traverse_params.stack = stack;
+	traverse_params.stack_size = &stack_size;
+	traverse_params.closest_t = &closest_t;
+	hit_something = traverse_bvh(traverse_params);
+	if (hit_something)
+		*(params.t) = closest_t;
+	return (hit_something);
 }

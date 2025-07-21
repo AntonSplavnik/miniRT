@@ -14,7 +14,6 @@
 # define BVH_H
 
 # include "types.h"
-# include "miniRT.h"
 
 # define MAX_STACK_SIZE 64
 # define LEAF_TRI_THRESHOLD 4
@@ -133,6 +132,15 @@ void		count_scene_objects(t_scene *scene);
 void		fill_objects_and_bounds(t_scene *scene, t_object **objects,
 				t_aabb *bounds, int object_count);
 
+typedef struct s_primitive_bary_params
+{
+	t_object	*obj;
+	t_ray		ray;
+	double		*t_temp;
+	int			*triangle_idx;
+}	t_primitive_bary_params;
+
+
 /* scene_ray_intersect_bvh functions */
 int			scene_ray_intersect_bvh(t_scene_ray_params params);
 int			test_leaf_node_intersection(t_leaf_intersection_params params);
@@ -147,12 +155,12 @@ int			intersect_cube(t_ray ray, t_cube *cube, double *t_temp);
 int			intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp);
 int			intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary);
 int			intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx);
-int			intersect_mesh_bary(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx, t_vec3 *bary);
+int			intersect_mesh_bary(t_ray ray, t_mesh *mesh, 
+				double *t_temp, t_mesh_bary_params out_params);
 int			intersect_cone(t_ray ray, t_cone *cone, double *t_temp);
 int			intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
 				int *triangle_idx);
-int			intersect_primitive_bary(t_object *obj, t_ray ray, double *t_temp,
-				int *triangle_idx, t_vec3 *bary);
+int			intersect_primitive_bary(t_primitive_bary_params params, t_vec3 *bary);
 
 /* ray_intersect_aabb functions */
 int			ray_intersect_aabb_scalar(t_ray_aabb_params params);
@@ -164,11 +172,65 @@ int			calculate_z_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
 				double *near_far);
 void		swap_values(double *a, double *b);
 
+typedef struct s_build_node
+{
+	int	start;
+	int	end;
+	int	node_index;
+}	t_build_node;
+
+typedef struct s_triangle_centroid
+{
+	t_vec3	centroid;
+	int		original_index;
+}	t_triangle_centroid;
+
+typedef struct s_mesh_split_params
+{
+	t_mesh				*mesh;
+	t_triangle_centroid	*centroids;
+	t_build_node		*stack;
+	int					*node_count;
+}	t_mesh_split_params;
+
+typedef struct s_centroid_range
+{
+	int	start;
+	int	end;
+}	t_centroid_range;
+
+typedef struct s_partition_params
+{
+	t_triangle_centroid	*centroids;
+	int					axis;
+	double				threshold;
+}	t_partition_params;
+
 /* mesh_bvh functions */
 void		build_mesh_bvh(t_mesh *mesh);
 int			mesh_bvh_intersect(t_ray ray, t_mesh *mesh, double *t, int *tri_idx);
 void		free_mesh_bvh(t_mesh *mesh);
 t_aabb		calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx);
+
+/* mesh_bvh_utils functions */
+double		get_centroid_axis_value(t_triangle_centroid *centroid, int axis);
+t_aabb		compute_bounds_from_centroids(t_mesh *mesh,
+				t_triangle_centroid *centroids, t_centroid_range range);
+t_aabb		aabb_union(t_aabb a, t_aabb b);
+void		ft_swap_centroid(t_triangle_centroid *a, t_triangle_centroid *b);
+
+/* mesh_partition_utils functions */
+int			partition_by_threshold(t_partition_params params,
+				t_centroid_range range);
+
+/* mesh_bvh_helpers functions */
 double		calculate_aabb_surface_area(t_aabb box);
+void		copy_indices_from_centroids(t_mesh *mesh,
+				t_triangle_centroid *centroids, int *tri_indices);
+int			find_best_split_axis(t_triangle_centroid *centroids,
+				t_centroid_range range);
+
+/* mesh_bvh_split functions */
+void		build_mesh_bvh_fast(t_mesh *mesh, t_triangle_centroid *centroids);
 
 #endif
