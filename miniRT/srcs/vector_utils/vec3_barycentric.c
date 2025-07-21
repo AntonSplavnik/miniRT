@@ -12,28 +12,21 @@
 
 #include "../../includes/miniRT.h"
 
-static t_vec3	compute_bary_coords(t_vec3 v0, t_vec3 v1, t_vec3 v2, \
-									double dot00, double dot01);
+static t_vec3	compute_bary_coords(t_bary_calc_params params);
 
 t_vec3	compute_barycentric(t_vec3 p, t_vec3 a, t_vec3 b, t_vec3 c)
 {
-	t_vec3	v0;
-	t_vec3	v1;
-	t_vec3	v2;
-	double	dot00;
-	double	dot01;
+	t_bary_calc_params	params;
 
-	v0 = vec3_subtract(c, a);
-	v1 = vec3_subtract(b, a);
-	v2 = vec3_subtract(p, a);
-	dot00 = vec3_dot(v0, v0);
-	dot01 = vec3_dot(v0, v1);
-
-	return (compute_bary_coords(v0, v1, v2, dot00, dot01));
+	params.v0 = vec3_subtract(c, a);
+	params.v1 = vec3_subtract(b, a);
+	params.v2 = vec3_subtract(p, a);
+	params.dot00 = vec3_dot(params.v0, params.v0);
+	params.dot01 = vec3_dot(params.v0, params.v1);
+	return (compute_bary_coords(params));
 }
 
-static t_vec3	compute_bary_coords(t_vec3 v0, t_vec3 v1, t_vec3 v2, \
-									double dot00, double dot01)
+static t_vec3	compute_bary_coords(t_bary_calc_params params)
 {
 	double	dot02;
 	double	dot11;
@@ -41,12 +34,12 @@ static t_vec3	compute_bary_coords(t_vec3 v0, t_vec3 v1, t_vec3 v2, \
 	double	inv_denom;
 	t_vec3	bary;
 
-	dot02 = vec3_dot(v0, v2);
-	dot11 = vec3_dot(v1, v1);
-	dot12 = vec3_dot(v1, v2);
-	inv_denom = 1.0 / (dot00 * dot11 - dot01 * dot01);
-	bary.y = (dot11 * dot02 - dot01 * dot12) * inv_denom;
-	bary.z = (dot00 * dot12 - dot01 * dot02) * inv_denom;
+	dot02 = vec3_dot(params.v0, params.v2);
+	dot11 = vec3_dot(params.v1, params.v1);
+	dot12 = vec3_dot(params.v1, params.v2);
+	inv_denom = 1.0 / (params.dot00 * dot11 - params.dot01 * params.dot01);
+	bary.y = (dot11 * dot02 - params.dot01 * dot12) * inv_denom;
+	bary.z = (params.dot00 * dot12 - params.dot01 * dot02) * inv_denom;
 	bary.x = 1.0 - bary.y - bary.z;
 	return (bary);
 }

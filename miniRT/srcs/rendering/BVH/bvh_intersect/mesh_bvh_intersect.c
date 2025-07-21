@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 21:30:00 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/21 10:37:16 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/21 10:50:27 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,18 +70,18 @@ int	process_bvh_node_bary(t_bvh_process_bary_params *proc_params)
 	return (proc_params->bary_params->hit_something);
 }
 
-int	mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, double *t, int *tri_idx,
-		t_vec3 *bary)
+int	mesh_bvh_intersect_bary(t_ray ray, t_mesh *mesh, \
+		t_bvh_bary_params *bary_params)
 {
 	t_bvh_bary_traverse_context	ctx;
 
-	ctx.tri_idx = tri_idx;
+	ctx.tri_idx = bary_params->tri_idx;
 	if (!initialize_bvh_bary_traversal(mesh, ray, &ctx))
 		return (0);
 	if (process_bvh_bary_traversal(&ctx))
 	{
-		*t = ctx.closest_t;
-		*bary = ctx.closest_bary;
+		*bary_params->t = ctx.closest_t;
+		*bary_params->bary = ctx.closest_bary;
 		return (1);
 	}
 	return (0);

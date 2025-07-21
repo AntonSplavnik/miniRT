@@ -127,8 +127,8 @@ typedef struct s_batch_params
 
 typedef struct s_batch_test_bary_params
 {
-	int					start;
-	int					count;
+	int						start;
+	int						count;
 	t_intersect_bary_full	*bary_params;
 }				t_batch_test_bary_params;
 
@@ -190,7 +190,6 @@ typedef struct s_bvh_traverse_context
 	int						*tri_idx;
 }				t_bvh_traverse_context;
 
-
 typedef struct s_bvh_bary_traverse_context
 {
 	int							stack[64];
@@ -212,8 +211,8 @@ typedef struct s_leaf_batch_context
 
 typedef struct s_leaf_batch_bary_params
 {
-	int					start;
-	int					count;
+	int						start;
+	int						count;
 	t_intersect_bary_full	*bary_params;
 }				t_leaf_batch_bary_params;
 
@@ -230,7 +229,8 @@ t_aabb		calculate_object_aabb(t_object *object);
 t_aabb		calculate_sphere_aabb(t_sphere *sphere);
 t_aabb		calculate_plane_aabb(t_plane *plane);
 t_aabb		calculate_cylinder_aabb(t_cylinder *cylinder);
-t_aabb		calculate_cylinder_aabb_helper(t_vec3 top, t_vec3 bottom, double radius);
+t_aabb		calculate_cylinder_aabb_helper(t_vec3 top, t_vec3 bottom, \
+				double radius);
 t_aabb		calculate_cube_aabb(t_cube *cube);
 t_aabb		calculate_cone_aabb(t_cone *cone);
 t_aabb		calculate_cone_aabb_helper(t_vec3 apex, t_vec3 base_center,
@@ -273,7 +273,6 @@ typedef struct s_primitive_bary_params
 	int			*triangle_idx;
 }	t_primitive_bary_params;
 
-
 /* scene_ray_intersect_bvh functions */
 int			scene_ray_intersect_bvh(t_scene_ray_params params);
 int			test_leaf_node_intersection(t_leaf_intersection_params params);
@@ -286,23 +285,26 @@ int			intersect_plane(t_ray ray, t_plane *plane, double *t_temp);
 int			intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t_temp);
 int			intersect_cube(t_ray ray, t_cube *cube, double *t_temp);
 int			intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp);
-int			intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary);
-int			intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx);
+int			intersect_triangle_bary(t_ray ray, t_triangle *triangle, \
+				double *t_temp, t_vec3 *bary);
+int			intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, \
+				int *triangle_idx);
 int			intersect_mesh_bary(t_ray ray, t_mesh *mesh,
 				double *t_temp, t_mesh_bary_params out_params);
 int			intersect_cone(t_ray ray, t_cone *cone, double *t_temp);
 int			intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
 				int *triangle_idx);
-int			intersect_primitive_bary(t_primitive_bary_params params, t_vec3 *bary);
+int			intersect_primitive_bary(t_primitive_bary_params params, \
+				t_vec3 *bary);
 
 /* ray_intersect_aabb functions */
 int			ray_intersect_aabb_scalar(t_ray_aabb_params params);
-int			calculate_x_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
-				double *near_far);
-int			calculate_y_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
-				double *near_far);
-int			calculate_z_intersection(t_aabb bounds, t_vec3 ray_origin, t_vec3 ray_dir,
-				double *near_far);
+int			calculate_x_intersection(t_aabb bounds, t_vec3 ray_origin, \
+				t_vec3 ray_dir, double *near_far);
+int			calculate_y_intersection(t_aabb bounds, t_vec3 ray_origin, \
+				t_vec3 ray_dir, double *near_far);
+int			calculate_z_intersection(t_aabb bounds, t_vec3 ray_origin, \
+				t_vec3 ray_dir, double *near_far);
 void		swap_values(double *a, double *b);
 
 typedef struct s_build_node
@@ -341,7 +343,8 @@ typedef struct s_partition_params
 
 /* mesh_bvh functions */
 void		build_mesh_bvh(t_mesh *mesh);
-int			mesh_bvh_intersect(t_ray ray, t_mesh *mesh, double *t, int *tri_idx);
+int			mesh_bvh_intersect(t_ray ray, t_mesh *mesh, \
+				double *t, int *tri_idx);
 void		free_mesh_bvh(t_mesh *mesh);
 t_aabb		calculate_transformed_tri_aabb(t_mesh *mesh, int tri_idx);
 
@@ -373,9 +376,10 @@ int			test_single_triangle_bary(t_mesh *mesh, t_ray ray, int idx,
 				t_intersect_bary_result *result);
 
 /* bvh_intersect_utils functions */
-int			ray_intersect_aabb_optimized(t_ray ray, t_aabb bounds, double max_t);
-int			ray_triangle_intersect_fast(t_ray ray, t_transformed_triangle tri,
-				double *t);
+int			ray_intersect_aabb_optimized(t_ray ray, \
+				t_aabb bounds, double max_t);
+int			ray_triangle_intersect_fast(t_ray ray, \
+				t_transformed_triangle tri, double *t);
 int			get_triangle_original_index(t_mesh *mesh, int idx);
 int			is_valid_triangle_index(int original_idx, int triangle_count);
 

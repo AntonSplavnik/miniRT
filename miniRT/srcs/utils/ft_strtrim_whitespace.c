@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim_whitespace.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 15:22:48 by abillote          #+#    #+#             */
-/*   Updated: 2025/06/05 12:36:53 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/21 10:51:03 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
 // Helper function to find the start index for trimming
-static int find_trim_start(char *s)
+static int	find_trim_start(char *s)
 {
 	int	i;
 
@@ -24,7 +24,7 @@ static int find_trim_start(char *s)
 }
 
 // Helper function to find the end index for trimming
-static int find_trim_end(char *s, int start)
+static int	find_trim_end(char *s, int start)
 {
 	int	end;
 
@@ -41,11 +41,11 @@ static int find_trim_end(char *s, int start)
 // Trim whitespace from the start and end of a string
 char	*ft_strtrim_whitespace(char *s)
 {
-	int	start;
-	int	end;
+	int		start;
+	int		end;
 	char	*result;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	if (!s)
 		return (NULL);

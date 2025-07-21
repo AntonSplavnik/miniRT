@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 09:57:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/05/12 09:57:58 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/21 10:51:11 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
 // Check if a character is whitespace
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	if (c == ' ')
 		return (1);
