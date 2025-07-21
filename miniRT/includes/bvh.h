@@ -92,6 +92,139 @@ typedef struct s_bvh_traverse_params
 	double				*closest_t;
 }	t_bvh_traverse_params;
 
+typedef struct s_intersect_bary_full
+{
+	double	*closest_t;
+	int		*tri_idx;
+	t_vec3	*closest_bary;
+	int		hit_something;
+}	t_intersect_bary_full;
+
+typedef struct s_intersect_result
+{
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_intersect_result;
+
+typedef struct s_batch_test_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_batch_test_params;
+
+typedef struct s_batch_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}	t_batch_params;
+
+typedef struct s_batch_test_bary_params
+{
+	int					start;
+	int					count;
+	t_intersect_bary_full	*bary_params;
+}				t_batch_test_bary_params;
+
+typedef struct s_leaf_batch_params
+{
+	int		start;
+	int		count;
+	double	*closest_t;
+	int		*tri_idx;
+	int		hit_something;
+}				t_leaf_batch_params;
+
+typedef struct s_bvh_bary_params
+{
+	double	*t;
+	int		*tri_idx;
+	t_vec3	*bary;
+}				t_bvh_bary_params;
+
+typedef struct s_intersect_data
+{
+	double	a;
+	double	f;
+	double	u;
+	double	v;
+	double	temp_t;
+}	t_intersect_data;
+
+typedef struct s_bvh_stack_params
+{
+	int		*stack;
+	int		*stack_ptr;
+}	t_bvh_stack_params;
+
+typedef struct s_bvh_process_params
+{
+	t_mesh				*mesh;
+	t_ray				ray;
+	t_bvh_stack_params	stack_info;
+	t_batch_params		*batch_params;
+}	t_bvh_process_params;
+
+typedef struct s_bvh_process_bary_params
+{
+	t_mesh					*mesh;
+	t_ray					ray;
+	t_bvh_stack_params		stack_info;
+	t_intersect_bary_full	*bary_params;
+}	t_bvh_process_bary_params;
+
+typedef struct s_bvh_traverse_context
+{
+	int						stack[64];
+	int						stack_ptr;
+	double					closest_t;
+	t_batch_params			params;
+	t_bvh_stack_params		stack_info;
+	t_bvh_process_params	proc_params;
+	int						*tri_idx;
+}				t_bvh_traverse_context;
+
+
+typedef struct s_bvh_bary_traverse_context
+{
+	int							stack[64];
+	int							stack_ptr;
+	double						closest_t;
+	t_vec3						closest_bary;
+	t_intersect_bary_full		params;
+	t_bvh_stack_params			stack_info;
+	t_bvh_process_bary_params	proc_params;
+	int							*tri_idx;
+}				t_bvh_bary_traverse_context;
+
+typedef struct s_leaf_batch_context
+{
+	int				left_index;
+	int				right_index;
+	t_batch_params	*params;
+}				t_leaf_batch_context;
+
+typedef struct s_leaf_batch_bary_params
+{
+	int					start;
+	int					count;
+	t_intersect_bary_full	*bary_params;
+}				t_leaf_batch_bary_params;
+
+typedef struct s_intersect_bary_result
+{
+	double	*closest_t;
+	int		*tri_idx;
+	t_vec3	*closest_bary;
+	int		hit_something;
+}	t_intersect_bary_result;
+
 /* calculate_object_aabb functions */
 t_aabb		calculate_object_aabb(t_object *object);
 t_aabb		calculate_sphere_aabb(t_sphere *sphere);
@@ -155,7 +288,7 @@ int			intersect_cube(t_ray ray, t_cube *cube, double *t_temp);
 int			intersect_triangle(t_ray ray, t_triangle *triangle, double *t_temp);
 int			intersect_triangle_bary(t_ray ray, t_triangle *triangle, double *t_temp, t_vec3 *bary);
 int			intersect_mesh(t_ray ray, t_mesh *mesh, double *t_temp, int *triangle_idx);
-int			intersect_mesh_bary(t_ray ray, t_mesh *mesh, 
+int			intersect_mesh_bary(t_ray ray, t_mesh *mesh,
 				double *t_temp, t_mesh_bary_params out_params);
 int			intersect_cone(t_ray ray, t_cone *cone, double *t_temp);
 int			intersect_primitive(t_object *obj, t_ray ray, double *t_temp,
@@ -232,5 +365,46 @@ int			find_best_split_axis(t_triangle_centroid *centroids,
 
 /* mesh_bvh_split functions */
 void		build_mesh_bvh_fast(t_mesh *mesh, t_triangle_centroid *centroids);
+
+/* bvh_intersect_leaves functions */
+int			test_single_triangle(t_mesh *mesh, t_ray ray, int idx,
+				t_intersect_result *result);
+int			test_single_triangle_bary(t_mesh *mesh, t_ray ray, int idx,
+				t_intersect_bary_result *result);
+
+/* bvh_intersect_utils functions */
+int			ray_intersect_aabb_optimized(t_ray ray, t_aabb bounds, double max_t);
+int			ray_triangle_intersect_fast(t_ray ray, t_transformed_triangle tri,
+				double *t);
+int			get_triangle_original_index(t_mesh *mesh, int idx);
+int			is_valid_triangle_index(int original_idx, int triangle_count);
+
+/* mesh_bvh_intersect_helpers functions */
+int			initialize_bvh_traversal(t_mesh *mesh, t_ray ray,
+				t_bvh_traverse_context *ctx);
+int			process_bvh_traversal(t_bvh_traverse_context *ctx);
+int			initialize_bvh_bary_traversal(t_mesh *mesh, t_ray ray,
+				t_bvh_bary_traverse_context *ctx);
+int			process_bvh_bary_traversal(t_bvh_bary_traverse_context *ctx);
+int			process_bvh_node_optimized(t_bvh_process_params *params);
+int			process_bvh_node_bary(t_bvh_process_bary_params *params);
+
+/* mesh_bvh_intersect_new functions */
+int			handle_leaf_node(t_bvh_process_params *proc_params,
+				int left_index, int right_index);
+void		push_internal_nodes(t_bvh_process_params *proc_params,
+				int left_index, int right_index);
+int			handle_leaf_node_bary(t_bvh_process_bary_params *proc_params,
+				int left_index, int right_index);
+void		push_internal_nodes_bary(t_bvh_process_bary_params *proc_params,
+				int left_index, int right_index);
+
+/* mesh_bvh_traversal_helpers functions */
+int			process_leaf_batch(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_context *ctx);
+int			test_leaf_triangles_batch_bary(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_bary_params *params);
+int			test_leaf_triangles_batch(t_mesh *mesh, t_ray ray,
+				t_leaf_batch_params *leaf_params);
 
 #endif

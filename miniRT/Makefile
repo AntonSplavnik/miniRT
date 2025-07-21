@@ -129,7 +129,13 @@ SRC_FILES = main.c \
 	rendering/BVH/mesh_partition_utils.c \
 	rendering/BVH/mesh_bvh_split.c \
 	rendering/BVH/mesh_bvh_helpers.c \
-	rendering/BVH/mesh_bvh_intersect.c \
+	rendering/BVH/bvh_intersect/bvh_intersect_batch.c \
+	rendering/BVH/bvh_intersect/bvh_intersect_leaves.c \
+	rendering/BVH/bvh_intersect/bvh_intersect_utils.c \
+	rendering/BVH/bvh_intersect/bvh_helpers.c \
+	rendering/BVH/bvh_intersect/mesh_bvh_intersect_helpers.c \
+	rendering/BVH/bvh_intersect/mesh_bvh_intersect.c \
+	rendering/BVH/bvh_intersect/mesh_bvh_traversal_helpers.c \
 	rendering/lighting/compute_light.c \
 	rendering/rays/compute_rays.c \
 	rendering/reflection/reflection.c \
