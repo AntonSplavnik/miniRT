@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 10:35:54 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 17:05:19 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/22 13:44:38 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,17 @@ void		compute_ray_intersection(t_ray ray, t_object *hit_object, double t, t_hit_
 //shadows
 int			is_in_shadow(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
 double		calculate_shadow_attenuation(t_scene *scene, t_vec3 hit_point, t_vec3 light_dir, double light_distance, t_hit_record hit_record);
+double		calculate_area_light_shadow(t_scene *scene, t_hit_record hit_record, t_light *light);
+t_vec3		sample_area_light_position(t_light *light);
+t_light		*create_area_light(t_vec3 position, t_vec3 normal, double width, double height);
+t_light_result	compute_area_light(t_scene *scene, t_hit_record hit_record, t_light *light);
+t_light_result	compute_light_at_position(t_scene *scene, t_hit_record hit_record, t_vec3 light_pos);
+
+// Global illumination
+t_vec3		compute_indirect_lighting(t_scene *scene, t_hit_record hit_record, int depth);
+t_vec3		sample_hemisphere_cosine(t_vec3 normal);
+t_vec3		hemisphere_to_world(t_vec3 sample, t_vec3 normal);
+t_ray		create_ray(t_vec3 origin, t_vec3 direction);
 
 // trace ray helpers
 double		get_light_shadow_attenuation(t_scene *scene, t_hit_record hit_record, t_light *light);
@@ -348,7 +359,10 @@ t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
 t_vec3		get_background_color(t_scene *scene);
 t_vec3		handle_refractive_material(t_ray_context context, double cos_theta);
 t_vec3		handle_reflective_material(t_ray_context context, double cos_theta, double *total_contrib);
-t_vec3		add_direct_lighting(t_scene *scene, t_hit_record hit_record, double total_contribution, t_vec3 final_color);
+t_vec3		compute_lighting(t_scene *scene, t_hit_record hit_record, double total_contribution, t_vec3 final_color, int is_gi_ray, int depth);
+t_vec3		add_ambient_contribution(t_scene *scene, t_hit_record hit_record, t_vec3 direct_color);
+t_vec3		add_direct_light_contribution(t_scene *scene, t_hit_record hit_record, t_vec3 direct_color);
+t_vec3		add_global_illumination_contribution(t_scene *scene, t_hit_record hit_record, t_vec3 direct_color, int is_gi_ray, int depth);
 t_vec3		process_lights(t_scene *scene, t_hit_record hit_record, t_light *current_light, t_vec3 direct_color);
 t_vec3		process_material_interaction(t_ray_context context, double cos_theta);
 
@@ -372,6 +386,7 @@ t_vec3		process_reflection_refraction(t_ray_context context, t_material_contrib 
 t_light_result	compute_light(t_scene *scene, t_hit_record hit_record, t_light *light);
 
 // Ray generation
+t_ray		create_ray(t_vec3 origin, t_vec3 direction);
 void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2 coords);
 
 // Basic reflection/refraction mathematics

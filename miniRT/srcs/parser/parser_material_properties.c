@@ -82,12 +82,27 @@ static void	parse_checker_properties(t_scene *scene, char *material_block, \
 	}
 }
 
+static void	parse_emissive_properties(t_scene *scene, char *material_block, \
+									t_material *material)
+{
+	double	value;
+	t_color	emissive_color;
+
+	value = get_property_value(material_block, "emissive_intensity:");
+	if (value >= 0.0)
+		material->emissive_intensity = value;
+	if (get_property_color(scene, material_block, "emissive_color:", \
+						&emissive_color))
+		material->emissive_color = color_to_linear(emissive_color);
+}
+
 void	parse_material_properties(t_scene *scene, char *material_block, \
 								t_material *material)
 {
 	parse_reflectivity_transparency(material_block, material);
 	parse_specular_shininess(material_block, material);
 	parse_checker_properties(scene, material_block, material);
+	parse_emissive_properties(scene, material_block, material);
 	get_texture_bump_map(scene, material_block, material);
 	free(material_block);
 }

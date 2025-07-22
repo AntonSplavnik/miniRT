@@ -32,6 +32,7 @@ void		check_parts_count(t_scene *scene, char **parts, \
 int			is_ambient(char *line);
 int			is_camera(char *line);
 int			is_light(char *line);
+int			is_area_light(char *line);
 int			is_sphere(char *line);
 int			is_plane(char *line);
 int			is_cylinder(char *line);
@@ -50,6 +51,7 @@ int			parse_rgb(char **parts, int *r, int *g, int *b);
 int			parse_ambient(t_scene *scene, char *line);
 int			parse_camera(t_scene *scene, char *line);
 int			parse_light(t_scene *scene, char *line);
+int			parse_area_light(t_scene *scene, char *line);
 int			parse_sphere(t_scene *scene, char *line);
 int			parse_plane(t_scene *scene, char *line);
 int			parse_cylinder(t_scene *scene, char *line);
@@ -60,7 +62,9 @@ int			parse_mesh(t_scene *scene, char *line);
 
 // Light parsing helper functions
 t_light		*parse_light_properties(t_scene *scene, char **parts);
+t_light		*parse_area_light_properties(t_scene *scene, char **parts);
 t_light		*create_light(t_vec3 position, double intensity, t_color color);
+t_light		*create_area_light_with_properties(t_vec3 position, t_vec3 normal, double width, double height, double intensity, char **parts);
 void		add_light(t_scene *scene, t_light *light);
 
 // Bonus parsing functions

@@ -20,6 +20,8 @@ double	get_light_shadow_attenuation(t_scene *scene, t_hit_record hit_record,
 
 	if (!scene->graphic_settings.enable_hard_shadows)
 		return (1.0);
+	if (light->is_area_light)
+		return (calculate_area_light_shadow(scene, hit_record, light));
 	light_dir = vec3_normalize(vec3_subtract(light->position, \
 		hit_record.point));
 	light_distance = vec3_length(vec3_subtract(light->position, \
@@ -35,8 +37,12 @@ t_vec3	apply_light_contribution(t_light_params params)
 	t_color_f		light_color_linear;
 	t_color_f		lit_color;
 
-	light_result = compute_light(params.scene, params.hit_record, \
-		params.light);
+	if (params.light->is_area_light)
+		light_result = compute_area_light(params.scene, params.hit_record, \
+			params.light);
+	else
+		light_result = compute_light(params.scene, params.hit_record, \
+			params.light);
 	light_intensity = light_result.diffuse * params.light->intensity * \
 		params.shadow_attenuation;
 	light_color_linear = color_to_linear(params.light->color);

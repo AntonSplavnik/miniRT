@@ -23,6 +23,8 @@ t_material	create_material(t_color color)
 	material.transparency = 0.0;
 	material.refractive_index = 1.0;
 	material.has_refraction = 0;
+	material.emissive_intensity = 0.0;
+	material.emissive_color = create_color_f(0.0, 0.0, 0.0);
 	material.has_checker = 0;
 	material.checker_size = 0;
 	material.checker_color = create_color(0, 0, 0);

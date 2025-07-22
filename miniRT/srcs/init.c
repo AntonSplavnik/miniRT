@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abillote <abillote@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/18 16:20:23 by abillote         ###   ########.fr       */
+/*   Updated: 2025/07/22 22:30:24 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,21 @@ void	init_camera_settings(t_scene *scene)
 	scene->camera.rotation_speed = CAMERA_ROTATION_SPEED;
 }
 
+
 /* Initialize graphics and mouse settings */
-void	init_graphics_and_mouse(t_scene *scene)
+void	init_graphics(t_scene *scene)
 {
 	scene->graphic_settings.enable_hard_shadows = 1;
 	scene->graphic_settings.enable_reflections = 1;
 	scene->graphic_settings.enable_specular = 1;
 	scene->graphic_settings.enable_refraction = 1;
-	scene->graphic_settings.enable_status_message = 1;
+	scene->graphic_settings.enable_status_message = 0;
+	scene->graphic_settings.enable_global_illumination = 1;
 	scene->graphic_settings.ssaa_samples = 1;
 	scene->graphic_settings.resolution_factor = 1;
+}
+void	init_mouse(t_scene *scene)
+{
 	scene->mouse_state.is_dragging = 0;
 	scene->mouse_state.left_button_down = 0;
 	scene->mouse_state.right_button_down = 0;
@@ -57,14 +62,31 @@ void	init_graphics_and_mouse(t_scene *scene)
 	scene->mouse_state.prev_mouse_y = 0;
 }
 
+void	init_global_ilumination(t_scene *scene)
+{
+	scene->gi.max_depth = 10;
+	scene->gi.samples_per_bounce = 3;
+}
+
+void	init_light_settings(t_scene *scene)
+{
+	scene->ambient.ratio = 0.05;
+	scene->ambient.color = create_color(255, 255, 255);
+	scene->sample = 1;
+	scene->scene_bvh = NULL;
+}
+void	init_light(t_scene *scene)
+{
+	init_global_ilumination(scene);
+	init_light_settings(scene);
+}
+
 /* Initialize ambient lighting and other scene data */
 void	init_data(t_scene *scene)
 {
 	init_app_and_window(scene);
 	init_camera_settings(scene);
-	init_graphics_and_mouse(scene);
-	scene->ambient.ratio = 0.05;
-	scene->ambient.color = create_color(255, 255, 255);
-	scene->sample = 1;
-	scene->scene_bvh = NULL;
+	init_graphics(scene);
+	init_light(scene);
+	init_mouse(scene);
 }

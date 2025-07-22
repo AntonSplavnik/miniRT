@@ -42,6 +42,16 @@ int	is_light(char *line)
 	return (0);
 }
 
+int	is_area_light(char *line)
+{
+	if (ft_strncmp(line, "AL", 2) == 0)
+	{
+		if (line[2] == ' ' || line[2] == '\t' || line[2] == '\0')
+			return (1);
+	}
+	return (0);
+}
+
 int	is_sphere(char *line)
 {
 	if (ft_strncmp(line, "sp", 2) == 0)

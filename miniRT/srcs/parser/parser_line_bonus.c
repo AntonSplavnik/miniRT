@@ -20,6 +20,8 @@ int	parse_parameters_bonus(t_scene *scene, char *line)
 		return (parse_camera(scene, line));
 	else if (is_light(line))
 		return (parse_light_bonus(scene, line));
+	else if (is_area_light(line))
+		return (parse_area_light(scene, line));
 	else if (is_sphere(line))
 		return (parse_sphere(scene, line));
 	else if (is_plane(line))

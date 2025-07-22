@@ -26,4 +26,5 @@ void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale,
 	ray->direction = rotate_point(ray_dir_camera, scene->camera.rotation);
 	ray->direction = vec3_normalize(ray->direction);
 	ray->origin = scene->camera.position;
+	ray->is_gi_ray = 0;
 }

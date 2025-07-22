@@ -6,35 +6,83 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 12:50:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/18 18:21:56 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/22 23:08:02 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-t_vec3	add_direct_lighting(t_scene *scene, t_hit_record hit_record,
-	double total_contribution, t_vec3 final_color)
+t_vec3	add_emissive_contribution(t_hit_record hit_record, t_vec3 direct_color)
 {
-	double		direct_contribution;
-	t_vec3		direct_color;
+	if (hit_record.material.emissive_intensity > 0.0)
+	{
+		direct_color.x += hit_record.material.emissive_color.r * \
+			hit_record.material.emissive_intensity;
+		direct_color.y += hit_record.material.emissive_color.g * \
+			hit_record.material.emissive_intensity;
+		direct_color.z += hit_record.material.emissive_color.b * \
+			hit_record.material.emissive_intensity;
+	}
+	return (direct_color);
+}
+
+t_vec3	add_ambient_contribution(t_scene *scene, t_hit_record hit_record, \
+	t_vec3 direct_color)
+{
 	t_color_f	ambient_linear;
 	t_color_f	surface_color;
-	t_light		*current_light;
 
-	direct_contribution = 1.0 - total_contribution;
-	if (direct_contribution <= 0.001)
-		return (final_color);
-	direct_color = vec3_create(0, 0, 0);
 	ambient_linear = color_to_linear(scene->ambient.color);
 	surface_color = get_surface_color_linear(&hit_record);
 	direct_color.x += surface_color.r * ambient_linear.r * scene->ambient.ratio;
 	direct_color.y += surface_color.g * ambient_linear.g * scene->ambient.ratio;
 	direct_color.z += surface_color.b * ambient_linear.b * scene->ambient.ratio;
+	return (direct_color);
+}
+
+t_vec3	add_direct_light_contribution(t_scene *scene, t_hit_record hit_record, \
+	t_vec3 direct_color)
+{
+	t_light	*current_light;
+
 	current_light = scene->lights;
-	direct_color = process_lights(scene, hit_record, current_light, \
-		direct_color);
-	return (vec3_add(final_color, vec3_scale(direct_color, \
-		direct_contribution)));
+	direct_color = process_lights(scene, hit_record, current_light, direct_color);
+	return (direct_color);
+}
+
+t_vec3	add_global_illumination_contribution(t_scene *scene, \
+	t_hit_record hit_record, t_vec3 direct_color, int is_gi_ray, int depth)
+{
+	t_vec3	gi_contrib;
+
+	if (scene->graphic_settings.enable_global_illumination && !is_gi_ray)
+	{
+		gi_contrib = compute_indirect_lighting(scene, hit_record, depth);
+		if (isfinite(gi_contrib.x) && isfinite(gi_contrib.y) && \
+			isfinite(gi_contrib.z))
+		{
+			gi_contrib = vec3_scale(gi_contrib, 0.1);
+			direct_color = vec3_add(direct_color, gi_contrib);
+		}
+	}
+	return (direct_color);
+}
+
+t_vec3	compute_lighting(t_scene *scene, t_hit_record hit_record,
+	double total_contribution, t_vec3 final_color, int is_gi_ray, int depth)
+{
+	double		direct_contribution;
+	t_vec3		direct_color;
+
+	direct_contribution = 1.0 - total_contribution;
+	if (direct_contribution <= 0.001)
+		return (final_color);
+	direct_color = vec3_create(0, 0, 0);
+	direct_color = add_emissive_contribution(hit_record, direct_color);
+	direct_color = add_ambient_contribution(scene, hit_record, direct_color);
+	direct_color = add_direct_light_contribution(scene, hit_record, direct_color);
+	direct_color = add_global_illumination_contribution(scene, hit_record, direct_color, is_gi_ray, depth);
+	return (vec3_add(final_color, vec3_scale(direct_color, direct_contribution)));
 }
 
 t_vec3	process_lights(t_scene *scene, t_hit_record hit_record,
@@ -81,8 +129,8 @@ t_vec3	process_material_interaction(t_ray_context context, double cos_theta)
 		final_color = handle_reflective_material(context, cos_theta, \
 			&total_contribution);
 	}
-	final_color = add_direct_lighting(context.scene, context.hit_record, \
-		total_contribution, final_color);
+	final_color = compute_lighting(context.scene, context.hit_record, \
+		total_contribution, final_color, context.ray.is_gi_ray, context.depth);
 	return (final_color);
 }
 

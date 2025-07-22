@@ -36,6 +36,7 @@ t_vec3	process_refraction(t_ray_context context,
 	refract_ray_struct.origin = vec3_add(context.hit_record.point, \
 		vec3_scale(refract_dir, 0.001));
 	refract_ray_struct.direction = refract_dir;
+	refract_ray_struct.is_gi_ray = 0;
 	refract_color = trace_ray(context.scene, refract_ray_struct, \
 		context.depth + 1);
 	refract_contrib = contrib->transmission * \

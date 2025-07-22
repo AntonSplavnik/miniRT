@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 17:21:27 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/22 16:05:39 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,8 @@ typedef struct	s_material
 	double		transparency; 		// 0.0 = opaque 1.0 = fully transparent
 	double		refractive_index;	// Air = 1.0 Water = 1.33 Glass = 1.5 Diamond = 2.4
 	bool		has_refraction;
+	double		emissive_intensity;	// 0.0 = no emission, higher = brighter
+	t_color_f	emissive_color;		// Color of emitted light
 	int			has_checker;
 	double		checker_size;
 	t_color		checker_color;
@@ -226,11 +228,32 @@ typedef struct s_ambient
 	int		has_ambient;
 }	t_ambient;
 
+typedef struct	s_ray
+{
+	t_vec3	origin;
+	t_vec3	direction;
+	int		is_gi_ray;
+}	t_ray;
+
+typedef struct s_global_illumination
+{
+	int		max_depth;
+	int		samples_per_bounce;
+	double	bounce_limit;
+} s_global_illumination;
+
+
 typedef struct	s_light
 {
 	t_vec3	position;
 	double	intensity;
 	t_color	color;
+	int		is_area_light;
+	t_vec3	normal;
+	double	width;
+	double	height;
+	t_vec3	u_axis;
+	t_vec3	v_axis;
 	struct s_light *next;
 }	t_light;
 
@@ -407,12 +430,6 @@ typedef struct s_cone
 	double	angle;
 } t_cone;
 
-typedef struct	s_ray
-{
-	t_vec3	origin;
-	t_vec3	direction;
-}	t_ray;
-
 typedef struct s_mesh_intersect_data
 {
 	t_ray	ray;
@@ -519,6 +536,7 @@ typedef struct graphic_settings
     bool    	enable_specular;
 	bool		enable_refraction;
 	bool		enable_status_message;
+	bool		enable_global_illumination;
 
 	int			ssaa_samples;
 
@@ -579,11 +597,11 @@ typedef struct s_scene
 {
 	t_app				app;
 	t_graphic_settings	graphic_settings;
+	s_global_illumination	gi;
 	t_mouse_state		mouse_state;
 	t_bvh_node			*scene_bvh; // Root of scene-wide BVH
-	int					object_count;
-
 	t_ui				ui; //UI panel and toggle button
+	int					object_count;
 
 	char				*name; //input file name
 

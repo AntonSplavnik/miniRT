@@ -101,6 +101,8 @@ SRC_FILES = main.c \
 	rendering/color/color_calculations.c \
 	rendering/color/texture_sampling.c \
 	rendering/color/surface_colors.c \
+	rendering/color/area_light.c \
+	rendering/color/global_illumination.c \
 	rendering/compute_intersections.c \
 	rendering/BVH/calculate_object_aabb.c \
 	rendering/BVH/calculate_object_aabb_2.c \
@@ -126,7 +128,6 @@ SRC_FILES = main.c \
 	rendering/reflection/reflection.c \
 	rendering/refraction/refraction.c \
 	rendering/render.c \
-	rendering/render_shared.c \
 	rendering/render_utils.c \
 	rendering/trace_ray/trace_rays.c \
 	rendering/trace_ray/trace_ray_helpers.c \
