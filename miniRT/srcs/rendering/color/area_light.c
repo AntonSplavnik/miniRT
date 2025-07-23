@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 16:00:00 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/22 15:09:59 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:21:44 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ double	calculate_area_light_shadow(t_scene *scene, t_hit_record hit_record, \
 	t_vec3	light_dir;
 	double	light_distance;
 
-	samples = 100;
+	samples = 40;
 	shadow_factor = 0.0;
 	i = 0;
 	while (i < samples)
@@ -100,7 +100,7 @@ t_light_result	compute_area_light(t_scene *scene, t_hit_record hit_record, \
 	int				i;
 
 
-	samples = 200;
+	samples = 40;
 	result.diffuse = 0.0;
 	result.specular_intensity = 0.0;
 	result.light_distance = 0.0;

@@ -36,6 +36,18 @@ void	display_progress(int current, int total)
 	fflush(stdout);
 }
 
+int	get_next_row(t_work_queue *work_queue)
+{
+	int	row;
+
+	pthread_mutex_lock(&work_queue->work_mutex);
+	row = work_queue->current_row;
+	if (row < work_queue->total_rows)
+		work_queue->current_row++;
+	pthread_mutex_unlock(&work_queue->work_mutex);
+	return (row);
+}
+
 /**
  * Main rendering thread function that handles ray tracing with reflections,
  * and checkerboard textures
@@ -48,13 +60,13 @@ void *render_thread(void *arg)
     t_thread_data *data = (t_thread_data *)arg;
     t_scene *scene = data->scene;
     double fov_scale = tan(scene->camera.fov * M_PI / 360.0);
-    int y = data->start_row;
+    int y;
 
     int samples = scene->graphic_settings.ssaa_samples;
     if (samples < 1)
         samples = 1;
 
-    while (y < data->end_row)
+    while ((y = get_next_row(data->work_queue)) < data->work_queue->total_rows)
     {
         int x = 0;
         while (x < scene->width)
@@ -96,7 +108,6 @@ void *render_thread(void *arg)
 
             x += scene->graphic_settings.resolution_factor;
         }
-        y += scene->graphic_settings.resolution_factor;
         
         pthread_mutex_lock(data->progress_mutex);
         (*data->progress_counter)++;
@@ -113,9 +124,9 @@ void *render_thread(void *arg)
 // void	render_scene(void *param)
 void	render_scene(t_scene *scene)
 {
-	int				rows_per_thread;
 	pthread_t		threads[NUM_THREADS];
 	t_thread_data	thread_data[NUM_THREADS];
+	t_work_queue	work_queue;
 	int				progress_counter;
 	int				total_rows;
 	pthread_mutex_t	progress_mutex;
@@ -131,21 +142,20 @@ void	render_scene(t_scene *scene)
 	progress_counter = 0;
 	total_rows = scene->height / scene->graphic_settings.resolution_factor;
 	pthread_mutex_init(&progress_mutex, NULL);
-	printf("Starting render...\n");
-	rows_per_thread = scene->height / NUM_THREADS;
+	
+	work_queue.current_row = 0;
+	work_queue.total_rows = total_rows;
+	pthread_mutex_init(&work_queue.work_mutex, NULL);
+	
+	printf("Starting render with work-stealing...\n");
 	int i = 0;
 	while (i < NUM_THREADS)
 	{
 		thread_data[i].scene = scene;
-		thread_data[i].start_row = i * rows_per_thread;
+		thread_data[i].work_queue = &work_queue;
 		thread_data[i].progress_counter = &progress_counter;
 		thread_data[i].total_rows = total_rows;
 		thread_data[i].progress_mutex = &progress_mutex;
-
-		if(i == NUM_THREADS - 1)
-			thread_data[i].end_row = scene->height;
-		else
-			thread_data[i].end_row = (i + 1) * rows_per_thread;
 
 		if (pthread_create(&threads[i], NULL, render_thread, &thread_data[i]) != 0)
         {
@@ -165,6 +175,7 @@ void	render_scene(t_scene *scene)
     }
 
     pthread_mutex_destroy(&progress_mutex);
+    pthread_mutex_destroy(&work_queue.work_mutex);
     printf("\n=== RENDER COMPLETE #%d (time: %.3f) ===\n", render_count, mlx_get_time());
     draw_ui(scene);
 }

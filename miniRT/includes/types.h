@@ -645,11 +645,17 @@ typedef struct s_light_params
 	t_vec3			direct_color;
 }	t_light_params;
 
+typedef struct s_work_queue
+{
+	int			current_row;
+	int			total_rows;
+	pthread_mutex_t	work_mutex;
+}	t_work_queue;
+
 typedef struct s_thread_data
 {
-	int			start_row;
-	int			end_row;
 	t_scene		*scene;
+	t_work_queue	*work_queue;
 	int			*progress_counter;
 	int			total_rows;
 	pthread_mutex_t	*progress_mutex;
