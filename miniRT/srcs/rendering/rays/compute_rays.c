@@ -27,4 +27,5 @@ void	compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale,
 	ray->direction = vec3_normalize(ray->direction);
 	ray->origin = scene->camera.position;
 	ray->is_gi_ray = 0;
+	ray->throughput = vec3_create(1.0, 1.0, 1.0);
 }

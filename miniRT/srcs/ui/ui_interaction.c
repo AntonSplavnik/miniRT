@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 00:41:31 by antonsplavn       #+#    #+#             */
-/*   Updated: 2025/07/14 00:41:32 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 14:54:00 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ bool	ui_panel_mouse_click(t_scene *scene, int x, int y)
 {
 	t_panel			*p;
 	t_toggle_button	*tog;
+	bool			result;
 
 	p = &scene->ui.panel;
 	tog = &scene->ui.toggle;
@@ -58,7 +59,8 @@ bool	ui_panel_mouse_click(t_scene *scene, int x, int y)
 	}
 	if (p->current_width < p->target_width / 2)
 		return (false);
-	return (handle_checkbox_clicks(scene, p, x, y));
+	result = handle_checkbox_clicks(scene, p, x, y);
+	return (result);
 }
 
 /*

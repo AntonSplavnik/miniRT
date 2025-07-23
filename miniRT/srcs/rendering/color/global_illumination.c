@@ -15,7 +15,9 @@
 double	gi_random(void)
 {
 	static unsigned int seed = 123456789;
-	seed = seed * 1664525 + 1013904223;
+	static int call_count = 0;
+	call_count++;
+	seed = (seed * 1664525 + 1013904223) ^ call_count;
 	return ((double)(seed >> 16) / 65536.0);
 }
 
@@ -26,6 +28,7 @@ t_ray	create_ray(t_vec3 origin, t_vec3 direction)
 	ray.origin = origin;
 	ray.direction = vec3_normalize(direction);
 	ray.is_gi_ray = 0;
+	ray.throughput = vec3_create(1.0, 1.0, 1.0);
 	return (ray);
 }
 
@@ -36,6 +39,7 @@ t_ray	create_gi_ray(t_vec3 origin, t_vec3 direction)
 	ray.origin = origin;
 	ray.direction = vec3_normalize(direction);
 	ray.is_gi_ray = 1;
+	ray.throughput = vec3_create(1.0, 1.0, 1.0);
 	return (ray);
 }
 
@@ -71,19 +75,47 @@ t_vec3	hemisphere_to_world(t_vec3 sample, t_vec3 normal)
 		vec3_scale(bitangent, sample.y)), vec3_scale(normal, sample.z)));
 }
 
+double	get_throughput_intensity(t_vec3 throughput)
+{
+	return ((throughput.x + throughput.y + throughput.z) / 3.0);
+}
+
 t_vec3	compute_indirect_lighting(t_scene *scene, t_hit_record hit_record, \
-									int depth)
+	int depth)
+{
+	s_global_illumination	*gi;
+	t_vec3	throughput;
+	double	rr_probability;
+	double	throughput_intensity;
+
+	gi = &scene->gi;
+	if (depth >= gi->max_depth)
+		return (vec3_create(0, 0, 0));
+	throughput = vec3_create(1.0, 1.0, 1.0);
+	throughput_intensity = get_throughput_intensity(throughput);
+	if (throughput_intensity < 0.001)
+		return (vec3_create(0, 0, 0));
+	if (depth >= 4)
+	{
+		rr_probability = fmin(throughput_intensity, 0.9);
+		if (gi_random() > rr_probability)
+			return (vec3_create(0, 0, 0));
+		throughput = vec3_scale(throughput, 1.0 / rr_probability);
+	}
+	return (sample_gi_rays(scene, hit_record, throughput, depth));
+}
+
+t_vec3	sample_gi_rays(t_scene *scene, t_hit_record hit_record, \
+	t_vec3 throughput, int depth)
 {
 	s_global_illumination	*gi;
 	t_vec3	indirect_color;
 	t_vec3	sample_direction;
 	t_ray	indirect_ray;
 	t_vec3	sample_contribution;
-	int						i;
+	int		i;
 
 	gi = &scene->gi;
-	if (depth >= gi->max_depth)
-		return (vec3_create(0, 0, 0));
 	indirect_color = vec3_create(0, 0, 0);
 	i = 0;
 	while (i < gi->samples_per_bounce)
@@ -91,6 +123,7 @@ t_vec3	compute_indirect_lighting(t_scene *scene, t_hit_record hit_record, \
 		sample_direction = sample_hemisphere_cosine(hit_record.normal);
 		indirect_ray = create_gi_ray(vec3_add(hit_record.point, \
 			vec3_scale(hit_record.normal, 0.001)), sample_direction);
+		indirect_ray.throughput = throughput;
 		sample_contribution = trace_ray(scene, indirect_ray, depth + 1);
 		indirect_color = vec3_add(indirect_color, sample_contribution);
 		i++;

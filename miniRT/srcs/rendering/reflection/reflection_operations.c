@@ -23,6 +23,7 @@ t_vec3	calculate_reflection(t_scene *scene, t_ray ray, \
 		vec3_scale(hit_record.normal, 0.001));
 	reflect_ray_struct.direction = reflect_dir;
 	reflect_ray_struct.is_gi_ray = 0;
+	reflect_ray_struct.throughput = vec3_create(1.0, 1.0, 1.0);
 	return (trace_ray(scene, reflect_ray_struct, depth + 1));
 }
 

@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 13:13:10 by asplavni          #+#    #+#             */
-/*   Updated: 2025/07/22 22:30:24 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 15:48:50 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ void	init_mouse(t_scene *scene)
 
 void	init_global_ilumination(t_scene *scene)
 {
-	scene->gi.max_depth = 10;
-	scene->gi.samples_per_bounce = 3;
+	scene->gi.max_depth = 3;
+	scene->gi.samples_per_bounce = 16;
+	scene->gi.bounce_limit = 0.1;
 }
 
 void	init_light_settings(t_scene *scene)

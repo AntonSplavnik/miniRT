@@ -12,6 +12,30 @@
 
 #include "../../includes/miniRT.h"
 
+void	display_progress(int current, int total)
+{
+	int		bar_width;
+	int		progress;
+	int		i;
+
+	bar_width = 50;
+	progress = (current * bar_width) / total;
+	printf("\rProgress: [");
+	i = 0;
+	while (i < bar_width)
+	{
+		if (i < progress)
+			printf("=");
+		else if (i == progress)
+			printf(">");
+		else
+			printf(" ");
+		i++;
+	}
+	printf("] %d/%d (%d%%)", current, total, (current * 100) / total);
+	fflush(stdout);
+}
+
 /**
  * Main rendering thread function that handles ray tracing with reflections,
  * and checkerboard textures
@@ -73,6 +97,15 @@ void *render_thread(void *arg)
             x += scene->graphic_settings.resolution_factor;
         }
         y += scene->graphic_settings.resolution_factor;
+        
+        pthread_mutex_lock(data->progress_mutex);
+        (*data->progress_counter)++;
+        if ((*data->progress_counter) % 5 == 0 || (*data->progress_counter) == data->total_rows)
+        {
+            display_progress(*data->progress_counter, data->total_rows);
+            fflush(stdout);
+        }
+        pthread_mutex_unlock(data->progress_mutex);
     }
     return NULL;
 }
@@ -80,24 +113,34 @@ void *render_thread(void *arg)
 // void	render_scene(void *param)
 void	render_scene(t_scene *scene)
 {
-	// t_scene *scene = (t_scene *)param;
-
 	int				rows_per_thread;
 	pthread_t		threads[NUM_THREADS];
 	t_thread_data	thread_data[NUM_THREADS];
+	int				progress_counter;
+	int				total_rows;
+	pthread_mutex_t	progress_mutex;
+	static int		render_count = 0;
 
-	// display_progress(scene, "Rendering...");
+	render_count++;
+	printf("\n=== RENDER START #%d (time: %.3f) ===\n", render_count, mlx_get_time());
 	if (!scene)
 	{
 		printf("ERROR - Scene pointer is NULL\n");
 		return;
 	}
+	progress_counter = 0;
+	total_rows = scene->height / scene->graphic_settings.resolution_factor;
+	pthread_mutex_init(&progress_mutex, NULL);
+	printf("Starting render...\n");
 	rows_per_thread = scene->height / NUM_THREADS;
 	int i = 0;
 	while (i < NUM_THREADS)
 	{
 		thread_data[i].scene = scene;
 		thread_data[i].start_row = i * rows_per_thread;
+		thread_data[i].progress_counter = &progress_counter;
+		thread_data[i].total_rows = total_rows;
+		thread_data[i].progress_mutex = &progress_mutex;
 
 		if(i == NUM_THREADS - 1)
 			thread_data[i].end_row = scene->height;
@@ -121,5 +164,7 @@ void	render_scene(t_scene *scene)
         i++;
     }
 
+    pthread_mutex_destroy(&progress_mutex);
+    printf("\n=== RENDER COMPLETE #%d (time: %.3f) ===\n", render_count, mlx_get_time());
     draw_ui(scene);
 }

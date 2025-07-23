@@ -239,6 +239,7 @@ t_light_result	compute_light_at_position(t_scene *scene, t_hit_record hit_record
 
 // Global illumination
 t_vec3		compute_indirect_lighting(t_scene *scene, t_hit_record hit_record, int depth);
+t_vec3		sample_gi_rays(t_scene *scene, t_hit_record hit_record, t_vec3 throughput, int depth);
 t_vec3		sample_hemisphere_cosine(t_vec3 normal);
 t_vec3		hemisphere_to_world(t_vec3 sample, t_vec3 normal);
 t_ray		create_ray(t_vec3 origin, t_vec3 direction);

@@ -52,8 +52,6 @@ static void	handle_button_release(t_scene *scene, mouse_key_t button)
 	{
 		scene->mouse_state.is_dragging = false;
 		scene->mouse_state.left_button_down = false;
-		render_scene(scene);
-		display_status(scene);
 	}
 	if (button == MLX_MOUSE_BUTTON_RIGHT)
 	{

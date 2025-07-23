@@ -233,6 +233,7 @@ typedef struct	s_ray
 	t_vec3	origin;
 	t_vec3	direction;
 	int		is_gi_ray;
+	t_vec3	throughput;
 }	t_ray;
 
 typedef struct s_global_illumination
@@ -649,6 +650,9 @@ typedef struct s_thread_data
 	int			start_row;
 	int			end_row;
 	t_scene		*scene;
+	int			*progress_counter;
+	int			total_rows;
+	pthread_mutex_t	*progress_mutex;
 }	t_thread_data;
 
 #endif
