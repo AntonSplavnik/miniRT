@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 12:50:49 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/23 13:01:09 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 19:10:38 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_vec3	add_global_illumination_contribution(t_scene *scene, \
 		if (isfinite(gi_contrib.x) && isfinite(gi_contrib.y) && \
 			isfinite(gi_contrib.z))
 		{
-			gi_contrib = vec3_scale(gi_contrib, 0.8);
+			gi_contrib = vec3_scale(gi_contrib, 0.3);
 			direct_color = vec3_add(direct_color, gi_contrib);
 		}
 	}

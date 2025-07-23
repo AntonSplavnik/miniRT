@@ -1,9 +1,9 @@
 # Specialized Checkerboard Patterns for Different Objects
-A 0.07    255,255,255
+A 0.03    255,255,255
 
 C 0,0,-10    0,0,1    70
 
-# AL 0,0,0   0,1,0    8.0    3.0    0.6    255,245,235
+AL 0,0,0   0,1,0    8.0    3.0    0.5    255,245,235
 
 # L 8,8,-5 0.06 255,240,220
 # L -8,8,-5 0.06 255,240,220
@@ -40,11 +40,11 @@ sp 8,0,0         3    220,220,220    {specular:0.8 shininess:150 refractive_inde
 
 
 # emissive spheres
-sp -6.5,6,10     2    200,0,0    {emissive_intensity:10.0 emissive_color:200,0,0 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
+sp -6.5,6,10     2    200,0,0    {emissive_intensity:7.0 emissive_color:200,0,0 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
 
-sp 0,6,10        2    0,200,0    {emissive_intensity:10.0 emissive_color:0,200,0 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
+sp 0,6,10        2    0,200,0    {emissive_intensity:7.0 emissive_color:0,200,0 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
 
-sp 6.5,6,10      2    0,0,200    {emissive_intensity:10.0 emissive_color:0,0,200 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
+sp 6.5,6,10      2    0,0,200    {emissive_intensity:7.0 emissive_color:0,0,200 specular:0.5 shininess:20 transparency:0.0 reflectivity:0.2}
 
 
 # reflective spheres

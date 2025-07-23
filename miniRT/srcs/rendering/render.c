@@ -6,13 +6,13 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 11:19:24 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/20 23:20:21 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 21:11:18 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/miniRT.h"
 
-void	display_progress(int current, int total)
+void	display_progress(int current, int total, double elapsed_time)
 {
 	int		bar_width;
 	int		progress;
@@ -32,7 +32,10 @@ void	display_progress(int current, int total)
 			printf(" ");
 		i++;
 	}
-	printf("] %d/%d (%d%%)", current, total, (current * 100) / total);
+	if (elapsed_time >= 60.0)
+		printf("] %d/%d (%d%%) - %.1fm", current, total, (current * 100) / total, elapsed_time / 60.0);
+	else
+		printf("] %d/%d (%d%%) - %.1fs", current, total, (current * 100) / total, elapsed_time);
 	fflush(stdout);
 }
 
@@ -108,12 +111,13 @@ void *render_thread(void *arg)
 
             x += scene->graphic_settings.resolution_factor;
         }
-        
+
         pthread_mutex_lock(data->progress_mutex);
         (*data->progress_counter)++;
         if ((*data->progress_counter) % 5 == 0 || (*data->progress_counter) == data->total_rows)
         {
-            display_progress(*data->progress_counter, data->total_rows);
+            double current_elapsed = mlx_get_time() - data->start_time;
+            display_progress(*data->progress_counter, data->total_rows, current_elapsed);
             fflush(stdout);
         }
         pthread_mutex_unlock(data->progress_mutex);
@@ -131,9 +135,11 @@ void	render_scene(t_scene *scene)
 	int				total_rows;
 	pthread_mutex_t	progress_mutex;
 	static int		render_count = 0;
+	double			start_time;
 
 	render_count++;
-	printf("\n=== RENDER START #%d (time: %.3f) ===\n", render_count, mlx_get_time());
+	start_time = mlx_get_time();
+	printf("\n=== RENDER START #%d ===\n", render_count);
 	if (!scene)
 	{
 		printf("ERROR - Scene pointer is NULL\n");
@@ -142,11 +148,11 @@ void	render_scene(t_scene *scene)
 	progress_counter = 0;
 	total_rows = scene->height / scene->graphic_settings.resolution_factor;
 	pthread_mutex_init(&progress_mutex, NULL);
-	
+
 	work_queue.current_row = 0;
 	work_queue.total_rows = total_rows;
 	pthread_mutex_init(&work_queue.work_mutex, NULL);
-	
+
 	printf("Starting render with work-stealing...\n");
 	int i = 0;
 	while (i < NUM_THREADS)
@@ -156,6 +162,7 @@ void	render_scene(t_scene *scene)
 		thread_data[i].progress_counter = &progress_counter;
 		thread_data[i].total_rows = total_rows;
 		thread_data[i].progress_mutex = &progress_mutex;
+		thread_data[i].start_time = start_time;
 
 		if (pthread_create(&threads[i], NULL, render_thread, &thread_data[i]) != 0)
         {
@@ -176,6 +183,13 @@ void	render_scene(t_scene *scene)
 
     pthread_mutex_destroy(&progress_mutex);
     pthread_mutex_destroy(&work_queue.work_mutex);
-    printf("\n=== RENDER COMPLETE #%d (time: %.3f) ===\n", render_count, mlx_get_time());
+
+    double elapsed_time = mlx_get_time() - start_time;
+
+    if (elapsed_time >= 60.0)
+        printf("\n=== RENDER COMPLETE #%d (%.2f minutes) ===\n\n", render_count, elapsed_time / 60.0);
+    else
+        printf("\n=== RENDER COMPLETE #%d (%.2f seconds) ===\n\n", render_count, elapsed_time);
+
     draw_ui(scene);
 }

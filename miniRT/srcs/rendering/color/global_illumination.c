@@ -87,17 +87,23 @@ t_vec3	compute_indirect_lighting(t_scene *scene, t_hit_record hit_record, \
 	t_vec3	throughput;
 	double	rr_probability;
 	double	throughput_intensity;
+	int		rr_start_depth;
+	double	min_throughput;
+	double	max_rr_probability;
 
 	gi = &scene->gi;
+	rr_start_depth = 4;
+	min_throughput = 0.001;
+	max_rr_probability = 0.9;
 	if (depth >= gi->max_depth)
 		return (vec3_create(0, 0, 0));
 	throughput = vec3_create(1.0, 1.0, 1.0);
 	throughput_intensity = get_throughput_intensity(throughput);
-	if (throughput_intensity < 0.001)
+	if (throughput_intensity < min_throughput)
 		return (vec3_create(0, 0, 0));
-	if (depth >= 4)
+	if (depth >= rr_start_depth)
 	{
-		rr_probability = fmin(throughput_intensity, 0.9);
+		rr_probability = fmin(throughput_intensity, max_rr_probability);
 		if (gi_random() > rr_probability)
 			return (vec3_create(0, 0, 0));
 		throughput = vec3_scale(throughput, 1.0 / rr_probability);

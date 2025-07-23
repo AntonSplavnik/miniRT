@@ -6,7 +6,7 @@
 /*   By: antonsplavnik <antonsplavnik@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:29:05 by abillote          #+#    #+#             */
-/*   Updated: 2025/07/22 16:05:39 by antonsplavn      ###   ########.fr       */
+/*   Updated: 2025/07/23 17:36:39 by antonsplavn      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,6 @@ typedef struct s_global_illumination
 {
 	int		max_depth;
 	int		samples_per_bounce;
-	double	bounce_limit;
 } s_global_illumination;
 
 
@@ -659,6 +658,7 @@ typedef struct s_thread_data
 	int			*progress_counter;
 	int			total_rows;
 	pthread_mutex_t	*progress_mutex;
+	double		start_time;
 }	t_thread_data;
 
 #endif
