@@ -18,11 +18,11 @@ t_vec3	handle_total_internal_reflection(t_ray_context context,
 	t_vec3	reflect_color;
 	double	reflect_contrib;
 
-	reflect_color = calculate_reflection(context.scene, context.ray, \
-		context.hit_record, context.depth);
 	reflect_contrib = contrib->transmission * \
 		context.hit_record.material.transparency;
 	contrib->total_contrib += reflect_contrib;
+	reflect_color = calculate_reflection(context, \
+		context.weight * reflect_contrib);
 	return (vec3_scale(reflect_color, reflect_contrib));
 }
 
@@ -33,14 +33,14 @@ t_vec3	process_refraction(t_ray_context context,
 	t_vec3	refract_color;
 	double	refract_contrib;
 
+	refract_contrib = contrib->transmission * \
+		context.hit_record.material.transparency;
+	contrib->total_contrib += refract_contrib;
 	refract_ray_struct.origin = vec3_add(context.hit_record.point, \
 		vec3_scale(refract_dir, 0.001));
 	refract_ray_struct.direction = refract_dir;
 	refract_color = trace_ray(context.scene, refract_ray_struct, \
-		context.depth + 1);
-	refract_contrib = contrib->transmission * \
-		context.hit_record.material.transparency;
-	contrib->total_contrib += refract_contrib;
+		context.depth + 1, context.weight * refract_contrib);
 	return (vec3_scale(refract_color, refract_contrib));
 }
 

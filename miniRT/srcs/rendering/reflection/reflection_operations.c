@@ -12,17 +12,17 @@
 
 #include "../../../includes/miniRT.h"
 
-t_vec3	calculate_reflection(t_scene *scene, t_ray ray, \
-								t_hit_record hit_record, int depth)
+t_vec3	calculate_reflection(t_ray_context context, double child_weight)
 {
 	t_vec3	reflect_dir;
 	t_ray	reflect_ray_struct;
 
-	reflect_dir = reflect_ray(ray.direction, hit_record.normal);
-	reflect_ray_struct.origin = vec3_add(hit_record.point, \
-		vec3_scale(hit_record.normal, 0.001));
+	reflect_dir = reflect_ray(context.ray.direction, context.hit_record.normal);
+	reflect_ray_struct.origin = vec3_add(context.hit_record.point, \
+		vec3_scale(context.hit_record.normal, 0.001));
 	reflect_ray_struct.direction = reflect_dir;
-	return (trace_ray(scene, reflect_ray_struct, depth + 1));
+	return (trace_ray(context.scene, reflect_ray_struct, \
+		context.depth + 1, child_weight));
 }
 
 t_vec3	add_reflection_contribution(t_ray_context context, \
@@ -31,10 +31,10 @@ t_vec3	add_reflection_contribution(t_ray_context context, \
 	t_vec3	reflect_color;
 	double	reflect_contrib;
 
-	reflect_color = calculate_reflection(context.scene, context.ray, \
-		context.hit_record, context.depth);
 	reflect_contrib = contrib->fresnel * \
 		context.hit_record.material.reflectivity;
 	contrib->total_contrib += reflect_contrib;
+	reflect_color = calculate_reflection(context, \
+		context.weight * reflect_contrib);
 	return (vec3_scale(reflect_color, reflect_contrib));
 }

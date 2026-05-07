@@ -211,7 +211,7 @@ void		compute_ray_direction(t_scene *scene, t_ray *ray, double fov_scale, t_vec2
 // void		render_rows(t_scene *scene, double fov_scale, int samples, int start_row, int end_row);
 // void		render_pixel_samples(t_scene *scene, double fov_scale, t_vec3 *final_color, int x, int y, int samples, int sy);
 // void		process_final_color(t_scene *scene, t_vec3 final_color, int samples, int x, int y);
-t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
+t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth, double weight);
 t_vec3		reinhard_tone_map(t_vec3 color, double exposure);
 t_vec3		reflect_ray(t_vec3 incident, t_vec3 normal);
 t_vec3		refract_ray(t_vec3 incident, t_vec3 normal, double eta_ratio, bool *total_internal_reflection);
@@ -360,7 +360,7 @@ t_vec2		map_y_face(t_cube *cube, t_vec3 local_point);
 t_vec2		map_z_face(t_cube *cube, t_vec3 local_point);
 
 // Ray tracing helper functions
-t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth);
+t_vec3		trace_ray(t_scene *scene, t_ray ray, int depth, double weight);
 t_vec3		get_background_color(t_scene *scene);
 t_vec3		handle_refractive_material(t_ray_context context, double cos_theta);
 t_vec3		handle_reflective_material(t_ray_context context, double cos_theta, double *total_contrib);
@@ -373,7 +373,7 @@ double		calculate_fresnel_reflectance(t_fresnel_params params);
 double		calculate_fresnel_schlick(double cos_theta, double ior);
 
 // Reflection operations
-t_vec3		calculate_reflection(t_scene *scene, t_ray ray, t_hit_record hit_record, int depth);
+t_vec3		calculate_reflection(t_ray_context context, double child_weight);
 t_vec3		add_reflection_contribution(t_ray_context context, t_material_contrib *contrib);
 
 // Refraction operations

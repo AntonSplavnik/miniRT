@@ -13,7 +13,7 @@ LIBFT_LIB = $(LIBFT_PATH)/libft.a
 
 # Compiler & Flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3 -pthread
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread -ffast-math -march=native -flto
 INCLUDES = -I$(MLX42_INCLUDE) -Iincludes -I$(LIBFT_PATH)
 
 # OS-specific linker flags

@@ -86,14 +86,14 @@ t_vec3	process_material_interaction(t_ray_context context, double cos_theta)
 	return (final_color);
 }
 
-t_vec3	trace_ray(t_scene *scene, t_ray ray, int depth)
+t_vec3	trace_ray(t_scene *scene, t_ray ray, int depth, double weight)
 {
 	t_hit_record	hit_record;
 	t_object		*hit_object;
 	double			cos_theta;
 	t_ray_context	context;
 
-	if (depth > MAX_RAY_DEPTH)
+	if (depth > MAX_RAY_DEPTH || weight < 0.005)
 		return (vec3_create(0, 0, 0));
 	if (!find_closest_intersection(scene, ray, &hit_record, &hit_object))
 		return (get_background_color(scene));
@@ -103,5 +103,6 @@ t_vec3	trace_ray(t_scene *scene, t_ray ray, int depth)
 	context.ray = ray;
 	context.hit_record = hit_record;
 	context.depth = depth;
+	context.weight = weight;
 	return (process_material_interaction(context, cos_theta));
 }

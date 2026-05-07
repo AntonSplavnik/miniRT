@@ -25,7 +25,7 @@ void	process_sample_ray(t_render_params *params, int sx, int sy)
 	coords.v = params->xy_coords.v + (sy + 0.5) / (double)params->samples;
 	compute_ray_direction(params->scene, &sample_ray, params->fov_scale, \
 							coords);
-	sample_color = trace_ray(params->scene, sample_ray, 0);
+	sample_color = trace_ray(params->scene, sample_ray, 0, 1.0);
 	params->final_color = vec3_add(params->final_color, sample_color);
 }
 

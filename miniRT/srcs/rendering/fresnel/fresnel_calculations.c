@@ -34,7 +34,12 @@ double	calculate_fresnel_reflectance(t_fresnel_params params)
 double	calculate_fresnel_schlick(double cos_theta, double ior)
 {
 	double	r0;
+	double	m;
+	double	m2;
 
-	r0 = pow((1.0 - ior) / (1.0 + ior), 2.0);
-	return (r0 + (1.0 - r0) * pow(1.0 - cos_theta, 5.0));
+	r0 = (1.0 - ior) / (1.0 + ior);
+	r0 = r0 * r0;
+	m = 1.0 - cos_theta;
+	m2 = m * m;
+	return (r0 + (1.0 - r0) * m2 * m2 * m);
 }

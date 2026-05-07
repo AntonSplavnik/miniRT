@@ -638,6 +638,7 @@ typedef struct s_ray_context
 	t_ray			ray;
 	t_hit_record	hit_record;
 	int				depth;
+	double			weight;
 }	t_ray_context;
 
 typedef struct s_light_params

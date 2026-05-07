@@ -74,6 +74,6 @@ t_vec3	handle_reflective_material(t_ray_context context, double cos_theta, \
 	final_reflectivity = min_reflectivity + \
 		(context.hit_record.material.reflectivity - min_reflectivity) * fresnel;
 	*total_contrib = final_reflectivity;
-	return (vec3_scale(calculate_reflection(context.scene, context.ray, \
-		context.hit_record, context.depth), final_reflectivity));
+	return (vec3_scale(calculate_reflection(context, \
+		context.weight * final_reflectivity), final_reflectivity));
 }
